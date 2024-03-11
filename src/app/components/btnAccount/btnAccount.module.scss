@@ -1,0 +1,13 @@
+@import "../../style.module.scss";
+
+.btnLogin {
+  background-color: var(--btn-color);
+  padding: 16px;
+  font-size: 1.6em;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  &:hover {
+    @include hoverBtn;
+  }
+}

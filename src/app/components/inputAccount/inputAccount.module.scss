@@ -1,5 +1,4 @@
 .inputAccount {
-  min-width: 445px;
   width: 100%;
   padding: 16px;
   font-size: 1.6em;
@@ -8,4 +7,8 @@
   outline: none;
   color: var(--text-color);
   font-weight: 600;
+  &:hover {
+    transition: 0.2s ease;
+    background-color: rgba(151, 179, 231, 0.3);
+  }
 }

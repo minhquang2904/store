@@ -7,6 +7,8 @@ export default function InputAccount(props: {
   placeholder: string;
   value: any;
   onChange: any;
+  className: string;
+  style: any;
 }) {
   return (
     <input
@@ -15,8 +17,9 @@ export default function InputAccount(props: {
       name={props.name}
       id={props.id}
       placeholder={props.placeholder}
-      className={style.inputAccount}
+      className={`${style.inputAccount} ${props.className}`}
       onChange={props.onChange}
+      style={props.style}
     />
   );
 }
