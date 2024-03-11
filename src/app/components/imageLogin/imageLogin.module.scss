@@ -1,0 +1,17 @@
+.formImage {
+  width: 50%;
+  .logo {
+    z-index: 1;
+    max-width: 143px !important;
+    height: 58px !important;
+    margin: 40px 0 0 40px;
+  }
+  .image {
+    position: relative !important;
+    //   max-width: 845px;
+    width: 100%;
+    max-height: 100vh;
+    object-fit: cover;
+    object-position: 50% 10%;
+  }
+}

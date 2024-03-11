@@ -1,0 +1,67 @@
+@import "../../style.module.scss";
+
+.formLogin {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h3 {
+    font-size: 3em;
+    color: var(--text-color);
+    font-weight: bold;
+  }
+  p {
+    font-size: 1.6em;
+    color: #a4a1aa;
+    font-weight: 400;
+    margin-bottom: 30px;
+    display: inline-block;
+  }
+  .formColumn {
+    display: flex;
+    flex-direction: column;
+    .formGroup {
+      h4 {
+        font-size: 1.3em;
+        color: var(--text-color);
+        font-weight: 450;
+        margin-bottom: 5px;
+      }
+      input {
+        min-width: 445px;
+        width: 100%;
+        padding: 16px;
+        font-size: 1.6em;
+        border: 1px solid var(--btn-color);
+        border-radius: 12px;
+        outline: none;
+        color: var(--text-color);
+        font-weight: 600;
+      }
+      margin-bottom: 16px;
+    }
+  }
+  .forgotPassword {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 32px;
+    p {
+      color: var(--text-color) !important;
+      font-size: 1.4em;
+      font-weight: 500;
+      margin-bottom: 0;
+    }
+  }
+  .btnLogin {
+    background-color: var(--btn-color);
+    padding: 16px;
+    font-size: 1.6em;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    &:hover {
+      @include hoverBtn;
+    }
+  }
+}
