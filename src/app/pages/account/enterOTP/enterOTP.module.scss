@@ -50,6 +50,9 @@
     }
   }
 }
+.disHover:hover {
+  pointer-events: none;
+}
 
 .subTitleCustom {
   font-size: 1.6em;

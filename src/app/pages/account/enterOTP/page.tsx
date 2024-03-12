@@ -1,41 +1,26 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import style from "./forgotPassword.module.scss";
+import { useState } from "react";
+import style from "./enterOTP.module.scss";
 import Link from "next/link";
 import Image from "next/image";
 import TitleAccount from "@/app/components/titleAccount/page";
+import SubTitleAccount from "@/app/components/subTitleAccount/page";
 import InputAccount from "@/app/components/inputAccount/page";
 import { ArrowLeft } from "../../../data";
 import BtnAccount from "@/app/components/btnAccount/page";
 import LayoutAccount from "../layoutAccount/page";
 
 export default function ForgotPassword() {
-  const router = useRouter();
+  const [otp, setOTP] = useState("");
 
-  const [email, setEmail] = useState("");
-  const [checkEmail, setCheckEmail] = useState(false);
-
-  const handleInputChangeEmail = (e) => {
-    setEmail(e.target.value);
+  const handleInputChangeEmail = (e: any) => {
+    setOTP(e.target.value);
   };
-
-  const handleSendOTP = (e) => {
-    if (email == "lmquang2904@gmail.com") {
-      setCheckEmail(true);
-    }
-  };
-
-  useLayoutEffect(() => {
-    if (checkEmail) {
-      router.push("/pages/account/enterOTP");
-    }
-  }, [checkEmail]);
 
   return (
     <LayoutAccount>
-      <Link href="/pages/account/login">
+      <Link href="/pages/account/forgotPassword">
         <div className={`${style.backGroup}`}>
           <Image
             src={ArrowLeft}
@@ -46,28 +31,27 @@ export default function ForgotPassword() {
           <h4 className={`${style.backTitle}`}>Back</h4>
         </div>
       </Link>
-      <TitleAccount title="Forgot Password" />
+      <TitleAccount title="Enter OTP" />
       <p className={`${style.subTitleCustom}`}>
-        Enter your registered email address. we’ll send you a code to reset your
-        password.
+        We have share a code of your registered email address
+        robertfox@example.com.
       </p>
       <form>
         <div className={`${style.formColumn}`}>
           <div className={`${style.formGroup}`}>
-            <h4>Email Address</h4>
             <InputAccount
-              value={email}
+              value={otp}
               onChange={handleInputChangeEmail}
               type="text"
-              name="email"
-              id="email"
-              placeholder="Email@gmail.com"
+              name="otp"
+              id="otp"
+              placeholder="Enter OTP"
               className=""
               style={{ margin: "0 0 16px 0" }}
             />
           </div>
         </div>
-        <BtnAccount title="Send OTP" onClick={handleSendOTP} />
+        <BtnAccount title="Verify" />
       </form>
     </LayoutAccount>
   );
