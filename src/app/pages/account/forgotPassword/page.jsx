@@ -4,7 +4,7 @@ import { useLayoutEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import style from "./forgotPassword.module.scss";
 import Link from "next/link";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import TitleAccount from "@/app/components/titleAccount/page";
 import InputAccount from "@/app/components/inputAccount/page";
 import { ArrowLeft } from "../../../data";
@@ -41,8 +41,8 @@ export default function ForgotPassword() {
             src={ArrowLeft}
             className={`${style.backIcon}`}
             alt="LOGO"
-            layout="fill"
-          />
+            fill
+            sizes="100vw" />
           <h4 className={`${style.backTitle}`}>Back</h4>
         </div>
       </Link>

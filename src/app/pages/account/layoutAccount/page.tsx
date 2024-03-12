@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import style from "./layoutAccount.module.scss";
 import { Jost } from "next/font/google";
 
@@ -20,14 +20,14 @@ export default function LayoutAccount({ children }: LayoutProps) {
           src="/images/logo.svg"
           className={style.logo}
           alt="LOGO"
-          layout="fill"
-        />
+          fill
+          sizes="100vw" />
         <Image
           src="/images/login1.svg"
           className={style.image}
           alt="IMAGE"
-          layout="fill"
-        />
+          fill
+          sizes="100vw" />
       </div>
       <div className={`${style.formLogin} ${jost.className}`}>
         <div className={`${style.formContainer}`}>{children}</div>
