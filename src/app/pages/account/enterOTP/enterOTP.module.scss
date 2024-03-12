@@ -7,6 +7,10 @@
   padding: 4px 8px;
   border-radius: 16px;
   transition: 0.3s;
+  span {
+    position: unset !important;
+    display: inline-block !important;
+  }
   &:hover {
     transition: 0.3s;
     background-color: rgba(151, 179, 231, 0.4);
@@ -18,9 +22,11 @@
   .backIcon {
     transition: 0.3s;
     position: relative !important;
-    width: 16px !important;
-    height: 16px !important;
-    margin-right: 6px;
+    min-width: 16px !important;
+    max-width: 16px !important;
+    min-height: 16px !important;
+    max-height: 16px !important;
+    margin-right: 8px;
   }
   .backTitle {
     color: var(--text-color);

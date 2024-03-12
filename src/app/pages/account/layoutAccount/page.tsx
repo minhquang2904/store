@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import style from "./layoutAccount.module.scss";
 import { Jost } from "next/font/google";
 

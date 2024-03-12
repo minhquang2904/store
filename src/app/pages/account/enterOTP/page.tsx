@@ -3,7 +3,7 @@
 import { useState } from "react";
 import style from "./enterOTP.module.scss";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import TitleAccount from "@/app/components/titleAccount/page";
 import SubTitleAccount from "@/app/components/subTitleAccount/page";
 import InputAccount from "@/app/components/inputAccount/page";
