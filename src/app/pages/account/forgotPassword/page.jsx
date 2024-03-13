@@ -7,7 +7,6 @@ import Link from "next/link";
 import Image from "next/image";
 import TitleAccount from "@/app/components/titleAccount/page";
 import InputAccount from "@/app/components/inputAccount/page";
-import { ArrowLeft } from "../../../data";
 import BtnAccount from "@/app/components/btnAccount/page";
 import LayoutAccount from "../layoutAccount/page";
 
@@ -38,11 +37,13 @@ export default function ForgotPassword() {
       <Link href="/pages/account/login">
         <div className={`${style.backGroup}`}>
           <Image
-            src={ArrowLeft}
+            src="/icons/arrowLeft.svg"
             className={`${style.backIcon}`}
             alt="LOGO"
-            fill
-            sizes="100vw" />
+            sizes="100vw"
+            width={16}
+            height={16}
+          />
           <h4 className={`${style.backTitle}`}>Back</h4>
         </div>
       </Link>

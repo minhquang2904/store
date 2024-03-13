@@ -23,6 +23,8 @@ export default function Login() {
     setPassword(e.target.value);
   };
 
+  const handleSignUp = (e: any) => {};
+
   return (
     <LayoutAccount>
       <TitleAccount title="Create New Account" />
@@ -71,7 +73,7 @@ export default function Login() {
             />
           </div>
         </div>
-        <BtnAccount title="Sign up" />
+        <BtnAccount title="Sign up" onClick={handleSignUp} />
       </form>
     </LayoutAccount>
   );

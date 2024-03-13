@@ -20,6 +20,8 @@ export default function Login() {
     setPassword(e.target.value);
   };
 
+  const handleLogin = (e: any) => {};
+
   return (
     <LayoutAccount>
       <TitleAccount title="Welcome 👋" />
@@ -60,7 +62,7 @@ export default function Login() {
             <p>Forgot Password?</p>
           </Link>
         </div>
-        <BtnAccount title="Login" />
+        <BtnAccount title="Login" onClick={handleLogin} />
       </form>
     </LayoutAccount>
   );

@@ -8,7 +8,7 @@
   border-radius: 16px;
   transition: 0.3s;
   span {
-    position: unset !important;
+    position: relative !important;
     display: inline-block !important;
   }
   &:hover {
@@ -20,13 +20,7 @@
     }
   }
   .backIcon {
-    transition: 0.3s;
-    position: relative !important;
-    min-width: 16px !important;
-    max-width: 16px !important;
-    min-height: 16px !important;
-    max-height: 16px !important;
-    margin-right: 8px;
+    @include backIcon;
   }
   .backTitle {
     color: var(--text-color);

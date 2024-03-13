@@ -4,3 +4,10 @@
     width: 100%;
   }
 }
+
+@mixin backIcon {
+  transition: 0.3s;
+  position: relative !important;
+  margin-right: 8px;
+  height: 16px;
+}

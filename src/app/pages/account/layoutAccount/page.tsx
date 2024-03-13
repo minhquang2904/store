@@ -21,13 +21,17 @@ export default function LayoutAccount({ children }: LayoutProps) {
           className={style.logo}
           alt="LOGO"
           fill
-          sizes="100vw" />
+          sizes="100vw"
+          priority={true}
+        />
         <Image
           src="/images/login1.svg"
           className={style.image}
-          alt="IMAGE"
+          alt="LOGIN"
           fill
-          sizes="100vw" />
+          sizes="100vw"
+          priority={true}
+        />
       </div>
       <div className={`${style.formLogin} ${jost.className}`}>
         <div className={`${style.formContainer}`}>{children}</div>
