@@ -11,3 +11,14 @@
   margin-right: 8px;
   height: 16px;
 }
+
+@mixin mainLayout {
+  max-width: 1320px;
+  width: 100%;
+}
+
+@mixin disflexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

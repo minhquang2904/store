@@ -2,12 +2,12 @@
 import { useState } from "react";
 import style from "./login.module.scss";
 import Link from "next/link";
-import TitleAccount from "@/app/components/titleAccount/page";
-import SubTitleAccount from "@/app/components/subTitleAccount/page";
-import InputAccount from "@/app/components/inputAccount/page";
-import BtnAccount from "@/app/components/btnAccount/page";
+import TitleAccount from "@/app/components/titleAccount/titleAccount";
+import SubTitleAccount from "@/app/components/subTitleAccount/subTitleAccount";
+import InputAccount from "@/app/components/inputAccount/inputAccount";
+import BtnAccount from "@/app/components/btnAccount/btnAccount";
 import LayoutAccount from "../layoutAccount/page";
-import ShowError from "../showError/page";
+import ShowError from "@/app/components/showError/page";
 
 export default function Login() {
   const [email, setEmail] = useState("");

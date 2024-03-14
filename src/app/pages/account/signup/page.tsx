@@ -3,10 +3,10 @@
 import { useState } from "react";
 import style from "./signUp.module.scss";
 import Link from "next/link";
-import TitleAccount from "@/app/components/titleAccount/page";
-import SubTitleAccount from "@/app/components/subTitleAccount/page";
-import InputAccount from "@/app/components/inputAccount/page";
-import BtnAccount from "@/app/components/btnAccount/page";
+import TitleAccount from "@/app/components/titleAccount/titleAccount";
+import SubTitleAccount from "@/app/components/subTitleAccount/subTitleAccount";
+import InputAccount from "@/app/components/inputAccount/inputAccount";
+import BtnAccount from "@/app/components/btnAccount/btnAccount";
 import LayoutAccount from "../layoutAccount/page";
 
 export default function Login() {

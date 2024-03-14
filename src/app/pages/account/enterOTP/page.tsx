@@ -4,9 +4,9 @@ import { useState } from "react";
 import style from "./enterOTP.module.scss";
 import Link from "next/link";
 import Image from "next/image";
-import TitleAccount from "@/app/components/titleAccount/page";
-import InputAccount from "@/app/components/inputAccount/page";
-import BtnAccount from "@/app/components/btnAccount/page";
+import TitleAccount from "@/app/components/titleAccount/titleAccount";
+import InputAccount from "@/app/components/inputAccount/inputAccount";
+import BtnAccount from "@/app/components/btnAccount/btnAccount";
 import LayoutAccount from "../layoutAccount/page";
 
 export default function ForgotPassword() {

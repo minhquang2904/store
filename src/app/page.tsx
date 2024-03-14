@@ -1,5 +1,12 @@
-import Image from "next/image";
 import Link from "next/link";
+import MainLayout from "./pages/home/mainLayOut/mainLayOut";
+{
+  /* <Link href={"/pages/account/login"}>next</Link> */
+}
 export default function Home() {
-  return <Link href="/pages/account/login">next</Link>;
+  return (
+    <MainLayout>
+      <div></div>
+    </MainLayout>
+  );
 }
