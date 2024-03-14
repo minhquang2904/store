@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { use, useState } from "react";
 import style from "./login.module.scss";
 import Link from "next/link";
 import TitleAccount from "@/app/components/titleAccount/page";
@@ -7,10 +7,12 @@ import SubTitleAccount from "@/app/components/subTitleAccount/page";
 import InputAccount from "@/app/components/inputAccount/page";
 import BtnAccount from "@/app/components/btnAccount/page";
 import LayoutAccount from "../layoutAccount/page";
+import ShowError from "../showError/page";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleInputChangeEmail = (e: any) => {
     setEmail(e.target.value);
@@ -20,7 +22,13 @@ export default function Login() {
     setPassword(e.target.value);
   };
 
-  const handleLogin = (e: any) => {};
+  const handleLogin = (e: any) => {
+    if (email == "") {
+      setError("Empty email");
+    } else {
+      setError("");
+    }
+  };
 
   return (
     <LayoutAccount>
@@ -43,7 +51,7 @@ export default function Login() {
               style={{}}
             />
           </div>
-          <div className={`${style.formGroup}`}>
+          <div className={`${style.formGroup}`} style={{ marginBottom: "0" }}>
             <h4>Password</h4>
             <InputAccount
               value={password}
@@ -57,6 +65,11 @@ export default function Login() {
             />
           </div>
         </div>
+        {error ? (
+          <ShowError style={{ visibility: "visible" }} error={error} />
+        ) : (
+          <ShowError style={{ visibility: "hidden" }} error={error} />
+        )}
         <div className={`${style.forgotPassword}`}>
           <Link href="/pages/account/forgotPassword">
             <p>Forgot Password?</p>
