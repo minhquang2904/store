@@ -9,6 +9,7 @@ export default function InputAccount(props: {
   onChange: any;
   className: string;
   style: any;
+  refer: any;
 }) {
   return (
     <input
@@ -20,6 +21,7 @@ export default function InputAccount(props: {
       className={`${style.inputAccount} ${props.className}`}
       onChange={props.onChange}
       style={props.style}
+      ref={props.refer}
     />
   );
 }

@@ -3,25 +3,25 @@
 import Link from "next/link";
 import style from "./navbar.module.scss";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function NavBar() {
+  const searchInput: any = useRef(null);
+  const [checkLogin, setCheckLogin] = useState(false);
   useEffect(() => {
     const mainLayout = document.querySelector(".mainLayout");
-    console.log(mainLayout);
     const iconSearch = document.querySelector(".iconSearch");
     const itemSearch = document.querySelector(".itemSearch");
     iconSearch?.addEventListener("click", (e) => {
       itemSearch?.classList.add(style.showSearch);
+      searchInput.current.focus();
       e.stopPropagation();
     });
     mainLayout?.addEventListener("click", (e) => {
       itemSearch?.classList.remove(style.showSearch);
     });
   });
-  const handleClick = (e: any) => {
-    console.log("");
-  };
+  const handleClick = (e: any) => {};
   return (
     <div className={`${style.mainContainer}`}>
       <div className={`${style.navigationContainer}`}>
@@ -58,9 +58,14 @@ export default function NavBar() {
                   priority={true}
                 />
                 <div className={`${style.navigationUserItemSearch} itemSearch`}>
-                  <input type="text" placeholder="Search" />
+                  <input
+                    ref={searchInput}
+                    type="text"
+                    placeholder="Search for clothes ,..."
+                  />
                 </div>
               </div>
+              {checkLogin}
               <div className={`${style.navigationUserItem}`}>
                 <Image
                   src="/icons/heart.svg"
@@ -81,9 +86,15 @@ export default function NavBar() {
                   priority={true}
                 />
               </div>
-              <Link href="/pages/account/login">
-                <button>Login</button>
-              </Link>
+              {checkLogin ? (
+                <div className={`${style.navigationNameUser}`}>
+                  <h3>Lương Minh Quang</h3>
+                </div>
+              ) : (
+                <Link href="/pages/account/login">
+                  <button>Login</button>
+                </Link>
+              )}
             </div>
           </div>
         </div>

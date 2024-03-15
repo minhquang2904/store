@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import style from "./login.module.scss";
 import Link from "next/link";
 import TitleAccount from "@/app/components/titleAccount/titleAccount";
@@ -13,6 +13,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const inputRef: any = useRef(null);
 
   const handleInputChangeEmail = (e: any) => {
     setEmail(e.target.value);
@@ -29,6 +30,10 @@ export default function Login() {
       setError("");
     }
   };
+
+  useEffect(() => {
+    inputRef.current.focus();
+  });
 
   return (
     <LayoutAccount>
@@ -49,6 +54,7 @@ export default function Login() {
               placeholder="Email@gmail.com"
               className=""
               style={{}}
+              refer={inputRef}
             />
           </div>
           <div className={`${style.formGroup}`} style={{ marginBottom: "0" }}>
@@ -62,6 +68,7 @@ export default function Login() {
               placeholder="Password"
               className=""
               style={{}}
+              refer={null}
             />
           </div>
         </div>
