@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import style from "./enterOTP.module.scss";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,7 +11,11 @@ import LayoutAccount from "../layoutAccount/page";
 
 export default function ForgotPassword() {
   const [otp, setOTP] = useState("");
+  const inputOTP: any = useRef(null);
 
+  useEffect(() => {
+    inputOTP.current.focus();
+  });
   const handleInputChangeEmail = (e: any) => {
     setOTP(e.target.value);
   };
@@ -50,6 +54,7 @@ export default function ForgotPassword() {
               placeholder="Enter OTP"
               className=""
               style={{ margin: "0 0 16px 0" }}
+              refer={inputOTP}
             />
           </div>
         </div>

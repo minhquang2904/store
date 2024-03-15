@@ -23,7 +23,7 @@ export default function NavBar() {
   });
   const handleClick = (e: any) => {};
   return (
-    <div className={`${style.mainContainer}`}>
+    <div className={`${style.headerContainer}`}>
       <div className={`${style.navigationContainer}`}>
         <div className={`${style.navigation}`}>
           <div className={`${style.navigationLeft}`}>
@@ -52,7 +52,7 @@ export default function NavBar() {
                 <Image
                   src="/icons/search.svg"
                   className={style.logo}
-                  alt="LOGO"
+                  alt="Search"
                   fill
                   sizes="100vw"
                   priority={true}
@@ -70,7 +70,7 @@ export default function NavBar() {
                 <Image
                   src="/icons/heart.svg"
                   className={style.logo}
-                  alt="LOGO"
+                  alt="Heart"
                   fill
                   sizes="100vw"
                   priority={true}
@@ -80,7 +80,7 @@ export default function NavBar() {
                 <Image
                   src="/icons/bag.svg"
                   className={style.logo}
-                  alt="LOGO"
+                  alt="Bag"
                   fill
                   sizes="100vw"
                   priority={true}

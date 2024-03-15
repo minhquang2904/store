@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import style from "./forgotPassword.module.scss";
 import Link from "next/link";
@@ -11,10 +11,20 @@ import BtnAccount from "@/app/components/btnAccount/btnAccount";
 import LayoutAccount from "../layoutAccount/page";
 
 export default function ForgotPassword() {
-  const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [checkEmail, setCheckEmail] = useState(false);
+  const router = useRouter();
+  const inputEmail = useRef(null);
+
+  useEffect(() => {
+    inputEmail.current.focus();
+  });
+
+  useEffect(() => {
+    if (checkEmail) {
+      router.push("/pages/account/enterOTP");
+    }
+  }, [checkEmail]);
 
   const handleInputChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -25,12 +35,6 @@ export default function ForgotPassword() {
       setCheckEmail(true);
     }
   };
-
-  useLayoutEffect(() => {
-    if (checkEmail) {
-      router.push("/pages/account/enterOTP");
-    }
-  }, [checkEmail]);
 
   return (
     <LayoutAccount>
@@ -65,6 +69,7 @@ export default function ForgotPassword() {
               placeholder="Email@gmail.com"
               className=""
               style={{ margin: "0 0 16px 0" }}
+              refer={inputEmail}
             />
           </div>
         </div>

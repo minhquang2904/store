@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import style from "./signUp.module.scss";
 import Link from "next/link";
 import TitleAccount from "@/app/components/titleAccount/titleAccount";
@@ -13,6 +13,11 @@ export default function Login() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const inputName: any = useRef(null);
+
+  useEffect(() => {
+    inputName.current.focus();
+  });
   const handleInputChangeName = (e: any) => {
     setName(e.target.value);
   };
@@ -44,6 +49,7 @@ export default function Login() {
               placeholder="Julia Roberts"
               className=""
               style={{}}
+              refer={inputName}
             />
           </div>
           <div className={`${style.formGroup}`}>
@@ -57,6 +63,7 @@ export default function Login() {
               placeholder="Email@gmail.com"
               className=""
               style={{}}
+              refer={null}
             />
           </div>
           <div className={`${style.formGroup}`}>
@@ -70,6 +77,7 @@ export default function Login() {
               placeholder="Password"
               className=""
               style={{ margin: "0 0 16px 0" }}
+              refer={null}
             />
           </div>
         </div>
