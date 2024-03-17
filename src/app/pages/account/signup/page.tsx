@@ -16,8 +16,9 @@ export default function Login() {
   const inputName: any = useRef(null);
 
   useEffect(() => {
+    console.log("123456");
     inputName.current.focus();
-  });
+  }, []);
   const handleInputChangeName = (e: any) => {
     setName(e.target.value);
   };

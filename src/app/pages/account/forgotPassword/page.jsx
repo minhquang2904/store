@@ -18,7 +18,7 @@ export default function ForgotPassword() {
 
   useEffect(() => {
     inputEmail.current.focus();
-  });
+  }, []);
 
   useEffect(() => {
     if (checkEmail) {

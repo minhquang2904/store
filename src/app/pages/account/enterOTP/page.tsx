@@ -15,7 +15,7 @@ export default function ForgotPassword() {
 
   useEffect(() => {
     inputOTP.current.focus();
-  });
+  }, []);
   const handleInputChangeEmail = (e: any) => {
     setOTP(e.target.value);
   };

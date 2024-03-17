@@ -33,7 +33,7 @@ export default function Login() {
 
   useEffect(() => {
     inputRef.current.focus();
-  });
+  }, []);
 
   return (
     <LayoutAccount>
