@@ -6,6 +6,8 @@
   top: 0;
   left: 0;
   right: 0;
+  background-color: #f3f4f4;
+  z-index: 100;
   .navigationContainer {
     @include mainLayout;
     display: flex;
@@ -16,7 +18,7 @@
       justify-content: space-between;
       width: 100%;
       align-items: center;
-      .navigationLeft {
+      &Left {
         display: flex;
         align-items: center;
         height: 100%;
@@ -38,7 +40,7 @@
           }
         }
       }
-      .navigationRight {
+      &Right {
         .navigationUser {
           display: flex;
           .navigationUserItem {
@@ -47,7 +49,7 @@
             padding: 10px;
             border-radius: 50%;
             position: relative;
-            .navigationUserItemSearch {
+            &Search {
               $width: calc(100% + 7px);
               position: absolute;
               top: $width;

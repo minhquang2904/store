@@ -2,37 +2,120 @@ import Link from "next/link";
 import Image from "next/image";
 import MainLayout from "./pages/home/mainLayOut/mainLayOut";
 import style from "./main.module.scss";
+import Banner from "./components/banner/banner";
 
 export default function Home() {
   return (
     <MainLayout>
-      <div className={`${style.banner}`}>
-        <div className={`${style.bannerContainer}`}>
-          <div className={`${style.bannerLeft}`}>
-            <div className={`${style.bannerLeftTitle}`}>
-              <h1> Collections </h1>
-            </div>
-            <div className={`${style.bannerLeftDescription}`}>
-              <p>
-                You can explore ans shop many differnt collection from various
-                barands here.
-              </p>
-            </div>
-            <div className={`${style.bannerLeftButton}`}>
-              <Link href="#">
-                <button>Shop Now</button>
+      <Banner />
+      <div className={`${style.brand}`}>
+        <div className={`${style.brandContainer}`}>
+          <div className={`${style.marquee}`}>
+            <div className={`${style.brandList}`}>
+              <div className={`${style.brandItem}`}>
                 <Image
-                  src="/icons/arrowRight.svg"
-                  className={`${style.icon} dark:invert`}
-                  alt="Arrow"
+                  src="/images/brand-1.png"
+                  className={`${style.logo}`}
+                  alt="Brand"
                   fill
-                  sizes="100vw"
+                  sizes="(width: 200px) 100vw"
                   priority={true}
                 />
-              </Link>
+              </div>
+              <div className={`${style.brandItem}`}>
+                <Image
+                  src="/images/brand-2.png"
+                  className={`${style.logo}`}
+                  alt="Brand"
+                  fill
+                  sizes="(width: 200px) 100vw"
+                  priority={true}
+                />
+              </div>
+              <div className={`${style.brandItem}`}>
+                <Image
+                  src="/images/brand-3.png"
+                  className={`${style.logo}`}
+                  alt="Brand"
+                  fill
+                  sizes="(width: 200px) 100vw"
+                  priority={true}
+                />
+              </div>
+              <div className={`${style.brandItem}`}>
+                <Image
+                  src="/images/brand-4.png"
+                  className={`${style.logo}`}
+                  alt="Brand"
+                  fill
+                  sizes="(width: 200px) 100vw"
+                  priority={true}
+                />
+              </div>
+              <div className={`${style.brandItem}`}>
+                <Image
+                  src="/images/brand-5.png"
+                  className={`${style.logo}`}
+                  alt="Brand"
+                  fill
+                  sizes="(width: 200px) 100vw"
+                  priority={true}
+                />
+              </div>
+            </div>
+            <div className={`${style.brandList}`}>
+              <div className={`${style.brandItem}`}>
+                <Image
+                  src="/images/brand-1.png"
+                  className={`${style.logo}`}
+                  alt="Brand"
+                  fill
+                  sizes="(width: 200px) 100vw"
+                  priority={true}
+                />
+              </div>
+              <div className={`${style.brandItem}`}>
+                <Image
+                  src="/images/brand-2.png"
+                  className={`${style.logo}`}
+                  alt="Brand"
+                  fill
+                  sizes="(width: 200px) 100vw"
+                  priority={true}
+                />
+              </div>
+              <div className={`${style.brandItem}`}>
+                <Image
+                  src="/images/brand-3.png"
+                  className={`${style.logo}`}
+                  alt="Brand"
+                  fill
+                  sizes="(width: 200px) 100vw"
+                  priority={true}
+                />
+              </div>
+              <div className={`${style.brandItem}`}>
+                <Image
+                  src="/images/brand-4.png"
+                  className={`${style.logo}`}
+                  alt="Brand"
+                  fill
+                  sizes="(width: 200px) 100vw"
+                  priority={true}
+                />
+              </div>
+              <div className={`${style.brandItem}`}>
+                <Image
+                  src="/images/brand-5.png"
+                  className={`${style.logo}`}
+                  alt="Brand"
+                  fill
+                  sizes="(width: 200px) 100vw"
+                  priority={true}
+                />
+              </div>
             </div>
           </div>
-          <div className={`${style.bannerRight}`}></div>
         </div>
       </div>
     </MainLayout>

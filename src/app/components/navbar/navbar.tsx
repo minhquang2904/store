@@ -12,14 +12,44 @@ export default function NavBar() {
     const mainLayout = document.querySelector(".mainLayout");
     const iconSearch = document.querySelector(".iconSearch");
     const itemSearch = document.querySelector(".itemSearch");
+    const positonTopNav: any = document.querySelector(
+      `.${style.headerContainer}`
+    );
+
+    const addStyleNav = () => {
+      positonTopNav.offsetTop > 120
+        ? (positonTopNav.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.15)")
+        : (positonTopNav.style.boxShadow = "unset");
+    };
+
+    window.addEventListener("scroll", () => {
+      addStyleNav();
+    });
+
     iconSearch?.addEventListener("click", (e) => {
       itemSearch?.classList.add(style.showSearch);
       searchInput.current.focus();
       e.stopPropagation();
     });
+
     mainLayout?.addEventListener("click", (e) => {
       itemSearch?.classList.remove(style.showSearch);
     });
+
+    addStyleNav();
+    return () => {
+      window.addEventListener("scroll", () => {
+        addStyleNav();
+      });
+      iconSearch?.addEventListener("click", (e) => {
+        itemSearch?.classList.add(style.showSearch);
+        searchInput.current.focus();
+        e.stopPropagation();
+      });
+      mainLayout?.addEventListener("click", (e) => {
+        itemSearch?.classList.remove(style.showSearch);
+      });
+    };
   });
   const handleClick = (e: any) => {};
   return (

@@ -15,7 +15,7 @@ export default function MainLayout({ children }: LayoutProps) {
   return (
     <div
       className={`${jost.className} mainLayout`}
-      style={{ backgroundColor: "#F3F4F4", minHeight: "100vh" }}
+      style={{ backgroundColor: "#F3F4F4", minHeight: "1000vh" }}
     >
       <NavBar />
       {children}
