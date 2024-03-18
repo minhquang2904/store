@@ -17,7 +17,7 @@ export default function NavBar() {
     );
 
     const addStyleNav = () => {
-      positonTopNav.offsetTop > 120
+      positonTopNav.offsetTop > 80
         ? (positonTopNav.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.15)")
         : (positonTopNav.style.boxShadow = "unset");
     };
