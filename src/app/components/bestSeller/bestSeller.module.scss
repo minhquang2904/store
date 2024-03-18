@@ -1,0 +1,152 @@
+@import "../../style.module.scss";
+
+.bestSeller {
+  @include disflexCenter;
+  &Container {
+    @include mainLayout;
+    margin-top: $marginTopLayOut;
+  }
+  &Title {
+    h1 {
+      font-size: 5em;
+      font-weight: 500;
+      text-transform: capitalize;
+      text-align: center;
+      color: var(--text-color);
+    }
+  }
+  &Type {
+    margin: 35px 0;
+    display: flex;
+    justify-content: space-between;
+    &Left {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      &Items {
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.6em;
+        font-weight: 600;
+        text-transform: capitalize;
+        cursor: pointer;
+        &:hover {
+          color: var(--text-color);
+        }
+      }
+    }
+    &Right {
+      &Btn {
+        background-color: var(--btn-color);
+        color: #fff;
+        font-size: 1.6em;
+        font-weight: 400;
+        text-transform: capitalize;
+        padding: 8px 14px;
+        &:hover {
+          @include hoverBtn;
+        }
+      }
+    }
+  }
+  &List {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    .bestSellerItems {
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      max-width: 312px;
+      max-height: 500px;
+      width: 100%;
+      display: block;
+      flex: 0 0 25%;
+      padding: 0 0 20px 0;
+      &Image {
+        position: relative !important;
+        .picture {
+          position: relative !important;
+          max-height: 400px;
+          width: 100%;
+        }
+        .bestSellerItemsSale {
+          position: absolute;
+          top: 20px;
+          left: 0;
+          p {
+            background-color: #ff6f61;
+            color: var(--white-color);
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 6px 12px;
+          }
+        }
+      }
+      .bestSellerItemsAdd {
+        height: 0;
+        text-align: center;
+        transition: 0.1s linear;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white-color);
+        font-size: 1.6em;
+        font-weight: 400;
+        cursor: pointer;
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.5);
+        }
+      }
+      &:hover {
+        .bestSellerItemsAdd {
+          transition: 0.1s linear;
+          height: 40px;
+        }
+      }
+      .bestSellerItemsSubTitle {
+        margin: 18px 10px 0 10px;
+      }
+      &Title {
+        h1 {
+          color: var(--text-color);
+          font-size: 1.6em;
+          font-weight: 600;
+          text-transform: capitalize;
+        }
+      }
+      &TypeAndPrice {
+        margin-top: 16px;
+        display: flex;
+        justify-content: space-between;
+        p {
+          font-size: 1.6em;
+          font-weight: 500;
+          text-transform: capitalize;
+          color: rgba(0, 0, 0, 0.5);
+        }
+        .bestSellerItemsDiscount {
+          display: flex;
+          font-weight: 500;
+          .price {
+            font-size: 1.6em;
+            color: rgba(0, 0, 0, 0.5);
+          }
+          .discount {
+            font-size: 1.6em;
+            color: #ff6f61;
+            margin-left: 12px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.bestSellerTypeLeftItems.active {
+  color: var(--text-color) !important;
+}
