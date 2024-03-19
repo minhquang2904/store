@@ -1,11 +1,11 @@
 "use client";
 import Image from "next/image";
-import style from "./bestSeller.module.scss";
+import style from "./teamplateProdcutView.module.scss";
 import Link from "next/link";
 import { data } from "@/app/data";
 import { useEffect } from "react";
 
-export default function BestSeller() {
+export default function TemplateProductView() {
   useEffect(() => {
     const btnAddCard = document.querySelectorAll(
       `.${style.bestSellerItemsAdd}`
@@ -40,11 +40,7 @@ export default function BestSeller() {
         <div className={`${style.bestSellerList}`}>
           {data.map((item, index) => {
             return (
-              <Link
-                key={index}
-                className={`${style.bestSellerItems}`}
-                href="https://www.google.com.vn/?hl=vi"
-              >
+              <Link key={index} className={`${style.bestSellerItems}`} href="#">
                 <div className={`${style.bestSellerItemsImage}`}>
                   <Image
                     src={item.url}

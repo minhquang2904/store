@@ -10,6 +10,8 @@
   --white-color: white;
   --text-color: #131118;
   --btn-color: #131118;
+  --template-product-color: rgba(0, 0, 0, 0.5);
+  --template-product-discount-color: #ff6f61;
 }
 
 @media (prefers-color-scheme: dark) {
