@@ -50,9 +50,6 @@ export default function TemplateProductView() {
                     sizes="(max-width: 312px) 100vw"
                     priority={true}
                   />
-                  <div className={`${style.bestSellerItemsAdd}`}>
-                    <h3>Add to Card</h3>
-                  </div>
                   {item.discount ? (
                     <div className={`${style.bestSellerItemsSale}`}>
                       <p>Sale</p>
@@ -60,6 +57,9 @@ export default function TemplateProductView() {
                   ) : (
                     <></>
                   )}
+                  <div className={`${style.bestSellerItemsAdd}`}>
+                    <h3>Add to Card</h3>
+                  </div>
                 </div>
                 <div className={`${style.bestSellerItemsSubTitle}`}>
                   <div className={`${style.bestSellerItemsTitle}`}>
