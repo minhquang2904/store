@@ -9,6 +9,7 @@ export default function Home() {
       <Banner />
       <Brand />
       <TemplateProductView />
+      asd
     </MainLayout>
   );
 }
