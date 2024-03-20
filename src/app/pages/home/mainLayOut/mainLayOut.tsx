@@ -8,10 +8,7 @@ interface LayoutProps {
 
 export default function MainLayout({ children }: LayoutProps) {
   return (
-    <div
-      className={`mainLayout`}
-      style={{ backgroundColor: "#F3F4F4", minHeight: "1000vh" }}
-    >
+    <div className={`mainLayout`} style={{ backgroundColor: "#F3F4F4" }}>
       <NavBar />
       {children}
     </div>

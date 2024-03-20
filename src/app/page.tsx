@@ -1,6 +1,7 @@
 import MainLayout from "./pages/home/mainLayOut/mainLayOut";
 import Banner from "./components/banner/banner";
 import Brand from "./components/brand/brand";
+import BannerGroup from "./components/bannerGroup/bannerGroup";
 import TemplateProductView from "./components/template-product-view/templateProductView";
 
 export default function Home() {
@@ -8,6 +9,7 @@ export default function Home() {
     <MainLayout>
       <Banner />
       <Brand />
+      <BannerGroup />
       <TemplateProductView />
     </MainLayout>
   );
