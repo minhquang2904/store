@@ -1,21 +1,22 @@
 "use client";
 import Image from "next/image";
-import style from "./teamplateProdcutView.module.scss";
+import style from "./templateProductView.module.scss";
 import Link from "next/link";
 import { data } from "@/app/data";
-import { useEffect } from "react";
+import IconHeartSvg from "../iconHeartSvg/iconHeartSvg";
 
 export default function TemplateProductView() {
-  useEffect(() => {
-    const btnAddCard = document.querySelectorAll(
-      `.${style.bestSellerItemsAdd}`
-    );
-    btnAddCard.forEach((item, index) => {
-      item.addEventListener("click", (e) => {
-        e.preventDefault();
-      });
-    });
-  }, []);
+  const handleAddCart = (e: any) => {
+    e.preventDefault();
+  };
+
+  const handleSubmitHeart = (e: any) => {
+    e.target
+      .closest(`.${style.iconHeartSvg}`)
+      .classList.toggle(`${style.active}`);
+    e.preventDefault();
+  };
+
   return (
     <div className={`${style.bestSeller}`}>
       <div className={`${style.bestSellerContainer}`}>
@@ -57,7 +58,16 @@ export default function TemplateProductView() {
                   ) : (
                     <></>
                   )}
-                  <div className={`${style.bestSellerItemsAdd}`}>
+                  <div className={`${style.iconHeart}`}>
+                    <IconHeartSvg
+                      onClick={handleSubmitHeart}
+                      className={style.iconHeartSvg}
+                    />
+                  </div>
+                  <div
+                    className={`${style.bestSellerItemsAdd}`}
+                    onClick={handleAddCart}
+                  >
                     <h3>Add to Card</h3>
                   </div>
                 </div>

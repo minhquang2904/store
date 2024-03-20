@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
+import { Jost } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const jost = Jost({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
   title: "Luxe Loft",
@@ -19,7 +22,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={jost.className}>{children}</body>
     </html>
   );
 }
