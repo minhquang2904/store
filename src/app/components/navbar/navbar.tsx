@@ -12,14 +12,14 @@ export default function NavBar() {
     const mainLayout = document.querySelector(".mainLayout");
     const iconSearch = document.querySelector(".iconSearch");
     const itemSearch = document.querySelector(".itemSearch");
-    const positonTopNav: any = document.querySelector(
+    const positionTopNav: any = document.querySelector(
       `.${style.headerContainer}`
     );
 
     const addStyleNav = () => {
-      positonTopNav.offsetTop > 80
-        ? (positonTopNav.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.15)")
-        : (positonTopNav.style.boxShadow = "unset");
+      positionTopNav.offsetTop > 80
+        ? (positionTopNav.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.15)")
+        : (positionTopNav.style.boxShadow = "unset");
     };
 
     window.addEventListener("scroll", () => {

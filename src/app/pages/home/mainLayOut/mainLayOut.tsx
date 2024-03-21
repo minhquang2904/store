@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import NavBar from "../../../components/navbar/navbar";
 import style from "./mainLayOut.module.scss";
-
+import NavBar from "../../../components/navbar/navbar";
+import Footer from "@/app/components/footer/footer";
 interface LayoutProps {
   children: ReactNode;
 }
@@ -11,6 +11,7 @@ export default function MainLayout({ children }: LayoutProps) {
     <div className={`mainLayout`} style={{ backgroundColor: "#F3F4F4" }}>
       <NavBar />
       {children}
+      <Footer />
     </div>
   );
 }
