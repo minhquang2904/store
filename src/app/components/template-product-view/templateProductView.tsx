@@ -4,8 +4,11 @@ import style from "./templateProductView.module.scss";
 import Link from "next/link";
 import { data } from "@/app/data";
 import IconHeartSvg from "../iconHeartSvg/iconHeartSvg";
+import { useState } from "react";
 
 export default function TemplateProductView() {
+  const [dataList, setData] = useState(data);
+
   const handleAddCart = (e: any) => {
     e.preventDefault();
   };
@@ -17,6 +20,25 @@ export default function TemplateProductView() {
     e.preventDefault();
   };
 
+  const handleChangeType = (e: any) => {
+    if (e.target.id == "dress") {
+      getDataType("dress");
+    } else if (e.target.id == "bag") {
+      getDataType("bag");
+    } else if (e.target.id == "shoes") {
+      getDataType("shoes");
+    } else {
+      setData(data);
+    }
+  };
+
+  const getDataType = (type: string) => {
+    const dataType = data.filter((item, index) => {
+      return item.type == type;
+    });
+    return setData(dataType);
+  };
+
   return (
     <div className={`${style.bestSeller}`}>
       <div className={`${style.bestSellerContainer}`}>
@@ -25,12 +47,33 @@ export default function TemplateProductView() {
         </div>
         <div className={`${style.bestSellerType}`}>
           <div className={`${style.bestSellerTypeLeft}`}>
-            <div className={`${style.bestSellerTypeLeftItems} ${style.active}`}>
+            <div
+              className={`${style.bestSellerTypeLeftItems} ${style.active}`}
+              onClick={handleChangeType}
+            >
               all products
             </div>
-            <div className={`${style.bestSellerTypeLeftItems}`}>t-shirt</div>
-            <div className={`${style.bestSellerTypeLeftItems}`}>hoodies</div>
-            <div className={`${style.bestSellerTypeLeftItems}`}>jacket</div>
+            <div
+              className={`${style.bestSellerTypeLeftItems}`}
+              onClick={handleChangeType}
+              id="dress"
+            >
+              Dress
+            </div>
+            <div
+              className={`${style.bestSellerTypeLeftItems}`}
+              onClick={handleChangeType}
+              id="bag"
+            >
+              Bag
+            </div>
+            <div
+              className={`${style.bestSellerTypeLeftItems}`}
+              onClick={handleChangeType}
+              id="shoes"
+            >
+              Shoes
+            </div>
           </div>
           <div className={`${style.bestSellerTypeRight}`}>
             <Link href="#" className={`${style.bestSellerTypeRightBtn}`}>
@@ -39,7 +82,7 @@ export default function TemplateProductView() {
           </div>
         </div>
         <div className={`${style.bestSellerList}`}>
-          {data.map((item, index) => {
+          {dataList.map((item, index) => {
             return (
               <Link key={index} className={`${style.bestSellerItems}`} href="#">
                 <div className={`${style.bestSellerItemsImage}`}>

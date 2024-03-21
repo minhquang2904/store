@@ -101,6 +101,7 @@
         display: flex;
         align-items: center;
         cursor: pointer;
+        position: relative !important;
         &:hover {
           opacity: 0.8;
         }
