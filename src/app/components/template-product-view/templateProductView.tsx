@@ -4,7 +4,7 @@ import style from "./templateProductView.module.scss";
 import Link from "next/link";
 import { data } from "@/app/data";
 import IconHeartSvg from "../iconHeartSvg/iconHeartSvg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function TemplateProductView() {
   const [dataList, setData] = useState(data);
@@ -30,11 +30,15 @@ export default function TemplateProductView() {
     } else {
       setData(data);
     }
+    document
+      .querySelector(`.${style.bestSellerTypeLeftItems}.${style.active}`)
+      ?.classList.remove(`${style.active}`);
+    e.target.classList.add(`${style.active}`);
   };
 
   const getDataType = (type: string) => {
-    const dataType = data.filter((item, index) => {
-      return item.type == type;
+    const dataType = data.filter((item) => {
+      return item.type.includes(type);
     });
     return setData(dataType);
   };

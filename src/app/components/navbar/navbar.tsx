@@ -9,9 +9,9 @@ export default function NavBar() {
   const searchInput: any = useRef(null);
   const [checkLogin, setCheckLogin] = useState(false);
   useEffect(() => {
-    const mainLayout = document.querySelector(".mainLayout");
-    const iconSearch = document.querySelector(".iconSearch");
-    const itemSearch = document.querySelector(".itemSearch");
+    const mainLayout: any = document.querySelector(".mainLayout");
+    const iconSearch: any = document.querySelector(".iconSearch");
+    const itemSearch: any = document.querySelector(".itemSearch");
     const positionTopNav: any = document.querySelector(
       `.${style.headerContainer}`
     );
@@ -26,14 +26,16 @@ export default function NavBar() {
       addStyleNav();
     });
 
-    iconSearch?.addEventListener("click", (e) => {
-      itemSearch?.classList.add(style.showSearch);
+    iconSearch.addEventListener("click", (e: any) => {
+      itemSearch.classList.add(style.showSearch);
+      iconSearch.style.backgroundColor = "#e3e7f3";
       searchInput.current.focus();
       e.stopPropagation();
     });
 
-    mainLayout?.addEventListener("click", (e) => {
-      itemSearch?.classList.remove(style.showSearch);
+    mainLayout.addEventListener("click", (e: any) => {
+      iconSearch.style.backgroundColor = "unset";
+      itemSearch.classList.remove(style.showSearch);
     });
 
     addStyleNav();
@@ -41,16 +43,16 @@ export default function NavBar() {
       window.addEventListener("scroll", () => {
         addStyleNav();
       });
-      iconSearch?.addEventListener("click", (e) => {
-        itemSearch?.classList.add(style.showSearch);
+      iconSearch.addEventListener("click", (e: any) => {
+        itemSearch.classList.add(style.showSearch);
         searchInput.current.focus();
         e.stopPropagation();
       });
-      mainLayout?.addEventListener("click", (e) => {
-        itemSearch?.classList.remove(style.showSearch);
+      mainLayout.addEventListener("click", (e: any) => {
+        itemSearch.classList.remove(style.showSearch);
       });
     };
-  });
+  }, []);
   const handleClick = (e: any) => {};
   return (
     <div className={`${style.headerContainer}`}>

@@ -1,0 +1,39 @@
+.slick-list {
+  margin: 0 -12px;
+}
+
+.slick-slide > div {
+  margin: 0 12px;
+}
+
+.slick-slider:hover {
+  .slick-arrow {
+    display: block;
+  }
+}
+
+.slick-arrow {
+  position: absolute !important;
+  width: 40px !important;
+  height: 40px !important;
+  // display: none;
+  z-index: 100;
+  &:hover {
+    background-color: rgba(227, 231, 243, 0.8);
+    border-radius: 50%;
+  }
+  &::before {
+    display: none;
+  }
+  Image {
+    width: 100%;
+    height: 100%;
+  }
+}
+.slick-next {
+  right: 14px;
+}
+
+.slick-prev {
+  left: 14px;
+}

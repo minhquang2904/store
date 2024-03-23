@@ -1,6 +1,6 @@
 @import "../../style.module.scss";
 
-.bestSeller {
+.productSlider {
   @include disflexCenter;
   &Container {
     @include mainLayout;
@@ -49,12 +49,7 @@
     }
   }
   &List {
-    display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
-    .bestSellerItems {
-      // box-shadow: 0 -2px 40px rgba(0, 0, 0, 0.12);
-      max-width: $widthTemplateProductItem;
+    .productSliderItems {
       max-height: $heightTemplateProductItem;
       width: 100%;
       display: block;
@@ -75,7 +70,7 @@
           top: 20px;
           display: none;
         }
-        .bestSellerItemsSale {
+        .productSliderItemsSale {
           position: absolute;
           top: 20px;
           left: 0;
@@ -90,7 +85,7 @@
           }
         }
       }
-      .bestSellerItemsAdd {
+      .productSliderItemsAdd {
         h3 {
           height: 100%;
           display: flex;
@@ -122,12 +117,12 @@
           transition: 0.4s ease;
           transform: scale(1.04);
         }
-        .bestSellerItemsAdd {
+        .productSliderItemsAdd {
           transition: 0.1s linear;
           height: 40px;
         }
       }
-      .bestSellerItemsSubTitle {
+      .productSliderItemsSubTitle {
         margin: 18px 10px 0 10px;
       }
       &Title {
@@ -148,7 +143,7 @@
           text-transform: capitalize;
           color: var(--template-product-color);
         }
-        .bestSellerItemsDiscount {
+        .productSliderItemsDiscount {
           display: flex;
           font-weight: 500;
           .price {
@@ -166,10 +161,14 @@
   }
 }
 
-.bestSellerTypeLeftItems.active {
+.productSliderTypeLeftItems.active {
   color: var(--text-color) !important;
 }
 
 .iconHeartSvg.active {
   fill: var(--template-product-discount-color) !important;
+}
+
+.slick-slide > div {
+  margin-right: 6px;
 }
