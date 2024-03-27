@@ -10,6 +10,7 @@ export default function InputAccount(props: {
   className: string;
   style: any;
   refer: any;
+  autoComplete: any;
 }) {
   return (
     <input
@@ -22,6 +23,7 @@ export default function InputAccount(props: {
       onChange={props.onChange}
       style={props.style}
       ref={props.refer}
+      autoComplete={props.autoComplete}
     />
   );
 }

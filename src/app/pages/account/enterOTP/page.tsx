@@ -55,6 +55,7 @@ export default function ForgotPassword() {
               className=""
               style={{ margin: "0 0 16px 0" }}
               refer={inputOTP}
+              autoComplete="OTP"
             />
           </div>
         </div>

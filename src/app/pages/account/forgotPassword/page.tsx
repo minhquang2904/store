@@ -14,7 +14,7 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [checkEmail, setCheckEmail] = useState(false);
   const router = useRouter();
-  const inputEmail = useRef(null);
+  const inputEmail: any = useRef(null);
 
   useEffect(() => {
     inputEmail.current.focus();
@@ -26,11 +26,11 @@ export default function ForgotPassword() {
     }
   }, [checkEmail]);
 
-  const handleInputChangeEmail = (e) => {
+  const handleInputChangeEmail = (e: any) => {
     setEmail(e.target.value);
   };
 
-  const handleSendOTP = (e) => {
+  const handleSendOTP = () => {
     if (email == "lmquang2904@gmail.com") {
       setCheckEmail(true);
     }
@@ -70,6 +70,7 @@ export default function ForgotPassword() {
               className=""
               style={{ margin: "0 0 16px 0" }}
               refer={inputEmail}
+              autoComplete="email"
             />
           </div>
         </div>

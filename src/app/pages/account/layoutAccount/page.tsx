@@ -1,12 +1,6 @@
 import { ReactNode } from "react";
 import Image from "next/image";
 import style from "./layoutAccount.module.scss";
-import { Jost } from "next/font/google";
-
-const jost = Jost({
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-});
 
 interface LayoutProps {
   children: ReactNode;
@@ -33,7 +27,7 @@ export default function LayoutAccount({ children }: LayoutProps) {
           priority={true}
         />
       </div>
-      <div className={`${style.formLogin} ${jost.className}`}>
+      <div className={`${style.formLogin}`}>
         <div className={`${style.formContainer}`}>{children}</div>
       </div>
     </main>

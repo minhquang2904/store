@@ -55,6 +55,7 @@ export default function Login() {
               className=""
               style={{}}
               refer={inputRef}
+              autoComplete="Email"
             />
           </div>
           <div className={`${style.formGroup}`} style={{ marginBottom: "0" }}>
@@ -69,6 +70,7 @@ export default function Login() {
               className=""
               style={{}}
               refer={null}
+              autoComplete="current-password"
             />
           </div>
         </div>

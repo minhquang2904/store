@@ -16,7 +16,6 @@ export default function Login() {
   const inputName: any = useRef(null);
 
   useEffect(() => {
-    console.log("123456");
     inputName.current.focus();
   }, []);
   const handleInputChangeName = (e: any) => {
@@ -51,6 +50,7 @@ export default function Login() {
               className=""
               style={{}}
               refer={inputName}
+              autoComplete="username"
             />
           </div>
           <div className={`${style.formGroup}`}>
@@ -65,6 +65,7 @@ export default function Login() {
               className=""
               style={{}}
               refer={null}
+              autoComplete="Email"
             />
           </div>
           <div className={`${style.formGroup}`}>
@@ -79,6 +80,7 @@ export default function Login() {
               className=""
               style={{ margin: "0 0 16px 0" }}
               refer={null}
+              autoComplete="current-password"
             />
           </div>
         </div>
