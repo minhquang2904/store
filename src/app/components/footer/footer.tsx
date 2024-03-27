@@ -5,7 +5,7 @@ import Image from "next/image";
 import style from "./footer.module.scss";
 
 export default function Footer() {
-  const handleScrollToTop = (e: any) => {
+  const handleScrollToTop = () => {
     window.scroll(0, 0);
   };
   return (
