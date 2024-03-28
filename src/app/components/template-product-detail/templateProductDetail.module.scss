@@ -1,6 +1,47 @@
 @import "../../style.module.scss";
 
 .detail {
+  @include disflexCenter;
   &Container {
+    @include mainLayout;
+    margin-top: $marginTopLayOut;
+  }
+  &PageNavigation {
+  }
+  &Buy {
+    &Left {
+      &Image {
+        &Review {
+        }
+      }
+    }
+    &Right {
+      &Title {
+      }
+      &Type {
+      }
+      &Price {
+      }
+      &Description {
+      }
+      &Color {
+      }
+      &Size {
+      }
+      &AddToCard {
+        &Number {
+        }
+        &Btn {
+        }
+        &Heart {
+        }
+      }
+    }
+  }
+  &Description {
+    &Navigation {
+    }
+    &Content {
+    }
   }
 }
