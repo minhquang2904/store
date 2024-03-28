@@ -59,7 +59,7 @@ export default function NavBar() {
       <div className={`${style.navigationContainer}`}>
         <div className={`${style.navigation}`}>
           <div className={`${style.navigationLeft}`}>
-            <Link href="">
+            <Link href="/">
               <Image
                 src="/images/logo.svg"
                 className={style.logo}
