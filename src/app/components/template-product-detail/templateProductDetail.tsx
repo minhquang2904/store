@@ -3,9 +3,32 @@
 import style from "./templateProductDetail.module.scss";
 import Image from "next/image";
 import IconHeartSvg from "../iconHeartSvg/iconHeartSvg";
+import { useEffect, useState } from "react";
+import { dataDescription } from "@/app/data";
 
 export default function TemplateProductDetail() {
+  const [description, setDescription] = useState("");
+
+  const navDescription = dataDescription[0].description;
+  const navAddInformation = dataDescription[1].addInformation;
+
+  const handleChangeDescription = (e: any) => {
+    const id = e.target.id;
+    if (id == "description") {
+      setDescription(navDescription || "");
+    } else if (id == "add-information") {
+      setDescription(navAddInformation || "");
+    }
+    document
+      .querySelector(`.${style.detailDescriptionItem}.${style.active}`)
+      ?.classList.remove(`${style.active}`);
+    e.target.classList.add(`${style.active}`);
+  };
   const handleIconHeart = () => {};
+
+  useEffect(() => {
+    setDescription(navDescription || "");
+  }, []);
   return (
     <div className={`${style.detail}`}>
       <div className={`${style.detailContainer}`}>
@@ -166,8 +189,25 @@ export default function TemplateProductDetail() {
           </div>
         </div>
         <div className={`${style.detailDescription}`}>
-          <div className={`${style.detailDescriptionNavigation}`}></div>
-          <div className={`${style.detailDescriptionContent}`}></div>
+          <div className={`${style.detailDescriptionNavigation}`}>
+            <div
+              className={`${style.detailDescriptionItem} ${style.active}`}
+              onClick={handleChangeDescription}
+              id="description"
+            >
+              description
+            </div>
+            <div
+              className={`${style.detailDescriptionItem}`}
+              onClick={handleChangeDescription}
+              id="add-information"
+            >
+              Add Information
+            </div>
+          </div>
+          <div className={`${style.detailDescriptionContent}`}>
+            <p>{description}</p>
+          </div>
         </div>
       </div>
     </div>

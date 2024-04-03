@@ -205,9 +205,43 @@
     }
   }
   &Description {
+    margin-top: 80px;
     &Navigation {
+      display: flex;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: var(--template-product-color);
+      text-transform: capitalize;
+      font-size: 2em;
+      font-weight: 500;
+      & > div {
+        padding-bottom: 8px;
+        margin-right: 16px;
+        position: relative;
+        cursor: pointer;
+        &:hover {
+          color: var(--text-color);
+        }
+      }
+      .detailDescriptionItem.active {
+        color: var(--text-color);
+        &::before {
+          position: absolute;
+          content: "";
+          width: 100%;
+          height: 4px;
+          bottom: 0;
+          background-color: var(--text-color);
+          border-radius: 4px;
+        }
+      }
     }
     &Content {
+      color: var(--text-color);
+      p {
+        font-size: 1.4em;
+        line-height: 2em;
+      }
     }
   }
 }

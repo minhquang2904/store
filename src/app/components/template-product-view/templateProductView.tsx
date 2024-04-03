@@ -4,7 +4,7 @@ import style from "./templateProductView.module.scss";
 import Link from "next/link";
 import { data } from "@/app/data";
 import IconHeartSvg from "../iconHeartSvg/iconHeartSvg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function TemplateProductView() {
   const [dataList, setData] = useState(data);
@@ -21,11 +21,12 @@ export default function TemplateProductView() {
   };
 
   const handleChangeType = (e: any) => {
-    if (e.target.id == "dress") {
+    const id = e.target.id;
+    if (id == "dress") {
       getDataType("dress");
-    } else if (e.target.id == "bag") {
+    } else if (id == "bag") {
       getDataType("bag");
-    } else if (e.target.id == "shoes") {
+    } else if (id == "shoes") {
       getDataType("shoes");
     } else {
       setData(data);

@@ -1,7 +1,7 @@
 @import "../../style.module.scss";
 
 .footer {
-  margin-top: $marginTopLayOut + 160px;
+  margin-top: $marginTopLayOut + 100px;
   &Header {
     @include disflexCenter;
     .footerContainer {
