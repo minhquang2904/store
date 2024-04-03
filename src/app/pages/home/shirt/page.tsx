@@ -1,3 +1,5 @@
+import MainLayout from "../mainLayOut/mainLayOut";
+
 export default function Shirt() {
-  return <>Shirt</>;
+  return <MainLayout>Shirt</MainLayout>;
 }

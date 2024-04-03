@@ -4,12 +4,12 @@ import Link from "next/link";
 import style from "./navbar.module.scss";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 export default function NavBar() {
   const searchInput: any = useRef(null);
   const [checkLogin, setCheckLogin] = useState(false);
-  const router = useRouter();
-  console.log(router);
+  const pathname: any = usePathname();
+
   useEffect(() => {
     const mainLayout: any = document.querySelector(".mainLayout");
     const iconSearch: any = document.querySelector(".iconSearch");
@@ -55,31 +55,9 @@ export default function NavBar() {
       });
     };
   }, []);
+
   const handleClick = (e: any) => {};
 
-  useEffect(() => {
-    const navigationItem = document.querySelectorAll(
-      `.${style.navigationItem}`
-    );
-    const line: any = document.querySelector(`.${style.line}`);
-    const navActive: any = document.querySelector(
-      `.${style.navigationItem}.${style.active}`
-    );
-
-    line.style.left = navActive.offsetLeft + 13 + "px";
-    line.style.width = navActive.offsetWidth - 26 + "px";
-
-    navigationItem.forEach((item: any) => {
-      item.onclick = () => {
-        document
-          .querySelector(`.${style.navigationItem}.${style.active}`)
-          ?.classList.remove(`${style.active}`);
-        item.classList.add(`${style.active}`);
-        line.style.left = item.offsetLeft + 13 + "px";
-        line.style.width = item.offsetWidth - 26 + "px";
-      };
-    });
-  }, []);
   return (
     <div className={`${style.headerContainer}`}>
       <div className={`${style.navigationContainer}`}>
@@ -100,25 +78,41 @@ export default function NavBar() {
             <div className={`${style.navigationList}`}>
               <Link
                 href="/"
-                className={`${style.navigationItem} ${style.active}`}
+                className={
+                  pathname == "/"
+                    ? `${style.navigationItem} ${style.active}`
+                    : `${style.navigationItem}`
+                }
               >
                 home
               </Link>
               <Link
                 href="/pages/home/shirt"
-                className={`${style.navigationItem}`}
+                className={
+                  pathname == "/pages/home/shirt"
+                    ? `${style.navigationItem} ${style.active}`
+                    : `${style.navigationItem}`
+                }
               >
                 shirt
               </Link>
               <Link
                 href="/pages/home/trousers"
-                className={`${style.navigationItem}`}
+                className={
+                  pathname == "/pages/home/trousers"
+                    ? `${style.navigationItem} ${style.active}`
+                    : `${style.navigationItem}`
+                }
               >
                 trousers
               </Link>
               <Link
                 href="/pages/home/bagShoes"
-                className={`${style.navigationItem}`}
+                className={
+                  pathname == "/pages/home/bagShoes"
+                    ? `${style.navigationItem} ${style.active}`
+                    : `${style.navigationItem}`
+                }
               >
                 Bag & Shoes
               </Link>

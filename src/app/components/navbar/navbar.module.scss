@@ -34,16 +34,6 @@
         .navigationList {
           display: flex;
           position: relative;
-          .line {
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 0;
-            height: 3px;
-            border-radius: 20px;
-            background-color: var(--text-color);
-            transition: all 0.2s ease;
-          }
           .navigationItem {
             color: var(--template-product-color);
             font-size: 1.6em;

@@ -1,3 +1,5 @@
+import MainLayout from "../mainLayOut/mainLayOut";
+
 export default function BagShoes() {
-  return <>BagShoes</>;
+  return <MainLayout>BagShoes</MainLayout>;
 }
