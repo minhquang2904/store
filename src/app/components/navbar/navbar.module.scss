@@ -33,10 +33,29 @@
       .navigationCenter {
         .navigationList {
           display: flex;
+          position: relative;
+          .line {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 3px;
+            border-radius: 20px;
+            background-color: var(--text-color);
+            transition: all 0.2s ease;
+          }
           .navigationItem {
-            color: var(--text-color);
+            color: var(--template-product-color);
             font-size: 1.6em;
             margin: 0 20px;
+            text-transform: capitalize;
+            cursor: pointer;
+            font-weight: 600;
+            padding: 4px 10px;
+            &.active,
+            &:hover {
+              color: var(--text-color) !important;
+            }
           }
         }
       }

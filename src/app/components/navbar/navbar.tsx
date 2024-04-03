@@ -4,10 +4,12 @@ import Link from "next/link";
 import style from "./navbar.module.scss";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-
+import { useRouter } from "next/navigation";
 export default function NavBar() {
   const searchInput: any = useRef(null);
   const [checkLogin, setCheckLogin] = useState(false);
+  const router = useRouter();
+  console.log(router);
   useEffect(() => {
     const mainLayout: any = document.querySelector(".mainLayout");
     const iconSearch: any = document.querySelector(".iconSearch");
@@ -54,6 +56,30 @@ export default function NavBar() {
     };
   }, []);
   const handleClick = (e: any) => {};
+
+  useEffect(() => {
+    const navigationItem = document.querySelectorAll(
+      `.${style.navigationItem}`
+    );
+    const line: any = document.querySelector(`.${style.line}`);
+    const navActive: any = document.querySelector(
+      `.${style.navigationItem}.${style.active}`
+    );
+
+    line.style.left = navActive.offsetLeft + 13 + "px";
+    line.style.width = navActive.offsetWidth - 26 + "px";
+
+    navigationItem.forEach((item: any) => {
+      item.onclick = () => {
+        document
+          .querySelector(`.${style.navigationItem}.${style.active}`)
+          ?.classList.remove(`${style.active}`);
+        item.classList.add(`${style.active}`);
+        line.style.left = item.offsetLeft + 13 + "px";
+        line.style.width = item.offsetWidth - 26 + "px";
+      };
+    });
+  }, []);
   return (
     <div className={`${style.headerContainer}`}>
       <div className={`${style.navigationContainer}`}>
@@ -72,10 +98,31 @@ export default function NavBar() {
           </div>
           <div className={`${style.navigationCenter}`}>
             <div className={`${style.navigationList}`}>
-              <div className={`${style.navigationItem}`}>Home</div>
-              <div className={`${style.navigationItem}`}>Shop</div>
-              <div className={`${style.navigationItem}`}>Blog</div>
-              <div className={`${style.navigationItem}`}>Contact Us</div>
+              <Link
+                href="/"
+                className={`${style.navigationItem} ${style.active}`}
+              >
+                home
+              </Link>
+              <Link
+                href="/pages/home/shirt"
+                className={`${style.navigationItem}`}
+              >
+                shirt
+              </Link>
+              <Link
+                href="/pages/home/trousers"
+                className={`${style.navigationItem}`}
+              >
+                trousers
+              </Link>
+              <Link
+                href="/pages/home/bagShoes"
+                className={`${style.navigationItem}`}
+              >
+                Bag & Shoes
+              </Link>
+              <div className={`${style.line}`}></div>
             </div>
           </div>
           <div className={`${style.navigationRight}`}>
