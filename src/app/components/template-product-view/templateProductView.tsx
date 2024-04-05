@@ -89,7 +89,11 @@ export default function TemplateProductView() {
         <div className={`${style.bestSellerList}`}>
           {dataList.map((item, index) => {
             return (
-              <Link key={index} className={`${style.bestSellerItems}`} href="#">
+              <Link
+                key={index}
+                className={`${style.bestSellerItems}`}
+                href="/productDetail"
+              >
                 <div className={`${style.bestSellerItemsImage}`}>
                   <Image
                     src={item.url}

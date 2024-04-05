@@ -12,7 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       style={{ backgroundColor: "#F3F4F4", minHeight: "100vh" }}
     >
       <NavBar />
-      {children}
+      <main>{children}</main>
       <Support />
       <Footer />
     </div>

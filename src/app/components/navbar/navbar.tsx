@@ -60,8 +60,13 @@ const NavBar = () => {
   const lineActive = (target: any, navActive: any, width: any) => {
     const sizeWidth = width;
     const sizeLeft = sizeWidth / 2;
-    target.style.left = navActive.offsetLeft + sizeLeft + "px";
-    target.style.width = navActive.offsetWidth - sizeWidth + "px";
+    if (navActive) {
+      target.style.left = navActive?.offsetLeft + sizeLeft + "px";
+      target.style.width = navActive?.offsetWidth - sizeWidth + "px";
+    } else {
+      target.style.left = 0 + "px";
+      target.style.width = 0 + "px";
+    }
   };
 
   useEffect(() => {
@@ -86,6 +91,9 @@ const NavBar = () => {
       item.addEventListener("click", handleClick);
     });
 
+    if (pathname == "/productDetail") {
+      lineActive(line, navActive, 0);
+    }
     return () => {
       navigationItem.forEach((item: any) => {
         item.removeEventListener("click", handleClick);
