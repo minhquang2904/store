@@ -4,11 +4,12 @@ import style from "./templateProductDetail.module.scss";
 import Image from "next/image";
 import IconHeartSvg from "../iconHeartSvg/iconHeartSvg";
 import { useEffect, useState } from "react";
-import { dataDescription } from "@/app/data";
+import { dataDescription, data } from "@/app/data";
 
 export default function TemplateProductDetail() {
   const [description, setDescription] = useState("");
-
+  const [dataDetail, setDataDetail] = useState(data);
+  const [picture, setPicture] = useState(0);
   const navDescription = dataDescription[0].description;
   const navAddInformation = dataDescription[1].addInformation;
 
@@ -25,10 +26,14 @@ export default function TemplateProductDetail() {
     e.target.classList.add(`${style.active}`);
   };
   const handleIconHeart = () => {};
+  const handleActivePicture = (index: any) => {
+    setPicture(index);
+  };
 
   useEffect(() => {
     setDescription(navDescription || "");
   }, []);
+
   return (
     <div className={`${style.detail}`}>
       <div className={`${style.detailContainer}`}>
@@ -37,7 +42,7 @@ export default function TemplateProductDetail() {
           <div className={`${style.detailBuyLeft}`}>
             <div className={`${style.detailBuyLeftImage}`}>
               <Image
-                src="/images/product2.png"
+                src={dataDetail[picture].url || ""}
                 className={`${style.picture}`}
                 alt="Product 1"
                 fill
@@ -46,66 +51,26 @@ export default function TemplateProductDetail() {
               />
             </div>
             <div className={`${style.detailBuyLeftReview}`}>
-              <div className={`${style.detailBuyLeftReviewItem}`}>
-                <Image
-                  src="/images/product3.png"
-                  className={`${style.picture}`}
-                  alt="Product 1"
-                  fill
-                  sizes="(max-width: 200px) 100vw"
-                  priority={true}
-                />
-              </div>
-              <div className={`${style.detailBuyLeftReviewItem}`}>
-                <Image
-                  src="/images/product3.png"
-                  className={`${style.picture}`}
-                  alt="Product 1"
-                  fill
-                  sizes="(max-width: 200px) 100vw"
-                  priority={true}
-                />
-              </div>
-              <div className={`${style.detailBuyLeftReviewItem}`}>
-                <Image
-                  src="/images/product1.png"
-                  className={`${style.picture}`}
-                  alt="Product 1"
-                  fill
-                  sizes="(max-width: 200px) 100vw"
-                  priority={true}
-                />
-              </div>
-              <div className={`${style.detailBuyLeftReviewItem}`}>
-                <Image
-                  src="/images/product4.png"
-                  className={`${style.picture}`}
-                  alt="Product 1"
-                  fill
-                  sizes="(max-width: 200px) 100vw"
-                  priority={true}
-                />
-              </div>
-              <div className={`${style.detailBuyLeftReviewItem}`}>
-                <Image
-                  src="/images/product1.png"
-                  className={`${style.picture}`}
-                  alt="Product 1"
-                  fill
-                  sizes="(max-width: 200px) 100vw"
-                  priority={true}
-                />
-              </div>
-              <div className={`${style.detailBuyLeftReviewItem}`}>
-                <Image
-                  src="/images/product3.png"
-                  className={`${style.picture}`}
-                  alt="Product 1"
-                  fill
-                  sizes="(max-width: 200px) 100vw"
-                  priority={true}
-                />
-              </div>
+              {dataDetail.slice(0, 6).map((item, index) => {
+                return dataDetail.length > 1 ? (
+                  <div
+                    key={index}
+                    className={`${style.detailBuyLeftReviewItem}`}
+                    onClick={() => handleActivePicture(index)}
+                  >
+                    <Image
+                      src={item.url}
+                      className={`${style.picture}`}
+                      alt="Product 1"
+                      fill
+                      sizes="(max-width: 200px) 100vw"
+                      priority={true}
+                    />
+                  </div>
+                ) : (
+                  ""
+                );
+              })}
             </div>
           </div>
           <div className={`${style.detailBuyRight}`}>

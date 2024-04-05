@@ -11,6 +11,14 @@ const NavBar = () => {
   const [checkLogin, setCheckLogin] = useState(false);
   const pathname = usePathname();
 
+  const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
+
+  const checkNavActive = (url: string): string => {
+    return pathname == `${url}`
+      ? `${style.navigationItem} lineActive`
+      : `${style.navigationItem}`;
+  };
+
   useEffect(() => {
     const mainLayout: any = document.querySelector(".mainLayout");
     const iconSearch: any = document.querySelector(".iconSearch");
@@ -75,14 +83,16 @@ const NavBar = () => {
     );
     const line: any = document.querySelector(`.${style.line}`);
     const navActive: any = document.querySelector(
-      `.${style.navigationItem}.${style.active}`
+      `.${style.navigationItem}.lineActive`
     );
 
     lineActive(line, navActive, 26);
+    navActive && navActive.classList.add(`${style.active}`);
 
     const handleClick = (event: Event) => {
       const target = event.target as HTMLElement;
       if (target.classList.contains(style.navigationItem)) {
+        target.classList.add(`${style.active}`);
         lineActive(line, target, 26);
       }
     };
@@ -91,7 +101,7 @@ const NavBar = () => {
       item.addEventListener("click", handleClick);
     });
 
-    if (pathname == "/productDetail") {
+    if (!urlNavLink.includes(pathname)) {
       lineActive(line, navActive, 0);
     }
     return () => {
@@ -121,44 +131,16 @@ const NavBar = () => {
           </div>
           <div className={`${style.navigationCenter}`}>
             <div className={`${style.navigationList}`}>
-              <Link
-                href="/"
-                className={
-                  pathname == "/"
-                    ? `${style.navigationItem} ${style.active}`
-                    : `${style.navigationItem}`
-                }
-              >
+              <Link href="/" className={checkNavActive("/")}>
                 home
               </Link>
-              <Link
-                href="/shirt"
-                className={
-                  pathname == "/shirt"
-                    ? `${style.navigationItem} ${style.active}`
-                    : `${style.navigationItem}`
-                }
-              >
+              <Link href="/shirt" className={checkNavActive("/shirt")}>
                 shirt
               </Link>
-              <Link
-                href="/trousers"
-                className={
-                  pathname == "/trousers"
-                    ? `${style.navigationItem} ${style.active}`
-                    : `${style.navigationItem}`
-                }
-              >
+              <Link href="/trousers" className={checkNavActive("/trousers")}>
                 trousers
               </Link>
-              <Link
-                href="/bagShoes"
-                className={
-                  pathname == "/bagShoes"
-                    ? `${style.navigationItem} ${style.active}`
-                    : `${style.navigationItem}`
-                }
-              >
+              <Link href="/bagShoes" className={checkNavActive("/bagShoes")}>
                 Bag & Shoes
               </Link>
               <div className={`${style.line}`}></div>

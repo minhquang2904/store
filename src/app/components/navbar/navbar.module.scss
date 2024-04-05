@@ -52,6 +52,7 @@
             cursor: pointer;
             font-weight: 600;
             padding: 4px 10px;
+            transition: all 0.2s ease;
             &.active,
             &:hover {
               color: var(--text-color) !important;
