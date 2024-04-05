@@ -204,6 +204,7 @@ export default function TemplateProductDetail() {
             >
               Add Information
             </div>
+            <div className={`${style.line}`}></div>
           </div>
           <div className={`${style.detailDescriptionContent}`}>
             <p>{description}</p>

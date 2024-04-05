@@ -2,11 +2,7 @@ import { ReactNode } from "react";
 import Image from "next/image";
 import style from "./layoutAccount.module.scss";
 
-interface LayoutProps {
-  children: ReactNode;
-}
-
-export default function LayoutAccount({ children }: LayoutProps) {
+export default function Layout({ children }: { children: ReactNode }) {
   return (
     <main className={`bg-white min-h-screen ${style.main}`}>
       <div className={style.formImage}>

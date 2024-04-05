@@ -7,7 +7,6 @@ import Image from "next/image";
 import TitleAccount from "@/app/components/titleAccount/titleAccount";
 import InputAccount from "@/app/components/inputAccount/inputAccount";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
-import LayoutAccount from "../layoutAccount/page";
 
 export default function ForgotPassword() {
   const [otp, setOTP] = useState("");
@@ -23,8 +22,8 @@ export default function ForgotPassword() {
   const handleSubmitOTP = (e: any) => {};
 
   return (
-    <LayoutAccount>
-      <Link href="/pages/account/forgotPassword">
+    <>
+      <Link href="/forgotPassword">
         <div className={`${style.backGroup}`}>
           <Image
             src="/icons/arrowLeft.svg"
@@ -61,6 +60,6 @@ export default function ForgotPassword() {
         </div>
         <BtnAccount title="Verify" onClick={handleSubmitOTP} />
       </form>
-    </LayoutAccount>
+    </>
   );
 }

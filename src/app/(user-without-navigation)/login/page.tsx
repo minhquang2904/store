@@ -1,58 +1,47 @@
 "use client";
-
-import { useState, useRef, useEffect } from "react";
-import style from "./signUp.module.scss";
+import React, { useState, useRef, useEffect } from "react";
+import style from "./login.module.scss";
 import Link from "next/link";
 import TitleAccount from "@/app/components/titleAccount/titleAccount";
 import SubTitleAccount from "@/app/components/subTitleAccount/subTitleAccount";
 import InputAccount from "@/app/components/inputAccount/inputAccount";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
-import LayoutAccount from "../layoutAccount/page";
+import ShowError from "@/app/components/showError/page";
 
 export default function Login() {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const inputName: any = useRef(null);
+  const [error, setError] = useState("");
+  const inputRef: any = useRef(null);
 
-  useEffect(() => {
-    inputName.current.focus();
-  }, []);
-  const handleInputChangeName = (e: any) => {
-    setName(e.target.value);
-  };
   const handleInputChangeEmail = (e: any) => {
     setEmail(e.target.value);
   };
+
   const handleInputChangePassword = (e: any) => {
     setPassword(e.target.value);
   };
 
-  const handleSignUp = (e: any) => {};
+  const handleLogin = (e: any) => {
+    if (email == "") {
+      setError("Empty email");
+    } else {
+      setError("");
+    }
+  };
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   return (
-    <LayoutAccount>
-      <TitleAccount title="Create New Account" />
-      <Link href="/pages/account/login">
-        <SubTitleAccount title="Please login here" />
+    <>
+      <TitleAccount title="Welcome 👋" />
+      <Link href="/signup">
+        <SubTitleAccount title="Please sign up here" />
       </Link>
       <form>
         <div className={`${style.formColumn}`}>
-          <div className={`${style.formGroup}`}>
-            <h4>First Name</h4>
-            <InputAccount
-              value={name}
-              onChange={handleInputChangeName}
-              type="text"
-              name="name"
-              id="name"
-              placeholder="Julia Roberts"
-              className=""
-              style={{}}
-              refer={inputName}
-              autoComplete="username"
-            />
-          </div>
           <div className={`${style.formGroup}`}>
             <h4>Email Address</h4>
             <InputAccount
@@ -64,11 +53,11 @@ export default function Login() {
               placeholder="Email@gmail.com"
               className=""
               style={{}}
-              refer={null}
+              refer={inputRef}
               autoComplete="Email"
             />
           </div>
-          <div className={`${style.formGroup}`}>
+          <div className={`${style.formGroup}`} style={{ marginBottom: "0" }}>
             <h4>Password</h4>
             <InputAccount
               value={password}
@@ -78,14 +67,24 @@ export default function Login() {
               id="password"
               placeholder="Password"
               className=""
-              style={{ margin: "0 0 16px 0" }}
+              style={{}}
               refer={null}
               autoComplete="current-password"
             />
           </div>
         </div>
-        <BtnAccount title="Sign up" onClick={handleSignUp} />
+        {error ? (
+          <ShowError style={{ visibility: "visible" }} error={error} />
+        ) : (
+          <ShowError style={{ visibility: "hidden" }} error={error} />
+        )}
+        <div className={`${style.forgotPassword}`}>
+          <Link href="/forgotPassword">
+            <p>Forgot Password?</p>
+          </Link>
+        </div>
+        <BtnAccount title="Login" onClick={handleLogin} />
       </form>
-    </LayoutAccount>
+    </>
   );
 }

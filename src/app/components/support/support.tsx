@@ -1,7 +1,8 @@
 import Image from "next/image";
 import style from "./support.module.scss";
+import React from "react";
 
-export default function Support() {
+const Support = () => {
   const data = [
     {
       url: "/icons/shippingbox.svg",
@@ -48,4 +49,6 @@ export default function Support() {
       </div>
     </div>
   );
-}
+};
+
+export default React.memo(Support);

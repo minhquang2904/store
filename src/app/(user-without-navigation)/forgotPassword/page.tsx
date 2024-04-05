@@ -8,7 +8,6 @@ import Image from "next/image";
 import TitleAccount from "@/app/components/titleAccount/titleAccount";
 import InputAccount from "@/app/components/inputAccount/inputAccount";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
-import LayoutAccount from "../layoutAccount/page";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -22,7 +21,7 @@ export default function ForgotPassword() {
 
   useEffect(() => {
     if (checkEmail) {
-      router.push("/pages/account/enterOTP");
+      router.push("/enterOTP");
     }
   }, [checkEmail]);
 
@@ -37,8 +36,8 @@ export default function ForgotPassword() {
   };
 
   return (
-    <LayoutAccount>
-      <Link href="/pages/account/login">
+    <>
+      <Link href="/login">
         <div className={`${style.backGroup}`}>
           <Image
             src="/icons/arrowLeft.svg"
@@ -76,6 +75,6 @@ export default function ForgotPassword() {
         </div>
         <BtnAccount title="Send OTP" onClick={handleSendOTP} />
       </form>
-    </LayoutAccount>
+    </>
   );
 }

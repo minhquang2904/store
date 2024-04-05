@@ -5,10 +5,11 @@ import style from "./navbar.module.scss";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-export default function NavBar() {
+
+const NavBar = () => {
   const searchInput: any = useRef(null);
   const [checkLogin, setCheckLogin] = useState(false);
-  const pathname: any = usePathname();
+  const pathname = usePathname();
 
   useEffect(() => {
     const mainLayout: any = document.querySelector(".mainLayout");
@@ -56,6 +57,42 @@ export default function NavBar() {
     };
   }, []);
 
+  const lineActive = (target: any, navActive: any, width: any) => {
+    const sizeWidth = width;
+    const sizeLeft = sizeWidth / 2;
+    target.style.left = navActive.offsetLeft + sizeLeft + "px";
+    target.style.width = navActive.offsetWidth - sizeWidth + "px";
+  };
+
+  useEffect(() => {
+    const navigationItem = document.querySelectorAll(
+      `.${style.navigationItem}`
+    );
+    const line: any = document.querySelector(`.${style.line}`);
+    const navActive: any = document.querySelector(
+      `.${style.navigationItem}.${style.active}`
+    );
+
+    lineActive(line, navActive, 26);
+
+    const handleClick = (event: Event) => {
+      const target = event.target as HTMLElement;
+      if (target.classList.contains(style.navigationItem)) {
+        lineActive(line, target, 26);
+      }
+    };
+
+    navigationItem.forEach((item: any) => {
+      item.addEventListener("click", handleClick);
+    });
+
+    return () => {
+      navigationItem.forEach((item: any) => {
+        item.removeEventListener("click", handleClick);
+      });
+    };
+  }, [pathname]);
+
   const handleClick = (e: any) => {};
 
   return (
@@ -87,9 +124,9 @@ export default function NavBar() {
                 home
               </Link>
               <Link
-                href="/pages/home/shirt"
+                href="/shirt"
                 className={
-                  pathname == "/pages/home/shirt"
+                  pathname == "/shirt"
                     ? `${style.navigationItem} ${style.active}`
                     : `${style.navigationItem}`
                 }
@@ -97,9 +134,9 @@ export default function NavBar() {
                 shirt
               </Link>
               <Link
-                href="/pages/home/trousers"
+                href="/trousers"
                 className={
-                  pathname == "/pages/home/trousers"
+                  pathname == "/trousers"
                     ? `${style.navigationItem} ${style.active}`
                     : `${style.navigationItem}`
                 }
@@ -107,9 +144,9 @@ export default function NavBar() {
                 trousers
               </Link>
               <Link
-                href="/pages/home/bagShoes"
+                href="/bagShoes"
                 className={
-                  pathname == "/pages/home/bagShoes"
+                  pathname == "/bagShoes"
                     ? `${style.navigationItem} ${style.active}`
                     : `${style.navigationItem}`
                 }
@@ -164,7 +201,7 @@ export default function NavBar() {
                   <h3>Lương Minh Quang</h3>
                 </div>
               ) : (
-                <Link href="/pages/account/login">
+                <Link href="/login">
                   <button>Login</button>
                 </Link>
               )}
@@ -174,4 +211,6 @@ export default function NavBar() {
       </div>
     </div>
   );
-}
+};
+
+export default NavBar;
