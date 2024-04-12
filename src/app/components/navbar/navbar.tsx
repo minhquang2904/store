@@ -6,9 +6,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { login } from "@/app/data";
-interface pageProps {
-  params: { slug: string };
-}
+
 const NavBar = () => {
   const searchInput: any = useRef(null);
   const [checkLogin, setCheckLogin] = useState(login);
@@ -23,12 +21,23 @@ const NavBar = () => {
   };
 
   useEffect(() => {
-    const mainLayout: any = document.querySelector(".mainLayout");
-    const iconSearch: any = document.querySelector(".iconSearch");
-    const itemSearch: any = document.querySelector(".itemSearch");
-    const positionTopNav: any = document.querySelector(
-      `.${style.headerContainer}`
-    );
+    const $ = document.querySelector.bind(document);
+
+    const mainLayout: any = $(".mainLayout");
+    const itemSearch: any = $(`.${style.navigationUserItemSearch}`);
+    const cartContainer: any = $(`.${style.cartContainer}`);
+    const positionTopNav: any = $(`.${style.headerContainer}`);
+
+    const checkActiveIcon = (e: any) => {
+      if (!cartContainer.contains(e.target)) {
+        cartContainer?.classList.remove(style.active);
+      }
+      if (!itemSearch.contains(e.target)) {
+        itemSearch?.classList.remove(style.active);
+      }
+    };
+
+    mainLayout.addEventListener("click", checkActiveIcon);
 
     const addStyleNav = () => {
       positionTopNav.offsetTop > 80
@@ -36,36 +45,14 @@ const NavBar = () => {
         : (positionTopNav.style.boxShadow = "unset");
     };
 
-    window.addEventListener("scroll", () => {
-      addStyleNav();
-    });
-
-    iconSearch.addEventListener("click", (e: any) => {
-      itemSearch.classList.add(style.showSearch);
-      iconSearch.style.backgroundColor = "#e3e7f3";
-      searchInput.current.focus();
-      e.stopPropagation();
-    });
-
-    mainLayout.addEventListener("click", (e: any) => {
-      iconSearch.style.backgroundColor = "unset";
-      itemSearch.classList.remove(style.showSearch);
-    });
+    window.addEventListener("scroll", addStyleNav);
 
     addStyleNav();
     return () => {
       window.addEventListener("scroll", () => {
         addStyleNav();
       });
-      iconSearch.addEventListener("click", (e: any) => {
-        itemSearch.classList.add(style.showSearch);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        searchInput.current.focus();
-        e.stopPropagation();
-      });
-      mainLayout.addEventListener("click", (e: any) => {
-        itemSearch.classList.remove(style.showSearch);
-      });
+      mainLayout.addEventListener("click", checkActiveIcon);
     };
   }, []);
 
@@ -82,13 +69,12 @@ const NavBar = () => {
   };
 
   useEffect(() => {
-    const navigationItem = document.querySelectorAll(
-      `.${style.navigationItem}`
-    );
-    const line: any = document.querySelector(`.${style.line}`);
-    const navActive: any = document.querySelector(
-      `.${style.navigationItem}.lineActive`
-    );
+    const $ = document.querySelector.bind(document);
+    const $$ = document.querySelectorAll.bind(document);
+
+    const navigationItem = $$(`.${style.navigationItem}`);
+    const line: any = $(`.${style.line}`);
+    const navActive: any = $(`.${style.navigationItem}.lineActive`);
 
     lineActive(line, navActive, 26);
     navActive && navActive.classList.add(`${style.active}`);
@@ -116,8 +102,20 @@ const NavBar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  const handleClick = (e: any) => {};
+  const handleDeleteProduct = (e: any) => {
+    e.preventDefault();
+  };
+  const handleShowCart = (e: any) => {
+    document
+      .querySelector(`.${style.cartContainer}`)
+      ?.classList.toggle(style.active);
+  };
 
+  const handleShowSearch = (e: any) => {
+    document
+      .querySelector(`.${style.navigationUserItemSearch}`)
+      ?.classList.toggle(style.active);
+  };
   return (
     <div className={`${style.headerContainer}`}>
       <div className={`${style.navigationContainer}`}>
@@ -153,7 +151,10 @@ const NavBar = () => {
           </div>
           <div className={`${style.navigationRight}`}>
             <div className={`${style.navigationUser}`}>
-              <div className={`${style.navigationUserItem} iconSearch`}>
+              <div
+                onClick={handleShowSearch}
+                className={`${style.navigationUserItem} iconSearch`}
+              >
                 <Image
                   src="/icons/search.svg"
                   className={style.logo}
@@ -162,7 +163,10 @@ const NavBar = () => {
                   sizes="100vw"
                   priority={true}
                 />
-                <div className={`${style.navigationUserItemSearch} itemSearch`}>
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  className={`${style.navigationUserItemSearch} itemSearch`}
+                >
                   <input
                     ref={searchInput}
                     type="text"
@@ -183,19 +187,177 @@ const NavBar = () => {
                   priority={true}
                 />
               </Link>
-              <Link
-                className={`${style.navigationUserItem}`}
-                href={checkLogin ? "/cart" : "/login"}
-              >
-                <Image
-                  src="/icons/bag.svg"
-                  className={style.logo}
-                  alt="Bag"
-                  fill
-                  sizes="100vw"
-                  priority={true}
-                />
-              </Link>
+              {!checkLogin ? (
+                <Link className={`${style.navigationUserItem}`} href="/login">
+                  <Image
+                    src="/icons/bag.svg"
+                    className={style.logo}
+                    alt="Bag"
+                    fill
+                    sizes="100vw"
+                    priority={true}
+                  />
+                </Link>
+              ) : (
+                <div
+                  onClick={handleShowCart}
+                  className={`${style.navigationUserItem} ${style.cartModal}`}
+                >
+                  <Image
+                    src="/icons/bag.svg"
+                    alt="Bag"
+                    className={style.logo}
+                    fill
+                    sizes="100vw"
+                    priority={true}
+                  />
+                  <div
+                    className={`${style.cartContainer}`}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <h1 className={`${style.cartTitle}`}>
+                      You have 3 items in your cart
+                    </h1>
+                    <ul>
+                      <Link href="/productDetail">
+                        <Image
+                          src="/images/product2.png"
+                          className={style.productImage}
+                          alt="Bag"
+                          fill
+                          sizes="(max-width: 80px) 100vw"
+                        />
+                        <div className={`${style.cartInformation}`}>
+                          <h2>Girls Pink Moana Printed Dress</h2>
+                          <h3>1 x $80</h3>
+                          <div className={`${style.cartInformationDelete}`}>
+                            <h2>Size S</h2>
+                            <div
+                              className={`${style.cartInformationDeleteIcon}`}
+                              onClick={handleDeleteProduct}
+                            >
+                              <Image
+                                src="/icons/trash-can.svg"
+                                className={style.trashDelete}
+                                alt="Bag"
+                                fill
+                                sizes="(max-width: 22px) 100vw"
+                                priority={true}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                      <Link href="/productDetail">
+                        <Image
+                          src="/images/product2.png"
+                          className={style.productImage}
+                          alt="Bag"
+                          fill
+                          sizes="(max-width: 80px) 100vw"
+                        />
+                        <div className={`${style.cartInformation}`}>
+                          <h2>Girls Pink Moana Printed Dress</h2>
+                          <h3>1 x $80</h3>
+                          <div className={`${style.cartInformationDelete}`}>
+                            <h2>Size S</h2>
+                            <div
+                              className={`${style.cartInformationDeleteIcon}`}
+                              onClick={handleDeleteProduct}
+                            >
+                              <Image
+                                src="/icons/trash-can.svg"
+                                className={style.trashDelete}
+                                alt="Bag"
+                                fill
+                                sizes="(max-width: 22px) 100vw"
+                                priority={true}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                      <Link href="/productDetail">
+                        <Image
+                          src="/images/product2.png"
+                          className={style.productImage}
+                          alt="Bag"
+                          fill
+                          sizes="(max-width: 80px) 100vw"
+                        />
+                        <div className={`${style.cartInformation}`}>
+                          <h2>Girls Pink Moana Printed Dress</h2>
+                          <h3>1 x $80</h3>
+                          <div className={`${style.cartInformationDelete}`}>
+                            <h2>Size S</h2>
+                            <div
+                              className={`${style.cartInformationDeleteIcon}`}
+                              onClick={handleDeleteProduct}
+                            >
+                              <Image
+                                src="/icons/trash-can.svg"
+                                className={style.trashDelete}
+                                alt="Bag"
+                                fill
+                                sizes="(max-width: 22px) 100vw"
+                                priority={true}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                      <Link href="/productDetail">
+                        <Image
+                          src="/images/product2.png"
+                          className={style.productImage}
+                          alt="Bag"
+                          fill
+                          sizes="(max-width: 80px) 100vw"
+                        />
+                        <div className={`${style.cartInformation}`}>
+                          <h2>Girls Pink Moana Printed Dress</h2>
+                          <h3>1 x $80</h3>
+                          <div className={`${style.cartInformationDelete}`}>
+                            <h2>Size S</h2>
+                            <div
+                              className={`${style.cartInformationDeleteIcon}`}
+                              onClick={handleDeleteProduct}
+                            >
+                              <Image
+                                src="/icons/trash-can.svg"
+                                className={style.trashDelete}
+                                alt="Bag"
+                                fill
+                                sizes="(max-width: 22px) 100vw"
+                                priority={true}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    </ul>
+                    <div className={`${style.cartCheckout}`}>
+                      <div className={`${style.cartCheckoutTitle}`}>
+                        <h1>subtotal</h1>
+                        <p>$200</p>
+                      </div>
+                      <Link
+                        href="/cart"
+                        className={`${style.cartCheckoutBtn} ${style.cartCheckoutBtnViewCart}`}
+                      >
+                        <button>View Cart</button>
+                      </Link>
+                      <Link
+                        href="/"
+                        className={`${style.cartCheckoutBtn} ${style.cartCheckoutBtnCheckout}`}
+                      >
+                        <button>Checkout</button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {checkLogin ? (
                 <div className={`${style.navigationNameUser}`}>
                   <h3>Lương Minh Quang</h3>

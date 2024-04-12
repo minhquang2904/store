@@ -42,7 +42,7 @@ export default function TemplateProductView() {
   };
 
   const getDataType = (type: string) => {
-    const dataType = data.filter((item) => {
+    const dataType = data.filter((item: any) => {
       return item.type.includes(type);
     });
     return setData(dataType);
@@ -91,7 +91,7 @@ export default function TemplateProductView() {
           </div>
         </div>
         <div className={`${style.bestSellerList}`}>
-          {dataList.map((item, index) => {
+          {dataList.map((item: any, index: any) => {
             return (
               <Link
                 key={index}
