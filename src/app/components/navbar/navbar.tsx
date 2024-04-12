@@ -5,10 +5,13 @@ import style from "./navbar.module.scss";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-
+import { login } from "@/app/data";
+interface pageProps {
+  params: { slug: string };
+}
 const NavBar = () => {
   const searchInput: any = useRef(null);
-  const [checkLogin, setCheckLogin] = useState(false);
+  const [checkLogin, setCheckLogin] = useState(login);
   const pathname = usePathname();
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
@@ -56,6 +59,7 @@ const NavBar = () => {
       });
       iconSearch.addEventListener("click", (e: any) => {
         itemSearch.classList.add(style.showSearch);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         searchInput.current.focus();
         e.stopPropagation();
       });
@@ -109,6 +113,7 @@ const NavBar = () => {
         item.removeEventListener("click", handleClick);
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const handleClick = (e: any) => {};
@@ -165,8 +170,10 @@ const NavBar = () => {
                   />
                 </div>
               </div>
-              {checkLogin}
-              <div className={`${style.navigationUserItem}`}>
+              <Link
+                className={`${style.navigationUserItem}`}
+                href={checkLogin ? "/like" : "/login"}
+              >
                 <Image
                   src="/icons/heart.svg"
                   className={style.logo}
@@ -175,8 +182,11 @@ const NavBar = () => {
                   sizes="100vw"
                   priority={true}
                 />
-              </div>
-              <div className={`${style.navigationUserItem}`}>
+              </Link>
+              <Link
+                className={`${style.navigationUserItem}`}
+                href={checkLogin ? "/cart" : "/login"}
+              >
                 <Image
                   src="/icons/bag.svg"
                   className={style.logo}
@@ -185,7 +195,7 @@ const NavBar = () => {
                   sizes="100vw"
                   priority={true}
                 />
-              </div>
+              </Link>
               {checkLogin ? (
                 <div className={`${style.navigationNameUser}`}>
                   <h3>Lương Minh Quang</h3>

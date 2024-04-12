@@ -1,58 +1,58 @@
-const data = [
+const data: any = [
   {
     url: "/images/product1.png",
     title: "Basic Dress Green",
     type: "dress",
-    price: "$236.00",
+    price: 236,
     discount: "",
   },
   {
     url: "/images/product2.png",
     title: "Nike Sportswear Futura Luxe",
     type: "bag",
-    price: "$130.00",
+    price: 130,
     discount: "",
   },
   {
     url: "/images/product3.png",
     title: "Yellow Reserved Hoodie",
     type: "dress",
-    price: "$364.00",
+    price: 364,
     discount: "$155.00",
   },
   {
     url: "/images/product4.png",
     title: "Nike Air Zoom Pegasus",
     type: "shoes",
-    price: "$220.00",
+    price: 220,
     discount: "$198.00",
   },
   {
     url: "/images/product1.png",
     title: "Basic Dress Green",
     type: "dress",
-    price: "$236.00",
+    price: 236,
     discount: "",
   },
   {
     url: "/images/product2.png",
     title: "Nike Sportswear Futura Luxe",
     type: "bag",
-    price: "$130.00",
+    price: 130,
     discount: "",
   },
   {
     url: "/images/product3.png",
     title: "Yellow Reserved Hoodie",
     type: "dress",
-    price: "$364.00",
+    price: 364,
     discount: "$155.00",
   },
   {
     url: "/images/product4.png",
     title: "Nike Air Zoom Pegasus",
     type: "shoes",
-    price: "$220.00",
+    price: 220,
     discount: "$198.00",
   },
 ];
@@ -68,4 +68,8 @@ const dataDescription = [
   },
 ];
 
-export { data, dataDescription };
+const login = true;
+
+const itemCart: any = [{}];
+
+export { data, dataDescription, login, itemCart };

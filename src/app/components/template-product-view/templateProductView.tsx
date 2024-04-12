@@ -1,15 +1,19 @@
 "use client";
+
 import Image from "next/image";
 import style from "./templateProductView.module.scss";
 import Link from "next/link";
-import { data } from "@/app/data";
+import { data, login } from "@/app/data";
 import IconHeartSvg from "../iconHeartSvg/iconHeartSvg";
 import { useState } from "react";
 
 export default function TemplateProductView() {
   const [dataList, setData] = useState(data);
-
+  const [checkLogin, setCheckLogin] = useState(login);
   const handleAddCart = (e: any) => {
+    if (!checkLogin) {
+      window.location.href = "/login";
+    }
     e.preventDefault();
   };
 
