@@ -14,6 +14,8 @@ const NavBar = () => {
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
 
+  const colorIcon = "#e3e7f3";
+
   const checkNavActive = (url: string): string => {
     return pathname == `${url}`
       ? `${style.navigationItem} lineActive`
@@ -29,11 +31,17 @@ const NavBar = () => {
     const positionTopNav: any = $(`.${style.headerContainer}`);
 
     const checkActiveIcon = (e: any) => {
-      if (!cartContainer.contains(e.target)) {
+      if (checkLogin && !cartContainer.contains(e.target)) {
         cartContainer?.classList.remove(style.active);
+        (
+          document.querySelector(`.${style.cartModal}`) as any
+        ).style.backgroundColor = "unset";
       }
       if (!itemSearch.contains(e.target)) {
         itemSearch?.classList.remove(style.active);
+        (
+          document.querySelector(`.${style.navigationUserIconSearch}`) as any
+        ).style.backgroundColor = "unset";
       }
     };
 
@@ -105,16 +113,24 @@ const NavBar = () => {
   const handleDeleteProduct = (e: any) => {
     e.preventDefault();
   };
-  const handleShowCart = (e: any) => {
+
+  const handleShowCart = () => {
     document
       .querySelector(`.${style.cartContainer}`)
       ?.classList.toggle(style.active);
+    (
+      document.querySelector(`.${style.cartModal}`) as any
+    ).style.backgroundColor = colorIcon;
   };
 
-  const handleShowSearch = (e: any) => {
+  const handleShowSearch = () => {
     document
       .querySelector(`.${style.navigationUserItemSearch}`)
       ?.classList.toggle(style.active);
+    (
+      document.querySelector(`.${style.navigationUserIconSearch}`) as any
+    ).style.backgroundColor = colorIcon;
+    searchInput.current.focus();
   };
   return (
     <div className={`${style.headerContainer}`}>
@@ -153,7 +169,7 @@ const NavBar = () => {
             <div className={`${style.navigationUser}`}>
               <div
                 onClick={handleShowSearch}
-                className={`${style.navigationUserItem} iconSearch`}
+                className={`${style.navigationUserItem} ${style.navigationUserIconSearch}`}
               >
                 <Image
                   src="/icons/search.svg"
@@ -165,7 +181,7 @@ const NavBar = () => {
                 />
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className={`${style.navigationUserItemSearch} itemSearch`}
+                  className={`${style.navigationUserItemSearch}`}
                 >
                   <input
                     ref={searchInput}

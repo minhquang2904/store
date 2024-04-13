@@ -155,14 +155,12 @@
     width: 360px;
     border-radius: 8px;
     background-color: var(--white-color);
-    box-shadow: 0 0px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 40px rgba(0, 0, 0, 0.2);
     cursor: default;
     display: none;
     transform-origin: 90% top;
     animation: showOut 0.3s ease !important;
-    &.active {
-      display: block !important;
-    }
+
     .cartTitle {
       width: 100%;
       color: var(--text-color);
