@@ -1,0 +1,12 @@
+@import "../../style.module.scss";
+
+.noItemCart {
+  position: relative !important;
+  @include disflexCenter;
+  .logo {
+    position: relative !important;
+    max-width: 253px;
+    width: 100%;
+    height: 100%;
+  }
+}

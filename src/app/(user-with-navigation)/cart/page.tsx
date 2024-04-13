@@ -1,12 +1,13 @@
 "use client";
 
+import NoItemCart from "@/app/components/noItemCart/noItemCart";
 import style from "./cart.module.scss";
 import { data, itemCart } from "@/app/data";
 import Image from "next/image";
 import { useState } from "react";
 
 const Cart = () => {
-  const [dataCart, setdataCart] = useState(data);
+  const [dataCart, setdataCart] = useState([]);
   return (
     <div className={`${style.cart}`}>
       <div className={`${style.cartContainer}`}>
@@ -18,15 +19,7 @@ const Cart = () => {
           style={dataCart.length <= 0 ? { justifyContent: "center" } : {}}
         >
           {dataCart.length <= 0 ? (
-            <div className={`${style.noItemCart}`}>
-              <Image
-                src="/images/no-item-cart.png"
-                className={style.logo}
-                alt="no-item-cart"
-                fill
-                sizes="100vw"
-              />
-            </div>
+            <NoItemCart />
           ) : (
             <>
               <div className={`${style.cartContentLeft}`}>

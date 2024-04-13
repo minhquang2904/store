@@ -5,11 +5,13 @@ import style from "./navbar.module.scss";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { login } from "@/app/data";
+import { login, data } from "@/app/data";
+import NoItemCart from "../noItemCart/noItemCart";
 
 const NavBar = () => {
   const searchInput: any = useRef(null);
   const [checkLogin, setCheckLogin] = useState(login);
+  const [dataList, setDataList] = useState([]);
   const pathname = usePathname();
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
@@ -235,122 +237,47 @@ const NavBar = () => {
                       You have 3 items in your cart
                     </h1>
                     <ul>
-                      <Link href="/productDetail">
-                        <Image
-                          src="/images/product2.png"
-                          className={style.productImage}
-                          alt="Bag"
-                          fill
-                          sizes="(max-width: 80px) 100vw"
-                        />
-                        <div className={`${style.cartInformation}`}>
-                          <h2>Girls Pink Moana Printed Dress</h2>
-                          <h3>1 x $80</h3>
-                          <div className={`${style.cartInformationDelete}`}>
-                            <h2>Size S</h2>
-                            <div
-                              className={`${style.cartInformationDeleteIcon}`}
-                              onClick={handleDeleteProduct}
-                            >
-                              <Image
-                                src="/icons/trash-can.svg"
-                                className={style.trashDelete}
-                                alt="Bag"
-                                fill
-                                sizes="(max-width: 22px) 100vw"
-                                priority={true}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                      <Link href="/productDetail">
-                        <Image
-                          src="/images/product2.png"
-                          className={style.productImage}
-                          alt="Bag"
-                          fill
-                          sizes="(max-width: 80px) 100vw"
-                        />
-                        <div className={`${style.cartInformation}`}>
-                          <h2>Girls Pink Moana Printed Dress</h2>
-                          <h3>1 x $80</h3>
-                          <div className={`${style.cartInformationDelete}`}>
-                            <h2>Size S</h2>
-                            <div
-                              className={`${style.cartInformationDeleteIcon}`}
-                              onClick={handleDeleteProduct}
-                            >
-                              <Image
-                                src="/icons/trash-can.svg"
-                                className={style.trashDelete}
-                                alt="Bag"
-                                fill
-                                sizes="(max-width: 22px) 100vw"
-                                priority={true}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                      <Link href="/productDetail">
-                        <Image
-                          src="/images/product2.png"
-                          className={style.productImage}
-                          alt="Bag"
-                          fill
-                          sizes="(max-width: 80px) 100vw"
-                        />
-                        <div className={`${style.cartInformation}`}>
-                          <h2>Girls Pink Moana Printed Dress</h2>
-                          <h3>1 x $80</h3>
-                          <div className={`${style.cartInformationDelete}`}>
-                            <h2>Size S</h2>
-                            <div
-                              className={`${style.cartInformationDeleteIcon}`}
-                              onClick={handleDeleteProduct}
-                            >
-                              <Image
-                                src="/icons/trash-can.svg"
-                                className={style.trashDelete}
-                                alt="Bag"
-                                fill
-                                sizes="(max-width: 22px) 100vw"
-                                priority={true}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                      <Link href="/productDetail">
-                        <Image
-                          src="/images/product2.png"
-                          className={style.productImage}
-                          alt="Bag"
-                          fill
-                          sizes="(max-width: 80px) 100vw"
-                        />
-                        <div className={`${style.cartInformation}`}>
-                          <h2>Girls Pink Moana Printed Dress</h2>
-                          <h3>1 x $80</h3>
-                          <div className={`${style.cartInformationDelete}`}>
-                            <h2>Size S</h2>
-                            <div
-                              className={`${style.cartInformationDeleteIcon}`}
-                              onClick={handleDeleteProduct}
-                            >
-                              <Image
-                                src="/icons/trash-can.svg"
-                                className={style.trashDelete}
-                                alt="Bag"
-                                fill
-                                sizes="(max-width: 22px) 100vw"
-                                priority={true}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
+                      {dataList.length <= 0 ? (
+                        <NoItemCart styleCustom={{ maxWidth: "180px" }} />
+                      ) : (
+                        <>
+                          {dataList.map((item: any) => {
+                            return (
+                              <Link key={item.id} href="/productDetail">
+                                <Image
+                                  src="/images/product2.png"
+                                  className={style.productImage}
+                                  alt="Bag"
+                                  fill
+                                  sizes="(max-width: 80px) 100vw"
+                                />
+                                <div className={`${style.cartInformation}`}>
+                                  <h2>Girls Pink Moana Printed Dress</h2>
+                                  <h3>1 x $80</h3>
+                                  <div
+                                    className={`${style.cartInformationDelete}`}
+                                  >
+                                    <h2>Size S</h2>
+                                    <div
+                                      className={`${style.cartInformationDeleteIcon}`}
+                                      onClick={handleDeleteProduct}
+                                    >
+                                      <Image
+                                        src="/icons/trash-can.svg"
+                                        className={style.trashDelete}
+                                        alt="Bag"
+                                        fill
+                                        sizes="(max-width: 22px) 100vw"
+                                        priority={true}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </Link>
+                            );
+                          })}
+                        </>
+                      )}
                     </ul>
                     <div className={`${style.cartCheckout}`}>
                       <div className={`${style.cartCheckoutTitle}`}>
