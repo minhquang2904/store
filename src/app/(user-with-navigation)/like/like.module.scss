@@ -6,17 +6,6 @@
     @include mainLayout;
     margin-top: $marginTopLayOut;
   }
-  &Header {
-    h1 {
-      font-size: 3.6em;
-      color: var(--text-color);
-      font-weight: 500;
-    }
-    p {
-      color: var(--text-color);
-      font-size: 1.6em;
-    }
-  }
   &Content {
     margin-top: 16px;
   }
@@ -24,49 +13,5 @@
     display: flex;
     flex-wrap: wrap;
     gap: 24px;
-  }
-  &Footer {
-    margin-top: 30px;
-    display: flex;
-    justify-content: flex-end;
-    .likePage {
-      margin: 0 6px;
-      ul {
-        display: flex;
-        a {
-          margin: 0 8px;
-          display: inline-block;
-          width: 45px;
-          height: 45px;
-          border-radius: 8px;
-          color: var(--text-color);
-          font-size: 1.8em;
-          border: 1px solid var(--text-color);
-          font-weight: 600;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          &:hover {
-            background-color: #e3e7f3;
-            transition: 0.2s ease;
-          }
-          &.active {
-            background-color: var(--btn-color);
-            color: var(--white-color);
-          }
-        }
-      }
-    }
-    .likeIconLeft,
-    .likeIconRight {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      border-radius: 50%;
-      &:hover {
-        cursor: pointer;
-        background-color: #e3e7f3;
-      }
-    }
   }
 }

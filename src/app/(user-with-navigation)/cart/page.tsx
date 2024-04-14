@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 const Cart = () => {
-  const [dataCart, setdataCart] = useState([]);
+  const [dataCart, setdataCart] = useState(data);
   return (
     <div className={`${style.cart}`}>
       <div className={`${style.cartContainer}`}>

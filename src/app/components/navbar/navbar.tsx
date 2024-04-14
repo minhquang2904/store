@@ -11,7 +11,7 @@ import NoItemCart from "../noItemCart/noItemCart";
 const NavBar = () => {
   const searchInput: any = useRef(null);
   const [checkLogin, setCheckLogin] = useState(login);
-  const [dataList, setDataList] = useState([]);
+  const [dataList, setDataList] = useState(data);
   const pathname = usePathname();
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
