@@ -31,19 +31,20 @@ const NavBar = () => {
     const itemSearch: any = $(`.${style.navigationUserItemSearch}`);
     const cartContainer: any = $(`.${style.cartContainer}`);
     const positionTopNav: any = $(`.${style.headerContainer}`);
+    const userModal: any = $(`.${style.navigationNameUserModal}`);
 
     const checkActiveIcon = (e: any) => {
       if (checkLogin && !cartContainer.contains(e.target)) {
         cartContainer?.classList.remove(style.active);
-        (
-          document.querySelector(`.${style.cartModal}`) as any
-        ).style.backgroundColor = "unset";
+        ($(`.${style.cartModal}`) as any).style.backgroundColor = "unset";
+      }
+      if (checkLogin && !userModal.contains(e.target)) {
+        userModal?.classList.remove(style.active);
       }
       if (!itemSearch.contains(e.target)) {
         itemSearch?.classList.remove(style.active);
-        (
-          document.querySelector(`.${style.navigationUserIconSearch}`) as any
-        ).style.backgroundColor = "unset";
+        ($(`.${style.navigationUserIconSearch}`) as any).style.backgroundColor =
+          "unset";
       }
     };
 
@@ -112,27 +113,32 @@ const NavBar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  const handleDeleteProduct = (e: any) => {
-    e.preventDefault();
+  const ToggleShowActive = (className: any) => {
+    document.querySelector(`.${className}`)?.classList.toggle(style.active);
   };
 
-  const handleShowCart = () => {
-    document
-      .querySelector(`.${style.cartContainer}`)
-      ?.classList.toggle(style.active);
-    (
-      document.querySelector(`.${style.cartModal}`) as any
-    ).style.backgroundColor = colorIcon;
+  const BgColorActive = (className: any) => {
+    (document.querySelector(`.${className}`) as any).style.backgroundColor =
+      colorIcon;
   };
 
   const handleShowSearch = () => {
-    document
-      .querySelector(`.${style.navigationUserItemSearch}`)
-      ?.classList.toggle(style.active);
-    (
-      document.querySelector(`.${style.navigationUserIconSearch}`) as any
-    ).style.backgroundColor = colorIcon;
+    ToggleShowActive(style.navigationUserItemSearch);
+    BgColorActive(style.navigationUserIconSearch);
     searchInput.current.focus();
+  };
+
+  const handleShowCart = () => {
+    ToggleShowActive(style.cartContainer);
+    BgColorActive(style.cartModal);
+  };
+
+  const handleShowProfile = () => {
+    ToggleShowActive(style.navigationNameUserModal);
+  };
+
+  const handleDeleteProduct = (e: any) => {
+    e.preventDefault();
   };
   return (
     <div className={`${style.headerContainer}`}>
@@ -192,19 +198,6 @@ const NavBar = () => {
                   />
                 </div>
               </div>
-              <Link
-                className={`${style.navigationUserItem}`}
-                href={checkLogin ? "/like" : "/login"}
-              >
-                <Image
-                  src="/icons/heart.svg"
-                  className={style.logo}
-                  alt="Heart"
-                  fill
-                  sizes="100vw"
-                  priority={true}
-                />
-              </Link>
               {!checkLogin ? (
                 <Link className={`${style.navigationUserItem}`} href="/login">
                   <Image
@@ -303,7 +296,113 @@ const NavBar = () => {
 
               {checkLogin ? (
                 <div className={`${style.navigationNameUser}`}>
-                  <h3>Lương Minh Quang</h3>
+                  <h3 onClick={handleShowProfile}>Lương Minh Quang</h3>
+                  <div className={`${style.navigationNameUserModal}`}>
+                    <div className={`${style.navigationNameUserContainer}`}>
+                      <div className={`${style.navigationNameUserItem}`}>
+                        <Link href="/profile">
+                          <svg
+                            height="20"
+                            viewBox="0 0 32 32"
+                            width="20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path d="m16 8a5 5 0 1 0 5 5 5 5 0 0 0 -5-5zm0 8a3 3 0 1 1 3-3 3.0034 3.0034 0 0 1 -3 3z" />
+                            <path d="m16 2a14 14 0 1 0 14 14 14.0158 14.0158 0 0 0 -14-14zm-6 24.3765v-1.3765a3.0033 3.0033 0 0 1 3-3h6a3.0033 3.0033 0 0 1 3 3v1.3765a11.8989 11.8989 0 0 1 -12 0zm13.9925-1.4507a5.0016 5.0016 0 0 0 -4.9925-4.9258h-6a5.0016 5.0016 0 0 0 -4.9925 4.9258 12 12 0 1 1 15.985 0z" />
+                            <path d="m0 0h32v32h-32z" fill="none" />
+                          </svg>
+                          <h1>My profile</h1>
+                        </Link>
+                      </div>
+                      <div className={`${style.navigationNameUserItem}`}>
+                        <Link href="/like">
+                          <svg
+                            width="20"
+                            height="20"
+                            strokeWidth="2"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M22 8.86222C22 10.4087 21.4062 11.8941 20.3458 12.9929C17.9049 15.523 15.5374 18.1613 13.0053 20.5997C12.4249 21.1505 11.5042 21.1304 10.9488 20.5547L3.65376 12.9929C1.44875 10.7072 1.44875 7.01723 3.65376 4.73157C5.88044 2.42345 9.50794 2.42345 11.7346 4.73157L11.9998 5.00642L12.2648 4.73173C13.3324 3.6245 14.7864 3 16.3053 3C17.8242 3 19.2781 3.62444 20.3458 4.73157C21.4063 5.83045 22 7.31577 22 8.86222Z"
+                              stroke="#131118"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+
+                          <h1>Wish lists</h1>
+                        </Link>
+                      </div>
+                      <div
+                        className={`${style.navigationNameUserItem} ${style.navigationNameUserItemLogout}`}
+                      >
+                        <Link href="">
+                          <svg
+                            fill="none"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            width="22"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <mask
+                              id="a"
+                              height="2"
+                              maskUnits="userSpaceOnUse"
+                              width="15"
+                              x="8"
+                              y="11"
+                            >
+                              <path
+                                clipRule="evenodd"
+                                d="m8.99609 11.2501h13.54091v1.5h-13.54091z"
+                                fill="#fff"
+                                fillRule="evenodd"
+                              />
+                            </mask>
+                            <mask
+                              id="b"
+                              height="8"
+                              maskUnits="userSpaceOnUse"
+                              width="5"
+                              x="18"
+                              y="8"
+                            >
+                              <path
+                                clipRule="evenodd"
+                                d="m18.1096 8.33539h4.4274v7.33071h-4.4274z"
+                                fill="#fff"
+                                fillRule="evenodd"
+                              />
+                            </mask>
+                            <path
+                              clipRule="evenodd"
+                              d="m11.3192 22.0001h-4.88596c-2.444 0-4.433-1.989-4.433-4.435v-11.12898c0-2.446 1.989-4.436 4.433-4.436h4.87496c2.446 0 4.436 1.99 4.436 4.436v.932c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-.932c0-1.62-1.317-2.936-2.936-2.936h-4.87496c-1.617 0-2.933 1.316-2.933 2.936v11.12898c0 1.619 1.316 2.935 2.933 2.935h4.88596c1.612 0 2.925-1.312 2.925-2.924v-.943c0-.414.336-.75.75-.75s.75.336.75.75v.943c0 2.44-1.986 4.424-4.425 4.424z"
+                              fill="#FF6F61"
+                              fillRule="evenodd"
+                            />
+                            <g mask="url(#a)">
+                              <path
+                                clipRule="evenodd"
+                                d="m21.7871 12.7501h-12.04101c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h12.04101c.414 0 .75.336.75.75s-.336.75-.75.75z"
+                                fill="#FF6F61"
+                                fillRule="evenodd"
+                              />
+                            </g>
+                            <g mask="url(#b)">
+                              <path
+                                clipRule="evenodd"
+                                d="m18.8594 15.6661c-.192 0-.385-.073-.531-.221-.292-.294-.291-.768.002-1.06l2.394-2.385-2.394-2.38396c-.293-.292-.295-.766-.002-1.06.292-.294.766-.294 1.06-.002l2.928 2.91496c.142.14.221.332.221.531s-.079.391-.221.531l-2.928 2.916c-.146.146-.338.219-.529.219z"
+                                fill="#FF6F61"
+                                fillRule="evenodd"
+                              />
+                            </g>
+                          </svg>
+                          <h1>Sign out</h1>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <Link href="/login">

@@ -5,6 +5,7 @@ import Image from "next/image";
 import IconHeartSvg from "@/app/components/iconHeartSvg/iconHeartSvg";
 import { useEffect, useState } from "react";
 import { dataDescription, data } from "@/app/data";
+import TitlePageNavigation from "@/app/components/titlePageNavigation/titlePageNavigation";
 
 export default function ProductDetail() {
   const [description, setDescription] = useState("");
@@ -37,7 +38,7 @@ export default function ProductDetail() {
   return (
     <div className={`${style.detail}`}>
       <div className={`${style.detailContainer}`}>
-        <div className={`${style.detailPageNavigation}`}>Home</div>
+        <TitlePageNavigation />
         <div className={`${style.detailBuy}`}>
           <div className={`${style.detailBuyLeft}`}>
             <div className={`${style.detailBuyLeftImage}`}>
@@ -47,7 +48,6 @@ export default function ProductDetail() {
                 alt="Product 1"
                 fill
                 sizes="(max-width: 400px) 100vw"
-                priority={true}
               />
             </div>
             <div className={`${style.detailBuyLeftReview}`}>

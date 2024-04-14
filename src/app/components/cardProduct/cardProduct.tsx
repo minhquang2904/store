@@ -62,7 +62,7 @@ const CardProduct = (props: any) => {
                     color: "#131118",
                   }}
                 >
-                  {data.price}
+                  ${data.price}
                 </h3>
               </>
             ) : (
@@ -71,7 +71,7 @@ const CardProduct = (props: any) => {
                   className={`${style.price}`}
                   style={{ textDecoration: "line-through" }}
                 >
-                  {data.price}
+                  ${data.price}
                 </h3>
                 <h3 className={`${style.discount}`}>{data.discount}</h3>
               </>
