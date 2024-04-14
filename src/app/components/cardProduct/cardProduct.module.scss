@@ -1,13 +1,9 @@
 @import "../../style.module.scss";
 
 .bestSellerItems {
-  // box-shadow: 0 -2px 40px rgba(0, 0, 0, 0.12);
-  max-width: $widthTemplateProductItem;
-  max-height: $heightTemplateProductItem;
-  width: 100%;
+  box-shadow: 0 -2px 40px rgba(0, 0, 0, 0.12);
   display: block;
-  flex: 0 0 25%;
-  padding: 0 0 20px 0;
+  padding-bottom: 20px;
   &Image {
     overflow: hidden;
     position: relative !important;
@@ -110,6 +106,12 @@
       }
     }
   }
+}
+
+.column {
+  display: block;
+  padding: 0 $paddingItemCard;
+  margin-bottom: 24px;
 }
 
 .iconHeartSvg.active {

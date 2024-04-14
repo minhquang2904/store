@@ -2,10 +2,11 @@ const data: any = [
   {
     id: 1,
     url: "/images/product1.png",
-    title: "Basic Dress Green",
-    type: "dress",
+    title: "Basic shirt Green",
+    type: "shirt",
     price: 236,
     discount: "",
+    size: "s",
   },
   {
     id: 2,
@@ -14,14 +15,16 @@ const data: any = [
     type: "bag",
     price: 130,
     discount: "",
+    size: "m",
   },
   {
     id: 3,
     url: "/images/product3.png",
     title: "Yellow Reserved Hoodie",
-    type: "dress",
+    type: "shirt",
     price: 364,
     discount: "$155.00",
+    size: "l",
   },
   {
     id: 4,
@@ -30,14 +33,16 @@ const data: any = [
     type: "shoes",
     price: 220,
     discount: "$198.00",
+    size: "xl",
   },
   {
     id: 5,
     url: "/images/product1.png",
-    title: "Basic Dress Green",
-    type: "dress",
+    title: "Basic shirt Green",
+    type: "shirt",
     price: 236,
     discount: "",
+    size: "xxl",
   },
   {
     id: 6,
@@ -46,14 +51,16 @@ const data: any = [
     type: "bag",
     price: 130,
     discount: "",
+    size: "xxl",
   },
   {
     id: 7,
     url: "/images/product3.png",
     title: "Yellow Reserved Hoodie",
-    type: "dress",
+    type: "shirt",
     price: 364,
     discount: "$155.00",
+    size: "xxl",
   },
   {
     id: 8,
@@ -62,14 +69,16 @@ const data: any = [
     type: "shoes",
     price: 220,
     discount: "$198.00",
+    size: "s",
   },
   {
     id: 9,
     url: "/images/product1.png",
-    title: "Basic Dress Green",
-    type: "dress",
+    title: "Basic shirt Green",
+    type: "shirt",
     price: 236,
     discount: "",
+    size: "m",
   },
   {
     id: 10,
@@ -78,14 +87,16 @@ const data: any = [
     type: "bag",
     price: 130,
     discount: "",
+    size: "l",
   },
   {
     id: 11,
     url: "/images/product3.png",
     title: "Yellow Reserved Hoodie",
-    type: "dress",
+    type: "shirt",
     price: 364,
     discount: "$155.00",
+    size: "l",
   },
   {
     id: 12,
@@ -94,14 +105,16 @@ const data: any = [
     type: "shoes",
     price: 220,
     discount: "$198.00",
+    size: "xl",
   },
   {
     id: 13,
     url: "/images/product1.png",
-    title: "Basic Dress Green",
-    type: "dress",
+    title: "Basic shirt Green",
+    type: "shirt",
     price: 236,
     discount: "",
+    size: "xl",
   },
   {
     id: 14,
@@ -110,14 +123,16 @@ const data: any = [
     type: "bag",
     price: 130,
     discount: "",
+    size: "s",
   },
   {
     id: 15,
     url: "/images/product3.png",
     title: "Yellow Reserved Hoodie",
-    type: "dress",
+    type: "shirt",
     price: 364,
     discount: "$155.00",
+    size: "m",
   },
   {
     id: 16,
@@ -126,6 +141,7 @@ const data: any = [
     type: "shoes",
     price: 220,
     discount: "$198.00",
+    size: "xxl",
   },
 ];
 
@@ -140,8 +156,30 @@ const dataDescription = [
   },
 ];
 
+const type = [
+  {
+    type: "shirt",
+  },
+  {
+    type: "trousers",
+  },
+  {
+    type: "bag",
+  },
+  {
+    type: "shoes",
+  },
+];
+
+const size = [
+  { size: "s" },
+  { size: "m" },
+  { size: "l" },
+  { size: "xl" },
+  { size: "xxl" },
+];
 const login = true;
 
 const itemCart: any = [{}];
 
-export { data, dataDescription, login, itemCart };
+export { data, dataDescription, login, itemCart, type, size };

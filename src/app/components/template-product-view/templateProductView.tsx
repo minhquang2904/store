@@ -1,5 +1,3 @@
-"use client";
-
 import style from "./templateProductView.module.scss";
 import Link from "next/link";
 import { data, login } from "@/app/data";
@@ -8,6 +6,7 @@ import CardProduct from "../cardProduct/cardProduct";
 
 export default function TemplateProductView() {
   const [dataList, setData] = useState(data);
+  const styleCustom = { width: "25%" };
 
   const handleChangeType = (e: any) => {
     const id = e.target.id;
@@ -77,7 +76,14 @@ export default function TemplateProductView() {
         </div>
         <div className={`${style.bestSellerList}`}>
           {dataList.slice(0, 8).map((item: any) => {
-            return <CardProduct key={item.id} data={item} login={login} />;
+            return (
+              <CardProduct
+                key={item.id}
+                data={item}
+                styleCustom={styleCustom}
+                login={login}
+              />
+            );
           })}
         </div>
       </div>

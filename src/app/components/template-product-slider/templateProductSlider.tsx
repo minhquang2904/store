@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -42,7 +40,7 @@ export default function TemplateProductSlider() {
   };
 
   const getDataType = (type: string) => {
-    const dataType = data.filter((item) => {
+    const dataType = data.filter((item: any) => {
       return item.type.includes(type);
     });
     return setData(dataType);
@@ -165,7 +163,7 @@ export default function TemplateProductSlider() {
         </div>
         <div className={`${style.productSliderList} slider-container`}>
           <Slider {...settings}>
-            {dataList.map((item, index) => {
+            {dataList.map((item: any, index: any) => {
               return (
                 <Link
                   key={index}

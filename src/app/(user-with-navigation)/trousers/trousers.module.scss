@@ -1,17 +1,19 @@
 @import "../../style.module.scss";
 
-.like {
+.filter {
   @include disflexCenter;
   &Container {
     @include mainLayout;
     margin-top: $marginTopLayOut;
   }
   &Content {
-    margin-top: 16px;
-  }
-  &List {
+    margin-top: 50px;
     display: flex;
-    flex-wrap: wrap;
-    margin: 0 $marginItemCard;
+    &Right {
+      flex: 0 1 70%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24;
+    }
   }
 }

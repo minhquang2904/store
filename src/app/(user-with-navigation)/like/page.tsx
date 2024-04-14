@@ -8,6 +8,7 @@ import Pagination from "@/app/components/pagination/pagination";
 import ShowingPage from "@/app/components/showingPage/showingPage";
 
 const Like = () => {
+  const styleCustom = { width: "25%" };
   const [dataList, setDataList] = useState(data);
   return (
     <div className={`${style.like}`}>
@@ -16,7 +17,14 @@ const Like = () => {
         <div className={`${style.likeContent}`}>
           <div className={`${style.likeList}`}>
             {dataList.map((item: any) => {
-              return <CardProduct key={item.id} data={item} login={login} />;
+              return (
+                <CardProduct
+                  key={item.id}
+                  data={item}
+                  login={login}
+                  styleCustom={styleCustom}
+                />
+              );
             })}
           </div>
         </div>

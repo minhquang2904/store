@@ -1,5 +1,45 @@
+"use client";
+
+import style from "./trousers.module.scss";
+import CardProduct from "@/app/components/cardProduct/cardProduct";
+import Filter from "@/app/components/filter/filter";
+import Pagination from "@/app/components/pagination/pagination";
+import TitlePageNavigation from "@/app/components/titlePageNavigation/titlePageNavigation";
+import { data } from "@/app/data";
+import { useLayoutEffect, useState } from "react";
+
 const Trousers = () => {
-  return <>trousers</>;
+  const styleCustom = { width: "33.333333%" };
+  const [dataLists, setDataLists] = useState(data);
+
+  useLayoutEffect(() => {
+    const filtered = dataLists.filter((item: any) => {
+      return item.type == "trousers";
+    });
+    setDataLists(filtered);
+  }, []);
+  return (
+    <div className={`${style.filter}`}>
+      <div className={`${style.filterContainer}`}>
+        <TitlePageNavigation />
+        <div className={`${style.filterContent}`}>
+          <Filter checkType="trousers" />
+          <div className={`${style.filterContentRight}`}>
+            {dataLists.map((item: any) => {
+              return (
+                <CardProduct
+                  key={item.id}
+                  data={item}
+                  styleCustom={styleCustom}
+                />
+              );
+            })}
+          </div>
+        </div>
+        <Pagination />
+      </div>
+    </div>
+  );
 };
 
 export default Trousers;

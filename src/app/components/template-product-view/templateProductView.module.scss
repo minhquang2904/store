@@ -50,8 +50,8 @@
   }
   &List {
     display: flex;
-    gap: 24px;
     flex-wrap: wrap;
+    margin: 0 $marginItemCard;
   }
 }
 

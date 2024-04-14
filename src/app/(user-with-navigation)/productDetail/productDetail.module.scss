@@ -14,7 +14,7 @@
     &Left {
       display: flex;
       flex-direction: column;
-      flex: 0 0 50%;
+      flex: 0 1 50%;
       align-items: center;
       &Image {
         position: relative !important;
@@ -44,7 +44,7 @@
       }
     }
     &Right {
-      flex: 0 0 50%;
+      flex: 0 1 50%;
       margin-left: 30px;
       &Title {
         display: flex;
