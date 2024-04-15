@@ -63,6 +63,7 @@ const NavBar = () => {
       });
       mainLayout.addEventListener("click", checkActiveIcon);
     };
+    cc;
   }, []);
 
   const lineActive = (target: any, navActive: any, width: any) => {
