@@ -1,27 +1,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { data } from "@/app/data";
-import IconHeartSvg from "../iconHeartSvg/iconHeartSvg";
+import { data, login } from "@/app/data";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import style from "./templateProductSlider.module.scss";
 import "./slider.scss";
+import CardProduct from "../cardProduct/cardProduct";
 
 export default function TemplateProductSlider() {
   const [dataList, setData] = useState(data);
-
-  const handleAddCart = (e: any) => {
-    e.preventDefault();
-  };
-
-  const handleSubmitHeart = (e: any) => {
-    e.target
-      .closest(`.${style.iconHeartSvg}`)
-      .classList.toggle(`${style.active}`);
-    e.preventDefault();
-  };
 
   const handleChangeType = (e: any) => {
     if (e.target.id == "dress") {
@@ -163,79 +152,8 @@ export default function TemplateProductSlider() {
         </div>
         <div className={`${style.productSliderList} slider-container`}>
           <Slider {...settings}>
-            {dataList.map((item: any, index: any) => {
-              return (
-                <Link
-                  key={index}
-                  className={`${style.productSliderItems}`}
-                  href="#"
-                >
-                  <div className={`${style.productSliderItemsImage}`}>
-                    <Image
-                      src={item.url}
-                      className={`${style.picture}`}
-                      alt="Product 1"
-                      fill
-                      sizes="(max-width: 312px) 100vw"
-                      priority={true}
-                    />
-                    {item.discount ? (
-                      <div className={`${style.productSliderItemsSale}`}>
-                        <p>Sale</p>
-                      </div>
-                    ) : (
-                      <></>
-                    )}
-                    <div className={`${style.iconHeart}`}>
-                      <IconHeartSvg
-                        onClick={handleSubmitHeart}
-                        className={style.iconHeartSvg}
-                      />
-                    </div>
-                    <div
-                      className={`${style.productSliderItemsAdd}`}
-                      onClick={handleAddCart}
-                    >
-                      <h3>Add to Card</h3>
-                    </div>
-                  </div>
-                  <div className={`${style.productSliderItemsSubTitle}`}>
-                    <div className={`${style.productSliderItemsTitle}`}>
-                      <h1>{item.title}</h1>
-                    </div>
-                    <div className={`${style.productSliderItemsTypeAndPrice}`}>
-                      <p>{item.type}</p>
-                      <div className={`${style.productSliderItemsDiscount}`}>
-                        {!item.discount ? (
-                          <>
-                            <h3
-                              className={`${style.price}`}
-                              style={{
-                                textDecoration: "unset",
-                                color: "#131118",
-                              }}
-                            >
-                              {item.price}
-                            </h3>
-                          </>
-                        ) : (
-                          <>
-                            <h3
-                              className={`${style.price}`}
-                              style={{ textDecoration: "line-through" }}
-                            >
-                              {item.price}
-                            </h3>
-                            <h3 className={`${style.discount}`}>
-                              {item.discount}
-                            </h3>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              );
+            {dataList.map((item: any) => {
+              return <CardProduct key={item.id} data={item} login={login} />;
             })}
           </Slider>
         </div>

@@ -1,6 +1,6 @@
 @import "../../style.module.scss";
 
-.bestSellerItems {
+.cardProductItems {
   box-shadow: 0 -2px 40px rgba(0, 0, 0, 0.12);
   display: block;
   padding-bottom: 20px;
@@ -19,7 +19,7 @@
       top: 20px;
       display: none;
     }
-    .bestSellerItemsSale {
+    .cardProductItemsSale {
       position: absolute;
       top: 20px;
       left: 0;
@@ -34,7 +34,7 @@
       }
     }
   }
-  .bestSellerItemsAdd {
+  .cardProductItemsAdd {
     h3 {
       height: 100%;
       display: flex;
@@ -66,12 +66,12 @@
       transition: 0.4s ease;
       transform: scale(1.04);
     }
-    .bestSellerItemsAdd {
+    .cardProductItemsAdd {
       transition: 0.1s linear;
       height: 40px;
     }
   }
-  .bestSellerItemsSubTitle {
+  .cardProductItemsSubTitle {
     margin: 18px 10px 0 10px;
   }
   &Title {
@@ -82,8 +82,16 @@
       text-transform: capitalize;
     }
   }
+  &Sub {
+    margin: 6px 0;
+    h1 {
+      color: var(--text-color);
+      font-size: 1.5em;
+      font-weight: 500;
+      text-transform: capitalize;
+    }
+  }
   &TypeAndPrice {
-    margin-top: 16px;
     display: flex;
     justify-content: space-between;
     p {
@@ -92,7 +100,7 @@
       text-transform: capitalize;
       color: var(--template-product-color);
     }
-    .bestSellerItemsDiscount {
+    .cardProductItemsDiscount {
       display: flex;
       font-weight: 500;
       .price {
@@ -102,7 +110,7 @@
       .discount {
         font-size: 1.6em;
         color: var(--template-product-discount-color);
-        margin-left: 12px;
+        margin-left: 10px;
       }
     }
   }

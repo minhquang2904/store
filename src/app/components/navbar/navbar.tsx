@@ -58,10 +58,8 @@ const NavBar = () => {
 
     addStyleNav();
     return () => {
-      window.addEventListener("scroll", () => {
-        addStyleNav();
-      });
-      mainLayout.addEventListener("click", checkActiveIcon);
+      window.removeEventListener("scroll", addStyleNav);
+      mainLayout.removeEventListener("click", checkActiveIcon);
     };
   }, []);
 
@@ -294,7 +292,9 @@ const NavBar = () => {
 
               {checkLogin ? (
                 <div className={`${style.navigationNameUser}`}>
-                  <h3 onClick={handleShowProfile}>Lương Minh Quang</h3>
+                  <div className={`${style.navigationNameUserLogin}`}>
+                    <h3 onClick={handleShowProfile}>Lương Minh Quang</h3>
+                  </div>
                   <div className={`${style.navigationNameUserModal}`}>
                     <div className={`${style.navigationNameUserContainer}`}>
                       <div className={`${style.navigationNameUserItem}`}>

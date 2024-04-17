@@ -20,8 +20,8 @@ const CardProduct = (props: any) => {
   };
   return (
     <div className={`${style.column}`} style={styleCustom}>
-      <Link className={`${style.bestSellerItems}`} href="/productDetail">
-        <div className={`${style.bestSellerItemsImage}`}>
+      <Link className={`${style.cardProductItems}`} href="/productDetail">
+        <div className={`${style.cardProductItemsImage}`}>
           <Image
             src={data.url}
             className={`${style.picture}`}
@@ -30,12 +30,10 @@ const CardProduct = (props: any) => {
             sizes="(max-width: 312px) 100vw"
             priority={true}
           />
-          {data.discount ? (
-            <div className={`${style.bestSellerItemsSale}`}>
+          {data.discount && (
+            <div className={`${style.cardProductItemsSale}`}>
               <p>Sale</p>
             </div>
-          ) : (
-            <></>
           )}
           <div className={`${style.iconHeart}`}>
             <IconHeartSvg
@@ -44,41 +42,36 @@ const CardProduct = (props: any) => {
             />
           </div>
           <div
-            className={`${style.bestSellerItemsAdd}`}
+            className={`${style.cardProductItemsAdd}`}
             onClick={handleAddCart}
           >
             <h3>Add to Card</h3>
           </div>
         </div>
-        <div className={`${style.bestSellerItemsSubTitle}`}>
-          <div className={`${style.bestSellerItemsTitle}`}>
+        <div className={`${style.cardProductItemsSubTitle}`}>
+          <div className={`${style.cardProductItemsTitle}`}>
             <h1>{data.title}</h1>
           </div>
-          <div className={`${style.bestSellerItemsTypeAndPrice}`}>
+          <div className={`${style.cardProductItemsSub}`}>
+            <h1>{data.subTitle}</h1>
+          </div>
+          <div className={`${style.cardProductItemsTypeAndPrice}`}>
             <p>{data.type}</p>
-            <div className={`${style.bestSellerItemsDiscount}`}>
-              {!data.discount ? (
-                <>
-                  <h3
-                    className={`${style.price}`}
-                    style={{
-                      textDecoration: "unset",
-                      color: "#131118",
-                    }}
-                  >
-                    ${data.price}
-                  </h3>
-                </>
-              ) : (
-                <>
-                  <h3
-                    className={`${style.price}`}
-                    style={{ textDecoration: "line-through" }}
-                  >
-                    ${data.price}
-                  </h3>
-                  <h3 className={`${style.discount}`}>{data.discount}</h3>
-                </>
+            <div className={`${style.cardProductItemsDiscount}`}>
+              <h3
+                className={`${style.price}`}
+                style={
+                  data.discount
+                    ? {
+                        textDecoration: "line-through",
+                      }
+                    : { textDecoration: "unset", color: "#131118" }
+                }
+              >
+                ${data.price}
+              </h3>
+              {data.discount && (
+                <h3 className={`${style.discount}`}>${data.discount}</h3>
               )}
             </div>
           </div>

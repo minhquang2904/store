@@ -129,12 +129,20 @@
           .navigationNameUser {
             display: flex;
             align-items: center;
-            cursor: pointer;
             position: relative;
-            h3 {
-              color: var(--text-color);
-              font-size: 2em;
-              margin-left: $marginLeftBtnUser;
+            .navigationNameUserLogin {
+              height: 100%;
+              width: 100%;
+              h3 {
+                color: var(--text-color);
+                font-size: 2em;
+                margin-left: $marginLeftBtnUser;
+                height: 100%;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+              }
             }
           }
         }

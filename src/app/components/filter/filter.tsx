@@ -14,18 +14,55 @@ const Filter = (props: any) => {
 
     if (checkType) {
       ($(`#${checkType} > span`) as any).style.background = "rgb(19, 17, 24)";
+      ($(`#${checkType} > span`) as any).setAttribute("checked", "active");
     }
+
+    const checkBoxActive = (index: any) => {
+      checkMark[index].style.background == "rgb(19, 17, 24)"
+        ? (checkMark[index].style.background = "transparent")
+        : (checkMark[index].style.background = "rgb(19, 17, 24)");
+    };
+
     container.forEach((item: any, index: any) => {
-      item.addEventListener("click", (e: any) => {
-        checkMark[index].style.background == "rgb(19, 17, 24)"
-          ? (checkMark[index].style.background = "transparent")
-          : (checkMark[index].style.background = "rgb(19, 17, 24)");
-      });
+      item.addEventListener("click", () => checkBoxActive(index));
     });
+
+    return () => {
+      container.forEach((item: any, index: any) => {
+        item.removeEventListener("click", () => checkBoxActive(index));
+      });
+    };
   }, []);
 
-  const handleCheckBox = (type: any) => {
-    childParent(type);
+  const getTag = (parent: any, child: any, index: any) => {
+    return document
+      .querySelectorAll(`.${parent}`)
+      [index].querySelector(`.${child}`);
+  };
+
+  const setAndRemoveAttr = (getAttr: any, element: any, type: any) => {
+    if (getAttr == null) {
+      element.setAttribute("checked", "active");
+      childParent(type, "active");
+    }
+    if (getAttr == "active") {
+      element.removeAttribute("checked");
+      childParent(type, "");
+    }
+  };
+
+  const handleCheckBoxType = (index: any, type: any) => {
+    const element: any = getTag("containerType", "checkmarkType", index);
+    const getAttr = element.getAttribute("checked", "active");
+
+    setAndRemoveAttr(getAttr, element, type);
+  };
+
+  const handleCheckBoxSize = (index: any, type: any) => {
+    const element: any = getTag("containerSize", "checkmarkSize", index);
+    const getAttr = element.getAttribute("checked", "active");
+
+    setAndRemoveAttr(getAttr, element, type);
   };
 
   return (
@@ -39,12 +76,11 @@ const Filter = (props: any) => {
             return (
               <div
                 key={index}
-                className={`${style.container}`}
+                className={`${style.container} containerType`}
                 id={item.type}
-                onClick={() => handleCheckBox(item.type)}
+                onClick={() => handleCheckBoxType(index, item.type)}
               >
-                {/* <input type="checkbox" value={""} /> */}
-                <span className={`${style.checkmark}`}></span>
+                <span className={`${style.checkmark} checkmarkType`}></span>
                 <p>{item.type}</p>
                 <CheckIcon />
               </div>
@@ -64,12 +100,11 @@ const Filter = (props: any) => {
             return (
               <div
                 key={index}
-                className={`${style.container}`}
+                className={`${style.container} containerSize`}
                 id={item.size}
-                onClick={() => handleCheckBox(item.size)}
+                onClick={() => handleCheckBoxSize(index, item.size)}
               >
-                {/* <input type="checkbox" value={""} /> */}
-                <span className={`${style.checkmark}`}></span>
+                <span className={`${style.checkmark} checkmarkSize`}></span>
                 <p style={{ textTransform: "uppercase" }}>{item.size}</p>
                 <CheckIcon />
               </div>

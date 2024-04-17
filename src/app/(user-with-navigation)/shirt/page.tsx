@@ -13,12 +13,18 @@ const Shirt = () => {
   const [dataLists, setDataLists] = useState([]);
   const [type, setType] = useState(["shirt"]);
 
-  const childToParent = (data: any) => {
-    setType([data, ...type]);
+  const childToParent = (data: any, check: any) => {
+    if (!check) {
+      const filtered = type.filter((item: any) => {
+        return item != data;
+      });
+      setType([...filtered]);
+    } else {
+      setType([data, ...type]);
+    }
   };
 
   useLayoutEffect(() => {
-    console.log(type);
     const filtered = data.filter((item: any) => {
       return type.includes(item.type) || type.includes(item.size);
     });
