@@ -25,7 +25,7 @@ const NavBar = () => {
 
   useEffect(() => {
     const $ = document.querySelector.bind(document);
-    const positionTopNav: any = $(`.${style.headerContainer}`);
+    const positionTopNav: any = $(".headerContainer");
 
     const addStyleNav = () => {
       positionTopNav.offsetTop > 80
@@ -121,7 +121,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className="flex justify-center items-center sticky top-0 left-0 right-0 bg-primary z-50">
+    <div className="headerContainer flex justify-center items-center sticky top-0 left-0 right-0 bg-primary z-50">
       <div className={`${style.navigationContainer} flex`}>
         <div className="h-20 mx-auto flex justify-between items-center w-full">
           <div className="flex items-center h-full">

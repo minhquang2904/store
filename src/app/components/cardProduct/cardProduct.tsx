@@ -20,32 +20,39 @@ const CardProduct = (props: any) => {
   };
   return (
     <div className={`${style.column}`} style={styleCustom}>
-      <Link className={`${style.cardProductItems}`} href="/productDetail">
-        <div className={`${style.cardProductItemsImage}`}>
+      <Link
+        className={`${style.cardProductItems} block shadow-sm pb-[20px]`}
+        href="/productDetail"
+      >
+        <div
+          className={`${style.cardProductItemsImage} overflow-hidden !relative`}
+        >
           <Image
             src={data.url}
-            className={`${style.picture}`}
+            className="!relative duration-500 w-full ease-in"
             alt="Product 1"
             fill
             sizes="(max-width: 312px) 100vw"
             priority={true}
           />
           {data.discount && (
-            <div className={`${style.cardProductItemsSale}`}>
-              <p>Sale</p>
+            <div className="absolute top-[20px] left-0">
+              <p className="text-white bg-secondary text-center text-[1.2em] font-semibold uppercase px-[12px] py-[6px]">
+                Sale
+              </p>
             </div>
           )}
-          <div className={`${style.iconHeart}`}>
+          <div className="absolute right-[8px] top-[20px] hidden">
             <IconHeartSvg
               onClick={handleSubmitHeart}
               className={style.iconHeartSvg}
             />
           </div>
           <div
-            className={`${style.cardProductItemsAdd}`}
+            className="flex items-center justify-center overflow-hidden h-0 text-center absolute duration-100 ease-linear bottom-0 left-0 right-0 bg-[#0000004d] text-white text-[1.6em] font-normal cursor-pointer hover:bg-[#00000080]"
             onClick={handleAddCart}
           >
-            <h3>Add to Card</h3>
+            <h3 className="h-full flex items-center">Add to Card</h3>
           </div>
         </div>
         <div className={`${style.cardProductItemsSubTitle}`}>

@@ -8,7 +8,7 @@ const config: Config = {
   ],
   theme: {
     boxShadow: {
-      sm: "0 2px 40px rgba(0, 0, 0, 0.2)",
+      sm: "0 2px 20px rgba(0, 0, 0, 0.12)",
     },
     colors: {
       button: "#131118",
@@ -17,6 +17,7 @@ const config: Config = {
       hover1: "#e3e7f3",
       primary: "#F3F4F4",
       white: "#fff",
+      secondary: "#ff6f61",
     },
     padding: {
       sm: "8px",

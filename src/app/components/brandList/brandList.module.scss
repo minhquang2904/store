@@ -1,19 +1,5 @@
 @import "../../style.module.scss";
 
 .brandList {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  min-width: 100%;
   animation: Scroll 60s linear infinite;
-  .brandItem {
-    position: relative !important;
-    // flex: 0 20%;
-    .logo {
-      position: relative !important;
-      min-width: 200px !important;
-      max-height: 70px;
-    }
-  }
 }

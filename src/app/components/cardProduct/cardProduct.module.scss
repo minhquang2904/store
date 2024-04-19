@@ -1,63 +1,30 @@
 @import "../../style.module.scss";
 
 .cardProductItems {
-  box-shadow: 0 -2px 40px rgba(0, 0, 0, 0.12);
-  display: block;
-  padding-bottom: 20px;
   &Image {
-    overflow: hidden;
-    position: relative !important;
     .picture {
-      transition: 0.4s ease;
-      position: relative !important;
       max-height: $heightTemplateProductImage;
-      width: 100%;
-    }
-    .iconHeart {
-      position: absolute;
-      right: 8px;
-      top: 20px;
-      display: none;
-    }
-    .cardProductItemsSale {
-      position: absolute;
-      top: 20px;
-      left: 0;
-      p {
-        background-color: var(--template-product-discount-color);
-        color: var(--white-color);
-        text-align: center;
-        font-size: 1.2em;
-        font-weight: 600;
-        text-transform: uppercase;
-        padding: 6px 12px;
-      }
     }
   }
-  .cardProductItemsAdd {
-    h3 {
-      height: 100%;
-      display: flex;
-      align-items: center;
-    }
-    @include disflexCenter;
-    overflow: hidden;
-    height: 0;
-    text-align: center;
-    transition: 0.1s linear;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-    color: var(--white-color);
-    font-size: 1.6em;
-    font-weight: 400;
-    cursor: pointer;
-    &:hover {
-      background-color: var(--template-product-color);
-    }
-  }
+  // .cardProductItemsAdd {
+  //   @include disflexCenter;
+  //   overflow: hidden;
+  //   height: 0;
+  //   text-align: center;
+  //   transition: 0.1s linear;
+  //   position: absolute;
+  //   bottom: 0;
+  //   left: 0;
+  //   right: 0;
+  //   background-color: #0000004d;
+  //   color: var(--white-color);
+  //   font-size: 1.6em;
+  //   font-weight: 400;
+  //   cursor: pointer;
+  //   &:hover {
+  //     background-color: var(--template-product-color);
+  //   }
+  // }
   &:hover {
     .iconHeart {
       display: block;

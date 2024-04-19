@@ -3,11 +3,13 @@ import style from "./brandList.module.scss";
 
 export default function BrandList() {
   return (
-    <div className={`${style.brandList}`}>
-      <div className={`${style.brandItem}`}>
+    <div
+      className={`${style.brandList} shrink-0 flex items-center justify-around min-w-full`}
+    >
+      <div className="!relative">
         <Image
           src="/images/brand-1.png"
-          className={`${style.logo}`}
+          className="!relative !min-w-[200px] max-h-[70px]"
           alt="Brand"
           fill
           sizes="(width: 200px) 100vw"
@@ -17,7 +19,7 @@ export default function BrandList() {
       <div className={`${style.brandItem}`}>
         <Image
           src="/images/brand-2.png"
-          className={`${style.logo}`}
+          className="!relative !min-w-[200px] max-h-[70px]"
           alt="Brand"
           fill
           sizes="(width: 200px) 100vw"
@@ -27,7 +29,7 @@ export default function BrandList() {
       <div className={`${style.brandItem}`}>
         <Image
           src="/images/brand-3.png"
-          className={`${style.logo}`}
+          className="!relative !min-w-[200px] max-h-[70px]"
           alt="Brand"
           fill
           sizes="(width: 200px) 100vw"
@@ -37,7 +39,7 @@ export default function BrandList() {
       <div className={`${style.brandItem}`}>
         <Image
           src="/images/brand-4.png"
-          className={`${style.logo}`}
+          className="!relative !min-w-[200px] max-h-[70px]"
           alt="Brand"
           fill
           sizes="(width: 200px) 100vw"
@@ -47,7 +49,7 @@ export default function BrandList() {
       <div className={`${style.brandItem}`}>
         <Image
           src="/images/brand-5.png"
-          className={`${style.logo}`}
+          className="!relative !min-w-[200px] max-h-[70px]"
           alt="Brand"
           fill
           sizes="(width: 200px) 100vw"

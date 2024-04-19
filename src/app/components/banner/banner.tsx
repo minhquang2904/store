@@ -4,24 +4,29 @@ import Image from "next/image";
 
 export default function Banner() {
   return (
-    <div className={`${style.banner}`}>
-      <div className={`${style.bannerContainer}`}>
-        <div className={`${style.bannerLeft}`}>
-          <div className={`${style.bannerLeftTitle}`}>
-            <h1> Collections </h1>
+    <div className={`${style.banner} flex justify-center items-center`}>
+      <div className={`${style.bannerContainer} flex items-center`}>
+        <div className="shrink-0 grow-0 basis-2/4">
+          <div className="mb-[6px]">
+            <h1 className="text-[6em] font-medium capitalize text-text">
+              Collections
+            </h1>
           </div>
-          <div className={`${style.bannerLeftDescription}`}>
-            <p>
+          <div className="mb-[40px]">
+            <p className="text-text capitalize font-light text-[2.4em]">
               You can explore ans shop many differnt collection from various
               barands here.
             </p>
           </div>
-          <div className={`${style.bannerLeftButton}`}>
-            <Link href="#">
-              <button>Shop Now</button>
+          <div className="inline-block">
+            <Link
+              href="#"
+              className="group bg-button hover:opacity-90 !relative inline-flex py-[10px] px-[14px] rounded-sm items-center"
+            >
+              <button className="text-[1.6em] mr-[10px]">Shop Now</button>
               <Image
                 src="/icons/arrowRight.svg"
-                className={`${style.icon} dark:invert`}
+                className="!relative max-w-[20px] dark:invert group-hover:translate-x-[6px] duration-500"
                 alt="Arrow"
                 fill
                 sizes="100vw"
@@ -30,11 +35,11 @@ export default function Banner() {
             </Link>
           </div>
         </div>
-        <div className={`${style.bannerRight}`}>
-          <div className={`${style.bannerRightImage}`}>
+        <div className="flex justify-center shrink-0 grow-0 basis-2/4">
+          <div className="relative  before:border-solid before:border-[2px] before:border-[#00000040] before:content-[''] before:h-full before:w-full before:top-[16px] before:left-[16px] before:absolute z-0">
             <Image
               src="/images/picture2.png"
-              className={`${style.picture}`}
+              className="!relative object-cover max-w-[424px] shadow-sm"
               alt="Picture"
               fill
               sizes="(max-width: 542px) 100vw"

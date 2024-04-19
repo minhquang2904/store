@@ -3,9 +3,9 @@ import BrandList from "../brandList/brandList";
 
 export default function Brand() {
   return (
-    <div className={`${style.brand}`}>
-      <div className={`${style.brandContainer}`}>
-        <div className={`${style.marquee}`}>
+    <div className="flex justify-center items-center">
+      <div className={`${style.brandContainer} overflow-hidden`}>
+        <div className={`${style.marquee} flex overflow-hidden select-none`}>
           <BrandList />
           <BrandList />
         </div>

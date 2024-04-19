@@ -1,83 +1,8 @@
 @import "../../style.module.scss";
 
 .banner {
-  @include disflexCenter;
   &Container {
     @include mainLayout;
     margin-top: $marginTopLayOut;
-    display: flex;
-    align-items: center;
-    .bannerLeft {
-      flex: 0 0 50%;
-      &Title {
-        h1 {
-          font-size: 6em;
-          font-weight: 500;
-          text-transform: capitalize;
-          color: var(--text-color);
-        }
-        margin-bottom: 10px;
-      }
-      &Description {
-        p {
-          font-size: 2.4em;
-          font-weight: 300;
-          text-transform: capitalize;
-          color: var(--text-color);
-        }
-        margin-bottom: 40px;
-      }
-      &Button {
-        display: inline-block;
-        a {
-          background-color: var(--btn-color);
-          position: relative !important;
-          display: inline-flex;
-          padding: 10px 14px;
-          border-radius: 8px;
-          align-items: center;
-          button {
-            font-size: 1.6em;
-            margin-right: 10px;
-          }
-          .icon {
-            position: relative !important;
-            max-width: 20px;
-            transition: 0.4s;
-          }
-        }
-        &:hover {
-          @include hoverBtn;
-          .icon {
-            transform: translateX(6px);
-            transition: 0.4s;
-          }
-        }
-      }
-    }
-    .bannerRight {
-      flex: 0 0 50%;
-      display: flex;
-      justify-content: center;
-      &Image {
-        position: relative;
-        .picture {
-          position: relative !important;
-          object-fit: cover;
-          max-width: 424px;
-          box-shadow: 0 -3px 20px rgba(0, 0, 0, 0.1);
-        }
-        &::before {
-          border: 2px solid rgba(0, 0, 0, 0.25);
-          z-index: 0;
-          position: absolute;
-          content: "";
-          width: 100%;
-          height: 100%;
-          top: 16px;
-          left: 16px;
-        }
-      }
-    }
   }
 }
