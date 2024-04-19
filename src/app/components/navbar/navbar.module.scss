@@ -1,184 +1,33 @@
 @import "../../style.module.scss";
 
-.headerContainer {
-  @include disflexCenter;
-  position: sticky;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: #f3f4f4;
-  z-index: 100;
-  .navigationContainer {
-    @include mainLayout;
-    display: flex;
-    .navigation {
-      height: 80px;
-      margin: auto 0;
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      align-items: center;
-      &Left {
-        display: flex;
-        align-items: center;
-        height: 100%;
-        a {
-          position: relative !important;
-          .logo {
-            position: relative !important;
-            max-width: 80% !important;
-          }
-        }
-      }
-      .navigationCenter {
-        .navigationList {
-          display: flex;
-          position: relative;
-          .line {
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 0;
-            height: 3px;
-            border-radius: 20px;
-            background-color: var(--text-color);
-            transition: all 0.2s ease;
-          }
-          .navigationItem {
-            color: var(--template-product-color);
-            font-size: 1.6em;
-            margin: 0 20px;
-            text-transform: capitalize;
-            cursor: pointer;
-            font-weight: 600;
-            padding: 4px 10px;
-            transition: all 0.2s ease;
-            &.active,
-            &:hover {
-              color: var(--text-color) !important;
-            }
-          }
-        }
-      }
-      &Right {
-        .navigationUser {
-          display: flex;
-          .navigationUserItem {
-            margin-right: 6px;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 50%;
-            position: relative;
-            &Search {
-              $width: calc(100% + 7px);
-              position: absolute;
-              top: $width;
-              right: 0;
-              transform-origin: 90% top;
-              animation: showOut 0.3s ease !important;
-              z-index: 1;
-              display: none;
-              input {
-                padding: 10px 20px;
-                font-size: 1.6em;
-                outline: none;
-                color: var(--text-color);
-                border: 1px solid var(--btn-color);
-                border-radius: 12px;
-                min-width: 260px;
-                max-width: 260px;
-                width: 100%;
-              }
-            }
-            &:hover {
-              background-color: #e3e7f3;
-              transition: 0.2s;
-            }
-            .logo {
-              position: relative !important;
-            }
-
-            &:nth-child(1) {
-              .logo {
-                max-width: 24px;
-              }
-            }
-            &:nth-child(2) {
-              .logo {
-                max-width: 22px;
-              }
-            }
-            &:nth-child(3) {
-              .logo {
-                max-width: 22px;
-              }
-            }
-          }
-          $marginLeftBtnUser: 12px;
-          button {
-            background-color: var(--btn-color);
-            display: inline-block;
-            padding: 12px 28px;
-            border-radius: 8px;
-            font-size: 1.2em;
-            margin-left: $marginLeftBtnUser;
-            &:hover {
-              @include hoverBtn;
-            }
-          }
-          .navigationNameUser {
-            display: flex;
-            align-items: center;
-            position: relative;
-            .navigationNameUserLogin {
-              height: 100%;
-              width: 100%;
-              h3 {
-                color: var(--text-color);
-                font-size: 2em;
-                margin-left: $marginLeftBtnUser;
-                height: 100%;
-                width: 100%;
-                display: flex;
-                align-items: center;
-                cursor: pointer;
-              }
-            }
-          }
-        }
-      }
+.navigationContainer {
+  @include mainLayout;
+  .line {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 3px;
+    border-radius: 20px;
+    background-color: #131118;
+    transition: all 0.2s ease;
+  }
+  .navigationItem {
+    color: var(--template-product-color);
+    font-size: 1.6em;
+    margin: 0 20px;
+    text-transform: capitalize;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 4px 10px;
+    transition: all 0.2s ease;
+    &.active,
+    &:hover {
+      color: var(--text-color) !important;
     }
   }
-}
-
-.cartModal {
-  position: relative;
   .cartContainer {
-    position: absolute;
-    right: 0;
-    top: calc(100% + 7px);
-    width: 360px;
-    border-radius: 8px;
-    background-color: var(--white-color);
-    box-shadow: 0 2px 40px rgba(0, 0, 0, 0.2);
-    cursor: default;
-    display: none;
-    transform-origin: 90% top;
-    animation: showOut 0.3s ease !important;
-
-    .cartTitle {
-      width: 100%;
-      color: var(--text-color);
-      font-size: 1.6em;
-      font-weight: 500;
-      padding-left: 12px;
-      margin-top: 16px;
-    }
     ul {
-      max-height: 312px;
-      margin: 16px 0;
-      overflow-y: auto;
-      overscroll-behavior: contain;
       &::-webkit-scrollbar {
         width: 8px;
       }
@@ -191,138 +40,11 @@
       &::-webkit-scrollbar-track {
         background-color: transparent;
       }
-      a {
-        padding: 12px;
-        position: relative !important;
-        display: flex;
-        &:hover {
-          background-color: #e3e7f3;
-          transition: 0.2s;
-        }
-        .productImage {
-          position: relative !important;
-          max-width: 80px;
-          max-height: 80px;
-        }
-        .cartInformation {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          flex: 0 1 100%;
-          margin-left: 16px;
-          & > h2 {
-            color: var(--text-color);
-            font-size: 1.4em;
-            font-weight: 500;
-          }
-          & > h3 {
-            color: var(--text-color);
-            font-size: 1.4em;
-            font-weight: 700;
-            margin: 4px 0;
-          }
-          &Delete {
-            display: flex;
-            justify-content: space-between;
-            h2 {
-              color: var(--text-color);
-              font-size: 1.4em;
-              font-weight: 500;
-            }
-            &Icon {
-              position: relative !important;
-              border-radius: 50%;
-              .trashDelete {
-                position: relative !important;
-                max-width: 24px;
-                max-height: 24px;
-              }
-            }
-          }
-        }
-      }
-    }
-    .cartCheckout {
-      padding: 0 12px;
-      &Title {
-        color: var(--text-color);
-        display: flex;
-        justify-content: space-between;
-        font-weight: 600;
-        text-transform: capitalize;
-        font-size: 1.4em;
-        margin-bottom: 16px;
-      }
-      &Btn {
-        button {
-          margin: 0 !important;
-          width: 100%;
-          font-size: 1.6em !important;
-          font-weight: 500;
-        }
-      }
-      .cartCheckoutBtnViewCart {
-        button {
-          background-color: transparent;
-          color: var(--text-color);
-          border: 1px solid var(--btn-color);
-          &:hover {
-            background-color: #e3e7f3;
-            transition: 0.2s ease !important;
-          }
-        }
-      }
-      .cartCheckoutBtnCheckout {
-        margin: 8px 0 16px 0;
-        display: block;
-        button {
-          border: 1px solid var(--btn-color);
-        }
-      }
     }
   }
-}
-
-.navigationNameUserModal {
-  position: absolute;
-  top: calc(100% + 7px);
-  right: 0;
-  background-color: var(--white-color);
-  box-shadow: 0 2px 40px rgba(0, 0, 0, 0.2);
-  border-radius: 12px;
-  max-width: 400px;
-  min-width: 200px;
-  width: 100%;
-  overflow: hidden;
-  display: none;
-  transform-origin: 90% top;
-  animation: showOut 0.2s ease !important;
-  .navigationNameUserItem {
-    a {
-      padding: 12px 40px 12px 16px;
-      display: flex;
-      align-items: center;
-      &:hover {
-        background-color: #e3e7f3;
-      }
-      h1 {
-        margin-left: 16px;
-        color: var(--text-color);
-        font-weight: 600;
-        font-size: 1.6em;
-      }
-    }
+  .navigationNameUserModal,
+  .cartContainer,
+  .navigationUserItemSearch {
+    animation: showOut 0.3s ease !important;
   }
-  .navigationNameUserItemLogout {
-    svg {
-      stroke: #ff6f61;
-    }
-    h1 {
-      color: #ff6f61 !important;
-    }
-  }
-}
-
-.active {
-  display: block !important;
 }

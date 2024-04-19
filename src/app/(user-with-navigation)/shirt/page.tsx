@@ -14,6 +14,7 @@ const Shirt = () => {
   const [type, setType] = useState(["shirt"]);
 
   const childToParent = (data: any, check: any) => {
+    console.log(data);
     if (!check) {
       const filtered = type.filter((item: any) => {
         return item != data;
@@ -26,7 +27,7 @@ const Shirt = () => {
 
   useLayoutEffect(() => {
     const filtered = data.filter((item: any) => {
-      return type.includes(item.type) || type.includes(item.size);
+      return type.includes(item.type) && type.includes(item.size);
     });
 
     setDataLists(filtered);

@@ -10,11 +10,12 @@ const NavBar = () => {
   const searchInput: any = useRef(null);
   const [checkLogin, setCheckLogin] = useState(login);
   const [dataList, setDataList] = useState(data);
+  const [searchModal, setSearchModal] = useState(false);
+  const [cartModal, setCartModal] = useState(false);
+  const [profileModal, setProfileModal] = useState(false);
   const pathname = usePathname();
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
-
-  const colorIcon = "#e3e7f3";
 
   const checkNavActive = (url: string): string => {
     return pathname == `${url}`
@@ -24,29 +25,7 @@ const NavBar = () => {
 
   useEffect(() => {
     const $ = document.querySelector.bind(document);
-
-    const mainLayout: any = $(".mainLayout");
-    const itemSearch: any = $(`.${style.navigationUserItemSearch}`);
-    const cartContainer: any = $(`.${style.cartContainer}`);
     const positionTopNav: any = $(`.${style.headerContainer}`);
-    const userModal: any = $(`.${style.navigationNameUserModal}`);
-
-    const checkActiveIcon = (e: any) => {
-      if (checkLogin && !cartContainer.contains(e.target)) {
-        cartContainer?.classList.remove(style.active);
-        ($(`.${style.cartModal}`) as any).style.backgroundColor = "unset";
-      }
-      if (checkLogin && !userModal.contains(e.target)) {
-        userModal?.classList.remove(style.active);
-      }
-      if (!itemSearch.contains(e.target)) {
-        itemSearch?.classList.remove(style.active);
-        ($(`.${style.navigationUserIconSearch}`) as any).style.backgroundColor =
-          "unset";
-      }
-    };
-
-    mainLayout.addEventListener("click", checkActiveIcon);
 
     const addStyleNav = () => {
       positionTopNav.offsetTop > 80
@@ -57,11 +36,28 @@ const NavBar = () => {
     window.addEventListener("scroll", addStyleNav);
 
     addStyleNav();
-    return () => {
-      window.removeEventListener("scroll", addStyleNav);
-      mainLayout.removeEventListener("click", checkActiveIcon);
-    };
+    return () => window.removeEventListener("scroll", addStyleNav);
   }, []);
+
+  useEffect(() => {
+    const $ = document.querySelector.bind(document);
+    const mainLayout: any = $(".mainLayout");
+    const itemSearch: any = $(`.${style.navigationUserItemSearch}`);
+    const cartContainer: any = $(`.${style.cartContainer}`);
+    const userModal: any = $(`.${style.navigationNameUserModal}`);
+
+    const checkActiveIcon = (e: any) => {
+      cartModal && !cartContainer.contains(e.target) && setCartModal(false);
+      profileModal && !userModal.contains(e.target) && setProfileModal(false);
+      searchModal && !itemSearch.contains(e.target) && setSearchModal(false);
+    };
+
+    searchModal && searchInput.current.focus();
+
+    mainLayout.addEventListener("click", checkActiveIcon);
+
+    return () => mainLayout.removeEventListener("click", checkActiveIcon);
+  }, [cartModal, profileModal, searchModal]);
 
   const lineActive = (target: any, navActive: any, width: any) => {
     const sizeWidth = width;
@@ -106,45 +102,33 @@ const NavBar = () => {
         item.removeEventListener("click", handleClick);
       });
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
-
-  const ToggleShowActive = (className: any) => {
-    document.querySelector(`.${className}`)?.classList.toggle(style.active);
-  };
-
-  const BgColorActive = (className: any) => {
-    (document.querySelector(`.${className}`) as any).style.backgroundColor =
-      colorIcon;
-  };
-
-  const handleShowSearch = () => {
-    ToggleShowActive(style.navigationUserItemSearch);
-    BgColorActive(style.navigationUserIconSearch);
-    searchInput.current.focus();
-  };
-
-  const handleShowCart = () => {
-    ToggleShowActive(style.cartContainer);
-    BgColorActive(style.cartModal);
-  };
-
-  const handleShowProfile = () => {
-    ToggleShowActive(style.navigationNameUserModal);
-  };
 
   const handleDeleteProduct = (e: any) => {
     e.preventDefault();
   };
+
+  const handleSearch = () => {
+    setSearchModal(!searchModal);
+  };
+
+  const handleCart = () => {
+    setCartModal(!cartModal);
+  };
+
+  const handleProfile = () => {
+    setProfileModal(!profileModal);
+  };
+
   return (
-    <div className={`${style.headerContainer}`}>
-      <div className={`${style.navigationContainer}`}>
-        <div className={`${style.navigation}`}>
-          <div className={`${style.navigationLeft}`}>
-            <Link href="/">
+    <div className="flex justify-center items-center sticky top-0 left-0 right-0 bg-primary z-50">
+      <div className={`${style.navigationContainer} flex`}>
+        <div className="h-20 mx-auto flex justify-between items-center w-full">
+          <div className="flex items-center h-full">
+            <Link href="/" className="!relative">
               <Image
                 src="/images/logo.svg"
-                className={style.logo}
+                className="!relative !max-w-[80%]"
                 alt="LOGO"
                 fill
                 sizes="100vw"
@@ -152,8 +136,8 @@ const NavBar = () => {
               />
             </Link>
           </div>
-          <div className={`${style.navigationCenter}`}>
-            <div className={`${style.navigationList}`}>
+          <div>
+            <div className="flex relative">
               <Link href="/" className={checkNavActive("/")}>
                 home
               </Link>
@@ -169,36 +153,44 @@ const NavBar = () => {
               <div className={`${style.line}`}></div>
             </div>
           </div>
-          <div className={`${style.navigationRight}`}>
-            <div className={`${style.navigationUser}`}>
-              <div
-                onClick={handleShowSearch}
-                className={`${style.navigationUserItem} ${style.navigationUserIconSearch}`}
-              >
-                <Image
-                  src="/icons/search.svg"
-                  className={style.logo}
-                  alt="Search"
-                  fill
-                  sizes="100vw"
-                  priority={true}
-                />
+          <div>
+            <div className="flex">
+              <div className="cursor-pointer relative">
                 <div
-                  onClick={(e) => e.stopPropagation()}
-                  className={`${style.navigationUserItemSearch}`}
+                  onClick={handleSearch}
+                  className="!relative p-[10px] hover:bg-hover1 rounded-half"
                 >
-                  <input
-                    ref={searchInput}
-                    type="text"
-                    placeholder="Search for clothes ,..."
+                  <Image
+                    src="/icons/search.svg"
+                    className="!relative max-w-[24px]"
+                    alt="Search"
+                    fill
+                    sizes="100vw"
+                    priority={true}
                   />
                 </div>
+                {searchModal && (
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className={`${style.navigationUserItemSearch} top-[calc(100%+7px)] absolute right-0 origin-top-right z-10`}
+                  >
+                    <input
+                      ref={searchInput}
+                      type="text"
+                      placeholder="Search for clothes ,..."
+                      className="text-text border-solid border px-[20px] py-[10px] text-base outline-none rounded-md min-w-[260px] max-w-[260px] w-full"
+                    />
+                  </div>
+                )}
               </div>
               {!checkLogin ? (
-                <Link className={`${style.navigationUserItem}`} href="/login">
+                <Link
+                  className="hover:bg-hover1 cursor-pointer p-[10px] rounded-full relative"
+                  href="/login"
+                >
                   <Image
                     src="/icons/bag.svg"
-                    className={style.logo}
+                    className="!relative max-w-[22px]"
                     alt="Bag"
                     fill
                     sizes="100vw"
@@ -206,204 +198,240 @@ const NavBar = () => {
                   />
                 </Link>
               ) : (
-                <div
-                  onClick={handleShowCart}
-                  className={`${style.navigationUserItem} ${style.cartModal}`}
-                >
-                  <Image
-                    src="/icons/bag.svg"
-                    alt="Bag"
-                    className={style.logo}
-                    fill
-                    sizes="100vw"
-                    priority={true}
-                  />
+                <div className="pointer relative">
                   <div
-                    className={`${style.cartContainer}`}
-                    onClick={(e) => e.stopPropagation()}
+                    className="hover:bg-hover1 p-[10px] rounded-half !relative cursor-pointer"
+                    onClick={handleCart}
                   >
-                    <h1 className={`${style.cartTitle}`}>
-                      You have 3 items in your cart
-                    </h1>
-                    <ul>
-                      {dataList.length <= 0 ? (
-                        <NoItemCart styleCustom={{ maxWidth: "180px" }} />
-                      ) : (
-                        <>
-                          {dataList.map((item: any) => {
-                            return (
-                              <Link key={item.id} href="/productDetail">
-                                <Image
-                                  src="/images/product2.png"
-                                  className={style.productImage}
-                                  alt="Bag"
-                                  fill
-                                  sizes="(max-width: 80px) 100vw"
-                                />
-                                <div className={`${style.cartInformation}`}>
-                                  <h2>Girls Pink Moana Printed Dress</h2>
-                                  <h3>1 x $80</h3>
-                                  <div
-                                    className={`${style.cartInformationDelete}`}
-                                  >
-                                    <h2>Size S</h2>
-                                    <div
-                                      className={`${style.cartInformationDeleteIcon}`}
-                                      onClick={handleDeleteProduct}
-                                    >
-                                      <Image
-                                        src="/icons/trash-can.svg"
-                                        className={style.trashDelete}
-                                        alt="Bag"
-                                        fill
-                                        sizes="(max-width: 22px) 100vw"
-                                        priority={true}
-                                      />
+                    <Image
+                      src="/icons/bag.svg"
+                      alt="Bag"
+                      className="!relative max-w-[22px]"
+                      fill
+                      sizes="100vw"
+                      priority={true}
+                    />
+                  </div>
+                  {cartModal && (
+                    <div
+                      onClick={(e) => e.stopPropagation()}
+                      className={`${style.cartContainer} absolute top-[calc(100%+7px)] origin-top-right right-0 w-[360px] rounded-sm bg-[white] cursor-default shadow-sm`}
+                    >
+                      <h1 className="w-full text-text text-base pl-[12px] mt-[16px] font-medium">
+                        You have 3 items in your cart
+                      </h1>
+                      <ul className="max-h-[312px] my-[16px] overflow-y-auto overscroll-y-contain">
+                        {dataList.length <= 0 ? (
+                          <NoItemCart className="max-w-[180px]" />
+                        ) : (
+                          <>
+                            {dataList.map((item: any) => {
+                              return (
+                                <Link
+                                  key={item.id}
+                                  href="/productDetail"
+                                  className="p-[12px] !relative flex hover:bg-hover1"
+                                >
+                                  <Image
+                                    src="/images/product2.png"
+                                    className="!relative max-w-[80px] max-h-[80px]"
+                                    alt="Bag"
+                                    fill
+                                    sizes="(max-width: 80px) 100vw"
+                                  />
+                                  <div className="flex flex-col justify-center ml-[16px] basis-full shrink grow-0">
+                                    <h2 className="text-text text-[1.4em] font-medium">
+                                      Girls Pink Moana Printed Dress
+                                    </h2>
+                                    <h3 className="text-text text-[1.4em] my-[4px] font-bold">
+                                      1 x $80
+                                    </h3>
+                                    <div className="flex justify-between">
+                                      <h2 className="text-text text-[1.4em] font-normal">
+                                        Size S
+                                      </h2>
+                                      <div
+                                        className="!relative rounded-half"
+                                        onClick={handleDeleteProduct}
+                                      >
+                                        <Image
+                                          src="/icons/trash-can.svg"
+                                          className="!relative max-w-[24px] max-h-[24px]"
+                                          alt="Bag"
+                                          fill
+                                          sizes="(max-width: 22px) 100vw"
+                                          priority={true}
+                                        />
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              </Link>
-                            );
-                          })}
-                        </>
-                      )}
-                    </ul>
-                    <div className={`${style.cartCheckout}`}>
-                      <div className={`${style.cartCheckoutTitle}`}>
-                        <h1>subtotal</h1>
-                        <p>$200</p>
+                                </Link>
+                              );
+                            })}
+                          </>
+                        )}
+                      </ul>
+                      <div className="px-[12px]">
+                        <div className="text-text flex justify-between font-semibold capitalize text-[1.4em] mb-[16px]">
+                          <h1>subtotal</h1>
+                          <p>$200</p>
+                        </div>
+                        <Link href="/cart">
+                          <button className="text-text hover:bg-hover1 border-solid border-border border-[1px] bg-transparent inline-block text-[1.6em] px-[28px] py-[12px] rounded-sm w-full font-medium">
+                            View Cart
+                          </button>
+                        </Link>
+                        <Link href="/" className="mt-[8px] mb-[16px] block">
+                          <button className="hover:opacity-90 border-solid border-[1px] border-border inline-block text-[1.6em] bg-button px-[28px] py-[12px] rounded-sm  w-full font-medium">
+                            Checkout
+                          </button>
+                        </Link>
                       </div>
-                      <Link
-                        href="/cart"
-                        className={`${style.cartCheckoutBtn} ${style.cartCheckoutBtnViewCart}`}
-                      >
-                        <button>View Cart</button>
-                      </Link>
-                      <Link
-                        href="/"
-                        className={`${style.cartCheckoutBtn} ${style.cartCheckoutBtnCheckout}`}
-                      >
-                        <button>Checkout</button>
-                      </Link>
                     </div>
-                  </div>
+                  )}
                 </div>
               )}
 
               {checkLogin ? (
-                <div className={`${style.navigationNameUser}`}>
-                  <div className={`${style.navigationNameUserLogin}`}>
-                    <h3 onClick={handleShowProfile}>Lương Minh Quang</h3>
+                <div className="flex items-center relative">
+                  <div className="h-full w-full ml-[10px]">
+                    <h3
+                      className="cursor-pointer h-full w-full text-text text-[20px] flex shrink grow items-center cursor-pointer;"
+                      onClick={handleProfile}
+                    >
+                      Lương Minh Quang
+                    </h3>
                   </div>
-                  <div className={`${style.navigationNameUserModal}`}>
-                    <div className={`${style.navigationNameUserContainer}`}>
-                      <div className={`${style.navigationNameUserItem}`}>
-                        <Link href="/profile">
-                          <svg
-                            height="20"
-                            viewBox="0 0 32 32"
-                            width="20"
-                            xmlns="http://www.w3.org/2000/svg"
+                  {profileModal && (
+                    <div
+                      className={`${style.navigationNameUserModal} origin-top-right absolute right-0 top-[calc(100%+7px)] bg-white shadow-sm rounded-[12px] max-w-[400px] min-w-[200px] w-full`}
+                    >
+                      <div>
+                        <div>
+                          <Link
+                            href="/profile"
+                            className="hover:bg-hover1 flex items-center py-[12px] pl-[16px] pr-[16px]"
                           >
-                            <path d="m16 8a5 5 0 1 0 5 5 5 5 0 0 0 -5-5zm0 8a3 3 0 1 1 3-3 3.0034 3.0034 0 0 1 -3 3z" />
-                            <path d="m16 2a14 14 0 1 0 14 14 14.0158 14.0158 0 0 0 -14-14zm-6 24.3765v-1.3765a3.0033 3.0033 0 0 1 3-3h6a3.0033 3.0033 0 0 1 3 3v1.3765a11.8989 11.8989 0 0 1 -12 0zm13.9925-1.4507a5.0016 5.0016 0 0 0 -4.9925-4.9258h-6a5.0016 5.0016 0 0 0 -4.9925 4.9258 12 12 0 1 1 15.985 0z" />
-                            <path d="m0 0h32v32h-32z" fill="none" />
-                          </svg>
-                          <h1>My profile</h1>
-                        </Link>
-                      </div>
-                      <div className={`${style.navigationNameUserItem}`}>
-                        <Link href="/like">
-                          <svg
-                            width="20"
-                            height="20"
-                            strokeWidth="2"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
+                            <svg
+                              height="20"
+                              viewBox="0 0 32 32"
+                              width="20"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path d="m16 8a5 5 0 1 0 5 5 5 5 0 0 0 -5-5zm0 8a3 3 0 1 1 3-3 3.0034 3.0034 0 0 1 -3 3z" />
+                              <path d="m16 2a14 14 0 1 0 14 14 14.0158 14.0158 0 0 0 -14-14zm-6 24.3765v-1.3765a3.0033 3.0033 0 0 1 3-3h6a3.0033 3.0033 0 0 1 3 3v1.3765a11.8989 11.8989 0 0 1 -12 0zm13.9925-1.4507a5.0016 5.0016 0 0 0 -4.9925-4.9258h-6a5.0016 5.0016 0 0 0 -4.9925 4.9258 12 12 0 1 1 15.985 0z" />
+                              <path d="m0 0h32v32h-32z" fill="none" />
+                            </svg>
+                            <h1 className="ml-[16px] text-text font-medium text-[1.6em]">
+                              My profile
+                            </h1>
+                          </Link>
+                        </div>
+                        <div className={`${style.navigationNameUserItem}`}>
+                          <Link
+                            href="/like"
+                            className="hover:bg-hover1 flex items-center py-[12px] pl-[16px] pr-[16px]"
                           >
-                            <path
-                              d="M22 8.86222C22 10.4087 21.4062 11.8941 20.3458 12.9929C17.9049 15.523 15.5374 18.1613 13.0053 20.5997C12.4249 21.1505 11.5042 21.1304 10.9488 20.5547L3.65376 12.9929C1.44875 10.7072 1.44875 7.01723 3.65376 4.73157C5.88044 2.42345 9.50794 2.42345 11.7346 4.73157L11.9998 5.00642L12.2648 4.73173C13.3324 3.6245 14.7864 3 16.3053 3C17.8242 3 19.2781 3.62444 20.3458 4.73157C21.4063 5.83045 22 7.31577 22 8.86222Z"
-                              stroke="#131118"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
+                            <svg
+                              width="20"
+                              height="20"
+                              strokeWidth="2"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M22 8.86222C22 10.4087 21.4062 11.8941 20.3458 12.9929C17.9049 15.523 15.5374 18.1613 13.0053 20.5997C12.4249 21.1505 11.5042 21.1304 10.9488 20.5547L3.65376 12.9929C1.44875 10.7072 1.44875 7.01723 3.65376 4.73157C5.88044 2.42345 9.50794 2.42345 11.7346 4.73157L11.9998 5.00642L12.2648 4.73173C13.3324 3.6245 14.7864 3 16.3053 3C17.8242 3 19.2781 3.62444 20.3458 4.73157C21.4063 5.83045 22 7.31577 22 8.86222Z"
+                                stroke="#131118"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
 
-                          <h1>Wish lists</h1>
-                        </Link>
-                      </div>
-                      <div
-                        className={`${style.navigationNameUserItem} ${style.navigationNameUserItemLogout}`}
-                      >
-                        <Link href="">
-                          <svg
-                            fill="none"
-                            height="22"
-                            viewBox="0 0 24 24"
-                            width="22"
-                            xmlns="http://www.w3.org/2000/svg"
+                            <h1 className="ml-[16px] text-text font-medium text-[1.6em]">
+                              Wish lists
+                            </h1>
+                          </Link>
+                        </div>
+                        <div className={`${style.navigationNameUserItem} `}>
+                          <Link
+                            href=""
+                            className="hover:bg-hover1 flex items-center py-[12px] pl-[16px] pr-[16px]"
                           >
-                            <mask
-                              id="a"
-                              height="2"
-                              maskUnits="userSpaceOnUse"
-                              width="15"
-                              x="8"
-                              y="11"
+                            <svg
+                              fill="none"
+                              height="22"
+                              viewBox="0 0 24 24"
+                              width="22"
+                              xmlns="http://www.w3.org/2000/svg"
+                              stroke="#ff6f61"
                             >
+                              <mask
+                                id="a"
+                                height="2"
+                                maskUnits="userSpaceOnUse"
+                                width="15"
+                                x="8"
+                                y="11"
+                              >
+                                <path
+                                  clipRule="evenodd"
+                                  d="m8.99609 11.2501h13.54091v1.5h-13.54091z"
+                                  fill="#fff"
+                                  fillRule="evenodd"
+                                />
+                              </mask>
+                              <mask
+                                id="b"
+                                height="8"
+                                maskUnits="userSpaceOnUse"
+                                width="5"
+                                x="18"
+                                y="8"
+                              >
+                                <path
+                                  clipRule="evenodd"
+                                  d="m18.1096 8.33539h4.4274v7.33071h-4.4274z"
+                                  fill="#fff"
+                                  fillRule="evenodd"
+                                />
+                              </mask>
                               <path
                                 clipRule="evenodd"
-                                d="m8.99609 11.2501h13.54091v1.5h-13.54091z"
-                                fill="#fff"
-                                fillRule="evenodd"
-                              />
-                            </mask>
-                            <mask
-                              id="b"
-                              height="8"
-                              maskUnits="userSpaceOnUse"
-                              width="5"
-                              x="18"
-                              y="8"
-                            >
-                              <path
-                                clipRule="evenodd"
-                                d="m18.1096 8.33539h4.4274v7.33071h-4.4274z"
-                                fill="#fff"
-                                fillRule="evenodd"
-                              />
-                            </mask>
-                            <path
-                              clipRule="evenodd"
-                              d="m11.3192 22.0001h-4.88596c-2.444 0-4.433-1.989-4.433-4.435v-11.12898c0-2.446 1.989-4.436 4.433-4.436h4.87496c2.446 0 4.436 1.99 4.436 4.436v.932c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-.932c0-1.62-1.317-2.936-2.936-2.936h-4.87496c-1.617 0-2.933 1.316-2.933 2.936v11.12898c0 1.619 1.316 2.935 2.933 2.935h4.88596c1.612 0 2.925-1.312 2.925-2.924v-.943c0-.414.336-.75.75-.75s.75.336.75.75v.943c0 2.44-1.986 4.424-4.425 4.424z"
-                              fill="#FF6F61"
-                              fillRule="evenodd"
-                            />
-                            <g mask="url(#a)">
-                              <path
-                                clipRule="evenodd"
-                                d="m21.7871 12.7501h-12.04101c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h12.04101c.414 0 .75.336.75.75s-.336.75-.75.75z"
+                                d="m11.3192 22.0001h-4.88596c-2.444 0-4.433-1.989-4.433-4.435v-11.12898c0-2.446 1.989-4.436 4.433-4.436h4.87496c2.446 0 4.436 1.99 4.436 4.436v.932c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-.932c0-1.62-1.317-2.936-2.936-2.936h-4.87496c-1.617 0-2.933 1.316-2.933 2.936v11.12898c0 1.619 1.316 2.935 2.933 2.935h4.88596c1.612 0 2.925-1.312 2.925-2.924v-.943c0-.414.336-.75.75-.75s.75.336.75.75v.943c0 2.44-1.986 4.424-4.425 4.424z"
                                 fill="#FF6F61"
                                 fillRule="evenodd"
                               />
-                            </g>
-                            <g mask="url(#b)">
-                              <path
-                                clipRule="evenodd"
-                                d="m18.8594 15.6661c-.192 0-.385-.073-.531-.221-.292-.294-.291-.768.002-1.06l2.394-2.385-2.394-2.38396c-.293-.292-.295-.766-.002-1.06.292-.294.766-.294 1.06-.002l2.928 2.91496c.142.14.221.332.221.531s-.079.391-.221.531l-2.928 2.916c-.146.146-.338.219-.529.219z"
-                                fill="#FF6F61"
-                                fillRule="evenodd"
-                              />
-                            </g>
-                          </svg>
-                          <h1>Sign out</h1>
-                        </Link>
+                              <g mask="url(#a)">
+                                <path
+                                  clipRule="evenodd"
+                                  d="m21.7871 12.7501h-12.04101c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h12.04101c.414 0 .75.336.75.75s-.336.75-.75.75z"
+                                  fill="#FF6F61"
+                                  fillRule="evenodd"
+                                />
+                              </g>
+                              <g mask="url(#b)">
+                                <path
+                                  clipRule="evenodd"
+                                  d="m18.8594 15.6661c-.192 0-.385-.073-.531-.221-.292-.294-.291-.768.002-1.06l2.394-2.385-2.394-2.38396c-.293-.292-.295-.766-.002-1.06.292-.294.766-.294 1.06-.002l2.928 2.91496c.142.14.221.332.221.531s-.079.391-.221.531l-2.928 2.916c-.146.146-.338.219-.529.219z"
+                                  fill="#FF6F61"
+                                  fillRule="evenodd"
+                                />
+                              </g>
+                            </svg>
+                            <h1 className="ml-[16px] text-text font-medium text-[1.6em] text-[#ff6f61]">
+                              Sign out
+                            </h1>
+                          </Link>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               ) : (
-                <Link href="/login">
+                <Link
+                  href="/login"
+                  className="ml-[10px] text-white bg-button text-[1.6em] rounded-sm px-[26px] py-[10px]  flex items-center justify-enter"
+                >
                   <button>Login</button>
                 </Link>
               )}

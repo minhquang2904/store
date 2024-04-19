@@ -39,6 +39,16 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+body::-webkit-scrollbar {
+  width: 10px;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: #b2b5b9;
+}
+body::-webkit-scrollbar-track {
+  background-color: #f3f4f4;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
