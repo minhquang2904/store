@@ -9,8 +9,8 @@ const Filter = (props: any) => {
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
 
-    const container: any = $$(`.${style.container}`);
-    const checkMark: any = $$(`.${style.checkmark}`);
+    const container: any = $$(".container");
+    const checkMark: any = $$(".checkmark");
 
     if (checkType) {
       ($(`#${checkType} > span`) as any).style.background = "rgb(19, 17, 24)";
@@ -66,46 +66,55 @@ const Filter = (props: any) => {
   };
 
   return (
-    <div className={`${style.filterContentLeft}`}>
-      <div className={`${style.filterContentFilter}`}>
-        <h1 className={`${style.filterContentProductTitle}`}>
+    <div className="grow-0 shrink basis-[30%]">
+      <div className="mb-[32px]">
+        <h1 className="text-text text-[1.8em] capitalize mb-[16px] font-semibold flex flex-col">
           product categories
         </h1>
-        <div className={`${style.filterContentFilterCheckBox}`}>
+        <div>
           {type.map((item: any, index: any) => {
             return (
               <div
                 key={index}
-                className={`${style.container} containerType`}
+                className="container containerType block items-center relative select-none cursor-pointer py-[10px] pr-0 pl-[35px]"
                 id={item.type}
                 onClick={() => handleCheckBoxType(index, item.type)}
               >
-                <span className={`${style.checkmark} checkmarkType`}></span>
-                <p>{item.type}</p>
+                <span className="checkmark checkmarkType absolute inline-block top-2/4 left-0 translate-y-[-50%] w-[22px] h-[22px] border-solid rounded-[6px] bg-transparent	border-[1px] border-button"></span>
+                <p className="text-text text-[1.6em] font-medium capitalize">
+                  {item.type}
+                </p>
                 <CheckIcon />
               </div>
             );
           })}
         </div>
       </div>
-      <div className={`${style.filterContentFilter}`}>
-        <h1 className={`${style.filterContentProductTitle}`}>
+      <div>
+        <h1 className="text-text text-[1.8em] capitalize mb-[16px] font-semibold flex flex-col">
           Filter by price
         </h1>
       </div>
-      <div className={`${style.filterContentFilter}`}>
-        <h1 className={`${style.filterContentProductTitle}`}>Filter by size</h1>
-        <div className={`${style.filterContentFilterCheckBox}`}>
+      <div>
+        <h1 className="text-text text-[1.8em] capitalize mb-[16px] font-semibold flex flex-col">
+          Filter by size
+        </h1>
+        <div>
           {size.map((item: any, index: any) => {
             return (
               <div
                 key={index}
-                className={`${style.container} containerSize`}
+                className="container containerSize block items-center relative select-none cursor-pointer py-[10px] pr-0 pl-[35px]"
                 id={item.size}
                 onClick={() => handleCheckBoxSize(index, item.size)}
               >
-                <span className={`${style.checkmark} checkmarkSize`}></span>
-                <p style={{ textTransform: "uppercase" }}>{item.size}</p>
+                <span className="checkmark checkmarkSize  absolute inline-block top-2/4 left-0 translate-y-[-50%] w-[22px] h-[22px] border-solid rounded-[6px] bg-transparent	border-[1px] border-button"></span>
+                <p
+                  className="text-text text-[1.6em] font-medium capitalize"
+                  style={{ textTransform: "uppercase" }}
+                >
+                  {item.size}
+                </p>
                 <CheckIcon />
               </div>
             );

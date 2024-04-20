@@ -1,29 +1,30 @@
-import style from "./inputAccount.module.scss";
-
-export default function InputAccount(props: {
-  type: string;
-  name: string;
-  id: string;
-  placeholder: string;
-  value: any;
-  onChange: any;
-  className: string;
-  style: any;
-  refer: any;
-  autoComplete: any;
-}) {
+const InputAccount = (props: any) => {
+  const {
+    type,
+    name,
+    id,
+    placeholder,
+    value,
+    onChange,
+    className,
+    style,
+    refer,
+    autoComplete,
+  } = props;
   return (
     <input
-      value={props.value}
-      type={props.type}
-      name={props.name}
-      id={props.id}
-      placeholder={props.placeholder}
-      className={`${style.inputAccount} ${props.className}`}
-      onChange={props.onChange}
-      style={props.style}
-      ref={props.refer}
-      autoComplete={props.autoComplete}
+      value={value}
+      type={type}
+      name={name}
+      id={id}
+      placeholder={placeholder}
+      className={`${className} w-full p-[16px] text-[1.6em] border-solid border-button border-[1px] rounded-[12px] outline-none text-text font-semibold hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out`}
+      onChange={onChange}
+      style={style}
+      ref={refer}
+      autoComplete={autoComplete}
     />
   );
-}
+};
+
+export default InputAccount;

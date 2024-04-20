@@ -1,9 +1,10 @@
-import style from "./checkicon.module.scss";
-
 const CheckIcon = (props: any) => {
   const { styleCustom } = props;
   return (
-    <div className={`${style.checkIcon}`} style={styleCustom}>
+    <div
+      className="absolute top-[50%] left-0 translate-y-[-50%] h-[22px] w-[22px] flex justify-center items-center"
+      style={styleCustom}
+    >
       <svg
         width="18"
         height="18"

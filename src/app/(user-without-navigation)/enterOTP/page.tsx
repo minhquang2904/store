@@ -1,12 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import style from "./enterOTP.module.scss";
-import Link from "next/link";
-import Image from "next/image";
 import TitleAccount from "@/app/components/titleAccount/titleAccount";
 import InputAccount from "@/app/components/inputAccount/inputAccount";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
+import BackForm from "@/app/components/backForm/backForm";
 
 export default function ForgotPassword() {
   const [otp, setOTP] = useState("");
@@ -15,38 +13,23 @@ export default function ForgotPassword() {
   useEffect(() => {
     inputOTP.current.focus();
   }, []);
-  const handleInputChangeEmail = (e: any) => {
-    setOTP(e.target.value);
-  };
 
   const handleSubmitOTP = (e: any) => {};
 
   return (
     <>
-      <Link href="/forgotPassword">
-        <div className={`${style.backGroup}`}>
-          <Image
-            src="/icons/arrowLeft.svg"
-            className={`${style.backIcon}`}
-            alt="LOGO"
-            sizes="100vw"
-            width={16}
-            height={16}
-          />
-          <h4 className={`${style.backTitle}`}>Back</h4>
-        </div>
-      </Link>
+      <BackForm url="/forgotPassword" />
       <TitleAccount title="Enter OTP" />
-      <p className={`${style.subTitleCustom}`}>
+      <p className="text-[1.6em] text-[#a4a1aa] font-normal mb-[30px] inline-block">
         We have share a code of your registered email address
         robertfox@example.com.
       </p>
       <form>
-        <div className={`${style.formColumn}`}>
-          <div className={`${style.formGroup}`}>
+        <div className="flex flex-col">
+          <div className="mb-[16px]">
             <InputAccount
               value={otp}
-              onChange={handleInputChangeEmail}
+              onChange={(e: any) => setOTP(e.target.value)}
               type="text"
               name="otp"
               id="otp"

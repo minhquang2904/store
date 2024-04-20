@@ -18,6 +18,7 @@ const config: Config = {
       primary: "#F3F4F4",
       white: "#fff",
       secondary: "#ff6f61",
+      sub: "#00000080",
     },
     padding: {
       sm: "8px",

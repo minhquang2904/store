@@ -16,7 +16,7 @@ export default function BrandList() {
           priority={true}
         />
       </div>
-      <div className={`${style.brandItem}`}>
+      <div className="!relative">
         <Image
           src="/images/brand-2.png"
           className="!relative !min-w-[200px] max-h-[70px]"
@@ -26,7 +26,7 @@ export default function BrandList() {
           priority={true}
         />
       </div>
-      <div className={`${style.brandItem}`}>
+      <div className="!relative">
         <Image
           src="/images/brand-3.png"
           className="!relative !min-w-[200px] max-h-[70px]"
@@ -36,7 +36,7 @@ export default function BrandList() {
           priority={true}
         />
       </div>
-      <div className={`${style.brandItem}`}>
+      <div className="!relative">
         <Image
           src="/images/brand-4.png"
           className="!relative !min-w-[200px] max-h-[70px]"
@@ -46,7 +46,7 @@ export default function BrandList() {
           priority={true}
         />
       </div>
-      <div className={`${style.brandItem}`}>
+      <div className="!relative">
         <Image
           src="/images/brand-5.png"
           className="!relative !min-w-[200px] max-h-[70px]"

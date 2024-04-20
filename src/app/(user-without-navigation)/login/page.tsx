@@ -1,6 +1,6 @@
 "use client";
+
 import React, { useState, useRef, useEffect } from "react";
-import style from "./login.module.scss";
 import Link from "next/link";
 import TitleAccount from "@/app/components/titleAccount/titleAccount";
 import SubTitleAccount from "@/app/components/subTitleAccount/subTitleAccount";
@@ -13,14 +13,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const inputRef: any = useRef(null);
-
-  const handleInputChangeEmail = (e: any) => {
-    setEmail(e.target.value);
-  };
-
-  const handleInputChangePassword = (e: any) => {
-    setPassword(e.target.value);
-  };
 
   const handleLogin = (e: any) => {
     if (email == "") {
@@ -41,34 +33,33 @@ export default function Login() {
         <SubTitleAccount title="Please sign up here" />
       </Link>
       <form>
-        <div className={`${style.formColumn}`}>
-          <div className={`${style.formGroup}`}>
-            <h4>Email Address</h4>
+        <div className="flex flex-col">
+          <div className="mb-[16px] ">
+            <h4 className="text-[1.4em] text-text font-[450] mb-[5px]">
+              Email Address
+            </h4>
             <InputAccount
               value={email}
-              onChange={handleInputChangeEmail}
+              onChange={(e: any) => setEmail(e.target.value)}
               type="text"
               name="email"
               id="email"
-              placeholder="Email@gmail.com"
-              className=""
-              style={{}}
+              placeholder="Example@gmail.com"
               refer={inputRef}
               autoComplete="Email"
             />
           </div>
-          <div className={`${style.formGroup}`} style={{ marginBottom: "0" }}>
-            <h4>Password</h4>
+          <div className="mb-0">
+            <h4 className="text-[1.4em] text-text font-[450] mb-[5px]">
+              Password
+            </h4>
             <InputAccount
               value={password}
-              onChange={handleInputChangePassword}
+              onChange={(e: any) => setPassword(e.target.value)}
               type="password"
               name="password"
               id="password"
               placeholder="Password"
-              className=""
-              style={{}}
-              refer={null}
               autoComplete="current-password"
             />
           </div>
@@ -78,9 +69,11 @@ export default function Login() {
         ) : (
           <ShowError style={{ visibility: "hidden" }} error={error} />
         )}
-        <div className={`${style.forgotPassword}`}>
+        <div className="flex justify-end mb-[32px]">
           <Link href="/forgotPassword">
-            <p>Forgot Password?</p>
+            <p className="!text-text text-[1.4em] font-medium mb-0 hover:opacity-90">
+              Forgot Password?
+            </p>
           </Link>
         </div>
         <BtnAccount title="Login" onClick={handleLogin} />

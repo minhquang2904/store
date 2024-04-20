@@ -2,12 +2,10 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import style from "./forgotPassword.module.scss";
-import Link from "next/link";
-import Image from "next/image";
 import TitleAccount from "@/app/components/titleAccount/titleAccount";
 import InputAccount from "@/app/components/inputAccount/inputAccount";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
+import BackForm from "@/app/components/backForm/backForm";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -25,10 +23,6 @@ export default function ForgotPassword() {
     }
   }, [checkEmail]);
 
-  const handleInputChangeEmail = (e: any) => {
-    setEmail(e.target.value);
-  };
-
   const handleSendOTP = () => {
     if (email == "lmquang2904@gmail.com") {
       setCheckEmail(true);
@@ -37,36 +31,25 @@ export default function ForgotPassword() {
 
   return (
     <>
-      <Link href="/login">
-        <div className={`${style.backGroup}`}>
-          <Image
-            src="/icons/arrowLeft.svg"
-            className={`${style.backIcon}`}
-            alt="LOGO"
-            sizes="100vw"
-            width={16}
-            height={16}
-          />
-          <h4 className={`${style.backTitle}`}>Back</h4>
-        </div>
-      </Link>
+      <BackForm url="/login" />
       <TitleAccount title="Forgot Password" />
-      <p className={`${style.subTitleCustom}`}>
+      <p className="text-[1.6em] text-[#a4a1aa] font-normal mb-[30px] inline-block">
         Enter your registered email address. we’ll send you a code to reset your
         password.
       </p>
       <form>
-        <div className={`${style.formColumn}`}>
-          <div className={`${style.formGroup}`}>
-            <h4>Email Address</h4>
+        <div className="flex flex-col">
+          <div className="mb-[16px]">
+            <h4 className="text-[1.4em] text-text font-[450] mb-[5px]">
+              Email Address
+            </h4>
             <InputAccount
               value={email}
-              onChange={handleInputChangeEmail}
+              onChange={(e: any) => setEmail(e.target.value)}
               type="text"
               name="email"
               id="email"
-              placeholder="Email@gmail.com"
-              className=""
+              placeholder="Example@gmail.com"
               style={{ margin: "0 0 16px 0" }}
               refer={inputEmail}
               autoComplete="email"
