@@ -13,8 +13,8 @@ export default function TemplateProductSlider() {
   const [dataList, setData] = useState(data);
 
   const handleChangeType = (e: any) => {
-    if (e.target.id == "dress") {
-      getDataType("dress");
+    if (e.target.id == "shirt") {
+      getDataType("shirt");
     } else if (e.target.id == "bag") {
       getDataType("bag");
     } else if (e.target.id == "shoes") {
@@ -30,7 +30,7 @@ export default function TemplateProductSlider() {
 
   const getDataType = (type: string) => {
     const dataType = data.filter((item: any) => {
-      return item.type.includes(type);
+      return type.includes(item.type);
     });
     return setData(dataType);
   };
@@ -109,48 +109,53 @@ export default function TemplateProductSlider() {
   }, [dataList]);
 
   return (
-    <div className={`${style.productSlider}`}>
+    <div className="flex justify-center items-center">
       <div className={`${style.productSliderContainer}`}>
-        <div className={`${style.productSliderTitle}`}>
-          <h1>Discount</h1>
+        <div>
+          <h1 className="text-[5em] font-medium capitalize text-center text-text">
+            Discount
+          </h1>
         </div>
-        <div className={`${style.productSliderType}`}>
-          <div className={`${style.productSliderTypeLeft}`}>
+        <div className="my-[35px] mx-0 flex justify-between">
+          <div className="flex gap-10 items-center">
             <div
-              className={`${style.productSliderTypeLeftItems} ${style.active}`}
+              className="active [&.active]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
               onClick={handleChangeType}
             >
               all products
             </div>
             <div
-              className={`${style.productSliderTypeLeftItems}`}
+              className="[&.active]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
               onClick={handleChangeType}
-              id="dress"
+              id="shirt"
             >
               Dress
             </div>
             <div
-              className={`${style.productSliderTypeLeftItems}`}
+              className="[&.active]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
               onClick={handleChangeType}
               id="bag"
             >
               Bag
             </div>
             <div
-              className={`${style.productSliderTypeLeftItems}`}
+              className="[&.active]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
               onClick={handleChangeType}
               id="shoes"
             >
               Shoes
             </div>
           </div>
-          <div className={`${style.productSliderTypeRight}`}>
-            <Link href="#" className={`${style.productSliderTypeRightBtn}`}>
+          <div>
+            <Link
+              href="#"
+              className="bg-button text-white text-[1.6em] font-normal capitalize py-[8px] px-[14px] hover:opacity-90"
+            >
               show all
             </Link>
           </div>
         </div>
-        <div className={`${style.productSliderList} slider-container`}>
+        <div className="slider-container">
           <Slider {...settings}>
             {dataList.map((item: any) => {
               return <CardProduct key={item.id} data={item} login={login} />;

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import style from "./support.module.scss";
-import React from "react";
 
 const Support = () => {
   const data = [
@@ -26,22 +25,26 @@ const Support = () => {
     },
   ];
   return (
-    <div className={`${style.support}`}>
+    <div className="flex justify-center items-center">
       <div className={`${style.supportContainer}`}>
-        <div className={`${style.supportList}`}>
+        <div className="flex gap-5">
           {data.map((item, index) => {
             return (
-              <div key={index} className={`${style.supportItem}`}>
+              <div key={index} className="shrink-0 grow-0 basis-1/4 !relative">
                 <Image
                   src={item.url}
-                  className={style.image}
+                  className="!relative max-w-[30px] max-h-[36px]"
                   alt="LOGIN"
                   fill
                   sizes="100vw"
                   priority={true}
                 />
-                <h3>{item.title}</h3>
-                <p>{item.desc}</p>
+                <h3 className="text-[1.6em] text-text font-extrabold capitalize mx-0 mt-[12px] mb-[4px]">
+                  {item.title}
+                </h3>
+                <p className="text-[1.4em] text-text font-medium">
+                  {item.desc}
+                </p>
               </div>
             );
           })}
@@ -51,4 +54,4 @@ const Support = () => {
   );
 };
 
-export default React.memo(Support);
+export default Support;

@@ -1,34 +1,6 @@
 @import "../../style.module.scss";
 
-.support {
-  @include disflexCenter;
-  &Container {
-    @include mainLayout;
-    margin-top: $marginTopLayOut;
-  }
-  &List {
-    display: flex;
-    gap: 20px;
-    .supportItem {
-      flex: 0 0 25%;
-      position: relative !important;
-      .image {
-        position: relative !important;
-        max-width: 36px;
-        max-height: 36px;
-      }
-      h3 {
-        font-size: 1.6em;
-        color: var(--text-color);
-        font-weight: 800;
-        text-transform: capitalize;
-        margin: 12px 0 4px 0;
-      }
-      p {
-        font-size: 1.4em;
-        color: var(--text-color);
-        font-weight: 500;
-      }
-    }
-  }
+.supportContainer {
+  @include mainLayout;
+  margin-top: $marginTopLayOut;
 }

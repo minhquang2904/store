@@ -1,9 +1,13 @@
-import style from "./showErrow.module.scss";
-
-export default function ShowError(props: { style: any; error: any }) {
+const ShowError = (props: any) => {
+  const { style, error } = props;
   return (
-    <p className={`${style.error}`} style={props.style}>
-      {props.error}
+    <p
+      className="text-[red] text-[1.3em] mt-[2px] font-medium h-[13px] invisible"
+      style={style}
+    >
+      {error}
     </p>
   );
-}
+};
+
+export default ShowError;
