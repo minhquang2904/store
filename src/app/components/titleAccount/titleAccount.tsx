@@ -1,5 +1,6 @@
-import style from "./titleAccount.module.scss";
+const TitleAccount = (props: any) => {
+  const { title } = props;
+  return <h3 className="text-[3em] text-text font-bold">{title}</h3>;
+};
 
-export default function TitleAccount(props: { title: string }) {
-  return <h3 className={style.title}>{props.title}</h3>;
-}
+export default TitleAccount;

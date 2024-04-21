@@ -1,19 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
-import style from "./titlePageNavigation.module.scss";
 
 const TitlePageNavigation = (props: any) => {
   return (
-    <div className={`${style.detailPageNavigation}`}>
-      <Link href="/">Home</Link>
+    <div className="text-text text-[1.6em] font-medium !relative flex items-center">
+      <Link href="/" className="text-[#05a]">
+        Home
+      </Link>
       <Image
         src="/icons/arrow-right-1.svg"
-        className={`${style.icon}`}
+        className="mx-[4px] !relative max-w-[16px] max-h-[16px]"
         alt="Product 1"
         fill
         sizes="100vw"
       />
-      <Link href="/">Shirt</Link>
+      <Link href="/" className="text-[#05a]">
+        Shirt
+      </Link>
     </div>
   );
 };

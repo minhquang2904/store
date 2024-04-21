@@ -13,19 +13,17 @@ export default function TemplateProductSlider() {
   const [dataList, setData] = useState(data);
 
   const handleChangeType = (e: any) => {
-    if (e.target.id == "shirt") {
-      getDataType("shirt");
-    } else if (e.target.id == "bag") {
-      getDataType("bag");
-    } else if (e.target.id == "shoes") {
-      getDataType("shoes");
-    } else {
-      setData(data);
-    }
+    const id = e.target.id;
+
+    id == "shirt" && getDataType("shirt");
+    id == "bag" && getDataType("bag");
+    id == "shoes" && getDataType("shoes");
+    !id && setData(data);
+
     document
-      .querySelector(`.${style.productSliderTypeLeftItems}.${style.active}`)
-      ?.classList.remove(`${style.active}`);
-    e.target.classList.add(`${style.active}`);
+      .querySelector(".activeTabSlider")
+      ?.classList.remove("activeTabSlider");
+    e.target.classList.add("activeTabSlider");
   };
 
   const getDataType = (type: string) => {
@@ -35,35 +33,35 @@ export default function TemplateProductSlider() {
     return setData(dataType);
   };
 
-  function SampleNextArrow(props: any) {
+  const SampleNextArrow = (props: any) => {
     const { className, onClick } = props;
     return (
       <div className={className} onClick={onClick}>
         <Image
           src="/icons/arrow-right-1.svg"
-          alt="Arrow 1"
+          alt="Icon"
           fill
           sizes="100vw"
           priority={true}
         />
       </div>
     );
-  }
+  };
 
-  function SamplePrevArrow(props: any) {
+  const SamplePrevArrow = (props: any) => {
     const { className, onClick } = props;
     return (
       <div className={className} onClick={onClick}>
         <Image
           src="/icons/arrow-left-1.svg"
-          alt="Arrow 2"
+          alt="Icon"
           fill
           sizes="100vw"
           priority={true}
         />
       </div>
     );
-  }
+  };
 
   const settings = {
     infinite: false,
@@ -100,12 +98,8 @@ export default function TemplateProductSlider() {
   useEffect(() => {
     const slideArrow = document.querySelectorAll(".slick-arrow");
     dataList.length <= 4
-      ? slideArrow.forEach((item: any) => {
-          item.style.display = "none";
-        })
-      : slideArrow.forEach((item: any) => {
-          item.style.display = "block";
-        });
+      ? slideArrow.forEach((item: any) => (item.style.display = "none"))
+      : slideArrow.forEach((item: any) => (item.style.display = "block"));
   }, [dataList]);
 
   return (
@@ -119,27 +113,27 @@ export default function TemplateProductSlider() {
         <div className="my-[35px] mx-0 flex justify-between">
           <div className="flex gap-10 items-center">
             <div
-              className="active [&.active]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
+              className="activeTabSlider [&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
               onClick={handleChangeType}
             >
               all products
             </div>
             <div
-              className="[&.active]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
+              className="[&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
               onClick={handleChangeType}
               id="shirt"
             >
-              Dress
+              shirt
             </div>
             <div
-              className="[&.active]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
+              className="[&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
               onClick={handleChangeType}
               id="bag"
             >
               Bag
             </div>
             <div
-              className="[&.active]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
+              className="[&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
               onClick={handleChangeType}
               id="shoes"
             >

@@ -1,17 +1,6 @@
 @import "../../style.module.scss";
 
-.like {
-  @include disflexCenter;
-  &Container {
-    @include mainLayout;
-    margin-top: $marginTopLayOut;
-  }
-  &Content {
-    margin-top: 16px;
-  }
-  &List {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 $marginItemCard;
-  }
+.likeContainer {
+  @include mainLayout;
+  margin-top: $marginTopLayOut;
 }

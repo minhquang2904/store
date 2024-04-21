@@ -8,7 +8,7 @@ import NavBar from "../components/navbar/navbar";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <div className={`mainLayout`} style={{ backgroundColor: "#F3F4F4" }}>
+    <div className="bg-[#F3F4F4] mainLayout">
       <NavBar />
       <main>{children}</main>
       <Support />

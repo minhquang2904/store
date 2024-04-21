@@ -1,60 +1,6 @@
 @import "../../style.module.scss";
 
-.bestSeller {
-  @include disflexCenter;
-  &Container {
-    @include mainLayout;
-    margin-top: $marginTopLayOut;
-  }
-  &Title {
-    h1 {
-      font-size: 5em;
-      font-weight: 500;
-      text-transform: capitalize;
-      text-align: center;
-      color: var(--text-color);
-    }
-  }
-  &Type {
-    margin: 35px 0;
-    display: flex;
-    justify-content: space-between;
-    &Left {
-      display: flex;
-      gap: 40px;
-      align-items: center;
-      &Items {
-        color: var(--template-product-color);
-        font-size: 1.6em;
-        font-weight: 600;
-        text-transform: capitalize;
-        cursor: pointer;
-        &:hover {
-          color: var(--text-color);
-        }
-      }
-    }
-    &Right {
-      &Btn {
-        background-color: var(--btn-color);
-        color: #fff;
-        font-size: 1.6em;
-        font-weight: 400;
-        text-transform: capitalize;
-        padding: 8px 14px;
-        &:hover {
-          @include hoverBtn;
-        }
-      }
-    }
-  }
-  &List {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 $marginItemCard;
-  }
-}
-
-.bestSellerTypeLeftItems.active {
-  color: var(--text-color) !important;
+.bestSellerContainer {
+  @include mainLayout;
+  margin-top: $marginTopLayOut;
 }

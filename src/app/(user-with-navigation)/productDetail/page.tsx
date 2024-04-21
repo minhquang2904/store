@@ -16,17 +16,15 @@ export default function ProductDetail() {
 
   const handleChangeDescription = (e: any) => {
     const id = e.target.id;
-    if (id == "description") {
-      setDescription(navDescription || "");
-    } else if (id == "add-information") {
-      setDescription(navAddInformation || "");
-    }
+    id == "description" && setDescription(navDescription || "");
+    id == "add-information" && setDescription(navAddInformation || "");
+
     document
-      .querySelector(`.${style.detailDescriptionItem}.${style.active}`)
-      ?.classList.remove(`${style.active}`);
-    e.target.classList.add(`${style.active}`);
+      .querySelector(".activeTabDetail")
+      ?.classList.remove("activeTabDetail");
+    e.target.classList.add("activeTabDetail");
   };
-  const handleIconHeart = () => {};
+
   const handleActivePicture = (index: any) => {
     setPicture(index);
   };
@@ -35,32 +33,47 @@ export default function ProductDetail() {
     setDescription(navDescription || "");
   }, []);
 
+  const handleChooseSize = (e: any) => {
+    document.querySelector(".activeSize")?.classList.remove("activeSize");
+    e.target.classList.add("activeSize");
+  };
+
+  const handleChooseColor = (e: any) => {
+    document.querySelector(".activeColor")?.classList.remove("activeColor");
+    e.target.classList.add("activeColor");
+  };
+
+  const handleSubmitHeart = (e: any) => {
+    e.target.closest(`.${style.iconHeartSvg}`).classList.toggle(style.active);
+    e.preventDefault();
+  };
+
   return (
-    <div className={`${style.detail}`}>
+    <div className="flex justify-center items-center">
       <div className={`${style.detailContainer}`}>
         <TitlePageNavigation />
-        <div className={`${style.detailBuy}`}>
-          <div className={`${style.detailBuyLeft}`}>
-            <div className={`${style.detailBuyLeftImage}`}>
+        <div className="mt-[50px] flex">
+          <div className="flex flex-col items-center shrink grow-0 basis-2/4">
+            <div className="!relative max-w-[400px] flex w-full">
               <Image
                 src={dataDetail[picture].url || ""}
-                className={`${style.picture}`}
+                className="!relative w-full"
                 alt="Product 1"
                 fill
                 sizes="(max-width: 400px) 100vw"
               />
             </div>
-            <div className={`${style.detailBuyLeftReview}`}>
+            <div className="flex">
               {dataDetail.slice(0, 6).map((item: any) => {
                 return dataDetail.length > 1 ? (
                   <div
                     key={item.id}
-                    className={`${style.detailBuyLeftReviewItem}`}
+                    className="!relative max-w-[110px] w-full cursor-pointer hover:opacity-80"
                     onClick={() => handleActivePicture(item.id - 1)}
                   >
                     <Image
                       src={item.url}
-                      className={`${style.picture}`}
+                      className="w-full !relative"
                       alt="Product 1"
                       fill
                       sizes="(max-width: 200px) 100vw"
@@ -73,31 +86,37 @@ export default function ProductDetail() {
               })}
             </div>
           </div>
-          <div className={`${style.detailBuyRight}`}>
-            <div className={`${style.detailBuyRightTitle}`}>
-              <h1>YK Disney</h1>
-              <div>
-                <div className={`${style.detailBuyRightTitleHeart}`}>
+          <div className="shrink grow-0 basis-2/4 ml-[30px]">
+            <div className="flex justify-between">
+              <h1 className="text-text font-bold text-[2.6em]">YK Disney</h1>
+              <div className="flex">
+                <div className="flex items-center mr-[16px]">
                   <div>
                     <IconHeartSvg
-                      onClick={handleIconHeart}
-                      className={style.iconHeart}
+                      onClick={handleSubmitHeart}
+                      className={`${style.iconHeartSvg} cursor-pointer`}
                     />
                   </div>
                 </div>
-                <div className={`${style.detailBuyRightTitleStock}`}>
-                  <h5>In Stock : 8</h5>
+                <div className="bg-[#e2f8e2] flex items-center py-[8px] px-[16px] rounded-[10px]">
+                  <h5 className="text-[#3cd139] text-[1.4em] font-medium">
+                    In Stock : 8
+                  </h5>
                 </div>
               </div>
             </div>
-            <div className={`${style.detailBuyRightType}`}>
-              <h4>Girl Pink Dress</h4>
+            <div className="mt-[8px]">
+              <h4 className="text-text font-normal text-[1.6em]">
+                Girl Pink Dress
+              </h4>
             </div>
-            <div className={`${style.detailBuyRightPrice}`}>
-              <h4>$80.00</h4>
+            <div className="mt-[8px]">
+              <h4 className="text-text font-normal text-[1.6em]">$80.00</h4>
             </div>
-            <div className={`${style.detailBuyRightDescription}`}>
-              <p>
+            <div className="mt-[16px]">
+              <p
+                className={`text-text font-normal text-[1.4em] ${style.subDescription} ${style.descriptionRight} `}
+              >
                 Lustrous yet understated. The new evening wear collection
                 exclusively offered at the reopened Giorgio Armani boutique in
                 Los Angeles. Lustrous yet understated. The new evening wear
@@ -108,38 +127,54 @@ export default function ProductDetail() {
                 the reopened Giorgio Armani boutique in Los Angeles.
               </p>
             </div>
-            <div className={`${style.detailBuyRightColor}`}>
-              <h3>Color</h3>
-              <div className={`${style.detailBuyRightColorList}`}>
-                <div className={`${style.detailBuyRightColorItem}`}></div>
-                <div className={`${style.detailBuyRightColorItem}`}></div>
+            <div className="mt-[16px]">
+              <h3 className="text-text text-[1.6em] font-semibold">Color</h3>
+              <div className="mt-[8px] flex gap-4">
+                {dataDetail[0].color.map((item: any, index: any) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={handleChooseColor}
+                      className={`[&.activeColor]:border-solid [&.activeColor]:border-[3px] [&.activeColor]:border-[#afb3b8] bg-[${item}] w-[70px] h-[40px] cursor-pointer rounded-[20px]`}
+                    ></div>
+                  );
+                })}
               </div>
             </div>
-            <div className={`${style.detailBuyRightSize}`}>
-              <h3>Size</h3>
-              <div className={`${style.detailBuyRightSizeList}`}>
-                <div className={`${style.detailBuyRightSizeItem}`}>S</div>
-                <div className={`${style.detailBuyRightSizeItem}`}>M</div>
-                <div className={`${style.detailBuyRightSizeItem}`}>L</div>
-                <div className={`${style.detailBuyRightSizeItem}`}>XL</div>
-                <div className={`${style.detailBuyRightSizeItem}`}>XXl</div>
+            <div className="mt-[16px]">
+              <h3 className="text-text  font-semibold text-[1.6em]">Size</h3>
+              <div className="flex mt-[8px]">
+                {dataDetail[0].size.map((item: any, index: any) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={handleChooseSize}
+                      className="[&.activeSize]:bg-button [&.activeSize]:text-white uppercase text-text mr-[8px] border-solid border-[1px] border-[#727074] text-[1.5em] w-[70px] h-[40px] rounded-[20px] flex justify-center items-center cursor-pointer font-medium"
+                    >
+                      {item}
+                    </div>
+                  );
+                })}
               </div>
             </div>
-            <div className={`${style.detailBuyRightAddToCard}`}>
-              <div className={`${style.detailBuyRightAddToCardNumber}`}>
-                <div>
+            <div className="mt-[28px] flex">
+              <div>
+                <div className="inline-flex !relative items-center border-[1px] border-solid border-button py-[4px] px-[8px] rounded-[26px]">
                   <Image
                     src="/icons/subtract.svg"
-                    className={style.logo}
+                    className="!relative !w-[24px] !h-[24px] cursor-pointer"
                     alt="Icon"
                     fill
                     sizes="100vw"
                     priority={true}
                   />
-                  <input type="number" />
+                  <input
+                    type="number"
+                    className={`text-text outline-none p-[8px] text-[1.4em] max-w-[40px] font-medium text-center ${style.inputOuterAndInner}`}
+                  />
                   <Image
                     src="/icons/plus.svg"
-                    className={style.logo}
+                    className="!relative !w-[24px] !h-[24px] cursor-pointer"
                     alt="Icon"
                     fill
                     sizes="100vw"
@@ -147,32 +182,33 @@ export default function ProductDetail() {
                   />
                 </div>
               </div>
-              <div className={`${style.detailBuyRightAddToCardBtn}`}>
-                <button>Add to Card</button>
+              <div className="mx-[16px] flex items-center bg-button rounded-[26px] max-w-[300px] w-full">
+                <button className="text-center w-full text-[1.4em]">
+                  Add to Card
+                </button>
               </div>
             </div>
           </div>
         </div>
-        <div className={`${style.detailDescription}`}>
-          <div className={`${style.detailDescriptionNavigation}`}>
+        <div className="mt-[80px]">
+          <div className="flex font-medium mb-[20px] text-sub capitalize text-[2em]">
             <div
-              className={`${style.detailDescriptionItem} ${style.active}`}
+              className="activeTabDetail [&.activeTabDetail]:before:absolute [&.activeTabDetail]:before:content-[''] [&.activeTabDetail]:before:w-full [&.activeTabDetail]:before:h-[4px] [&.activeTabDetail]:before:bottom-0 [&.activeTabDetail]:before:bg-button [&.activeTabDetail]:before:rounded-[4px] [&.activeTabDetail]:text-text pb-[8px] mr-[16px] relative cursor-pointer hover:text-button"
               onClick={handleChangeDescription}
               id="description"
             >
               description
             </div>
             <div
-              className={`${style.detailDescriptionItem}`}
+              className="[&.activeTabDetail]:before:absolute [&.activeTabDetail]:before:content-[''] [&.activeTabDetail]:before:w-full [&.activeTabDetail]:before:h-[4px] [&.activeTabDetail]:before:bottom-0 [&.activeTabDetail]:before:bg-button [&.activeTabDetail]:before:rounded-[4px] [&.activeTabDetail]:text-text pb-[8px] mr-[16px] relative cursor-pointer hover:text-button"
               onClick={handleChangeDescription}
               id="add-information"
             >
               Add Information
             </div>
-            <div className={`${style.line}`}></div>
           </div>
-          <div className={`${style.detailDescriptionContent}`}>
-            <p>{description}</p>
+          <div className="text-text">
+            <p className="text-[1.4em] leading-5">{description}</p>
           </div>
         </div>
       </div>

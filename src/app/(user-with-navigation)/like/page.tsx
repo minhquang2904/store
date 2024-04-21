@@ -11,11 +11,11 @@ const Like = () => {
   const styleCustom = { width: "25%" };
   const [dataList, setDataList] = useState(data);
   return (
-    <div className={`${style.like}`}>
+    <div className="flex justify-center items-center">
       <div className={`${style.likeContainer}`}>
         <ShowingPage />
-        <div className={`${style.likeContent}`}>
-          <div className={`${style.likeList}`}>
+        <div className="mt-[16px]">
+          <div className="flex flex-wrap mx-[-12px]">
             {dataList.map((item: any) => {
               return (
                 <CardProduct

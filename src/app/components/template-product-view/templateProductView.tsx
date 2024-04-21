@@ -10,19 +10,14 @@ export default function TemplateProductView() {
 
   const handleChangeType = (e: any) => {
     const id = e.target.id;
-    if (id == "dress") {
-      getDataType("dress");
-    } else if (id == "bag") {
-      getDataType("bag");
-    } else if (id == "shoes") {
-      getDataType("shoes");
-    } else {
-      setData(data);
-    }
-    document
-      .querySelector(`.${style.bestSellerTypeLeftItems}.${style.active}`)
-      ?.classList.remove(`${style.active}`);
-    e.target.classList.add(`${style.active}`);
+
+    id == "shirt" && getDataType("shirt");
+    id == "bag" && getDataType("bag");
+    id == "shoes" && getDataType("shoes");
+    !id && setData(data);
+
+    document.querySelector(".activeTabView")?.classList.remove("activeTabView");
+    e.target.classList.add("activeTabView");
   };
 
   const getDataType = (type: string) => {
@@ -33,48 +28,53 @@ export default function TemplateProductView() {
   };
 
   return (
-    <div className={`${style.bestSeller}`}>
+    <div className="flex justify-center items-center">
       <div className={`${style.bestSellerContainer}`}>
-        <div className={`${style.bestSellerTitle}`}>
-          <h1>Best sellers</h1>
+        <div>
+          <h1 className="text-[5em] font-medium capitalize text-center text-text">
+            Best sellers
+          </h1>
         </div>
-        <div className={`${style.bestSellerType}`}>
-          <div className={`${style.bestSellerTypeLeft}`}>
+        <div className="my-[35px] mx-0 flex justify-between">
+          <div className="flex gap-10 items-center">
             <div
-              className={`${style.bestSellerTypeLeftItems} ${style.active}`}
+              className="activeTabView [&.activeTabView]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
               onClick={handleChangeType}
             >
               all products
             </div>
             <div
-              className={`${style.bestSellerTypeLeftItems}`}
+              className="[&.activeTabView]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
               onClick={handleChangeType}
-              id="dress"
+              id="shirt"
             >
-              Dress
+              shirt
             </div>
             <div
-              className={`${style.bestSellerTypeLeftItems}`}
+              className="[&.activeTabView]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
               onClick={handleChangeType}
               id="bag"
             >
               Bag
             </div>
             <div
-              className={`${style.bestSellerTypeLeftItems}`}
+              className="[&.activeTabView]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
               onClick={handleChangeType}
               id="shoes"
             >
               Shoes
             </div>
           </div>
-          <div className={`${style.bestSellerTypeRight}`}>
-            <Link href="#" className={`${style.bestSellerTypeRightBtn}`}>
+          <div>
+            <Link
+              href="#"
+              className="bg-button text-white text-[1.6em] font-normal capitalize py-[8px] px-[14px] hover:opacity-90"
+            >
               show all
             </Link>
           </div>
         </div>
-        <div className={`${style.bestSellerList}`}>
+        <div className="flex flex-wrap mx-[-12px]">
           {dataList.slice(0, 8).map((item: any) => {
             return (
               <CardProduct
