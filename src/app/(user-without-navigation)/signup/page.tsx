@@ -6,6 +6,7 @@ import TitleAccount from "@/app/components/titleAccount/titleAccount";
 import SubTitleAccount from "@/app/components/subTitleAccount/subTitleAccount";
 import InputAccount from "@/app/components/inputAccount/inputAccount";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
+import TitleInput from "@/app/components/titleInput/titleInput";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -28,9 +29,7 @@ export default function Login() {
       <form>
         <div className="flex flex-col">
           <div className="mb-[16px]">
-            <h4 className="text-[1.4em] text-text font-[450] mb-[5px]">
-              Email Address
-            </h4>
+            <TitleInput title="email" />
             <InputAccount
               value={email}
               onChange={(e: any) => setEmail(e.target.value)}
@@ -43,9 +42,7 @@ export default function Login() {
             />
           </div>
           <div className="mb-[16px]">
-            <h4 className="text-[1.4em] text-text font-[450] mb-[5px]">
-              Password
-            </h4>
+            <TitleInput title="password" />
             <InputAccount
               value={password}
               onChange={(e: any) => setPassword(e.target.value)}
@@ -57,9 +54,7 @@ export default function Login() {
             />
           </div>
           <div className="mb-[16px]">
-            <h4 className="text-[1.4em] text-text font-[450] mb-[5px]">
-              Confirm Password
-            </h4>
+            <TitleInput title="Confirm Password" />
             <InputAccount
               value={confirmPassword}
               onChange={(e: any) => setConfirmPassword(e.target.value)}

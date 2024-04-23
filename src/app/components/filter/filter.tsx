@@ -1,10 +1,9 @@
 import { useEffect } from "react";
-import style from "./filter.module.scss";
 import CheckIcon from "../checkIcon/checkIcon";
 import { type, size } from "@/app/data";
 
 const Filter = (props: any) => {
-  const { checkType, childParent } = props;
+  const { checkType, childParentType, childParentSize } = props;
   useEffect(() => {
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
@@ -40,14 +39,25 @@ const Filter = (props: any) => {
       [index].querySelector(`.${child}`);
   };
 
-  const setAndRemoveAttr = (getAttr: any, element: any, type: any) => {
+  const setAndRemoveAttrType = (getAttr: any, element: any, type: any) => {
     if (getAttr == null) {
       element.setAttribute("checked", "active");
-      childParent(type, "active");
+      childParentType(type, "active");
     }
     if (getAttr == "active") {
       element.removeAttribute("checked");
-      childParent(type, "");
+      childParentType(type, "");
+    }
+  };
+
+  const setAndRemoveAttrSize = (getAttr: any, element: any, type: any) => {
+    if (getAttr == null) {
+      element.setAttribute("checked", "active");
+      childParentSize(type, "active");
+    }
+    if (getAttr == "active") {
+      element.removeAttribute("checked");
+      childParentSize(type, "");
     }
   };
 
@@ -55,14 +65,14 @@ const Filter = (props: any) => {
     const element: any = getTag("containerType", "checkmarkType", index);
     const getAttr = element.getAttribute("checked", "active");
 
-    setAndRemoveAttr(getAttr, element, type);
+    setAndRemoveAttrType(getAttr, element, type);
   };
 
   const handleCheckBoxSize = (index: any, type: any) => {
     const element: any = getTag("containerSize", "checkmarkSize", index);
     const getAttr = element.getAttribute("checked", "active");
 
-    setAndRemoveAttr(getAttr, element, type);
+    setAndRemoveAttrSize(getAttr, element, type);
   };
 
   return (

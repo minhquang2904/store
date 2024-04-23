@@ -18,7 +18,7 @@ const data: any = [
     type: ["bag"],
     price: 130,
     discount: "",
-    size: ["m"],
+    size: [],
     color: [""],
   },
   {
@@ -40,7 +40,7 @@ const data: any = [
     type: ["shoes"],
     price: 220,
     discount: 198,
-    size: ["xl"],
+    size: [],
     color: [""],
   },
   {
@@ -62,7 +62,7 @@ const data: any = [
     type: ["bag"],
     price: 130,
     discount: "",
-    size: ["xxl"],
+    size: [],
     color: [""],
   },
   {
@@ -84,7 +84,7 @@ const data: any = [
     type: ["shoes"],
     price: 220,
     discount: 198,
-    size: ["s"],
+    size: [],
     color: [""],
   },
   {
@@ -106,7 +106,7 @@ const data: any = [
     type: ["bag"],
     price: 130,
     discount: "",
-    size: ["l"],
+    size: [],
     color: [""],
   },
   {
@@ -128,7 +128,7 @@ const data: any = [
     type: ["shoes"],
     price: 220,
     discount: 198,
-    size: ["xl"],
+    size: [],
     color: [""],
   },
   {
@@ -150,7 +150,7 @@ const data: any = [
     type: ["bag"],
     price: 130,
     discount: "",
-    size: ["s"],
+    size: [],
     color: [""],
   },
   {
@@ -172,7 +172,7 @@ const data: any = [
     type: ["shoes"],
     price: 220,
     discount: 198,
-    size: ["xxl"],
+    size: [],
     color: [""],
   },
 ];

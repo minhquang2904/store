@@ -5,6 +5,7 @@ import TitleAccount from "@/app/components/titleAccount/titleAccount";
 import InputAccount from "@/app/components/inputAccount/inputAccount";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
 import BackForm from "@/app/components/backForm/backForm";
+import SubTitleOtp from "@/app/components/subTitleOTP/subTitleOTP";
 
 export default function ForgotPassword() {
   const [otp, setOTP] = useState("");
@@ -20,10 +21,11 @@ export default function ForgotPassword() {
     <>
       <BackForm url="/forgotPassword" />
       <TitleAccount title="Enter OTP" />
-      <p className="text-[1.6em] text-[#a4a1aa] font-normal mb-[30px] inline-block">
+      {/* <p className="text-[1.6em] text-[#a4a1aa] font-normal mb-[30px] inline-block">
         We have share a code of your registered email address
         robertfox@example.com.
-      </p>
+      </p> */}
+      <SubTitleOtp title=" We have share a code of your registered email address" />
       <form>
         <div className="flex flex-col">
           <div className="mb-[16px]">

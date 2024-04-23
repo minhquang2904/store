@@ -7,6 +7,7 @@ import SubTitleAccount from "@/app/components/subTitleAccount/subTitleAccount";
 import InputAccount from "@/app/components/inputAccount/inputAccount";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
 import ShowError from "@/app/components/showError/page";
+import TitleInput from "@/app/components/titleInput/titleInput";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -28,16 +29,14 @@ export default function Login() {
 
   return (
     <>
-      <TitleAccount title="Welcome 👋" />
+      <TitleAccount title="Welcome" />
       <Link href="/signup">
         <SubTitleAccount title="Please sign up here" />
       </Link>
       <form>
         <div className="flex flex-col">
-          <div className="mb-[16px] ">
-            <h4 className="text-[1.4em] text-text font-[450] mb-[5px]">
-              Email Address
-            </h4>
+          <div className="mb-[16px]">
+            <TitleInput title="email" />
             <InputAccount
               value={email}
               onChange={(e: any) => setEmail(e.target.value)}
@@ -50,9 +49,7 @@ export default function Login() {
             />
           </div>
           <div className="mb-0">
-            <h4 className="text-[1.4em] text-text font-[450] mb-[5px]">
-              Password
-            </h4>
+            <TitleInput title="password" />
             <InputAccount
               value={password}
               onChange={(e: any) => setPassword(e.target.value)}
@@ -71,8 +68,8 @@ export default function Login() {
         )}
         <div className="flex justify-end mb-[32px]">
           <Link href="/forgotPassword">
-            <p className="!text-text text-[1.4em] font-medium mb-0 hover:opacity-90">
-              Forgot Password?
+            <p className="!text-text text-subMobile xsm:text-smMobile sm:text-subTablet font-medium mb-0 hover:opacity-90">
+              Forgot Password ?
             </p>
           </Link>
         </div>

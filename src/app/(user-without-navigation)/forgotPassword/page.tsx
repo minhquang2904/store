@@ -6,6 +6,8 @@ import TitleAccount from "@/app/components/titleAccount/titleAccount";
 import InputAccount from "@/app/components/inputAccount/inputAccount";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
 import BackForm from "@/app/components/backForm/backForm";
+import TitleInput from "@/app/components/titleInput/titleInput";
+import SubTitleOtp from "@/app/components/subTitleOTP/subTitleOTP";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -33,16 +35,13 @@ export default function ForgotPassword() {
     <>
       <BackForm url="/login" />
       <TitleAccount title="Forgot Password" />
-      <p className="text-[1.6em] text-[#a4a1aa] font-normal mb-[30px] inline-block">
-        Enter your registered email address. we’ll send you a code to reset your
-        password.
-      </p>
+      <SubTitleOtp
+        title="Enter your registered email address. we’ll send you a code to reset your
+        password."
+      />
       <form>
         <div className="flex flex-col">
           <div className="mb-[16px]">
-            <h4 className="text-[1.4em] text-text font-[450] mb-[5px]">
-              Email Address
-            </h4>
             <InputAccount
               value={email}
               onChange={(e: any) => setEmail(e.target.value)}

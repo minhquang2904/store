@@ -10,11 +10,11 @@ import Filter from "@/app/components/filter/filter";
 
 const Shirt = () => {
   const styleCustom = { width: "33.333333%" };
-  const [dataLists, setDataLists] = useState([]);
+  const [dataLists, setDataLists] = useState(data);
   const [type, setType] = useState(["shirt"]);
+  const [size, setSize] = useState([null]);
 
-  const childToParent = (data: any, check: any) => {
-    console.log(data);
+  const childParentType = (data: any, check: any) => {
     if (!check) {
       const filtered = type.filter((item: any) => {
         return item != data;
@@ -25,19 +25,41 @@ const Shirt = () => {
     }
   };
 
-  useLayoutEffect(() => {
-    const filtered = data.filter((item: any) => {
-      return type.includes(item.type) && type.includes(item.size);
-    });
+  const childParentSize = (data: any, check: any) => {
+    if (!check) {
+      const filtered = size.filter((item: any) => {
+        return item != data;
+      });
+      setSize([...filtered]);
+    } else {
+      setSize([data, ...size]);
+    }
+  };
 
-    setDataLists(filtered);
-  }, [type]);
+  useLayoutEffect(() => {
+    const filteredType = data.filter((item: any) => {
+      return type.includes(item.type.toString());
+    });
+    setDataLists(filteredType);
+    // if (size.length > 0) {
+    //   const filteredSize = dataLists.filter((item: any) => {
+    //     console.log(item.size);
+    //     return size.some((size: any) => item.size.includes(size));
+    //   });
+    //   setDataLists(filteredSize);
+    // }
+  }, [type, size]);
+
   return (
     <div className={`${style.filter}`}>
       <div className={`${style.filterContainer}`}>
         <TitlePageNavigation />
         <div className={`${style.filterContent}`}>
-          <Filter checkType="shirt" childParent={childToParent} />
+          <Filter
+            checkType="shirt"
+            childParentType={childParentType}
+            childParentSize={childParentSize}
+          />
           <div className={`${style.filterContentRight}`}>
             {dataLists.map((item: any) => {
               return (
