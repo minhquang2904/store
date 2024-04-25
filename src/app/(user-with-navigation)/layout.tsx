@@ -8,11 +8,11 @@ import NavBar from "../components/navbar/navbar";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <div className="bg-[#F3F4F4] mainLayout">
+    <div className="bg-[#F3F4F4] min-h-[100vh] mainLayout">
       <NavBar />
       <main>{children}</main>
-      <Support />
-      <Footer />
+      {/* <Support /> */}
+      {/* <Footer /> */}
     </div>
   );
 }

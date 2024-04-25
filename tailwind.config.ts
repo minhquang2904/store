@@ -19,6 +19,7 @@ const config: Config = {
       white: "#fff",
       secondary: "#ff6f61",
       sub: "#00000080",
+      navMobile: "#C3C3C3",
     },
     padding: {
       sm: "8px",

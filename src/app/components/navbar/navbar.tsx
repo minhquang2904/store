@@ -5,15 +5,16 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { login, data } from "@/app/data";
 import NoItemCart from "../noItemCart/noItemCart";
+import IconListsProduct from "../iconListsProduct/iconListProduct";
 
 const NavBar = () => {
   const searchInput: any = useRef(null);
   const [checkLogin, setCheckLogin] = useState(login);
   const [dataList, setDataList] = useState(data);
-  const [searchModal, setSearchModal] = useState(false);
   const [cartModal, setCartModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
   const pathname = usePathname();
+  let searchTimeOut: any;
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
 
@@ -42,22 +43,18 @@ const NavBar = () => {
   useEffect(() => {
     const $ = document.querySelector.bind(document);
     const mainLayout: any = $(".mainLayout");
-    const itemSearch: any = $(`.${style.navigationUserItemSearch}`);
     const cartContainer: any = $(`.${style.cartContainer}`);
     const userModal: any = $(`.${style.navigationNameUserModal}`);
 
     const checkActiveIcon = (e: any) => {
       cartModal && !cartContainer.contains(e.target) && setCartModal(false);
       profileModal && !userModal.contains(e.target) && setProfileModal(false);
-      searchModal && !itemSearch.contains(e.target) && setSearchModal(false);
     };
-
-    searchModal && searchInput.current.focus();
 
     mainLayout.addEventListener("click", checkActiveIcon);
 
     return () => mainLayout.removeEventListener("click", checkActiveIcon);
-  }, [cartModal, profileModal, searchModal]);
+  }, [cartModal, profileModal]);
 
   const lineActive = (target: any, navActive: any, width: any) => {
     const sizeWidth = width;
@@ -97,6 +94,7 @@ const NavBar = () => {
     if (!urlNavLink.includes(pathname)) {
       lineActive(line, navActive, 0);
     }
+
     return () => {
       navigationItem.forEach((item: any) => {
         item.removeEventListener("click", handleClick);
@@ -108,8 +106,18 @@ const NavBar = () => {
     e.preventDefault();
   };
 
-  const handleSearch = () => {
-    setSearchModal(!searchModal);
+  const searchFocus = () => searchInput.current.focus();
+
+  const handleShowSearch = () => {
+    document.querySelector(".searchContainer")?.classList.add("activeSearch");
+    searchTimeOut = setTimeout(searchFocus, 100);
+  };
+
+  const handleCloseSearch = () => {
+    document
+      .querySelector(".searchContainer")
+      ?.classList.remove("activeSearch");
+    clearTimeout(searchTimeOut);
   };
 
   const handleCart = () => {
@@ -120,15 +128,19 @@ const NavBar = () => {
     setProfileModal(!profileModal);
   };
 
+  const handleShowNavBottom = () => {
+    document.querySelector(".navBottom")?.classList.toggle("activeNavBottom");
+  };
+
   return (
-    <div className="headerContainer flex justify-center items-center sticky top-0 left-0 right-0 bg-primary z-50">
+    <div className="headerContainer flex justify-center items-center sticky top-0 left-0 right-0 bg-primary z-50 l:px-[15px] xsm:px-[15px] sm:px-[30px]">
       <div className={`${style.navigationContainer} flex`}>
         <div className="h-20 mx-auto flex justify-between items-center w-full">
           <div className="flex items-center h-full">
             <Link href="/" className="!relative">
               <Image
                 src="/images/logo.svg"
-                className="!relative !max-w-[80%]"
+                className="!relative l:!max-w-[80%] xsm:!max-w-[60%] sm:!max-w-[70%]"
                 alt="LOGO"
                 fill
                 sizes="100vw"
@@ -136,7 +148,7 @@ const NavBar = () => {
               />
             </Link>
           </div>
-          <div>
+          <div className="xsm:hidden sm:hidden l:flex">
             <div className="flex relative">
               <Link href="/" className={checkNavActive("/")}>
                 home
@@ -153,11 +165,51 @@ const NavBar = () => {
               <div className={`${style.line}`}></div>
             </div>
           </div>
+          <div className="xsm:block l:hidden !fixed bottom-0 right-0 left-0 bg-button text-navMobile text-[1.6em] font-medium uppercase px-[15px]">
+            <div className="flex flex-col">
+              <div className="flex items-center">
+                <Link
+                  href="/"
+                  className="py-[16px] flex shrink-0 grow-0 basis-2/4 !relative justify-center items-center"
+                >
+                  <Image
+                    src="/icons/home.svg"
+                    className="!relative max-w-[20px] mr-[6px]"
+                    alt="LOGO"
+                    fill
+                    sizes="100vw"
+                    priority={true}
+                  />
+                  <h1>home</h1>
+                </Link>
+                <div
+                  className="py-[16px] flex justify-center items-center shrink-0 grow-0 basis-2/4"
+                  onClick={handleShowNavBottom}
+                >
+                  <IconListsProduct />
+                  <h1>Lists</h1>
+                </div>
+              </div>
+              <div className="h-0 overflow-hidden duration-200  navBottom [&.activeNavBottom]:h-[150px] [&.activeNavBottom]:duration-200 [&.activeNavBottom]:ease-linear">
+                <div className="bg-[#222222] my-[15px] flex flex-col rounded-[4px] py-[6px]">
+                  <Link href="/shirt" className="ml-[10px] py-[6px]">
+                    shirt
+                  </Link>
+                  <Link href="/trousers" className="ml-[10px] py-[6px]">
+                    trousers
+                  </Link>
+                  <Link href="/bagShoes" className="ml-[10px] py-[6px]">
+                    Bag & Shoes
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
           <div>
             <div className="flex">
               <div className="cursor-pointer relative">
                 <div
-                  onClick={handleSearch}
+                  onClick={handleShowSearch}
                   className="!relative p-[10px] hover:bg-hover1 rounded-half"
                 >
                   <Image
@@ -169,19 +221,6 @@ const NavBar = () => {
                     priority={true}
                   />
                 </div>
-                {searchModal && (
-                  <div
-                    onClick={(e) => e.stopPropagation()}
-                    className={`${style.navigationUserItemSearch} top-[calc(100%+7px)] absolute right-0 origin-top-right z-10`}
-                  >
-                    <input
-                      ref={searchInput}
-                      type="text"
-                      placeholder="Search for clothes ,..."
-                      className="text-text border-solid border px-[20px] py-[10px] text-base outline-none rounded-md min-w-[260px] max-w-[260px] w-full"
-                    />
-                  </div>
-                )}
               </div>
               {!checkLogin ? (
                 <Link
@@ -198,10 +237,102 @@ const NavBar = () => {
                   />
                 </Link>
               ) : (
-                <div className="pointer relative">
-                  <div
-                    className="hover:bg-hover1 p-[10px] rounded-half !relative cursor-pointer"
-                    onClick={handleCart}
+                <>
+                  <div className="pointer relative xsm:hidden sm:hidden l:flex">
+                    <div
+                      className="hover:bg-hover1 p-[10px] rounded-half !relative cursor-pointer"
+                      onClick={handleCart}
+                    >
+                      <Image
+                        src="/icons/bag.svg"
+                        alt="Bag"
+                        className="!relative max-w-[22px]"
+                        fill
+                        sizes="100vw"
+                        priority={true}
+                      />
+                    </div>
+                    {cartModal && (
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        className={`${style.cartContainer} absolute top-[calc(100%+7px)] origin-top-right right-0 w-[360px] rounded-sm bg-[white] cursor-default shadow-sm`}
+                      >
+                        <h1 className="w-full text-text text-base pl-[12px] mt-[16px] font-medium">
+                          You have 3 items in your cart
+                        </h1>
+                        <ul className="max-h-[312px] my-[16px] overflow-y-auto overscroll-y-contain">
+                          {dataList.length <= 0 ? (
+                            <NoItemCart className="max-w-[180px]" />
+                          ) : (
+                            <>
+                              {dataList.map((item: any) => {
+                                return (
+                                  <Link
+                                    key={item.id}
+                                    href="/productDetail"
+                                    className="p-[12px] !relative flex hover:bg-hover1"
+                                  >
+                                    <Image
+                                      src="/images/product2.png"
+                                      className="!relative max-w-[80px] max-h-[80px]"
+                                      alt="Bag"
+                                      fill
+                                      sizes="(max-width: 80px) 100vw"
+                                    />
+                                    <div className="flex flex-col justify-center ml-[16px] basis-full shrink grow-0">
+                                      <h2 className="text-text text-[1.4em] font-medium">
+                                        Girls Pink Moana Printed Dress
+                                      </h2>
+                                      <h3 className="text-text text-[1.4em] my-[4px] font-bold">
+                                        1 x $80
+                                      </h3>
+                                      <div className="flex justify-between">
+                                        <h2 className="text-text text-[1.4em] font-normal">
+                                          Size S
+                                        </h2>
+                                        <div
+                                          className="!relative rounded-half"
+                                          onClick={handleDeleteProduct}
+                                        >
+                                          <Image
+                                            src="/icons/trash-can.svg"
+                                            className="!relative max-w-[24px] max-h-[24px]"
+                                            alt="Bag"
+                                            fill
+                                            sizes="(max-width: 22px) 100vw"
+                                            priority={true}
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </Link>
+                                );
+                              })}
+                            </>
+                          )}
+                        </ul>
+                        <div className="px-[12px]">
+                          <div className="text-text flex justify-between font-semibold capitalize text-[1.4em] mb-[16px]">
+                            <h1>subtotal</h1>
+                            <p>$200</p>
+                          </div>
+                          <Link href="/cart">
+                            <button className="text-text hover:bg-hover1 border-solid border-border border-[1px] bg-transparent inline-block text-[1.6em] px-[28px] py-[12px] rounded-sm w-full font-medium">
+                              View Cart
+                            </button>
+                          </Link>
+                          <Link href="/" className="mt-[8px] mb-[16px] block">
+                            <button className="hover:opacity-90 border-solid border-[1px] border-border inline-block text-[1.6em] bg-button px-[28px] py-[12px] rounded-sm  w-full font-medium">
+                              Checkout
+                            </button>
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <Link
+                    className="p-[10px] rounded-half !relative cursor-pointer xsm:flex l:hidden"
+                    href="/cart"
                   >
                     <Image
                       src="/icons/bag.svg"
@@ -211,232 +342,204 @@ const NavBar = () => {
                       sizes="100vw"
                       priority={true}
                     />
-                  </div>
-                  {cartModal && (
-                    <div
-                      onClick={(e) => e.stopPropagation()}
-                      className={`${style.cartContainer} absolute top-[calc(100%+7px)] origin-top-right right-0 w-[360px] rounded-sm bg-[white] cursor-default shadow-sm`}
-                    >
-                      <h1 className="w-full text-text text-base pl-[12px] mt-[16px] font-medium">
-                        You have 3 items in your cart
-                      </h1>
-                      <ul className="max-h-[312px] my-[16px] overflow-y-auto overscroll-y-contain">
-                        {dataList.length <= 0 ? (
-                          <NoItemCart className="max-w-[180px]" />
-                        ) : (
-                          <>
-                            {dataList.map((item: any) => {
-                              return (
-                                <Link
-                                  key={item.id}
-                                  href="/productDetail"
-                                  className="p-[12px] !relative flex hover:bg-hover1"
-                                >
-                                  <Image
-                                    src="/images/product2.png"
-                                    className="!relative max-w-[80px] max-h-[80px]"
-                                    alt="Bag"
-                                    fill
-                                    sizes="(max-width: 80px) 100vw"
-                                  />
-                                  <div className="flex flex-col justify-center ml-[16px] basis-full shrink grow-0">
-                                    <h2 className="text-text text-[1.4em] font-medium">
-                                      Girls Pink Moana Printed Dress
-                                    </h2>
-                                    <h3 className="text-text text-[1.4em] my-[4px] font-bold">
-                                      1 x $80
-                                    </h3>
-                                    <div className="flex justify-between">
-                                      <h2 className="text-text text-[1.4em] font-normal">
-                                        Size S
-                                      </h2>
-                                      <div
-                                        className="!relative rounded-half"
-                                        onClick={handleDeleteProduct}
-                                      >
-                                        <Image
-                                          src="/icons/trash-can.svg"
-                                          className="!relative max-w-[24px] max-h-[24px]"
-                                          alt="Bag"
-                                          fill
-                                          sizes="(max-width: 22px) 100vw"
-                                          priority={true}
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                </Link>
-                              );
-                            })}
-                          </>
-                        )}
-                      </ul>
-                      <div className="px-[12px]">
-                        <div className="text-text flex justify-between font-semibold capitalize text-[1.4em] mb-[16px]">
-                          <h1>subtotal</h1>
-                          <p>$200</p>
-                        </div>
-                        <Link href="/cart">
-                          <button className="text-text hover:bg-hover1 border-solid border-border border-[1px] bg-transparent inline-block text-[1.6em] px-[28px] py-[12px] rounded-sm w-full font-medium">
-                            View Cart
-                          </button>
-                        </Link>
-                        <Link href="/" className="mt-[8px] mb-[16px] block">
-                          <button className="hover:opacity-90 border-solid border-[1px] border-border inline-block text-[1.6em] bg-button px-[28px] py-[12px] rounded-sm  w-full font-medium">
-                            Checkout
-                          </button>
-                        </Link>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                  </Link>
+                </>
               )}
 
               {checkLogin ? (
-                <div className="flex items-center relative">
-                  <div className="h-full w-full ml-[10px]">
-                    <h3
-                      className="cursor-pointer h-full w-full text-text text-[20px] flex shrink grow items-center cursor-pointer;"
-                      onClick={handleProfile}
-                    >
-                      Lương Minh Quang
-                    </h3>
-                  </div>
-                  {profileModal && (
-                    <div
-                      className={`${style.navigationNameUserModal} origin-top-right absolute right-0 top-[calc(100%+7px)] bg-white shadow-sm rounded-[12px] max-w-[400px] min-w-[200px] w-full`}
-                    >
-                      <div>
+                <>
+                  <div className="flex items-center relative xsm:hidden sm:hidden l:flex">
+                    <div className="h-full w-full ml-[10px]">
+                      <h3
+                        className="cursor-pointer h-full w-full text-text text-[20px] flex shrink grow items-center cursor-pointer;"
+                        onClick={handleProfile}
+                      >
+                        Lương Minh Quang
+                      </h3>
+                    </div>
+                    {profileModal && (
+                      <div
+                        className={`${style.navigationNameUserModal} origin-top-right absolute right-0 top-[calc(100%+7px)] bg-white shadow-sm rounded-[12px] max-w-[400px] min-w-[200px] w-full`}
+                      >
                         <div>
-                          <Link
-                            href="/profile"
-                            className="hover:bg-hover1 flex items-center py-[12px] pl-[16px] pr-[16px]"
-                          >
-                            <svg
-                              height="20"
-                              viewBox="0 0 32 32"
-                              width="20"
-                              xmlns="http://www.w3.org/2000/svg"
+                          <div>
+                            <Link
+                              href="/profile"
+                              className="hover:bg-hover1 flex items-center py-[12px] pl-[16px] pr-[16px]"
                             >
-                              <path d="m16 8a5 5 0 1 0 5 5 5 5 0 0 0 -5-5zm0 8a3 3 0 1 1 3-3 3.0034 3.0034 0 0 1 -3 3z" />
-                              <path d="m16 2a14 14 0 1 0 14 14 14.0158 14.0158 0 0 0 -14-14zm-6 24.3765v-1.3765a3.0033 3.0033 0 0 1 3-3h6a3.0033 3.0033 0 0 1 3 3v1.3765a11.8989 11.8989 0 0 1 -12 0zm13.9925-1.4507a5.0016 5.0016 0 0 0 -4.9925-4.9258h-6a5.0016 5.0016 0 0 0 -4.9925 4.9258 12 12 0 1 1 15.985 0z" />
-                              <path d="m0 0h32v32h-32z" fill="none" />
-                            </svg>
-                            <h1 className="ml-[16px] text-text font-medium text-[1.6em]">
-                              My profile
-                            </h1>
-                          </Link>
-                        </div>
-                        <div className={`${style.navigationNameUserItem}`}>
-                          <Link
-                            href="/like"
-                            className="hover:bg-hover1 flex items-center py-[12px] pl-[16px] pr-[16px]"
-                          >
-                            <svg
-                              width="20"
-                              height="20"
-                              strokeWidth="2"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
+                              <svg
+                                height="20"
+                                viewBox="0 0 32 32"
+                                width="20"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path d="m16 8a5 5 0 1 0 5 5 5 5 0 0 0 -5-5zm0 8a3 3 0 1 1 3-3 3.0034 3.0034 0 0 1 -3 3z" />
+                                <path d="m16 2a14 14 0 1 0 14 14 14.0158 14.0158 0 0 0 -14-14zm-6 24.3765v-1.3765a3.0033 3.0033 0 0 1 3-3h6a3.0033 3.0033 0 0 1 3 3v1.3765a11.8989 11.8989 0 0 1 -12 0zm13.9925-1.4507a5.0016 5.0016 0 0 0 -4.9925-4.9258h-6a5.0016 5.0016 0 0 0 -4.9925 4.9258 12 12 0 1 1 15.985 0z" />
+                                <path d="m0 0h32v32h-32z" fill="none" />
+                              </svg>
+                              <h1 className="ml-[16px] text-text font-medium text-[1.6em]">
+                                My profile
+                              </h1>
+                            </Link>
+                          </div>
+                          <div className={`${style.navigationNameUserItem}`}>
+                            <Link
+                              href="/like"
+                              className="hover:bg-hover1 flex items-center py-[12px] pl-[16px] pr-[16px]"
                             >
-                              <path
-                                d="M22 8.86222C22 10.4087 21.4062 11.8941 20.3458 12.9929C17.9049 15.523 15.5374 18.1613 13.0053 20.5997C12.4249 21.1505 11.5042 21.1304 10.9488 20.5547L3.65376 12.9929C1.44875 10.7072 1.44875 7.01723 3.65376 4.73157C5.88044 2.42345 9.50794 2.42345 11.7346 4.73157L11.9998 5.00642L12.2648 4.73173C13.3324 3.6245 14.7864 3 16.3053 3C17.8242 3 19.2781 3.62444 20.3458 4.73157C21.4063 5.83045 22 7.31577 22 8.86222Z"
-                                stroke="#131118"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
+                              <svg
+                                width="20"
+                                height="20"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M22 8.86222C22 10.4087 21.4062 11.8941 20.3458 12.9929C17.9049 15.523 15.5374 18.1613 13.0053 20.5997C12.4249 21.1505 11.5042 21.1304 10.9488 20.5547L3.65376 12.9929C1.44875 10.7072 1.44875 7.01723 3.65376 4.73157C5.88044 2.42345 9.50794 2.42345 11.7346 4.73157L11.9998 5.00642L12.2648 4.73173C13.3324 3.6245 14.7864 3 16.3053 3C17.8242 3 19.2781 3.62444 20.3458 4.73157C21.4063 5.83045 22 7.31577 22 8.86222Z"
+                                  stroke="#131118"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
 
-                            <h1 className="ml-[16px] text-text font-medium text-[1.6em]">
-                              Wish lists
-                            </h1>
-                          </Link>
-                        </div>
-                        <div className={`${style.navigationNameUserItem} `}>
-                          <Link
-                            href=""
-                            className="hover:bg-hover1 flex items-center py-[12px] pl-[16px] pr-[16px]"
-                          >
-                            <svg
-                              fill="none"
-                              height="22"
-                              viewBox="0 0 24 24"
-                              width="22"
-                              xmlns="http://www.w3.org/2000/svg"
-                              stroke="#ff6f61"
+                              <h1 className="ml-[16px] text-text font-medium text-[1.6em]">
+                                Wish lists
+                              </h1>
+                            </Link>
+                          </div>
+                          <div className={`${style.navigationNameUserItem} `}>
+                            <Link
+                              href=""
+                              className="hover:bg-hover1 flex items-center py-[12px] pl-[16px] pr-[16px]"
                             >
-                              <mask
-                                id="a"
-                                height="2"
-                                maskUnits="userSpaceOnUse"
-                                width="15"
-                                x="8"
-                                y="11"
+                              <svg
+                                fill="none"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                width="22"
+                                xmlns="http://www.w3.org/2000/svg"
+                                stroke="#ff6f61"
                               >
+                                <mask
+                                  id="a"
+                                  height="2"
+                                  maskUnits="userSpaceOnUse"
+                                  width="15"
+                                  x="8"
+                                  y="11"
+                                >
+                                  <path
+                                    clipRule="evenodd"
+                                    d="m8.99609 11.2501h13.54091v1.5h-13.54091z"
+                                    fill="#fff"
+                                    fillRule="evenodd"
+                                  />
+                                </mask>
+                                <mask
+                                  id="b"
+                                  height="8"
+                                  maskUnits="userSpaceOnUse"
+                                  width="5"
+                                  x="18"
+                                  y="8"
+                                >
+                                  <path
+                                    clipRule="evenodd"
+                                    d="m18.1096 8.33539h4.4274v7.33071h-4.4274z"
+                                    fill="#fff"
+                                    fillRule="evenodd"
+                                  />
+                                </mask>
                                 <path
                                   clipRule="evenodd"
-                                  d="m8.99609 11.2501h13.54091v1.5h-13.54091z"
-                                  fill="#fff"
-                                  fillRule="evenodd"
-                                />
-                              </mask>
-                              <mask
-                                id="b"
-                                height="8"
-                                maskUnits="userSpaceOnUse"
-                                width="5"
-                                x="18"
-                                y="8"
-                              >
-                                <path
-                                  clipRule="evenodd"
-                                  d="m18.1096 8.33539h4.4274v7.33071h-4.4274z"
-                                  fill="#fff"
-                                  fillRule="evenodd"
-                                />
-                              </mask>
-                              <path
-                                clipRule="evenodd"
-                                d="m11.3192 22.0001h-4.88596c-2.444 0-4.433-1.989-4.433-4.435v-11.12898c0-2.446 1.989-4.436 4.433-4.436h4.87496c2.446 0 4.436 1.99 4.436 4.436v.932c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-.932c0-1.62-1.317-2.936-2.936-2.936h-4.87496c-1.617 0-2.933 1.316-2.933 2.936v11.12898c0 1.619 1.316 2.935 2.933 2.935h4.88596c1.612 0 2.925-1.312 2.925-2.924v-.943c0-.414.336-.75.75-.75s.75.336.75.75v.943c0 2.44-1.986 4.424-4.425 4.424z"
-                                fill="#FF6F61"
-                                fillRule="evenodd"
-                              />
-                              <g mask="url(#a)">
-                                <path
-                                  clipRule="evenodd"
-                                  d="m21.7871 12.7501h-12.04101c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h12.04101c.414 0 .75.336.75.75s-.336.75-.75.75z"
+                                  d="m11.3192 22.0001h-4.88596c-2.444 0-4.433-1.989-4.433-4.435v-11.12898c0-2.446 1.989-4.436 4.433-4.436h4.87496c2.446 0 4.436 1.99 4.436 4.436v.932c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-.932c0-1.62-1.317-2.936-2.936-2.936h-4.87496c-1.617 0-2.933 1.316-2.933 2.936v11.12898c0 1.619 1.316 2.935 2.933 2.935h4.88596c1.612 0 2.925-1.312 2.925-2.924v-.943c0-.414.336-.75.75-.75s.75.336.75.75v.943c0 2.44-1.986 4.424-4.425 4.424z"
                                   fill="#FF6F61"
                                   fillRule="evenodd"
                                 />
-                              </g>
-                              <g mask="url(#b)">
-                                <path
-                                  clipRule="evenodd"
-                                  d="m18.8594 15.6661c-.192 0-.385-.073-.531-.221-.292-.294-.291-.768.002-1.06l2.394-2.385-2.394-2.38396c-.293-.292-.295-.766-.002-1.06.292-.294.766-.294 1.06-.002l2.928 2.91496c.142.14.221.332.221.531s-.079.391-.221.531l-2.928 2.916c-.146.146-.338.219-.529.219z"
-                                  fill="#FF6F61"
-                                  fillRule="evenodd"
-                                />
-                              </g>
-                            </svg>
-                            <h1 className="ml-[16px] text-text font-medium text-[1.6em] text-[#ff6f61]">
-                              Sign out
-                            </h1>
-                          </Link>
+                                <g mask="url(#a)">
+                                  <path
+                                    clipRule="evenodd"
+                                    d="m21.7871 12.7501h-12.04101c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h12.04101c.414 0 .75.336.75.75s-.336.75-.75.75z"
+                                    fill="#FF6F61"
+                                    fillRule="evenodd"
+                                  />
+                                </g>
+                                <g mask="url(#b)">
+                                  <path
+                                    clipRule="evenodd"
+                                    d="m18.8594 15.6661c-.192 0-.385-.073-.531-.221-.292-.294-.291-.768.002-1.06l2.394-2.385-2.394-2.38396c-.293-.292-.295-.766-.002-1.06.292-.294.766-.294 1.06-.002l2.928 2.91496c.142.14.221.332.221.531s-.079.391-.221.531l-2.928 2.916c-.146.146-.338.219-.529.219z"
+                                    fill="#FF6F61"
+                                    fillRule="evenodd"
+                                  />
+                                </g>
+                              </svg>
+                              <h1 className="ml-[16px] font-medium text-[1.6em] text-[#ff6f61]">
+                                Sign out
+                              </h1>
+                            </Link>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </div>
+                    )}
+                  </div>
+                  <Link
+                    href="/profile"
+                    className="xsm:block l:hidden !relative"
+                  >
+                    <Image
+                      src="/icons/user.svg"
+                      alt="Bag"
+                      className="!relative max-w-[44px] p-[10px] pr-[0px]"
+                      fill
+                      sizes="100vw"
+                      priority={true}
+                    />
+                  </Link>
+                </>
               ) : (
-                <Link
-                  href="/login"
-                  className="ml-[10px] text-white bg-button text-[1.6em] rounded-sm px-[26px] py-[10px]  flex items-center justify-enter"
-                >
-                  <button>Login</button>
-                </Link>
+                <>
+                  <Link
+                    href="/login"
+                    className="ml-[10px] flex items-center justify-center"
+                  >
+                    <button className="text-white bg-button hover:opacity-90 text-[1.6em] rounded-sm px-[26px] py-[10px]">
+                      Login
+                    </button>
+                  </Link>
+                </>
               )}
             </div>
           </div>
+        </div>
+      </div>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="l:px-[15px] xsm:px-[15px] sm:px-[30px] searchContainer [&.activeSearch]:opacity-100 [&.activeSearch]:duration-300 [&.activeSearch]:visible duration-300 invisible flex opacity-0 top-0 absolute right-0 left-0 origin-top-right z-10 bg-primary h-full  justify-center items-center"
+      >
+        <div className="!relative max-w-[1320px] w-full h-full flex items-center">
+          <input
+            ref={searchInput}
+            type="text"
+            placeholder="Search for clothes..."
+            className="text-text xsm:text-[2em] sm:text-[2em]  l:text-[3.4em]  outline-none w-full inputSearch"
+            contentEditable={true}
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="cursor-pointer ml-[16px] stroke-[#868995] hover:stroke-button duration-200"
+            width="36"
+            height="36"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            onClick={handleCloseSearch}
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
         </div>
       </div>
     </div>

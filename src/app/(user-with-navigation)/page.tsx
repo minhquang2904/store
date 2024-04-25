@@ -9,11 +9,11 @@ import TemplateProductSlider from "../components/template-product-slider/templat
 const Home = () => {
   return (
     <>
-      <Banner />
+      {/* <Banner />
       <Brand />
       <BannerGroup />
       <TemplateProductView />
-      <TemplateProductSlider />
+      <TemplateProductSlider /> */}
     </>
   );
 };
