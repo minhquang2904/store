@@ -190,8 +190,8 @@ const NavBar = () => {
                   <h1>Lists</h1>
                 </div>
               </div>
-              <div className="h-0 overflow-hidden duration-200  navBottom [&.activeNavBottom]:h-[150px] [&.activeNavBottom]:duration-200 [&.activeNavBottom]:ease-linear">
-                <div className="bg-[#222222] my-[15px] flex flex-col rounded-[4px] py-[6px]">
+              <div className="h-0 overflow-hidden duration-200  navBottom [&.activeNavBottom]:h-[155px] [&.activeNavBottom]:duration-200 [&.activeNavBottom]:ease-linear">
+                <div className="bg-[#222222] mb-[25px] mt-[10px] flex flex-col rounded-[4px] py-[6px]">
                   <Link href="/shirt" className="ml-[10px] py-[6px]">
                     shirt
                   </Link>
@@ -521,7 +521,7 @@ const NavBar = () => {
             ref={searchInput}
             type="text"
             placeholder="Search for clothes..."
-            className="text-text xsm:text-[2em] sm:text-[2em]  l:text-[3.4em]  outline-none w-full inputSearch"
+            className="text-text xsm:text-[2em] sm:text-[2em]  l:text-[3.4em]  outline-none w-full inputSearch bg-transparent	"
             contentEditable={true}
           />
           <svg
