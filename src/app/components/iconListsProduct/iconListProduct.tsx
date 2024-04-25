@@ -8,7 +8,12 @@ const IconListsProduct = (props: any) => {
       xmlns="http://www.w3.org/2000/svg"
       className="mr-[6px]"
     >
-      <g stroke="#C3C3C3" strokeLinecap="round" strokeLinejoin="round">
+      <g
+        stroke="currentColor"
+        className="[&.activeNavIconLists]:stroke-[#ee4266]"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="m1 3c.27614 0 .5-.22386.5-.5s-.22386-.5-.5-.5c-.276142 0-.5.22386-.5.5s.223858.5.5.5z" />
         <path d="m4.5 2.5h9" />
         <path d="m1 7.5c.27614 0 .5-.22386.5-.5s-.22386-.5-.5-.5c-.276142 0-.5.22386-.5.5s.223858.5.5.5z" />

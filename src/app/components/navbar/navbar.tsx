@@ -102,11 +102,15 @@ const NavBar = () => {
     };
   }, [pathname]);
 
-  const handleDeleteProduct = (e: any) => {
-    e.preventDefault();
+  const toggleClass = (classCurrent: any, classActive: any) => {
+    document.querySelector(classCurrent)?.classList.toggle(classActive);
   };
 
   const searchFocus = () => searchInput.current.focus();
+
+  const handleDeleteProduct = (e: any) => {
+    e.preventDefault();
+  };
 
   const handleShowSearch = () => {
     document.querySelector(".searchContainer")?.classList.add("activeSearch");
@@ -128,8 +132,10 @@ const NavBar = () => {
     setProfileModal(!profileModal);
   };
 
-  const handleShowNavBottom = () => {
-    document.querySelector(".navBottom")?.classList.toggle("activeNavBottom");
+  const handleShowNavBottom = (e: any) => {
+    toggleClass(".navBottom", "activeNavBottom");
+    toggleClass(".navBottomList h1", "activeNavLists");
+    toggleClass(".navBottomList svg g", "activeNavIconLists");
   };
 
   return (
@@ -183,11 +189,11 @@ const NavBar = () => {
                   <h1>home</h1>
                 </Link>
                 <div
-                  className="py-[16px] flex justify-center items-center shrink-0 grow-0 basis-2/4"
+                  className="py-[16px] flex justify-center items-center shrink-0 grow-0 basis-2/4 navBottomList"
                   onClick={handleShowNavBottom}
                 >
                   <IconListsProduct />
-                  <h1>Lists</h1>
+                  <h1 className="[&.activeNavLists]:text-[#ee4266]">Lists</h1>
                 </div>
               </div>
               <div className="h-0 overflow-hidden duration-200  navBottom [&.activeNavBottom]:h-[155px] [&.activeNavBottom]:duration-200 [&.activeNavBottom]:ease-linear">
@@ -418,7 +424,7 @@ const NavBar = () => {
                                 viewBox="0 0 24 24"
                                 width="22"
                                 xmlns="http://www.w3.org/2000/svg"
-                                stroke="#ff6f61"
+                                stroke="#ee4266"
                               >
                                 <mask
                                   id="a"
@@ -446,21 +452,21 @@ const NavBar = () => {
                                   <path
                                     clipRule="evenodd"
                                     d="m18.1096 8.33539h4.4274v7.33071h-4.4274z"
-                                    fill="#fff"
+                                    fill="#ee4266"
                                     fillRule="evenodd"
                                   />
                                 </mask>
                                 <path
                                   clipRule="evenodd"
                                   d="m11.3192 22.0001h-4.88596c-2.444 0-4.433-1.989-4.433-4.435v-11.12898c0-2.446 1.989-4.436 4.433-4.436h4.87496c2.446 0 4.436 1.99 4.436 4.436v.932c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-.932c0-1.62-1.317-2.936-2.936-2.936h-4.87496c-1.617 0-2.933 1.316-2.933 2.936v11.12898c0 1.619 1.316 2.935 2.933 2.935h4.88596c1.612 0 2.925-1.312 2.925-2.924v-.943c0-.414.336-.75.75-.75s.75.336.75.75v.943c0 2.44-1.986 4.424-4.425 4.424z"
-                                  fill="#FF6F61"
+                                  fill="#ee4266"
                                   fillRule="evenodd"
                                 />
                                 <g mask="url(#a)">
                                   <path
                                     clipRule="evenodd"
                                     d="m21.7871 12.7501h-12.04101c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h12.04101c.414 0 .75.336.75.75s-.336.75-.75.75z"
-                                    fill="#FF6F61"
+                                    fill="#ee4266"
                                     fillRule="evenodd"
                                   />
                                 </g>
@@ -468,12 +474,12 @@ const NavBar = () => {
                                   <path
                                     clipRule="evenodd"
                                     d="m18.8594 15.6661c-.192 0-.385-.073-.531-.221-.292-.294-.291-.768.002-1.06l2.394-2.385-2.394-2.38396c-.293-.292-.295-.766-.002-1.06.292-.294.766-.294 1.06-.002l2.928 2.91496c.142.14.221.332.221.531s-.079.391-.221.531l-2.928 2.916c-.146.146-.338.219-.529.219z"
-                                    fill="#FF6F61"
+                                    fill="#ee4266"
                                     fillRule="evenodd"
                                   />
                                 </g>
                               </svg>
-                              <h1 className="ml-[16px] font-medium text-[1.6em] text-[#ff6f61]">
+                              <h1 className="ml-[16px] font-medium text-[1.6em] text-[#ee4266]">
                                 Sign out
                               </h1>
                             </Link>
