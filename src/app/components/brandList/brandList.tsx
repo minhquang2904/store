@@ -9,7 +9,7 @@ export default function BrandList() {
       <div className="!relative">
         <Image
           src="/images/brand-1.png"
-          className="!relative !min-w-[200px] max-h-[70px]"
+          className="!relative sm:!min-w-[200px] xsm:!min-w-[160px] max-h-[70px]"
           alt="Brand"
           fill
           sizes="(width: 200px) 100vw"
@@ -19,7 +19,7 @@ export default function BrandList() {
       <div className="!relative">
         <Image
           src="/images/brand-2.png"
-          className="!relative !min-w-[200px] max-h-[70px]"
+          className="!relative sm:!min-w-[200px] xsm:!min-w-[160px] max-h-[70px]"
           alt="Brand"
           fill
           sizes="(width: 200px) 100vw"
@@ -29,7 +29,7 @@ export default function BrandList() {
       <div className="!relative">
         <Image
           src="/images/brand-3.png"
-          className="!relative !min-w-[200px] max-h-[70px]"
+          className="!relative sm:!min-w-[200px] xsm:!min-w-[160px] max-h-[70px]"
           alt="Brand"
           fill
           sizes="(width: 200px) 100vw"
@@ -39,7 +39,7 @@ export default function BrandList() {
       <div className="!relative">
         <Image
           src="/images/brand-4.png"
-          className="!relative !min-w-[200px] max-h-[70px]"
+          className="!relative sm:!min-w-[200px] xsm:!min-w-[160px] max-h-[70px]"
           alt="Brand"
           fill
           sizes="(width: 200px) 100vw"
@@ -49,7 +49,7 @@ export default function BrandList() {
       <div className="!relative">
         <Image
           src="/images/brand-5.png"
-          className="!relative !min-w-[200px] max-h-[70px]"
+          className="!relative sm:!min-w-[200px] xsm:!min-w-[160px] max-h-[70px]"
           alt="Brand"
           fill
           sizes="(width: 200px) 100vw"

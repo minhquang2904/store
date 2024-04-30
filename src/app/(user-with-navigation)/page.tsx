@@ -9,10 +9,10 @@ import TemplateProductSlider from "../components/template-product-slider/templat
 const Home = () => {
   return (
     <>
-      {/* <Banner />
-      <Brand />
-      <BannerGroup />
-      <TemplateProductView />
+      {/* <Banner /> */}
+      {/* <Brand /> */}
+      {/* <BannerGroup /> */}
+      {/* <TemplateProductView />
       <TemplateProductSlider /> */}
     </>
   );

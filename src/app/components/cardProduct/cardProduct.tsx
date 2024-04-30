@@ -17,7 +17,7 @@ const CardProduct = (props: any) => {
     e.preventDefault();
   };
   return (
-    <div className={`${style.column}`} style={styleCustom}>
+    <div className={`${style.column} l:w-[25%] sm:w-[33.333333%] xsm:w-[50%]`}>
       <Link
         className={`${style.cardProductItems} block shadow-sm pb-[20px] group`}
         href="/productDetail"
@@ -52,12 +52,12 @@ const CardProduct = (props: any) => {
         </div>
         <div className="mt-[18px] mx-[10px] mb-0">
           <div>
-            <h1 className="text-text text-[1.6em] font-semibold capitalize">
+            <h1 className="text-text text-[1.6em] font-semibold capitalize min-h-[48px] line-clamp-2">
               {data.title}
             </h1>
           </div>
           <div className="my-[6px] mx-0">
-            <h1 className="text-text text-[1.6em] font-medium capitalize">
+            <h1 className="text-text text-[1.6em] font-medium capitalize min-h-[24px] line-clamp-1">
               {data.subTitle}
             </h1>
           </div>
@@ -78,11 +78,11 @@ const CardProduct = (props: any) => {
                     : { textDecoration: "unset", color: "#131118" }
                 }
               >
-                ${data.price}
+                {data.price}
               </h3>
               {data.discount && (
                 <h3 className="text-[1.6em] ml-[10px] text-[#ff6f61]">
-                  ${data.discount}
+                  {data.discount}
                 </h3>
               )}
             </div>

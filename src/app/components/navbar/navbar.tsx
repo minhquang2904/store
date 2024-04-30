@@ -45,10 +45,22 @@ const NavBar = () => {
     const mainLayout: any = $(".mainLayout");
     const cartContainer: any = $(`.${style.cartContainer}`);
     const userModal: any = $(`.${style.navigationNameUserModal}`);
+    const cartIcon: any = $(".cartIcon");
+    const profileName: any = $(".profileName");
+    const profileIcon: any = $(".profileIcon");
 
     const checkActiveIcon = (e: any) => {
-      cartModal && !cartContainer.contains(e.target) && setCartModal(false);
-      profileModal && !userModal.contains(e.target) && setProfileModal(false);
+      const target = e.target;
+      cartModal &&
+        !cartContainer.contains(target) &&
+        !cartIcon.contains(target) &&
+        setCartModal(false);
+
+      profileModal &&
+        !userModal.contains(target) &&
+        !profileName.contains(target) &&
+        !profileIcon.contains(target) &&
+        setProfileModal(false);
     };
 
     mainLayout.addEventListener("click", checkActiveIcon);
@@ -246,7 +258,7 @@ const NavBar = () => {
                 <>
                   <div className="pointer relative xsm:hidden sm:hidden l:flex">
                     <div
-                      className="hover:bg-hover1 p-[10px] rounded-half !relative cursor-pointer"
+                      className="hover:bg-hover1 p-[10px] rounded-half !relative cursor-pointer cartIcon"
                       onClick={handleCart}
                     >
                       <Image
@@ -354,14 +366,25 @@ const NavBar = () => {
 
               {checkLogin ? (
                 <>
-                  <div className="flex items-center relative xsm:hidden sm:hidden l:flex">
-                    <div className="h-full w-full ml-[10px]">
+                  <div className="flex items-center relative">
+                    <div className="h-full w-full ml-[10px] xsm:hidden sm:hidden l:flex">
                       <h3
-                        className="cursor-pointer h-full w-full text-text text-[20px] flex shrink grow items-center cursor-pointer;"
+                        className="cursor-pointer h-full w-full text-text text-[20px] flex shrink grow items-center profileName"
                         onClick={handleProfile}
                       >
                         Lương Minh Quang
                       </h3>
+                    </div>
+                    <div className="xsm:block l:hidden !relative">
+                      <Image
+                        src="/icons/user.svg"
+                        alt="Bag"
+                        className="!relative max-w-[44px] p-[10px] pr-[0px] profileIcon"
+                        fill
+                        sizes="100vw"
+                        priority={true}
+                        onClick={handleProfile}
+                      />
                     </div>
                     {profileModal && (
                       <div
@@ -488,19 +511,6 @@ const NavBar = () => {
                       </div>
                     )}
                   </div>
-                  <Link
-                    href="/profile"
-                    className="xsm:block l:hidden !relative"
-                  >
-                    <Image
-                      src="/icons/user.svg"
-                      alt="Bag"
-                      className="!relative max-w-[44px] p-[10px] pr-[0px]"
-                      fill
-                      sizes="100vw"
-                      priority={true}
-                    />
-                  </Link>
                 </>
               ) : (
                 <>
@@ -520,7 +530,7 @@ const NavBar = () => {
       </div>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="l:px-[15px] xsm:px-[15px] sm:px-[30px] searchContainer [&.activeSearch]:opacity-100 [&.activeSearch]:duration-300 [&.activeSearch]:visible duration-300 invisible flex opacity-0 top-0 absolute right-0 left-0 origin-top-right z-10 bg-primary h-full  justify-center items-center"
+        className="l:px-[15px] xsm:px-[15px] sm:px-[30px] searchContainer [&.activeSearch]:opacity-100 [&.activeSearch]:duration-300 [&.activeSearch]:visible invisible flex opacity-0 top-0 absolute right-0 left-0 origin-top-right z-10 bg-primary h-full  justify-center items-center"
       >
         <div className="!relative max-w-[1320px] w-full h-full flex items-center">
           <input

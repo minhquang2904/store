@@ -11,9 +11,12 @@ const Like = () => {
   const styleCustom = { width: "25%" };
   const [dataList, setDataList] = useState(data);
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center px-[15px]">
       <div className={`${style.likeContainer}`}>
-        <ShowingPage />
+        <ShowingPage
+          title="Wish Lists"
+          subTitle="Showing 1 - 16 of 72 results"
+        />
         <div className="mt-[16px]">
           <div className="flex flex-wrap mx-[-12px]">
             {dataList.map((item: any) => {
