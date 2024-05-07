@@ -10,6 +10,13 @@ const config: Config = {
     boxShadow: {
       sm: "0 2px 20px rgba(0, 0, 0, 0.12)",
     },
+    spacing: {
+      layout: "1320px",
+      "80": "80px",
+      "60": "60px",
+      "40": "40px",
+      mCard: "-15px",
+    },
     colors: {
       button: "#131118",
       text: "#131118",
@@ -26,6 +33,8 @@ const config: Config = {
       md: "16px",
       lg: "32px",
       xl: "64px",
+      pCard: "15px",
+      pLayout: "15px",
     },
     fontSize: {
       sm: "0.8rem",

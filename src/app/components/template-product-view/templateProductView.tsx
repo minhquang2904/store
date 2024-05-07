@@ -1,8 +1,8 @@
-import style from "./templateProductView.module.scss";
 import Link from "next/link";
 import { data, login } from "@/app/data";
 import { useState } from "react";
 import CardProduct from "../cardProduct/cardProduct";
+import TitleComponent from "../titleComponent/titleComponent";
 
 export default function TemplateProductView() {
   const [dataList, setData] = useState(data);
@@ -28,15 +28,11 @@ export default function TemplateProductView() {
   };
 
   return (
-    <div className="flex justify-center items-center">
-      <div className={`${style.bestSellerContainer}`}>
-        <div>
-          <h1 className="text-[5em] font-medium capitalize text-center text-text">
-            Best sellers
-          </h1>
-        </div>
-        <div className="my-[35px] mx-0 flex justify-between">
-          <div className="flex gap-10 items-center">
+    <div className="flex justify-center items-center px-pLayout">
+      <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
+        <TitleComponent title="Best sellers" />
+        <div className="my-[35px] mx-[0] flex justify-between">
+          <div className="flex gap-[10px] items-center">
             <div
               className="activeTabView [&.activeTabView]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
               onClick={handleChangeType}
@@ -74,7 +70,7 @@ export default function TemplateProductView() {
             </Link>
           </div>
         </div>
-        <div className="flex flex-wrap mx-[-12px]">
+        <div className="flex flex-wrap mx-mCard">
           {dataList.slice(0, 8).map((item: any) => {
             return (
               <CardProduct

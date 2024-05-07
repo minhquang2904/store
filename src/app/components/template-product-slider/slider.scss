@@ -1,5 +1,5 @@
 .slick-list {
-  margin: 0 -12px;
+  margin: 0 -15px;
 }
 
 .slick-slider:hover {
@@ -12,7 +12,7 @@
   position: absolute !important;
   width: 40px !important;
   height: 40px !important;
-  z-index: 100;
+  z-index: 10;
   &:hover {
     background-color: rgba(227, 231, 243, 0.8);
     border-radius: 50%;

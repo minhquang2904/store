@@ -1,49 +1,46 @@
 @import "../../style.module.scss";
 
-.navigationContainer {
-  @include mainLayout;
-  .line {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0;
-    height: 3px;
-    border-radius: 20px;
-    background-color: #131118;
-    transition: all 0.2s ease;
+.line {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 3px;
+  border-radius: 20px;
+  background-color: #131118;
+  transition: all 0.2s ease;
+}
+.navigationItem {
+  color: var(--template-product-color);
+  font-size: 1.6em;
+  margin: 0 20px;
+  text-transform: capitalize;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 4px 10px;
+  transition: all 0.2s ease;
+  &.active,
+  &:hover {
+    color: var(--text-color) !important;
   }
-  .navigationItem {
-    color: var(--template-product-color);
-    font-size: 1.6em;
-    margin: 0 20px;
-    text-transform: capitalize;
-    cursor: pointer;
-    font-weight: 600;
-    padding: 4px 10px;
-    transition: all 0.2s ease;
-    &.active,
-    &:hover {
-      color: var(--text-color) !important;
+}
+.cartContainer {
+  ul {
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    &:hover::-webkit-scrollbar-thumb {
+      background-color: #d0d2d4;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: transparent;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
     }
   }
-  .cartContainer {
-    ul {
-      &::-webkit-scrollbar {
-        width: 8px;
-      }
-      &:hover::-webkit-scrollbar-thumb {
-        background-color: #d0d2d4;
-      }
-      &::-webkit-scrollbar-thumb {
-        background-color: transparent;
-      }
-      &::-webkit-scrollbar-track {
-        background-color: transparent;
-      }
-    }
-  }
-  .navigationNameUserModal,
-  .cartContainer {
-    animation: showOut 0.3s ease !important;
-  }
+}
+.navigationNameUserModal,
+.cartContainer {
+  animation: showOut 0.3s ease !important;
 }

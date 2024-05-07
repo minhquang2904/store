@@ -1,15 +1,11 @@
 @import "../../style.module.scss";
 
-.brandContainer {
-  @include mainLayout;
-  margin-top: $marginTopLayOut;
-  .marquee {
-    mask-image: linear-gradient(
-      var(--mask-direction, to right),
-      hsl(0 0% 0% / 0),
-      hsl(0 0% 0% / 1) 6%,
-      hsl(0 0% 0% / 1) 92%,
-      hsl(0 0% 0% / 0)
-    );
-  }
+.marquee {
+  mask-image: linear-gradient(
+    var(--mask-direction, to right),
+    hsl(0 0% 0% / 0),
+    hsl(0 0% 0% / 1) 6%,
+    hsl(0 0% 0% / 1) 92%,
+    hsl(0 0% 0% / 0)
+  );
 }

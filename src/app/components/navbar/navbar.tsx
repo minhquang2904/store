@@ -107,6 +107,9 @@ const NavBar = () => {
       lineActive(line, navActive, 0);
     }
 
+    profileModal && setProfileModal(false);
+    cartModal && setCartModal(false);
+
     return () => {
       navigationItem.forEach((item: any) => {
         item.removeEventListener("click", handleClick);
@@ -151,8 +154,8 @@ const NavBar = () => {
   };
 
   return (
-    <div className="headerContainer flex justify-center items-center sticky top-0 left-0 right-0 bg-primary z-50 l:px-[15px] xsm:px-[15px] sm:px-[30px]">
-      <div className={`${style.navigationContainer} flex`}>
+    <div className="headerContainer min-h-80 flex justify-center items-center sticky top-[0] left-[0] right-[0] bg-primary z-20 l:px-pLayout xsm:px-pLayout sm:px-[30px]">
+      <div className="flex w-full max-w-layout">
         <div className="h-20 mx-auto flex justify-between items-center w-full">
           <div className="flex items-center h-full">
             <Link href="/" className="!relative">
@@ -183,7 +186,7 @@ const NavBar = () => {
               <div className={`${style.line}`}></div>
             </div>
           </div>
-          <div className="xsm:block l:hidden !fixed bottom-0 right-0 left-0 bg-button text-navMobile text-[1.6em] font-medium uppercase px-[15px]">
+          <div className="xsm:block l:hidden !fixed bottom-[0] right-[0] left-[0] bg-button text-navMobile text-[1.6em] font-medium uppercase px-pLayout">
             <div className="flex flex-col">
               <div className="flex items-center">
                 <Link
@@ -208,7 +211,7 @@ const NavBar = () => {
                   <h1 className="[&.activeNavLists]:text-[#ee4266]">Lists</h1>
                 </div>
               </div>
-              <div className="h-0 overflow-hidden duration-200  navBottom [&.activeNavBottom]:h-[155px] [&.activeNavBottom]:duration-200 [&.activeNavBottom]:ease-linear">
+              <div className="h-[0] overflow-hidden duration-200  navBottom [&.activeNavBottom]:h-[155px] [&.activeNavBottom]:duration-200 [&.activeNavBottom]:ease-linear">
                 <div className="bg-[#222222] mb-[25px] mt-[10px] flex flex-col rounded-[4px] py-[6px]">
                   <Link href="/shirt" className="ml-[10px] py-[6px]">
                     shirt
@@ -273,7 +276,7 @@ const NavBar = () => {
                     {cartModal && (
                       <div
                         onClick={(e) => e.stopPropagation()}
-                        className={`${style.cartContainer} absolute top-[calc(100%+7px)] origin-top-right right-0 w-[360px] rounded-sm bg-[white] cursor-default shadow-sm`}
+                        className={`${style.cartContainer} absolute top-[calc(100%+16.5px)] origin-top-right right-[0] w-[360px] rounded-sm bg-[white] cursor-default shadow-sm`}
                       >
                         <h1 className="w-full text-text text-base pl-[12px] mt-[16px] font-medium">
                           You have 3 items in your cart
@@ -388,7 +391,7 @@ const NavBar = () => {
                     </div>
                     {profileModal && (
                       <div
-                        className={`${style.navigationNameUserModal} origin-top-right absolute right-0 top-[calc(100%+7px)] bg-white shadow-sm rounded-[12px] max-w-[400px] min-w-[200px] w-full`}
+                        className={`${style.navigationNameUserModal} origin-top-right absolute right-[0] top-[calc(100%+16.5px)] bg-white shadow-sm rounded-[12px] max-w-[400px] min-w-[200px] w-full`}
                       >
                         <div>
                           <div>
@@ -530,7 +533,7 @@ const NavBar = () => {
       </div>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="l:px-[15px] xsm:px-[15px] sm:px-[30px] searchContainer [&.activeSearch]:opacity-100 [&.activeSearch]:duration-300 [&.activeSearch]:visible invisible flex opacity-0 top-0 absolute right-0 left-0 origin-top-right z-10 bg-primary h-full  justify-center items-center"
+        className="l:px-[15px] xsm:px-[15px] sm:px-[30px] searchContainer [&.activeSearch]:opacity-100 [&.activeSearch]:duration-300 [&.activeSearch]:visible invisible flex opacity-0 top-[0] absolute right-[0] left-[0] origin-top-right z-10 bg-primary h-full  justify-center items-center"
       >
         <div className="!relative max-w-[1320px] w-full h-full flex items-center">
           <input

@@ -1,5 +1,4 @@
 import Image from "next/image";
-import style from "./support.module.scss";
 
 const Support = () => {
   const data = [
@@ -25,12 +24,15 @@ const Support = () => {
     },
   ];
   return (
-    <div className="flex justify-center items-center">
-      <div className={`${style.supportContainer}`}>
-        <div className="flex gap-5">
+    <div className="flex justify-center items-center px-pLayout">
+      <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
+        <div className="flex gap-y-[60px] flex-wrap">
           {data.map((item, index) => {
             return (
-              <div key={index} className="shrink-0 grow-0 basis-1/4 !relative">
+              <div
+                key={index}
+                className="!relative l:w-[25%] sm:w-[50%] xsm:w-[100%] xsm:flex flex-col justify-center items-center"
+              >
                 <Image
                   src={item.url}
                   className="!relative max-w-[30px] max-h-[36px]"

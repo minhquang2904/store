@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import style from "./like.module.scss";
 import { data, login } from "@/app/data";
 import CardProduct from "@/app/components/cardProduct/cardProduct";
 import Pagination from "@/app/components/pagination/pagination";
@@ -12,13 +11,13 @@ const Like = () => {
   const [dataList, setDataList] = useState(data);
   return (
     <div className="flex justify-center items-center px-[15px]">
-      <div className={`${style.likeContainer}`}>
+      <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
         <ShowingPage
           title="Wish Lists"
           subTitle="Showing 1 - 16 of 72 results"
         />
         <div className="mt-[16px]">
-          <div className="flex flex-wrap mx-[-12px]">
+          <div className="flex flex-wrap mx-mCard">
             {dataList.map((item: any) => {
               return (
                 <CardProduct

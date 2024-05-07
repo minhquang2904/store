@@ -6,13 +6,15 @@ import Footer from "@/app/components/footer/footer";
 import Support from "@/app/components/support/support";
 import NavBar from "../components/navbar/navbar";
 
-export default function Layout({ children }: { children: ReactNode }) {
+const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="bg-[#F3F4F4] min-h-[100vh] mainLayout">
       <NavBar />
       <main>{children}</main>
-      {/* <Support /> */}
-      {/* <Footer /> */}
+      <Support />
+      <Footer />
     </div>
   );
-}
+};
+
+export default React.memo(Layout);

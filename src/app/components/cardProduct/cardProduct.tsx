@@ -1,13 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import style from "./cardProduct.module.scss";
 import IconHeartSvg from "../iconHeartSvg/iconHeartSvg";
 
 const CardProduct = (props: any) => {
   const { data, login, styleCustom } = props;
 
   const handleSubmitHeart = (e: any) => {
-    e.target.closest(`.${style.iconHeartSvg}`).classList.toggle(style.active);
+    e.target.closest(".iconHeartSvg").classList.toggle("active");
     e.preventDefault();
   };
   const handleAddCart = (e: any) => {
@@ -17,11 +16,8 @@ const CardProduct = (props: any) => {
     e.preventDefault();
   };
   return (
-    <div className={`${style.column} l:w-[25%] sm:w-[33.333333%] xsm:w-[50%]`}>
-      <Link
-        className={`${style.cardProductItems} block shadow-sm pb-[20px] group`}
-        href="/productDetail"
-      >
+    <div className="block mb-[24px] px-pCard l:w-[25%] sm:w-[33.333333%] xsm:w-[50%]">
+      <Link className="block shadow-sm pb-[20px] group" href="/productDetail">
         <div className="overflow-hidden !relative">
           <Image
             src={data.url}
@@ -31,7 +27,7 @@ const CardProduct = (props: any) => {
             sizes="(max-width: 312px) 100vw"
           />
           {data.discount && (
-            <div className="absolute top-[20px] left-0">
+            <div className="absolute top-[20px] left-[0]">
               <p className="text-white bg-secondary text-center text-[1.2em] font-semibold uppercase px-[12px] py-[6px]">
                 Sale
               </p>
@@ -40,30 +36,28 @@ const CardProduct = (props: any) => {
           <div className="absolute right-[8px] top-[20px] hidden group-hover:block">
             <IconHeartSvg
               onClick={handleSubmitHeart}
-              className={style.iconHeartSvg}
+              className="iconHeartSvg [&.active]:fill-secondary"
             />
           </div>
           <div
-            className="flex items-center justify-center overflow-hidden h-0 text-center absolute duration-100 ease-linear bottom-0 left-0 right-0 bg-[#0000004d] text-white text-[1.6em] font-normal cursor-pointer group-hover:bg-[#00000080] group-hover:h-[40px]"
+            className="flex items-center justify-center overflow-hidden h-[0] text-center absolute duration-100 ease-linear bottom-[0] left-[0] right-[0] bg-[#0000004d] text-white text-[1.6em] font-normal cursor-pointer group-hover:bg-[#00000080] group-hover:h-[40px]"
             onClick={handleAddCart}
           >
             <h3 className="h-full flex items-center">Add to Card</h3>
           </div>
         </div>
-        <div className="mt-[18px] mx-[10px] mb-0">
+        <div className="mt-[18px] mx-[10px] mb-[0]">
           <div>
             <h1 className="text-text text-[1.6em] font-semibold capitalize min-h-[48px] line-clamp-2">
               {data.title}
             </h1>
           </div>
-          <div className="my-[6px] mx-0">
+          <div className="my-[6px] mx-[0]">
             <h1 className="text-text text-[1.6em] font-medium capitalize min-h-[24px] line-clamp-1">
               {data.subTitle}
             </h1>
           </div>
-          <div
-            className={`${style.cardProductItemsTypeAndPrice} flex justify-between`}
-          >
+          <div className="flex justify-between">
             <p className="text-[#00000080] text-[1.6em] font-medium capitalize">
               {data.type}
             </p>
