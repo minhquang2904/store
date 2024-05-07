@@ -31,7 +31,7 @@ const Support = () => {
             return (
               <div
                 key={index}
-                className="!relative l:w-[25%] sm:w-[50%] xsm:w-[100%] xsm:flex flex-col justify-center items-center"
+                className="!relative l:w-[25%] sm:w-[50%] xsm:w-[100%] xsm:flex sm:flex flex-col justify-center items-center"
               >
                 <Image
                   src={item.url}

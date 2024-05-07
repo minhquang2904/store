@@ -4,14 +4,15 @@
 
 .slick-slider:hover {
   .slick-arrow {
-    display: block;
+    background-color: rgba(227, 231, 243, 0.8);
+    border-radius: 50%;
   }
 }
 
 .slick-arrow {
   position: absolute !important;
-  width: 40px !important;
-  height: 40px !important;
+  width: 36px !important;
+  height: 36px !important;
   z-index: 10;
   &:hover {
     background-color: rgba(227, 231, 243, 0.8);
@@ -31,4 +32,10 @@
 
 .slick-prev {
   left: 14px;
+}
+
+@media screen and (max-width: 992px) {
+  .slick-arrow {
+    display: none !important;
+  }
 }

@@ -27,17 +27,22 @@ const NavBar = () => {
   useEffect(() => {
     const $ = document.querySelector.bind(document);
     const positionTopNav: any = $(".headerContainer");
+    const iconScrollTop: any = $(".iconScrollTop");
 
-    const addStyleNav = () => {
+    const handleScrollTop = () => {
       positionTopNav.offsetTop > 80
         ? (positionTopNav.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.15)")
         : (positionTopNav.style.boxShadow = "unset");
+
+      positionTopNav.offsetTop > 500
+        ? iconScrollTop.classList.add("active")
+        : iconScrollTop.classList.remove("active");
     };
 
-    window.addEventListener("scroll", addStyleNav);
+    window.addEventListener("scroll", handleScrollTop);
 
-    addStyleNav();
-    return () => window.removeEventListener("scroll", addStyleNav);
+    handleScrollTop();
+    return () => window.removeEventListener("scroll", handleScrollTop);
   }, []);
 
   useEffect(() => {

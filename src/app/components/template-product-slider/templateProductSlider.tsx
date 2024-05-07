@@ -63,7 +63,7 @@ export default function TemplateProductSlider() {
   const SamplePrevArrow = (props: any) => {
     const { className, onClick } = props;
     return (
-      <div className={className} onClick={onClick}>
+      <div className={`${className} !xsm:hidden l:block`} onClick={onClick}>
         <Image
           src="/icons/arrow-left-1.svg"
           alt="Icon"
@@ -161,7 +161,7 @@ export default function TemplateProductSlider() {
           <Slider {...settings}>
             {dataList.map((item: any) => {
               return (
-                <div key={item.id} className="block mb-[24px] px-pCard">
+                <div key={item.id} className="block px-pCard">
                   <Link
                     className="block shadow-sm pb-[20px] group"
                     href="/productDetail"
