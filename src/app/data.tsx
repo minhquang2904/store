@@ -8,7 +8,7 @@ const data: any = [
     price: 236,
     discount: "",
     size: ["s", "m", "l", "xl", "xxl"],
-    color: ["#0B5233", "yellow", "pink"],
+    color: ["#0B5233", "#33FF66", "#06B6D4", "#0B5233", "#33FF66", "#06B6D4"],
   },
   {
     id: 2,

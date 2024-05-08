@@ -44,16 +44,16 @@ export default function ProductDetail() {
   };
 
   const handleSubmitHeart = (e: any) => {
-    e.target.closest(`.${style.iconHeartSvg}`).classList.toggle(style.active);
+    e.target.closest(".iconHeartSvg").classList.toggle("active");
     e.preventDefault();
   };
 
   return (
-    <div className="flex justify-center items-center">
-      <div className={`${style.detailContainer}`}>
+    <div className="flex justify-center items-center px-pLayout">
+      <div className="l:mt-80 sm:mt-60 xsm:mt-40 w-full max-w-layout">
         <TitlePageNavigation />
         <div className="mt-[50px] flex">
-          <div className="flex flex-col items-center shrink grow-0 basis-2/4">
+          <div className="flex flex-col items-center shrink grow-0 l:basis-2/4 sm:basis-[40%]">
             <div className="!relative max-w-[400px] flex w-full">
               <Image
                 src={dataDetail[picture].url || ""}
@@ -86,7 +86,7 @@ export default function ProductDetail() {
               })}
             </div>
           </div>
-          <div className="shrink grow-0 basis-2/4 ml-[30px]">
+          <div className="shrink grow-0 l:basis-2/4 ml-[30px] sm:basis-[60%]">
             <div className="flex justify-between">
               <h1 className="text-text font-bold text-[2.6em]">YK Disney</h1>
               <div className="flex">
@@ -94,7 +94,7 @@ export default function ProductDetail() {
                   <div>
                     <IconHeartSvg
                       onClick={handleSubmitHeart}
-                      className={`${style.iconHeartSvg} cursor-pointer`}
+                      className="iconHeartSvg [&.active]:fill-secondary cursor-pointer"
                     />
                   </div>
                 </div>
@@ -114,9 +114,7 @@ export default function ProductDetail() {
               <h4 className="text-text font-normal text-[1.6em]">$80.00</h4>
             </div>
             <div className="mt-[16px]">
-              <p
-                className={`text-text font-normal text-[1.4em] ${style.subDescription} ${style.descriptionRight} `}
-              >
+              <p className="text-text font-normal text-[1.4em] line-clamp-4">
                 Lustrous yet understated. The new evening wear collection
                 exclusively offered at the reopened Giorgio Armani boutique in
                 Los Angeles. Lustrous yet understated. The new evening wear
@@ -124,18 +122,23 @@ export default function ProductDetail() {
                 boutique in Los Angeles. Lustrous yet understated. The new
                 evening wear collection exclusively offered at the reopened
                 Giorgio Armani boutique in Los Angeles. xclusively offered at
-                the reopened Giorgio Armani boutique in Los Angeles.
+                the reopened Giorgio Armani boutique in Los Angeles. yet
+                understated. The new evening wear collection exclusively offered
+                at the reopened Giorgio Armani boutique in Los Angeles.
+                xclusively offered at the reopened Giorgio Armani boutique in
+                Los Angeles.
               </p>
             </div>
             <div className="mt-[16px]">
               <h3 className="text-text text-[1.6em] font-semibold">Color</h3>
-              <div className="mt-[8px] flex gap-4">
+              <div className="mt-[8px] flex flex-wrap gap-y-[8px]">
                 {dataDetail[0].color.map((item: any, index: any) => {
                   return (
                     <div
                       key={index}
                       onClick={handleChooseColor}
-                      className={`[&.activeColor]:border-solid [&.activeColor]:border-[3px] [&.activeColor]:border-[#afb3b8] bg-[${item}] w-[70px] h-[40px] cursor-pointer rounded-[20px]`}
+                      className={`mr-[8px] [&.activeColor]:border-solid [&.activeColor]:border-[3px] [&.activeColor]:border-[#afb3b8] w-[70px] h-[40px] cursor-pointer rounded-[20px]`}
+                      style={{ background: `${item}` }}
                     ></div>
                   );
                 })}
@@ -193,14 +196,14 @@ export default function ProductDetail() {
         <div className="mt-[80px]">
           <div className="flex font-medium mb-[20px] text-sub capitalize text-[2em]">
             <div
-              className="activeTabDetail [&.activeTabDetail]:before:absolute [&.activeTabDetail]:before:content-[''] [&.activeTabDetail]:before:w-full [&.activeTabDetail]:before:h-[4px] [&.activeTabDetail]:before:bottom-0 [&.activeTabDetail]:before:bg-button [&.activeTabDetail]:before:rounded-[4px] [&.activeTabDetail]:text-text pb-[8px] mr-[16px] relative cursor-pointer hover:text-button"
+              className="activeTabDetail [&.activeTabDetail]:before:absolute [&.activeTabDetail]:before:content-[''] [&.activeTabDetail]:before:w-full [&.activeTabDetail]:before:h-[4px] [&.activeTabDetail]:before:bottom-[0] [&.activeTabDetail]:before:bg-button [&.activeTabDetail]:before:rounded-[4px] [&.activeTabDetail]:text-text pb-[8px] mr-[16px] relative cursor-pointer hover:text-button"
               onClick={handleChangeDescription}
               id="description"
             >
               description
             </div>
             <div
-              className="[&.activeTabDetail]:before:absolute [&.activeTabDetail]:before:content-[''] [&.activeTabDetail]:before:w-full [&.activeTabDetail]:before:h-[4px] [&.activeTabDetail]:before:bottom-0 [&.activeTabDetail]:before:bg-button [&.activeTabDetail]:before:rounded-[4px] [&.activeTabDetail]:text-text pb-[8px] mr-[16px] relative cursor-pointer hover:text-button"
+              className="[&.activeTabDetail]:before:absolute [&.activeTabDetail]:before:content-[''] [&.activeTabDetail]:before:w-full [&.activeTabDetail]:before:h-[4px] [&.activeTabDetail]:before:bottom-[0] [&.activeTabDetail]:before:bg-button [&.activeTabDetail]:before:rounded-[4px] [&.activeTabDetail]:text-text pb-[8px] mr-[16px] relative cursor-pointer hover:text-button"
               onClick={handleChangeDescription}
               id="add-information"
             >

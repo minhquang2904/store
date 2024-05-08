@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect } from "react";
 
 const SubTitleFooter = (props: any) => {
   const { title } = props;
@@ -28,7 +27,7 @@ const Footer = () => {
         <div className="flex justify-center items-center">
           <div className="w-full max-w-layout">
             <div className="flex flex-wrap gap-y-[16px]">
-              <div className="shrink-0 grow-0 l:basis-1/4 xsm:basis-[100%] sm:basis-[100%]">
+              <div className="xsm:mb-[20px] sm:mb-[20px] l:mb-[0] shrink-0 grow-0 l:basis-1/4 xsm:basis-[100%] sm:basis-[100%]">
                 <div className="xsm:flex sm:flex l:block flex-col justify-center items-center">
                   <Link
                     href="#"

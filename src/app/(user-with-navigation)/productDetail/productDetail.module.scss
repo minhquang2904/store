@@ -1,22 +1,5 @@
-@import "../../style.module.scss";
-
-.detailContainer {
-  @include mainLayout;
-  margin-top: $marginTopLayOut;
-  .descriptionRight {
-    -webkit-line-clamp: 4;
-  }
-  .subDescription {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .inputOuterAndInner::-webkit-outer-spin-button,
-  .inputOuterAndInner::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  .iconHeartSvg.active {
-    fill: var(--template-product-discount-color) !important;
-  }
+.inputOuterAndInner::-webkit-outer-spin-button,
+.inputOuterAndInner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

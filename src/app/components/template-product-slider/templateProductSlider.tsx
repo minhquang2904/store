@@ -7,9 +7,70 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./slider.scss";
 import TitleComponent from "../titleComponent/titleComponent";
-import IconHeartSvg from "../iconHeartSvg/iconHeartSvg";
 
-export default function TemplateProductSlider() {
+const SampleNextArrow = (props: any) => {
+  const { className, onClick } = props;
+  return (
+    <div className={className} onClick={onClick}>
+      <Image
+        src="/icons/arrow-right-1.svg"
+        alt="Icon"
+        fill
+        sizes="100vw"
+        priority={true}
+      />
+    </div>
+  );
+};
+
+const SamplePrevArrow = (props: any) => {
+  const { className, onClick } = props;
+  return (
+    <div className={`${className} !xsm:hidden l:block`} onClick={onClick}>
+      <Image
+        src="/icons/arrow-left-1.svg"
+        alt="Icon"
+        fill
+        sizes="100vw"
+        priority={true}
+      />
+    </div>
+  );
+};
+
+const settings = {
+  infinite: false,
+  speed: 400,
+  slidesToShow: 4,
+  slidesToScroll: 1,
+  nextArrow: <SampleNextArrow />,
+  prevArrow: <SamplePrevArrow />,
+  responsive: [
+    {
+      breakpoint: 992,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 1,
+      },
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 1,
+      },
+    },
+    {
+      breakpoint: 575,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 1,
+      },
+    },
+  ],
+};
+
+const TemplateProductSlider = () => {
   const [dataList, setData] = useState(data);
 
   const handleChangeType = (e: any) => {
@@ -31,80 +92,6 @@ export default function TemplateProductSlider() {
       return type.includes(item.type);
     });
     return setData(dataType);
-  };
-
-  const handleSubmitHeart = (e: any) => {
-    e.target.closest(".iconHeartSvg").classList.toggle("active");
-    e.preventDefault();
-  };
-
-  const handleAddCart = (e: any) => {
-    if (!login) {
-      window.location.href = "/login";
-    }
-    e.preventDefault();
-  };
-
-  const SampleNextArrow = (props: any) => {
-    const { className, onClick } = props;
-    return (
-      <div className={className} onClick={onClick}>
-        <Image
-          src="/icons/arrow-right-1.svg"
-          alt="Icon"
-          fill
-          sizes="100vw"
-          priority={true}
-        />
-      </div>
-    );
-  };
-
-  const SamplePrevArrow = (props: any) => {
-    const { className, onClick } = props;
-    return (
-      <div className={`${className} !xsm:hidden l:block`} onClick={onClick}>
-        <Image
-          src="/icons/arrow-left-1.svg"
-          alt="Icon"
-          fill
-          sizes="100vw"
-          priority={true}
-        />
-      </div>
-    );
-  };
-
-  const settings = {
-    infinite: false,
-    speed: 400,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
-    responsive: [
-      {
-        breakpoint: 992,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 575,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-    ],
   };
 
   useEffect(() => {
@@ -163,13 +150,13 @@ export default function TemplateProductSlider() {
               return (
                 <div key={item.id} className="block px-pCard">
                   <Link
-                    className="block shadow-sm pb-[20px] group"
+                    className="block shadow-sm pb-[20px]"
                     href="/productDetail"
                   >
-                    <div className="overflow-hidden !relative">
+                    <div className="!relative">
                       <Image
                         src={item.url}
-                        className="!relative w-full group-hover:scale-[1.04] group-hover:opacity-90 duration-300 ease-out max-h-400px"
+                        className="!relative w-full max-h-400px"
                         alt="Product 1"
                         fill
                         sizes="(max-width: 312px) 100vw"
@@ -181,20 +168,6 @@ export default function TemplateProductSlider() {
                           </p>
                         </div>
                       )}
-                      <div className="absolute right-[8px] top-[20px] hidden group-hover:block">
-                        <IconHeartSvg
-                          onClick={handleSubmitHeart}
-                          className="iconHeartSvg [&.active]:fill-secondary"
-                        />
-                      </div>
-                      <div
-                        className="flex items-center justify-center overflow-hidden h-[0] text-center absolute duration-100 ease-linear bottom-[0] left-[0] right-[0] bg-[#0000004d] text-white text-[1.6em] font-normal cursor-pointer group-hover:bg-[#00000080] group-hover:h-[40px]"
-                        onClick={handleAddCart}
-                      >
-                        <h3 className="h-full flex items-center">
-                          Add to Card
-                        </h3>
-                      </div>
                     </div>
                     <div className="mt-[18px] mx-[10px] mb-[0]">
                       <div>
@@ -244,4 +217,6 @@ export default function TemplateProductSlider() {
       </div>
     </div>
   );
-}
+};
+
+export default TemplateProductSlider;
