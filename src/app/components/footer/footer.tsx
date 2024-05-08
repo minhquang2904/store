@@ -164,12 +164,12 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="iconScrollTop [&.active]:xsm:flex bg-[#1e2832] w-[40px] h-[40px] rounded-[50%] l:hidden justify-center items-center xsm:hidden fixed bottom-[80px] right-[16px]">
-        <div className="w-full max-w-layout py-[10px] px-0 flex items-center justify-center">
-          <div
-            className="flex items-center cursor-pointer !relative hover:opacity-80"
-            onClick={() => window.scroll(0, 0)}
-          >
+      <div className="iconScrollTop [&.active]:xsm:flex [&.active]:sm:flex [&.active]:l:hidden bg-[#1e2832] w-[40px] h-[40px] rounded-[50%] l:hidden justify-center items-center xsm:hidden sm:hidden fixed bottom-[80px] right-[16px]">
+        <div
+          className="w-full max-w-layout py-[10px] px-0 flex items-center justify-center cursor-pointer"
+          onClick={() => window.scroll(0, 0)}
+        >
+          <div className="flex items-center cursor-pointer !relative hover:opacity-80">
             <Image
               src="/icons/arrowUp.svg"
               className="!relative !w-[20px] !h-[20px]"

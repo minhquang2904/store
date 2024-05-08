@@ -7,6 +7,13 @@ import { useEffect, useState } from "react";
 import { dataDescription, data } from "@/app/data";
 import TitlePageNavigation from "@/app/components/titlePageNavigation/titlePageNavigation";
 
+const SubTitleProductDetail = (props: any) => {
+  const { title } = props;
+  return (
+    <h3 className="text-text capitalize font-semibold text-[1.6em]">{title}</h3>
+  );
+};
+
 export default function ProductDetail() {
   const [description, setDescription] = useState("");
   const [dataDetail, setDataDetail] = useState(data);
@@ -52,8 +59,8 @@ export default function ProductDetail() {
     <div className="flex justify-center items-center px-pLayout">
       <div className="l:mt-80 sm:mt-60 xsm:mt-40 w-full max-w-layout">
         <TitlePageNavigation />
-        <div className="mt-[50px] flex">
-          <div className="flex flex-col items-center shrink grow-0 l:basis-2/4 sm:basis-[40%]">
+        <div className="mt-[50px] flex xsm:flex-col">
+          <div className="flex flex-col items-center shrink grow-0 l:basis-2/4 sm:basis-[40%] xsm:basis-[100%]">
             <div className="!relative max-w-[400px] flex w-full">
               <Image
                 src={dataDetail[picture].url || ""}
@@ -63,7 +70,7 @@ export default function ProductDetail() {
                 sizes="(max-width: 400px) 100vw"
               />
             </div>
-            <div className="flex">
+            <div className="flex mt-[10px]">
               {dataDetail.slice(0, 6).map((item: any) => {
                 return dataDetail.length > 1 ? (
                   <div
@@ -86,7 +93,7 @@ export default function ProductDetail() {
               })}
             </div>
           </div>
-          <div className="shrink grow-0 l:basis-2/4 ml-[30px] sm:basis-[60%]">
+          <div className="shrink grow-0 l:basis-2/4 ml-[30px] xsm:ml-[0] xsm:mt-[40px] sm:basis-[60%] xsm:basis-[100%]">
             <div className="flex justify-between">
               <h1 className="text-text font-bold text-[2.6em]">YK Disney</h1>
               <div className="flex">
@@ -130,7 +137,7 @@ export default function ProductDetail() {
               </p>
             </div>
             <div className="mt-[16px]">
-              <h3 className="text-text text-[1.6em] font-semibold">Color</h3>
+              <SubTitleProductDetail title="Color" />
               <div className="mt-[8px] flex flex-wrap gap-y-[8px]">
                 {dataDetail[0].color.map((item: any, index: any) => {
                   return (
@@ -145,8 +152,8 @@ export default function ProductDetail() {
               </div>
             </div>
             <div className="mt-[16px]">
-              <h3 className="text-text  font-semibold text-[1.6em]">Size</h3>
-              <div className="flex mt-[8px]">
+              <SubTitleProductDetail title="Size" />
+              <div className="flex mt-[8px] flex-wrap gap-y-[8px]">
                 {dataDetail[0].size.map((item: any, index: any) => {
                   return (
                     <div
@@ -162,7 +169,7 @@ export default function ProductDetail() {
             </div>
             <div className="mt-[28px] flex">
               <div>
-                <div className="inline-flex !relative items-center border-[1px] border-solid border-button py-[4px] px-[8px] rounded-[26px]">
+                <div className="inline-flex !relative items-center border-[1px] border-solid border-button py-[4px] px-[8px] rounded-[26px] min-w-[106px]">
                   <Image
                     src="/icons/subtract.svg"
                     className="!relative !w-[24px] !h-[24px] cursor-pointer"
@@ -173,7 +180,9 @@ export default function ProductDetail() {
                   />
                   <input
                     type="number"
-                    className={`text-text outline-none p-[8px] text-[1.4em] max-w-[40px] font-medium text-center ${style.inputOuterAndInner}`}
+                    value={0}
+                    onChange={() => {}}
+                    className={`text-text outline-none p-[6px] text-[1.6em] max-w-[40px] font-medium text-center ${style.inputOuterAndInner}`}
                   />
                   <Image
                     src="/icons/plus.svg"
@@ -185,7 +194,7 @@ export default function ProductDetail() {
                   />
                 </div>
               </div>
-              <div className="mx-[16px] flex items-center bg-button rounded-[26px] max-w-[300px] w-full">
+              <div className="ml-[16px] flex items-center bg-button rounded-[26px] max-w-[300px] w-full hover:opacity-90 cursor-pointer duration-200">
                 <button className="text-center w-full text-[1.4em]">
                   Add to Card
                 </button>
@@ -193,7 +202,7 @@ export default function ProductDetail() {
             </div>
           </div>
         </div>
-        <div className="mt-[80px]">
+        <div className="l:mt-[80px] sm:mt-[60px] xsm:mt-[40px]">
           <div className="flex font-medium mb-[20px] text-sub capitalize text-[2em]">
             <div
               className="activeTabDetail [&.activeTabDetail]:before:absolute [&.activeTabDetail]:before:content-[''] [&.activeTabDetail]:before:w-full [&.activeTabDetail]:before:h-[4px] [&.activeTabDetail]:before:bottom-[0] [&.activeTabDetail]:before:bg-button [&.activeTabDetail]:before:rounded-[4px] [&.activeTabDetail]:text-text pb-[8px] mr-[16px] relative cursor-pointer hover:text-button"

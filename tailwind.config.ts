@@ -15,7 +15,7 @@ const config: Config = {
       "80": "80px",
       "60": "60px",
       "40": "40px",
-      mCard: "-15px",
+      mCard: "-12px",
     },
     colors: {
       button: "#131118",
@@ -33,7 +33,7 @@ const config: Config = {
       md: "16px",
       lg: "32px",
       xl: "64px",
-      pCard: "15px",
+      pCard: "12px",
       pLayout: "15px",
     },
     fontSize: {
