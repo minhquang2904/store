@@ -143,7 +143,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="bg-[#1e2832] l:flex justify-center items-center xsm:hidden">
+      <div className="bg-[#1e2832] l:flex justify-center items-center xsm:hidden px-pLayout">
         <div className="w-full max-w-layout py-[10px] px-0 flex justify-between">
           <h1 className="text-[1.6em] capitalize"> © 2022 Coral , Inc.</h1>
           <div

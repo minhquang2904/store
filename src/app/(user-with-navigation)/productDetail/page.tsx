@@ -182,7 +182,7 @@ export default function ProductDetail() {
                     type="number"
                     value={0}
                     onChange={() => {}}
-                    className={`text-text outline-none p-[6px] text-[1.6em] max-w-[40px] font-medium text-center ${style.inputOuterAndInner}`}
+                    className={`text-text outline-none p-[6px] text-[1.6em] max-w-[40px] font-medium text-center ${style.inputOuterAndInner} bg-[transparent]`}
                   />
                   <Image
                     src="/icons/plus.svg"
@@ -195,7 +195,7 @@ export default function ProductDetail() {
                 </div>
               </div>
               <div className="ml-[16px] flex items-center bg-button rounded-[26px] max-w-[300px] w-full hover:opacity-90 cursor-pointer duration-200">
-                <button className="text-center w-full text-[1.4em]">
+                <button className="text-center w-full text-[1.4em] text-white">
                   Add to Card
                 </button>
               </div>

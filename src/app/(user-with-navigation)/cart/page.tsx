@@ -101,7 +101,7 @@ const Cart = () => {
                   </tbody>
                 </table>
               </div>
-              <div className="shrink grow-0 l:basis-[30%] mt-[10px] xsm:mt-[40px] sm:mt-[40px] l:ml-[80px]">
+              <div className="shrink grow-0 l:basis-[30%] l:mt-[10px] xsm:mt-[40px] sm:mt-[40px] l:ml-[80px]">
                 <div className="flex justify-between text-[1.6em] mb-[50px]">
                   <h1 className="text-text capitalize font-bold">subtotal</h1>
                   <h3 className="font-bold text-text">200.00</h3>

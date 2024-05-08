@@ -25,7 +25,7 @@ const Support = () => {
   ];
   return (
     <div className="flex justify-center items-center px-pLayout">
-      <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
+      <div className="w-full max-w-layout l:mt-100 sm:mt-80 xsm:mt-60">
         <div className="flex gap-y-[60px] flex-wrap">
           {data.map((item, index) => {
             return (
