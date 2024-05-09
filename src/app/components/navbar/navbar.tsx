@@ -545,7 +545,7 @@ const NavBar = () => {
             ref={searchInput}
             type="text"
             placeholder="Search for clothes..."
-            className="text-text xsm:text-[2em] sm:text-[2em]  l:text-[3.4em]  outline-none w-full inputSearch bg-primary	"
+            className="text-text xsm:text-[2em] sm:text-[2em] l:text-[3.4em] outline-none w-full inputSearch bg-primary	"
             contentEditable={true}
           />
           <svg

@@ -32,7 +32,7 @@ export default function TemplateProductView() {
       <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
         <TitleComponent title="Best sellers" />
         <div className="my-[35px] mx-[0] flex justify-between">
-          <div className="flex gap-[10px] items-center">
+          <div className="flex gap-[12px] items-center">
             <div
               className="activeTabView [&.activeTabView]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
               onClick={handleChangeType}

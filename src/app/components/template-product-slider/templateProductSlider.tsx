@@ -42,7 +42,7 @@ const settings = {
   infinite: false,
   speed: 400,
   slidesToShow: 4,
-  slidesToScroll: 1,
+  slidesToScroll: 4,
   nextArrow: <SampleNextArrow />,
   prevArrow: <SamplePrevArrow />,
   responsive: [
@@ -50,21 +50,21 @@ const settings = {
       breakpoint: 992,
       settings: {
         slidesToShow: 3,
-        slidesToScroll: 1,
+        slidesToScroll: 3,
       },
     },
     {
       breakpoint: 768,
       settings: {
         slidesToShow: 2,
-        slidesToScroll: 1,
+        slidesToScroll: 2,
       },
     },
     {
       breakpoint: 575,
       settings: {
         slidesToShow: 2,
-        slidesToScroll: 1,
+        slidesToScroll: 2,
       },
     },
   ],
@@ -106,7 +106,7 @@ const TemplateProductSlider = () => {
       <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
         <TitleComponent title="Discount" />
         <div className="my-[35px] mx-[0] flex justify-between">
-          <div className="flex gap-[10px] items-center">
+          <div className="flex gap-[12px] items-center">
             <div
               className="activeTabSlider [&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
               onClick={handleChangeType}
@@ -185,24 +185,13 @@ const TemplateProductSlider = () => {
                           {item.type}
                         </p>
                         <div className="flex font-medium">
-                          <h3
-                            className="text-[1.6em] text-[#00000080]"
-                            style={
-                              item.discount
-                                ? {
-                                    textDecoration: "line-through",
-                                  }
-                                : {
-                                    textDecoration: "unset",
-                                    color: "#131118",
-                                  }
-                            }
-                          >
-                            {item.price}
-                          </h3>
-                          {item.discount && (
-                            <h3 className="text-[1.6em] ml-[10px] text-[#ff6f61]">
+                          {item.discount ? (
+                            <h3 className="text-[1.6em] ml-[10px] text-secondary">
                               {item.discount}
+                            </h3>
+                          ) : (
+                            <h3 className="text-[1.6em] text-secondary">
+                              {item.price}
                             </h3>
                           )}
                         </div>

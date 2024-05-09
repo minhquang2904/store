@@ -1,7 +1,10 @@
 const TitleComponent = (props: any) => {
-  const { title } = props;
+  const { title, styleCustom } = props;
   return (
-    <h1 className="l:text-[4.6em] sm:text-[4em] xsm:text-[3.2em] font-medium capitalize text-center text-text">
+    <h1
+      className="l:text-[4em] sm:text-[3.6em] xsm:text-[3.2em] font-normal capitalize text-center text-text"
+      style={styleCustom}
+    >
       {title}
     </h1>
   );
