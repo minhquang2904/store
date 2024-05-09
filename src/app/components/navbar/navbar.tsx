@@ -159,7 +159,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className="headerContainer min-h-80 flex justify-center items-center sticky top-[0] left-[0] right-[0] bg-primary z-20 l:px-pLayout xsm:px-pLayout sm:px-[30px]">
+    <div className="headerContainer min-h-80 flex justify-center items-center sticky top-[0] left-[0] right-[0] bg-primary z-20 l:px-pLayout xsm:px-pLayout sm:px-[15px]">
       <div className="flex w-full max-w-layout">
         <div className="h-20 mx-auto flex justify-between items-center w-full">
           <div className="flex items-center h-full">
@@ -538,7 +538,7 @@ const NavBar = () => {
       </div>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="l:px-[15px] xsm:px-[15px] sm:px-[30px] searchContainer [&.activeSearch]:opacity-100 [&.activeSearch]:duration-300 [&.activeSearch]:visible invisible flex opacity-0 top-[0] absolute right-[0] left-[0] origin-top-right z-10 bg-primary h-full  justify-center items-center"
+        className="l:px-[15px] xsm:px-[15px] sm:px-[15px] searchContainer [&.activeSearch]:opacity-100 [&.activeSearch]:duration-300 [&.activeSearch]:visible invisible flex opacity-0 top-[0] absolute right-[0] left-[0] origin-top-right z-10 bg-primary h-full  justify-center items-center"
       >
         <div className="!relative max-w-[1320px] w-full h-full flex items-center">
           <input

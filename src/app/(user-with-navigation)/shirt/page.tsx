@@ -1,7 +1,6 @@
 "use client";
 
 import { useLayoutEffect, useState } from "react";
-import style from "./shirt.module.scss";
 import { data } from "@/app/data";
 import TitlePageNavigation from "@/app/components/titlePageNavigation/titlePageNavigation";
 import Pagination from "@/app/components/pagination/pagination";
@@ -51,24 +50,18 @@ const Shirt = () => {
   }, [type, size]);
 
   return (
-    <div className={`${style.filter}`}>
-      <div className={`${style.filterContainer}`}>
+    <div className="flex justify-center items-center px-pLayout">
+      <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
         <TitlePageNavigation />
-        <div className={`${style.filterContent}`}>
+        <div className="l:mt-[50px] sm:mt-[40px] xsm:mt-[30px] flex justify-between sm:flex-col xsm:flex-col l:flex-row">
           <Filter
             checkType="shirt"
             childParentType={childParentType}
             childParentSize={childParentSize}
           />
-          <div className={`${style.filterContentRight}`}>
+          <div className="l:w-[70%] flex flex-wrap mx-mCard xsm:mt-[20px] sm:mt-[20px] l:mt-[0px]">
             {dataLists.map((item: any) => {
-              return (
-                <CardProduct
-                  key={item.id}
-                  data={item}
-                  styleCustom={styleCustom}
-                />
-              );
+              return <CardProduct key={item.id} data={item} />;
             })}
           </div>
         </div>

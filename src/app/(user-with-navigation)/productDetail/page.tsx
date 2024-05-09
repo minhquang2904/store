@@ -61,7 +61,7 @@ export default function ProductDetail() {
       <div className="flex justify-center items-center px-pLayout">
         <div className="l:mt-80 sm:mt-60 xsm:mt-40 w-full max-w-layout">
           <TitlePageNavigation />
-          <div className="mt-[50px] flex xsm:flex-col">
+          <div className="l:mt-[50px] sm:mt-[40px] xsm:mt-[30px] flex xsm:flex-col">
             <div className="flex flex-col items-center shrink grow-0 l:basis-2/4 sm:basis-[40%] xsm:basis-[100%]">
               <div className="!relative max-w-[400px] flex w-full">
                 <Image
