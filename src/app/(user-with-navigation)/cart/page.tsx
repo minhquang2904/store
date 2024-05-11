@@ -1,6 +1,8 @@
 "use client";
 
 import NoItemCart from "@/app/components/noItemCart/noItemCart";
+import TitleCheckOut from "@/app/components/titleCheckOut/titleCheckOut";
+import Total from "@/app/components/total/total";
 import { data } from "@/app/data";
 import Image from "next/image";
 import { useState } from "react";
@@ -18,13 +20,9 @@ const Cart = () => {
   return (
     <div className="flex justify-center items-center px-pLayout">
       <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
-        <div>
-          <h1 className="text-[3.6em] font-medium uppercase text-text">
-            Checkout
-          </h1>
-        </div>
+        <TitleCheckOut title="Checkout" />
         <div
-          className="mt-[40px] flex"
+          className="flex"
           style={dataCart.length <= 0 ? { justifyContent: "center" } : {}}
         >
           {dataCart.length <= 0 ? (
@@ -101,29 +99,7 @@ const Cart = () => {
                   </tbody>
                 </table>
               </div>
-              <div className="shrink grow-0 l:basis-[30%] l:mt-[10px] xsm:mt-[40px] sm:mt-[40px] l:ml-[80px]">
-                <div className="flex justify-between text-[1.6em] mb-[50px]">
-                  <h1 className="text-text capitalize font-bold">subtotal</h1>
-                  <h3 className="font-bold text-text">200.00</h3>
-                </div>
-                <div className="flex justify-between text-[1.6em] mb-[16px]">
-                  <h1 className="text-text capitalize font-medium">
-                    Delivery Change
-                  </h1>
-                  <h3 className="font-medium text-text">5.00</h3>
-                </div>
-                <div className="flex justify-between text-[1.6em] mb-[16px]">
-                  <h1 className="text-text capitalize font-bold">
-                    Grand Total
-                  </h1>
-                  <h3 className="font-bold text-text">205.00</h3>
-                </div>
-                <div>
-                  <button className="mt-[10px] text-[1.4em] text-white bg-button w-full p-[14px] rounded-[10px] hover:opacity-90">
-                    Proceed to Checkout
-                  </button>
-                </div>
-              </div>
+              <Total />
             </div>
           )}
         </div>

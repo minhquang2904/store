@@ -59,7 +59,7 @@ const Shirt = () => {
             childParentType={childParentType}
             childParentSize={childParentSize}
           />
-          <div className="l:w-[70%] flex flex-wrap mx-mCard xsm:mt-[20px] sm:mt-[20px] l:mt-[0px]">
+          <div className="l:w-[70%] flex flex-wrap mx-mCard xsm:mt-[20px] sm:mt-[20px] l:mt-[ 0px]">
             {dataLists.map((item: any) => {
               return <CardProduct key={item.id} data={item} />;
             })}

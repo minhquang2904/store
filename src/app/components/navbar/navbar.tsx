@@ -92,6 +92,9 @@ const NavBar = () => {
     const navigationItem = $$(`.${style.navigationItem}`);
     const line: any = $(`.${style.line}`);
     const navActive: any = $(`.${style.navigationItem}.lineActive`);
+    const navBottom: any = $(".navBottom");
+    const navBottomList: any = $(".navBottomList h1");
+    const navBottomIcon: any = $(".navBottomList svg g");
 
     lineActive(line, navActive, 26);
     navActive && navActive.classList.add(`${style.active}`);
@@ -115,12 +118,27 @@ const NavBar = () => {
     profileModal && setProfileModal(false);
     cartModal && setCartModal(false);
 
+    checkContainsClass(navBottom, "activeNavBottom") &&
+      removeClass(navBottom, "activeNavBottom");
+    checkContainsClass(navBottomList, "activeNavLists") &&
+      removeClass(navBottomList, "activeNavLists");
+    checkContainsClass(navBottomIcon, "activeNavIconLists") &&
+      removeClass(navBottomIcon, "activeNavIconLists");
+
     return () => {
       navigationItem.forEach((item: any) => {
         item.removeEventListener("click", handleClick);
       });
     };
   }, [pathname]);
+
+  const removeClass = (className: any, classRemove: any) => {
+    className.classList.remove(classRemove);
+  };
+
+  const checkContainsClass = (className: any, classCheck: any) => {
+    return className.classList.contains(classCheck);
+  };
 
   const toggleClass = (classCurrent: any, classActive: any) => {
     document.querySelector(classCurrent)?.classList.toggle(classActive);
@@ -216,7 +234,7 @@ const NavBar = () => {
                   <h1 className="[&.activeNavLists]:text-[#ee4266]">Lists</h1>
                 </div>
               </div>
-              <div className="h-[0] overflow-hidden duration-200  navBottom [&.activeNavBottom]:h-[155px] [&.activeNavBottom]:duration-200 [&.activeNavBottom]:ease-linear">
+              <div className="max-h-[0] overflow-hidden navBottom [&.activeNavBottom]:max-h-[400px] duration-300 [&.activeNavBottom]:ease-in">
                 <div className="bg-[#222222] mb-[25px] mt-[10px] flex flex-col rounded-[4px] py-[6px]">
                   <Link href="/shirt" className="ml-[10px] py-[6px]">
                     shirt
