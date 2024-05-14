@@ -14,3 +14,7 @@
 // };
 
 // export { GET };
+
+export default function User() {
+  return <></>;
+}
