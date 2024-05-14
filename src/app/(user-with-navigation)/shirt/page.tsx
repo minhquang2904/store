@@ -12,7 +12,7 @@ const Shirt = () => {
   const [dataLists, setDataLists] = useState(data);
   const [type, setType] = useState(["shirt"]);
   const [size, setSize] = useState([null]);
-
+  console.log(size);
   const childParentType = (data: any, check: any) => {
     if (!check) {
       const filtered = type.filter((item: any) => {
