@@ -99,7 +99,7 @@ const Cart = () => {
                   </tbody>
                 </table>
               </div>
-              <Total />
+              <Total title="Proceed to Checkout" btn={true} />
             </div>
           )}
         </div>

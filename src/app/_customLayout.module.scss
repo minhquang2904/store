@@ -1,24 +1,24 @@
-@mixin formContainer {
-  .formContainer {
-    max-width: 445px;
-    width: 100%;
-  }
-}
+// @mixin formContainer {
+//   .formContainer {
+//     max-width: 445px;
+//     width: 100%;
+//   }
+// }
 
-@mixin backIcon {
-  transition: 0.3s;
-  position: relative !important;
-  margin-right: 8px;
-  height: 16px;
-}
+// @mixin backIcon {
+//   transition: 0.3s;
+//   position: relative !important;
+//   margin-right: 8px;
+//   height: 16px;
+// }
 
-@mixin mainLayout {
-  max-width: 1320px;
-  width: 100%;
-}
+// @mixin mainLayout {
+//   max-width: 1320px;
+//   width: 100%;
+// }
 
-@mixin disflexCenter {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+// @mixin disflexCenter {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }

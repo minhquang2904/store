@@ -1,12 +1,12 @@
-@mixin hoverBtn {
-  transition: 0.4s ease;
-  opacity: 0.9;
-}
+// @mixin hoverBtn {
+//   transition: 0.4s ease;
+//   opacity: 0.9;
+// }
 
-@mixin hoverText {
-  transition: 0.4s ease;
-  opacity: 0.8;
-}
+// @mixin hoverText {
+//   transition: 0.4s ease;
+//   opacity: 0.8;
+// }
 
 @keyframes showOut {
   from {
@@ -19,22 +19,22 @@
   }
 }
 
-@keyframes showIn {
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-}
+// @keyframes showIn {
+//   100% {
+//     transform: scale(1);
+//     opacity: 1;
+//   }
+//   0% {
+//     transform: scale(0);
+//     opacity: 0;
+//   }
+// }
 
-@keyframes Scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
+// @keyframes Scroll {
+//   0% {
+//     transform: translateX(0);
+//   }
+//   100% {
+//     transform: translateX(-100%);
+//   }
+// }

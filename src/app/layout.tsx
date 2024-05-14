@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Jost } from "next/font/google";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const jost = Jost({
   subsets: ["latin"],
@@ -21,7 +22,9 @@ function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className={jost.className}>{children}</body>
+      <body className={jost.className}>
+        <ChakraProvider>{children}</ChakraProvider>
+      </body>
     </html>
   );
 }

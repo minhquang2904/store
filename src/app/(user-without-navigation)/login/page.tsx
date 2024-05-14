@@ -27,8 +27,25 @@ export default function Login() {
     inputRef.current.focus();
   }, []);
 
+  const fetchUsers = async () => {
+    const res = await fetch("/api/users");
+    return res;
+  };
+
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetchUsers()
+      .then((res: any) => res.json())
+      .then((data) => {
+        setUsers(data);
+      });
+  }, []);
   return (
     <>
+      {/* {users.map((user: any) => {
+        return <h1 key={user._id}>{user}</h1>;
+      })} */}
       <TitleAccount title="Welcome" />
       <Link href="/signup">
         <SubTitleAccount title="Please sign up here" />

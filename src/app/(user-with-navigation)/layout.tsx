@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { ReactNode } from "react";
-import style from "./mainLayOut.module.scss";
 import Footer from "@/app/components/footer/footer";
 import Support from "@/app/components/support/support";
 import NavBar from "../components/navbar/navbar";

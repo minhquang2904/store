@@ -210,8 +210,27 @@ const size = [
   { size: "xl" },
   { size: "xxl" },
 ];
+
+const address = [
+  {
+    name: "Deven Borer",
+    address: "392 Dola Mine Road, Morrisville, North Carolina",
+  },
+  {
+    name: "Robert fox",
+    address: "2533 Wolf Pen Road, Palo Alto, California",
+  },
+  {
+    name: "Prof. Lavon Mills",
+    address: "415 Tetrick Road, Avon Park, Florida",
+  },
+  {
+    name: "Fredy Walker",
+    address: "5617 Carolina Beach Rd #110, Wilmington, Nebraska",
+  },
+];
 const login = true;
 
 const itemCart: any = [{}];
 
-export { data, dataDescription, login, itemCart, type, size };
+export { data, dataDescription, login, itemCart, type, size, address };
