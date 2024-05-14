@@ -27,20 +27,20 @@ export default function Login() {
     inputRef.current.focus();
   }, []);
 
-  const fetchUsers = async () => {
-    const res = await fetch("/api/users");
-    return res;
-  };
+  // const fetchUsers = async () => {
+  //   const res = await fetch("/api/users");
+  //   return res;
+  // };
 
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
 
-  useEffect(() => {
-    fetchUsers()
-      .then((res: any) => res.json())
-      .then((data) => {
-        setUsers(data);
-      });
-  }, []);
+  // useEffect(() => {
+  //   fetchUsers()
+  //     .then((res: any) => res.json())
+  //     .then((data) => {
+  //       setUsers(data);
+  //     });
+  // }, []);
   return (
     <>
       {/* {users.map((user: any) => {
