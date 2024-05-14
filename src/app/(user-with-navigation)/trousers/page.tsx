@@ -1,6 +1,5 @@
 "use client";
 
-import style from "./trousers.module.scss";
 import CardProduct from "@/app/components/cardProduct/cardProduct";
 import Filter from "@/app/components/filter/filter";
 import Pagination from "@/app/components/pagination/pagination";
@@ -18,28 +17,7 @@ const Trousers = () => {
     });
     setDataLists(filtered);
   }, []);
-  return (
-    <div className={`${style.filter}`}>
-      <div className={`${style.filterContainer}`}>
-        <TitlePageNavigation />
-        <div className={`${style.filterContent}`}>
-          <Filter checkType="trousers" />
-          <div className={`${style.filterContentRight}`}>
-            {dataLists.map((item: any) => {
-              return (
-                <CardProduct
-                  key={item.id}
-                  data={item}
-                  styleCustom={styleCustom}
-                />
-              );
-            })}
-          </div>
-        </div>
-        <Pagination />
-      </div>
-    </div>
-  );
+  return <></>;
 };
 
 export default Trousers;

@@ -17,31 +17,31 @@ const renderCity = (area: any, citis: any, district: any, ward: any) => {
   for (const x of area) {
     citis.options[citis.options.length] = new Option(x.Name, x.Id);
   }
-  citis.onchange = function () {
+  citis.addEventListener("change", () => {
     district.length = 1;
     ward.length = 1;
-    if (this.value != "") {
-      const result = area.filter((n: any) => n.Id === this.value);
+    if (citis.value != "") {
+      const result = area.filter((n: any) => n.Id === citis.value);
 
       for (const k of result[0].Districts) {
         district.options[district.options.length] = new Option(k.Name, k.Id);
       }
     }
-  };
+  });
 
-  district.onchange = function () {
+  district.addEventListener("change", () => {
     ward.length = 1;
     const dataCity = area.filter((n: any) => n.Id === citis.value);
-    if (this.value != "") {
+    if (district.value != "") {
       const dataWards = dataCity[0].Districts.filter(
-        (n: any) => n.Id === this.value
+        (n: any) => n.Id === district.value
       )[0].Wards;
 
       for (const w of dataWards) {
         ward.options[ward.options.length] = new Option(w.Name, w.Id);
       }
     }
-  };
+  });
 };
 const Address = () => {
   const [modalDeleteShow, setModalDeleteShow] = useState(false);
