@@ -8,7 +8,6 @@ import CardProduct from "@/app/components/cardProduct/cardProduct";
 import Filter from "@/app/components/filter/filter";
 
 const Shirt = () => {
-  const styleCustom = { width: "33.333333%" };
   const [dataLists, setDataLists] = useState(data);
   const [type, setType] = useState(["shirt"]);
   const [size, setSize] = useState([null]);

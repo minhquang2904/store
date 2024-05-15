@@ -366,7 +366,7 @@ const NavBar = () => {
                             </button>
                           </Link>
                           <Link href="/" className="mt-[8px] mb-[16px] block">
-                            <button className="hover:opacity-90 border-solid border-[1px] border-border inline-block text-[1.6em] bg-button px-[28px] py-[12px] rounded-sm  w-full font-medium">
+                            <button className="hover:opacity-90 border-solid border-[1px] border-border inline-block text-[1.6em] bg-button px-[28px] py-[12px] rounded-sm  w-full font-medium text-white">
                               Checkout
                             </button>
                           </Link>

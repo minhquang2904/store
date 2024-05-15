@@ -20,7 +20,7 @@ export default function BannerGroup() {
             />
             <div className="group-hover:opacity-100 group-hover:bg-[rgba(0,0,0,0.2)] flex justify-center items-center absolute top-[0] left-[0] right-[0] bottom-[0] opacity-0">
               <div>
-                <h1 className="uppercase l:text-[4em] sm:text-[3.4em] xsm:text-[2.6em] tracking-[10px]">
+                <h1 className="uppercase l:text-[4em] sm:text-[3.4em] xsm:text-[2.6em] tracking-[10px] text-white">
                   women
                 </h1>
               </div>
@@ -40,7 +40,7 @@ export default function BannerGroup() {
             />
             <div className="group-hover:opacity-100 group-hover:bg-[rgba(0,0,0,0.2)] flex justify-center items-center absolute top-[0] left-[0] right-[0] bottom-[0] opacity-0">
               <div>
-                <h1 className="uppercase l:text-[4em] sm:text-[3.4em] xsm:text-[2.6em] tracking-[10px]">
+                <h1 className="uppercase l:text-[4em] sm:text-[3.4em] xsm:text-[2.6em] tracking-[10px] text-white">
                   man
                 </h1>
               </div>
@@ -60,7 +60,7 @@ export default function BannerGroup() {
             />
             <div className="group-hover:opacity-100 group-hover:bg-[rgba(0,0,0,0.2)] flex justify-center items-center absolute top-[0] left-[0] right-[0] bottom-[0] opacity-0">
               <div>
-                <h1 className="uppercase l:text-[4em] sm:text-[3.4em] xsm:text-[2.6em] tracking-[10px]">
+                <h1 className="uppercase l:text-[4em] sm:text-[3.4em] xsm:text-[2.6em] tracking-[10px] text-white">
                   bag
                 </h1>
               </div>
@@ -80,7 +80,7 @@ export default function BannerGroup() {
             />
             <div className="group-hover:opacity-100 group-hover:bg-[rgba(0,0,0,0.2)] flex justify-center items-center absolute top-[0] left-[0] right-[0] bottom-[0] opacity-0">
               <div>
-                <h1 className="uppercase l:text-[4em] sm:text-[3.4em] xsm:text-[2.6em] tracking-[10px]">
+                <h1 className="uppercase l:text-[4em] sm:text-[3.4em] xsm:text-[2.6em] tracking-[10px] text-white">
                   shoes
                 </h1>
               </div>

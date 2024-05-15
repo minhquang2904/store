@@ -1,5 +1,5 @@
 const Total = (props: any) => {
-  const { title, btn } = props;
+  const { title, btn, onClick } = props;
   const checkBtn = btn;
   return (
     <div className="shrink grow-0 l:basis-[30%] l:mt-[10px] xsm:mt-[40px] sm:mt-[40px] l:ml-[80px]">
@@ -17,7 +17,10 @@ const Total = (props: any) => {
       </div>
       {checkBtn && (
         <div>
-          <button className="mt-[10px] text-[1.4em] text-white bg-button w-full p-[14px] rounded-[10px] hover:opacity-90">
+          <button
+            className="mt-[10px] text-[1.4em] text-white bg-button w-full p-[14px] rounded-[10px] hover:opacity-90"
+            onClick={onClick}
+          >
             {title}
           </button>
         </div>

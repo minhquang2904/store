@@ -1,5 +1,6 @@
 "use client";
 
+import SubTitleCheckOut from "@/app/components/subTitleCheckOut/subTitleCheckOut";
 import TitleCheckOut from "@/app/components/titleCheckOut/titleCheckOut";
 import Total from "@/app/components/total/total";
 import { address } from "@/app/data";
@@ -11,6 +12,7 @@ import {
   ModalFooter,
   ModalBody,
 } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const renderCity = (area: any, citis: any, district: any, ward: any) => {
@@ -50,6 +52,7 @@ const Address = () => {
   const [dataModalDelete, setDataModalDelete] = useState([]);
   const [dataModalEdit, setDataModalEdit] = useState([]);
   const [area, setArea] = useState();
+  const router = useRouter();
 
   const handleCloseAdd = () => setModalAddShow(false);
   const handleShowAdd = (data: any) => {
@@ -84,6 +87,10 @@ const Address = () => {
     getCity().then((data) => setArea(data));
   }, []);
 
+  const handleDelivery = () => {
+    router.push("/payment");
+  };
+
   return (
     <>
       <div className="flex justify-center items-center px-pLayout">
@@ -97,9 +104,7 @@ const Address = () => {
               >
                 Add a new address
               </button>
-              <h1 className="text-text text-[1.6em] font-semibold mb-[20px]">
-                Select a delivery address
-              </h1>
+              <SubTitleCheckOut title="Select a delivery address" />
               <div className="flex flex-wrap gap-y-[16px]">
                 {address.map((data, index) => {
                   const { name, address } = data;
@@ -131,7 +136,10 @@ const Address = () => {
                           </h1>
                         </div>
                       </div>
-                      <button className="text-white text-[1.4em] bg-button w-full py-[12px] px-[16px] rounded-[8px] invisible group-hover:visible">
+                      <button
+                        className="text-white text-[1.4em] bg-button w-full py-[12px] px-[16px] rounded-[8px] invisible group-hover:visible"
+                        onClick={handleDelivery}
+                      >
                         Delivery here
                       </button>
                     </div>
