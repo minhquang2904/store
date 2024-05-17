@@ -145,12 +145,15 @@ const Footer = () => {
       </div>
       <div className="bg-[#1e2832] l:flex justify-center items-center xsm:hidden px-pLayout">
         <div className="w-full max-w-layout py-[10px] px-0 flex justify-between">
-          <h1 className="text-[1.6em] capitalize"> © 2022 Coral , Inc.</h1>
+          <h1 className="text-[1.6em] capitalize text-white">
+            {" "}
+            © 2022 Coral , Inc.
+          </h1>
           <div
             className="flex items-center cursor-pointer !relative hover:opacity-80"
             onClick={() => window.scroll(0, 0)}
           >
-            <h3 className="text-[1.6em] capitalize tracking-[2px] mr-[10px]">
+            <h3 className="text-[1.6em] text-white capitalize tracking-[2px] mr-[10px]">
               Scroll to top
             </h3>
             <Image

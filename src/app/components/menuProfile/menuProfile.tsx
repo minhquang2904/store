@@ -10,7 +10,7 @@ const MenuProfile = () => {
     return pathname === `${url}` ? `${active}` : `${inactive}`;
   };
   return (
-    <div className="w-[30%]">
+    <div className="w-[20%]">
       <div className="!relative flex items-center">
         <Image
           src="/images/profile.png"
@@ -29,7 +29,7 @@ const MenuProfile = () => {
       <div className="mt-[32px]">
         <Link
           href="/profile"
-          className={`px-[10px] py-[12px] cursor-pointer block  ${checkActiveMenu(
+          className={`px-[16px] py-[14px] cursor-pointer block rounded-[16px] ${checkActiveMenu(
             "/profile",
             "bg-button",
             ""
@@ -73,7 +73,7 @@ const MenuProfile = () => {
         </Link>
         <Link
           href="/profile/listsOrder"
-          className={`px-[10px] py-[12px] cursor-pointer block ${checkActiveMenu(
+          className={`px-[16px] py-[14px] cursor-pointer block rounded-[16px] ${checkActiveMenu(
             "/profile/listsOrder",
             "bg-button",
             ""
@@ -94,7 +94,7 @@ const MenuProfile = () => {
                   stroke={checkActiveMenu(
                     "/profile/listsOrder",
                     "white",
-                    "[#131118]"
+                    "#131118"
                   )}
                   strokeWidth="1.5"
                   strokeLinecap="round"
@@ -106,7 +106,7 @@ const MenuProfile = () => {
                   stroke={checkActiveMenu(
                     "/profile/listsOrder",
                     "white",
-                    "[#131118]"
+                    "#131118"
                   )}
                   strokeWidth="1.5"
                   strokeLinecap="round"
@@ -118,7 +118,7 @@ const MenuProfile = () => {
                   stroke={checkActiveMenu(
                     "/profile/listsOrder",
                     "white",
-                    "[#131118]"
+                    "#131118"
                   )}
                   strokeWidth="1.5"
                   strokeLinecap="round"
@@ -130,7 +130,7 @@ const MenuProfile = () => {
                   stroke={checkActiveMenu(
                     "/profile/listsOrder",
                     "white",
-                    "[#131118]"
+                    "#131118"
                   )}
                   strokeWidth="1.5"
                   strokeLinecap="round"

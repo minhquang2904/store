@@ -1,11 +1,21 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Banner from "../components/banner/banner";
 import Brand from "../components/brand/brand";
 import BannerGroup from "../components/bannerGroup/bannerGroup";
-import TemplateProductView from "../components/template-product-view/templateProductView";
+// const TemplateProductView = dynamic(
+//   () => import("../components/template-product-view/templateProductView"),
+//   {
+//     loading: () => <LoadingPage />,
+//     ssr: false,
+//   }
+// );
 import TemplateProductSlider from "../components/template-product-slider/templateProductSlider";
 import RelatedProduct from "../components/relatedProduct/relatedProduct";
+import { Suspense } from "react";
+import LoadingPage from "./loadingPage";
+import TemplateProductView from "../components/template-product-view/templateProductView";
 
 const Home = () => {
   return (

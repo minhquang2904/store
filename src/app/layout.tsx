@@ -22,7 +22,7 @@ function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className={jost.className}>
+      <body className={`${jost.className} bg-[#F3F4F4]`}>
         <ChakraProvider>{children}</ChakraProvider>
       </body>
     </html>

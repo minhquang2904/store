@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/app/components/loading/loading";
 import SubTitleCheckOut from "@/app/components/subTitleCheckOut/subTitleCheckOut";
 import TitleCheckOut from "@/app/components/titleCheckOut/titleCheckOut";
 import Total from "@/app/components/total/total";
@@ -51,12 +52,22 @@ const Address = () => {
   const [modalAddShow, setModalAddShow] = useState(false);
   const [dataModalDelete, setDataModalDelete] = useState([]);
   const [dataModalEdit, setDataModalEdit] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [area, setArea] = useState();
   const router = useRouter();
 
   const handleCloseAdd = () => setModalAddShow(false);
   const handleShowAdd = (data: any) => {
-    setModalAddShow(true);
+    setLoading(true);
+    fetch(
+      "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setArea(data);
+        setLoading(false);
+        setModalAddShow(true);
+      });
   };
 
   const handleCloseEdit = () => setModalEditShow(false);
@@ -72,7 +83,7 @@ const Address = () => {
   };
 
   useEffect(() => {
-    if (area) {
+    if (area && modalAddShow) {
       const getElement = setTimeout(() => {
         const citis = document.querySelector("#cityAdd");
         const district = document.querySelector("#districtAdd");
@@ -82,10 +93,6 @@ const Address = () => {
       return () => clearTimeout(getElement);
     }
   }, [modalAddShow]);
-
-  useEffect(() => {
-    getCity().then((data) => setArea(data));
-  }, []);
 
   const handleDelivery = () => {
     router.push("/payment");
@@ -162,16 +169,9 @@ const Address = () => {
         onClose={handleCloseDelete}
         data={dataModalDelete}
       />
+      {loading && <Loading />}
     </>
   );
-};
-
-const getCity = async () => {
-  const res = await fetch(
-    "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
-  );
-  const data = res.json();
-  return data;
 };
 
 const ModalAdd = (props: any) => {
