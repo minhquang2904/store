@@ -10,12 +10,12 @@ const MenuProfile = () => {
     return pathname === `${url}` ? `${active}` : `${inactive}`;
   };
   return (
-    <div className="w-[20%]">
-      <div className="!relative flex items-center">
+    <div className="l:w-[20%] xsm:w-full sm:w-full sm:flex-row sm:flex l:block">
+      <div className="!relative l:flex items-center xsm:hidden sm:hidden">
         <Image
           src="/images/profile.png"
           alt="Bag"
-          className="!relative max-w-[51px] max-h-[51px] w-full h-full rounded-[50%] object-cover"
+          className="!relative !w-[51px] !h-[51px] rounded-[50%] object-cover"
           fill
           sizes="(max-width: 51px) 100vw"
         />
@@ -26,7 +26,7 @@ const MenuProfile = () => {
           </p>
         </div>
       </div>
-      <div className="mt-[32px]">
+      <div className="l:mt-[32px] l:ml-[0] xsm:flex sm:flex sm:gap-x-[20px] xsm:gap-x-[20px] l:block">
         <Link
           href="/profile"
           className={`px-[16px] py-[14px] cursor-pointer block rounded-[16px] ${checkActiveMenu(
@@ -157,7 +157,9 @@ const MenuProfile = () => {
 const Title = (props: any) => {
   const { title, active } = props;
   return (
-    <div className={`ml-[12px] text-[1.6em] font-medium capitalize ${active}`}>
+    <div
+      className={`ml-[12px] text-[1.6em] font-medium capitalize sm:hidden xsm:hidden l:block ${active}`}
+    >
       {title}
     </div>
   );

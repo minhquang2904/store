@@ -59,7 +59,7 @@ const config: Config = {
       sm: "576px",
       md: "768px",
       l: "992px",
-      xl: "1200px",
+      xl: { max: "1200px" },
       xxl: "1400px",
     },
     borderRadius: {

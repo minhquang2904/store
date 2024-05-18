@@ -112,11 +112,14 @@ const Address = () => {
                 Add a new address
               </button>
               <SubTitleCheckOut title="Select a delivery address" />
-              <div className="flex flex-wrap gap-y-[16px]">
+              <div className="flex flex-wrap gap-y-[16px] xsm:mt-[16px] xsm:gap-y-[40px] xsm:flex-col">
                 {address.map((data, index) => {
                   const { name, address } = data;
                   return (
-                    <div key={index} className="p-[16px] w-[33.3333333%] group">
+                    <div
+                      key={index}
+                      className="sm:p-[16px] w-[33.3333333%] xsm:w-[100%] group"
+                    >
                       <h1 className="text-text text-[1.6em] font-semibold mb-[8px]">
                         {name}
                       </h1>
@@ -144,7 +147,7 @@ const Address = () => {
                         </div>
                       </div>
                       <button
-                        className="text-white text-[1.4em] bg-button w-full py-[12px] px-[16px] rounded-[8px] invisible group-hover:visible"
+                        className="text-white text-[1.4em] bg-button w-full py-[12px] px-[16px] rounded-[8px] l:invisible l:group-hover:visible xl:visible"
                         onClick={handleDelivery}
                       >
                         Delivery here
@@ -182,14 +185,14 @@ const ModalAdd = (props: any) => {
       <ModalContent
         rounded={"20px"}
         padding={"10px"}
-        margin={"auto 10px auto 10px"}
+        margin={"auto 15px auto 15px"}
       >
-        <ModalHeader>
+        <ModalHeader padding={"8px 16px"}>
           <div>
             <h1>Add a new address</h1>
           </div>
         </ModalHeader>
-        <ModalBody className="flex flex-col">
+        <ModalBody className="flex flex-col" padding={"8px 16px"}>
           <InputModal title="name" type="text" placeholder="Enter Name" />
           <InputModal
             title="mobile number"
@@ -220,16 +223,16 @@ const ModalAdd = (props: any) => {
             placeholder="Street Name, Building, House No."
           />
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter className="flex gap-x-[10px]" padding={"8px 16px"}>
           <ButtonModal
             onClick={onClose}
             title="Cancel"
-            styleCustom="border-[#D2D8DE] bg-white"
+            styleCustom="border-button bg-white"
           />
           <ButtonModal
             onClick={onClose}
             title="Add"
-            styleCustom="bg-[#255AC2] text-white"
+            styleCustom="bg-button text-white"
           />
         </ModalFooter>
       </ModalContent>
@@ -245,14 +248,14 @@ const ModalEdit = (props: any) => {
       <ModalContent
         rounded={"20px"}
         padding={"10px"}
-        margin={"auto 10px auto 10px"}
+        margin={"auto 15px auto 15px"}
       >
-        <ModalHeader>
+        <ModalHeader padding={"8px 16px"}>
           <div>
             <h1>Update address</h1>
           </div>
         </ModalHeader>
-        <ModalBody className="flex flex-col">
+        <ModalBody className="flex flex-col" padding={"8px 16px"}>
           <InputModal title="name" type="text" placeholder="Enter Name" />
           <InputModal
             title="mobile number"
@@ -283,16 +286,16 @@ const ModalEdit = (props: any) => {
             placeholder="Street Name, Building, House No."
           />
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter className="flex gap-x-[10px]" padding={"8px 16px"}>
           <ButtonModal
             onClick={onClose}
             title="Cancel"
-            styleCustom="border-[#D2D8DE] bg-white"
+            styleCustom="border-button bg-white"
           />
           <ButtonModal
             onClick={onClose}
-            title="Update"
-            styleCustom="bg-[#255AC2] text-white"
+            title="Save"
+            styleCustom="bg-button text-white"
           />
         </ModalFooter>
       </ModalContent>
@@ -371,7 +374,7 @@ const ModalDelete = (props: any) => {
       <ModalContent
         rounded={"20px"}
         padding={"10px"}
-        margin={"auto 10px auto 10px"}
+        margin={"auto 15px auto 15px"}
       >
         <ModalHeader>
           <div className="flex justify-center">
@@ -407,18 +410,18 @@ const ModalDelete = (props: any) => {
         </ModalHeader>
         <ModalBody className="flex flex-col items-center">
           <h1 className="text-[2.2em] text-secondary">Delete Address</h1>
-          <p className="text-text text-[1.6em]">{data.address}</p>
+          <p className="text-text text-[1.6em] text-center">{data.address}</p>
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter className="flex xsm:flex-col sm:flex-col l:flex-row gap-x-[10px] gap-y-[10px]">
           <ButtonModal
             onClick={onClose}
             title="Cancel"
-            styleCustom="border-[#D2D8DE] bg-white"
+            styleCustom="border-button bg-white xsm:w-full sm:w-full"
           />
           <ButtonModal
             onClick={onClose}
             title="Delete"
-            styleCustom="bg-secondary text-white"
+            styleCustom="bg-secondary text-white xsm:w-full sm:w-full"
           />
         </ModalFooter>
       </ModalContent>
@@ -431,7 +434,7 @@ const ButtonModal = (props: any) => {
   return (
     <button
       onClick={onClick}
-      className={`text-[1.6em] font-normal outline-none capitalize ml-[16px] px-[20px] py-[8px] w-[100px] h-[42px] rounded-[12px] ${styleCustom} border-[1px] border-solid hover:opacity-80`}
+      className={`text-[1.6em] font-normal outline-none capitalize px-[20px] py-[8px] w-[120px] h-[42px] rounded-[12px] ${styleCustom} border-[1px] border-solid hover:opacity-80`}
     >
       {title}
     </button>

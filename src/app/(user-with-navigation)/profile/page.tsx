@@ -105,27 +105,27 @@ const Profile = () => {
           </div>
         </div>
         <div className="mt-[32px]">
-          <div className="flex gap-x-[20px]">
+          <div className="flex gap-x-[20px] xsm:flex-col">
             <InputModal
               title="First Name"
-              styleCustom="w-[50%]"
+              styleCustom="sm:w-[50%] xsm:w-[100%]"
               readOnly={true}
             />
             <InputModal
               title="Last Name"
-              styleCustom="w-[50%]"
+              styleCustom="sm:w-[50%] xsm:w-[100%]"
               readOnly={true}
             />
           </div>
-          <div className="flex gap-x-[20px]">
+          <div className="flex gap-x-[20px] xsm:flex-col">
             <InputModal
               title="Phone Number"
-              styleCustom="w-[50%]"
+              styleCustom="sm:w-[50%] xsm:w-[100%]"
               readOnly={true}
             />
             <InputModal
               title="Email Address"
-              styleCustom="w-[50%]"
+              styleCustom="sm:w-[50%] xsm:w-[100%]"
               readOnly={true}
             />
           </div>
@@ -176,7 +176,7 @@ const ButtonModal = (props: any) => {
   return (
     <button
       onClick={onClick}
-      className={`text-[1.6em] font-normal outline-none capitalize ml-[16px] px-[20px] py-[8px] w-[120px] h-[42px] rounded-[12px] ${styleCustom} border-[1px] border-solid hover:opacity-80`}
+      className={`text-[1.6em] font-normal outline-none capitalize px-[20px] py-[8px] w-[120px] h-[42px] rounded-[12px] ${styleCustom} border-[1px] border-solid hover:opacity-80`}
     >
       {title}
     </button>
@@ -230,27 +230,27 @@ const ModalAdd = (props: any) => {
       <ModalContent
         rounded={"20px"}
         padding={"10px"}
-        margin={"auto 10px auto 10px"}
+        margin={"auto 15px auto 15px"}
         maxWidth={"500px"}
       >
-        <ModalHeader>
+        <ModalHeader padding={"8px 16px"}>
           <div>
             <h1>Edit Profile</h1>
           </div>
         </ModalHeader>
-        <ModalBody className="flex flex-col">
-          <div className="flex justify-between gap-x-[20px]">
+        <ModalBody className="flex flex-col" padding={"8px 16px"}>
+          <div className="flex justify-between gap-x-[20px] xsm:flex-col">
             <InputModal
               title="First Name"
               type="text"
               placeholder="Enter First Name"
-              styleCustom={"w-[50%]"}
+              styleCustom={"sm:w-[50%] xsm:w-[100%]"}
             />
             <InputModal
               title="Last Name"
               type="text"
               placeholder="Enter Last Name"
-              styleCustom={"w-[50%]"}
+              styleCustom={"sm:w-[50%] xsm:w-[100%]"}
             />
           </div>
           <InputModal
@@ -287,7 +287,7 @@ const ModalAdd = (props: any) => {
             placeholder="Street Name, Building, House No."
           />
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter padding={"8px 16px"} className="flex gap-x-[10px]">
           <ButtonModal
             onClick={onClose}
             title="Cancel"

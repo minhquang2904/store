@@ -26,7 +26,7 @@ const ListsOrder = () => {
       <div className="flex flex-col gap-y-[40px]">
         <div>
           <div className="flex justify-between">
-            <div className="w-[50%] flex">
+            <div className="w-[50%] xsm:w-[80%]  flex">
               {/* <div className="!relative">
                 <Image
                   src="/images/product2.png"
@@ -36,7 +36,7 @@ const ListsOrder = () => {
                   sizes="(max-width: 80px) 100vw"
                 />
               </div> */}
-              <div className="flex flex-col justify-center px-[8px]">
+              <div className="flex flex-col justify-center px-[8px] xsm:px-[0]">
                 <h1 className="text-text text-[1.6em] font-semibold">
                   Robert fox
                 </h1>
@@ -49,20 +49,32 @@ const ListsOrder = () => {
                 </h3>
               </div>
             </div>
-            <div className="w-[20%] flex items-center justify-center px-[8px]">
+            <div className="w-[20%] xsm:w-[20%] flex items-center justify-center px-[8px] xsm:px-[0]">
               <h1 className="text-text text-[1.6em] font-semibold">80.00</h1>
             </div>
-            <div className="w-[30%] flex justify-end pl-[8px]">
+            <div className="w-[30%] flex justify-end pl-[8px] xsm:hidden">
               <div className="flex flex-col gap-y-[10px]">
                 <ButtonOrder
                   title="View Order"
                   styleCustom="border-button text-text bg-[transparent]"
                 />
                 <ButtonOrder
-                  title="Write a Review"
+                  title="Review"
                   styleCustom="bg-button text-white"
                 />
               </div>
+            </div>
+          </div>
+          <div className="w-[100%] xsm:flex justify-end sm:hidden mt-[32px]">
+            <div className="flex sm:flex-col xsm:flex-row gap-y-[10px] gap-x-[10px] xsm:w-full">
+              <ButtonOrder
+                title="View Order"
+                styleCustom="border-button text-text bg-[transparent] xsm:w-[50%]"
+              />
+              <ButtonOrder
+                title="Review"
+                styleCustom="bg-button text-white xsm:w-[50%]"
+              />
             </div>
           </div>
           <div className="flex mt-[8px]">
@@ -74,7 +86,7 @@ const ListsOrder = () => {
         </div>
         <div>
           <div className="flex justify-between">
-            <div className="w-[50%] flex">
+            <div className="w-[50%] xsm:w-[80%] flex">
               {/* <div className="!relative">
                 <Image
                   src="/images/product2.png"
@@ -84,7 +96,7 @@ const ListsOrder = () => {
                   sizes="(max-width: 80px) 100vw"
                 />
               </div> */}
-              <div className="flex flex-col justify-center px-[8px]">
+              <div className="flex flex-col justify-center px-[8px] xsm:px-[0]">
                 <h1 className="text-text text-[1.6em] font-semibold">
                   Robert fox
                 </h1>
@@ -97,21 +109,34 @@ const ListsOrder = () => {
                 </h3>
               </div>
             </div>
-            <div className="w-[20%] flex items-center justify-center px-[8px]">
+            <div className="w-[20%] xsm:w-[20%] flex items-center justify-center px-[8px] xsm:px-[0]">
               <h1 className="text-text text-[1.6em] font-semibold">80.00</h1>
             </div>
-            <div className="w-[30%] flex justify-end pl-[8px]">
+            <div className="w-[30%] flex justify-end pl-[8px] xsm:hidden">
               <div className="flex flex-col gap-y-[10px]">
                 <ButtonOrder
                   title="View Order"
                   styleCustom="border-button text-text bg-[transparent]"
                 />
                 <ButtonOrder
-                  title="Cancel Order"
+                  title="Cancel"
                   styleCustom="bg-secondary text-white"
                   onClick={() => handleShowDelete(address)}
                 />
               </div>
+            </div>
+          </div>
+          <div className="w-[100%] xsm:flex justify-end sm:hidden mt-[32px]">
+            <div className="flex sm:flex-col xsm:flex-row gap-y-[10px] gap-x-[10px] xsm:w-full">
+              <ButtonOrder
+                title="View Order"
+                styleCustom="border-button text-text bg-[transparent] xsm:w-[50%]"
+              />
+              <ButtonOrder
+                styleCustom="bg-secondary text-white xsm:w-[50%]"
+                title="Cancel"
+                onClick={() => handleShowDelete(address)}
+              />
             </div>
           </div>
           <div className="flex mt-[8px]">
@@ -191,18 +216,18 @@ const ModalDelete = (props: any) => {
         </ModalHeader>
         <ModalBody className="flex flex-col items-center">
           <h1 className="text-[2.2em] text-secondary">Delete Address</h1>
-          <p className="text-text text-[1.6em]">{data.address}</p>
+          <p className="text-text text-[1.6em] text-center">{data.address}</p>
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter className="flex gap-x-[10px] gap-y-[10px] xsm:flex-col sm:flex-col l:flex-row">
           <ButtonModal
             onClick={onClose}
             title="Cancel"
-            styleCustom="border-[#D2D8DE] bg-white"
+            styleCustom="border-button bg-white xsm:w-full sm:w-full"
           />
           <ButtonModal
             onClick={onClose}
             title="Delete"
-            styleCustom="bg-secondary text-white"
+            styleCustom="bg-secondary text-white xsm:w-full sm:w-full"
           />
         </ModalFooter>
       </ModalContent>
@@ -215,7 +240,7 @@ const ButtonModal = (props: any) => {
   return (
     <button
       onClick={onClick}
-      className={`text-[1.6em] font-normal outline-none capitalize ml-[16px] px-[20px] py-[8px] w-[100px] h-[42px] rounded-[12px] ${styleCustom} border-[1px] border-solid hover:opacity-80`}
+      className={`text-[1.6em] font-normal outline-none capitalize px-[20px] py-[8px] w-[100px] h-[42px] rounded-[12px] ${styleCustom} border-[1px] border-solid hover:opacity-80`}
     >
       {title}
     </button>

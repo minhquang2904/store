@@ -11,9 +11,11 @@ const Layout = ({ children }: { children: ReactNode }) => {
           <h1 className="sm:text-[3.2em] xsm:text-[2.8em] font-medium capitalize text-text mb-[30px]">
             My Profile
           </h1>
-          <div className="flex gap-x-[30px]">
+          <div className="flex l:flex-row sm:flex-col xsm:flex-col">
             <MenuProfile />
-            <div className="w-[80%]">{children}</div>
+            <div className="l:w-[80%] xsm:w-[100%] sm:w-[100%] l:pl-[40px] xsm:mt-[40px] sm:mt-[40px] l:mt-[0]">
+              {children}
+            </div>
           </div>
         </div>
       </div>
