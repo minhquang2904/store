@@ -10,7 +10,7 @@ const Like = () => {
   const styleCustom = { width: "25%" };
   const [dataList, setDataList] = useState(data);
   return (
-    <div className="flex justify-center items-center px-[15px]">
+    <div className="flex justify-center items-center px-pLayout">
       <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
         <ShowingPage
           title="Wish Lists"

@@ -7,7 +7,7 @@ const NotFound = () => {
         <div className="notfound-404">
           <h1>Oops!</h1>
         </div>
-        <div className="mt-[60px]">
+        <div className="mt-[60px] px-pLayout">
           <h2>404 - Page not found</h2>
           <p>
             The page you are looking for might have been removed had its name
