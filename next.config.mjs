@@ -4,6 +4,7 @@ const nextConfig = {
   env: {
     MONGO_URL: process.env.MONGO_URL,
     AREA_URL: process.env.AREA_URL,
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
   },
 };
 

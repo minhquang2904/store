@@ -1,18 +1,25 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { useRouter } from "next/navigation";
 import TitleAccount from "@/app/components/titleAccount/titleAccount";
 import SubTitleAccount from "@/app/components/subTitleAccount/subTitleAccount";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
 import FieldInput from "@/app/components/fieldInput/fieldInput";
 import ErrorInput from "@/app/components/errorInput/errorInput";
 import LabelInput from "@/app/components/labelInput/labelInput";
+import Loading from "@/app/components/loading/loading";
+import ErrorMessage from "@/app/components/errorMessage/errorMessage";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const emailRef: any = useRef(null);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     emailRef.current.focus();
@@ -26,8 +33,36 @@ export default function Login() {
   });
 
   const handleSubmit = (values: any, setSubmitting: any) => {
-    console.log(values);
-    setSubmitting(false);
+    setLoading(true);
+    try {
+      fetch("api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setLoading(false);
+          if (data.status == 200) {
+            Cookies.set("login", "true");
+            Cookies.set("access-token", data.token, {
+              sameSite: "strict",
+              secure: true,
+              path: "/",
+              expires: 7,
+            });
+            router.push("/");
+          }
+          if (data.status == 400) {
+            setError(true);
+          }
+        });
+      setSubmitting(false);
+    } catch (error: any) {
+      console.log("Login failed", error.message);
+    }
   };
   return (
     <>
@@ -35,6 +70,9 @@ export default function Login() {
       <Link href="/signup">
         <SubTitleAccount title="Please sign up here" />
       </Link>
+      {error && (
+        <ErrorMessage message="Your account or password is incorrect" />
+      )}
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={LoginSchema}
@@ -69,6 +107,7 @@ export default function Login() {
           </Form>
         )}
       </Formik>
+      {loading && <Loading />}
     </>
   );
 }

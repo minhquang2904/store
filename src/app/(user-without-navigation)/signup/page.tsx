@@ -18,14 +18,15 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
 } from "@chakra-ui/react";
+import ErrorMessage from "@/app/components/errorMessage/errorMessage";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const [modalSuccess, setModalSuccess] = useState(false);
-  const [modalError, setModalError] = useState(false);
+  const [error, setError] = useState(false);
   const emailRef: any = useRef(null);
   const router = useRouter();
 
@@ -57,15 +58,23 @@ export default function Login() {
         .then((data) => {
           setLoading(false);
           if (data.status == 200) {
+            Cookies.set("login", "true");
+            Cookies.set("access-token", data.token, {
+              sameSite: "strict",
+              secure: true,
+              path: "/",
+              expires: 7,
+            });
             setModalSuccess(true);
+            error && setError(false);
           }
           if (data.status == 400) {
-            setModalError(true);
+            setError(true);
           }
         });
       setSubmitting(false);
     } catch (error: any) {
-      console.log("Signup failed", error.message);
+      console.log("SignUp failed", error.message);
     }
   };
 
@@ -73,15 +82,14 @@ export default function Login() {
     setModalSuccess(false);
     router.push("/");
   };
-  const handleCloseModalError = () => {
-    setModalError(false);
-  };
+
   return (
     <>
       <TitleAccount title="Create New Account" />
       <Link href="/login">
         <SubTitleAccount title="Please login here" />
       </Link>
+      {error && <ErrorMessage message=" User already exists" />}
       <Formik
         initialValues={{ email: "", password: "", confirmPassword: "" }}
         validationSchema={SignUpSchema}
@@ -113,7 +121,7 @@ export default function Login() {
               <ErrorInput name="password" />
             </div>
             <div>
-              <LabelInput name="Confirm Password" />
+              <LabelInput name="Confirm Password" id="confirmPassword" />
               <FieldInput
                 type="password"
                 name="confirmPassword"
@@ -128,7 +136,6 @@ export default function Login() {
       </Formik>
       {loading && <Loading />}
       <ModalSuccess isOpen={modalSuccess} onClick={handleCloseModalSuccess} />
-      <ModalError isOpen={modalError} onClick={handleCloseModalError} />
     </>
   );
 }
@@ -181,31 +188,6 @@ const ModalSuccess = (props: any) => {
             onClick={onClick}
           >
             OKAY
-          </button>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
-  );
-};
-const ModalError = (props: any) => {
-  const { isOpen, onClose, data, onClick } = props;
-  return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent
-        rounded={"20px"}
-        padding={"10px"}
-        margin={"auto 15px auto 15px"}
-      >
-        <ModalBody className="flex flex-col items-center" paddingTop={"10px"}>
-          <p className="text-text text-[2em] text-center mb-[16px]">
-            User already exists
-          </p>
-          <button
-            className="text-white bg-button px-[30px] py-[6px] text-[2em] mb-[7px] rounded-[30px]"
-            onClick={onClick}
-          >
-            Close
           </button>
         </ModalBody>
       </ModalContent>

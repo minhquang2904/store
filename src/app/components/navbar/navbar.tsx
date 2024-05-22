@@ -1,19 +1,23 @@
 import Link from "next/link";
 import style from "./navbar.module.scss";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { login, data } from "@/app/data";
 import NoItemCart from "../noItemCart/noItemCart";
 import IconListsProduct from "../iconListsProduct/iconListProduct";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const NavBar = () => {
   const searchInput: any = useRef(null);
-  const [checkLogin, setCheckLogin] = useState(login);
   const [dataList, setDataList] = useState(data);
   const [cartModal, setCartModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
+  const [token, setToken] = useState("");
   const pathname = usePathname();
+  const router = useRouter();
+  const accessToken: any = Cookies.get("access-token");
   let searchTimeOut: any;
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
@@ -132,6 +136,10 @@ const NavBar = () => {
     };
   }, [pathname]);
 
+  useLayoutEffect(() => {
+    setToken(accessToken);
+  });
+
   const removeClass = (className: any, classRemove: any) => {
     className.classList.remove(classRemove);
   };
@@ -174,6 +182,11 @@ const NavBar = () => {
     toggleClass(".navBottom", "activeNavBottom");
     toggleClass(".navBottomList h1", "activeNavLists");
     toggleClass(".navBottomList svg g", "activeNavIconLists");
+  };
+
+  const handleSignOut = () => {
+    Cookies.remove("access-token");
+    router.push("/login");
   };
 
   return (
@@ -266,7 +279,7 @@ const NavBar = () => {
                   />
                 </div>
               </div>
-              {!checkLogin ? (
+              {!token ? (
                 <Link
                   className="hover:bg-hover1 cursor-pointer p-[10px] rounded-full relative"
                   href="/login"
@@ -390,7 +403,7 @@ const NavBar = () => {
                 </>
               )}
 
-              {checkLogin ? (
+              {token ? (
                 <>
                   <div className="flex items-center relative">
                     <div className="h-full w-full ml-[10px] xsm:hidden sm:hidden l:flex">
@@ -462,11 +475,11 @@ const NavBar = () => {
                               </h1>
                             </Link>
                           </div>
-                          <div className={`${style.navigationNameUserItem} `}>
-                            <Link
-                              href=""
-                              className="hover:bg-hover1 flex items-center py-[12px] pl-[16px] pr-[16px]"
-                            >
+                          <div
+                            className={`${style.navigationNameUserItem} `}
+                            onClick={handleSignOut}
+                          >
+                            <div className="hover:bg-hover1 flex items-center py-[12px] pl-[16px] pr-[16px] cursor-pointer">
                               <svg
                                 fill="none"
                                 height="22"
@@ -531,7 +544,7 @@ const NavBar = () => {
                               <h1 className="ml-[16px] font-medium text-[1.6em] text-[#ee4266]">
                                 Sign out
                               </h1>
-                            </Link>
+                            </div>
                           </div>
                         </div>
                       </div>

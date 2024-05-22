@@ -5,8 +5,8 @@ import TitleCheckOut from "@/app/components/titleCheckOut/titleCheckOut";
 import Total from "@/app/components/total/total";
 import { data } from "@/app/data";
 import Image from "next/image";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 const TitleTable = (props: any) => {
   const { title } = props;
@@ -17,8 +17,8 @@ const TitleTable = (props: any) => {
   );
 };
 const Cart = () => {
-  const [dataCart, setdataCart] = useState(data);
   const router = useRouter();
+  const [dataCart, setDataCart] = useState(data);
   return (
     <div className="flex justify-center items-center px-pLayout">
       <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
