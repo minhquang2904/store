@@ -58,8 +58,7 @@ export default function Login() {
         .then((data) => {
           setLoading(false);
           if (data.status == 200) {
-            Cookies.set("login", "true");
-            Cookies.set("access-token", data.token, {
+            Cookies.set("LOGIN-INFO-USER", data.token, {
               sameSite: "strict",
               secure: true,
               path: "/",

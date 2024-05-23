@@ -35,7 +35,7 @@ export default function Login() {
   const handleSubmit = (values: any, setSubmitting: any) => {
     setLoading(true);
     try {
-      fetch("api/users/login", {
+      fetch("/api/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -46,8 +46,8 @@ export default function Login() {
         .then((data) => {
           setLoading(false);
           if (data.status == 200) {
-            Cookies.set("login", "true");
-            Cookies.set("access-token", data.token, {
+            // Cookies.set("login", "true");
+            Cookies.set("LOGIN-INFO-USER", data.token, {
               sameSite: "strict",
               secure: true,
               path: "/",

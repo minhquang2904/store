@@ -1,15 +1,23 @@
-import jwt from "jsonwebtoken";
+import { SignJWT, jwtVerify, type JWTPayload } from "jose";
 
-const SECRET_KEY: any = process.env.NEXTAUTH_SECRET;
+const SECRET_KEY: any = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
 
-export function signToken(payload: any) {
-  return jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+export async function signToken(payload: any) {
+  const iat = Math.floor(Date.now() / 1000);
+  const exp = iat + 60 * 60;
+  return new SignJWT({ ...payload })
+    .setProtectedHeader({ alg: "HS256", typ: "JWT" })
+    .setExpirationTime(exp)
+    .setIssuedAt(iat)
+    .setNotBefore(iat)
+    .sign(SECRET_KEY);
 }
 
-export function verifyToken(token: any) {
+export async function verifyToken(token: any) {
   try {
-    return jwt.verify(token, SECRET_KEY);
+    const payload = await jwtVerify(token, SECRET_KEY);
+    return payload;
   } catch (error) {
-    return null;
+    return error;
   }
 }

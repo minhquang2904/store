@@ -17,7 +17,7 @@ const NavBar = () => {
   const [token, setToken] = useState("");
   const pathname = usePathname();
   const router = useRouter();
-  const accessToken: any = Cookies.get("access-token");
+  const accessToken: any = Cookies.get("LOGIN-INFO-USER");
   let searchTimeOut: any;
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
@@ -185,7 +185,7 @@ const NavBar = () => {
   };
 
   const handleSignOut = () => {
-    Cookies.remove("access-token");
+    Cookies.remove("LOGIN-INFO-USER");
     router.push("/login");
   };
 
