@@ -26,9 +26,19 @@ export async function POST(req: NextRequest) {
     if (admin) {
       const isMatch = await bcryptjs.compare(password, admin.password);
       if (isMatch) {
+        const id = admin._id;
+        const role = admin.role;
+
+        const token = await signToken({
+          id,
+          username: usernameToLowerCase,
+          role,
+        });
+
         return NextResponse.json({
           message: "Login Success!",
           status: 200,
+          token: token,
         });
       }
       return NextResponse.json({ message: "Login Failed", status: 400 });

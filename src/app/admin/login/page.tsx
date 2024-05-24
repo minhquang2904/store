@@ -10,6 +10,7 @@ import FieldInput from "@/app/components/fieldInput/fieldInput";
 import LabelInput from "@/app/components/labelInput/labelInput";
 import Loading from "@/app/components/loading/loading";
 import ErrorMessage from "@/app/components/errorMessage/errorMessage";
+import Cookies from "js-cookie";
 
 const LoginAmin = () => {
   const usernameRef: any = useRef(null);
@@ -38,6 +39,12 @@ const LoginAmin = () => {
         .then((data) => {
           setLoading(false);
           if (data.status == 200) {
+            Cookies.set("LOGIN-INFO-ADMIN", data.token, {
+              sameSite: "strict",
+              secure: true,
+              path: "/",
+              expires: 7,
+            });
             router.push("/admin");
           }
           if (data.status == 400) {

@@ -1,4 +1,5 @@
 const IconListsProduct = (props: any) => {
+  const { navBottom } = props;
   return (
     <svg
       fill="none"
@@ -10,7 +11,9 @@ const IconListsProduct = (props: any) => {
     >
       <g
         stroke="currentColor"
-        className="[&.activeNavIconLists]:stroke-[#ee4266]"
+        className={`[&.activeNavIconLists]:stroke-[#ee4266] ${
+          navBottom ? "activeNavIconLists" : ""
+        }`}
         strokeLinecap="round"
         strokeLinejoin="round"
       >

@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 const NavBar = () => {
   const searchInput: any = useRef(null);
   const [dataList, setDataList] = useState(data);
+  const [navBottom, setNavBottom] = useState(false);
   const [cartModal, setCartModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
   const [token, setToken] = useState("");
@@ -96,9 +97,6 @@ const NavBar = () => {
     const navigationItem = $$(`.${style.navigationItem}`);
     const line: any = $(`.${style.line}`);
     const navActive: any = $(`.${style.navigationItem}.lineActive`);
-    const navBottom: any = $(".navBottom");
-    const navBottomList: any = $(".navBottomList h1");
-    const navBottomIcon: any = $(".navBottomList svg g");
 
     lineActive(line, navActive, 26);
     navActive && navActive.classList.add(`${style.active}`);
@@ -121,14 +119,7 @@ const NavBar = () => {
 
     profileModal && setProfileModal(false);
     cartModal && setCartModal(false);
-
-    checkContainsClass(navBottom, "activeNavBottom") &&
-      removeClass(navBottom, "activeNavBottom");
-    checkContainsClass(navBottomList, "activeNavLists") &&
-      removeClass(navBottomList, "activeNavLists");
-    checkContainsClass(navBottomIcon, "activeNavIconLists") &&
-      removeClass(navBottomIcon, "activeNavIconLists");
-
+    setNavBottom(false);
     return () => {
       navigationItem.forEach((item: any) => {
         item.removeEventListener("click", handleClick);
@@ -139,18 +130,6 @@ const NavBar = () => {
   useLayoutEffect(() => {
     setToken(accessToken);
   });
-
-  const removeClass = (className: any, classRemove: any) => {
-    className.classList.remove(classRemove);
-  };
-
-  const checkContainsClass = (className: any, classCheck: any) => {
-    return className.classList.contains(classCheck);
-  };
-
-  const toggleClass = (classCurrent: any, classActive: any) => {
-    document.querySelector(classCurrent)?.classList.toggle(classActive);
-  };
 
   const searchFocus = () => searchInput.current.focus();
 
@@ -176,12 +155,6 @@ const NavBar = () => {
 
   const handleProfile = () => {
     setProfileModal(!profileModal);
-  };
-
-  const handleShowNavBottom = (e: any) => {
-    toggleClass(".navBottom", "activeNavBottom");
-    toggleClass(".navBottomList h1", "activeNavLists");
-    toggleClass(".navBottomList svg g", "activeNavIconLists");
   };
 
   const handleSignOut = () => {
@@ -241,13 +214,23 @@ const NavBar = () => {
                 </Link>
                 <div
                   className="py-[16px] flex justify-center items-center shrink-0 grow-0 basis-2/4 navBottomList"
-                  onClick={handleShowNavBottom}
+                  onClick={() => setNavBottom(!navBottom)}
                 >
-                  <IconListsProduct />
-                  <h1 className="[&.activeNavLists]:text-[#ee4266]">Lists</h1>
+                  <IconListsProduct navBottom={navBottom} />
+                  <h1
+                    className={`[&.activeNavLists]:text-[#ee4266] ${
+                      navBottom ? "activeNavLists" : ""
+                    }`}
+                  >
+                    Lists
+                  </h1>
                 </div>
               </div>
-              <div className="max-h-[0] overflow-hidden navBottom [&.activeNavBottom]:max-h-[400px] duration-300 [&.activeNavBottom]:ease-in">
+              <div
+                className={`max-h-[0] overflow-hidden [&.activeNavBottom]:max-h-[400px] duration-300 [&.activeNavBottom]:ease-in ${
+                  navBottom ? "activeNavBottom" : ""
+                }`}
+              >
                 <div className="bg-[#222222] mb-[25px] mt-[10px] flex flex-col rounded-[4px] py-[6px]">
                   <Link href="/shirt" className="ml-[10px] py-[6px]">
                     shirt
