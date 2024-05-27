@@ -13,13 +13,13 @@ const NavBar = () => {
   const searchInput: any = useRef(null);
   const [dataList, setDataList] = useState(data);
   const [navBottom, setNavBottom] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
   const [cartModal, setCartModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
   const [token, setToken] = useState("");
   const pathname = usePathname();
   const router = useRouter();
   const accessToken: any = Cookies.get("LOGIN-INFO-USER");
-  let searchTimeOut: any;
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
 
@@ -129,33 +129,7 @@ const NavBar = () => {
 
   useLayoutEffect(() => {
     setToken(accessToken);
-  });
-
-  const searchFocus = () => searchInput.current.focus();
-
-  const handleDeleteProduct = (e: any) => {
-    e.preventDefault();
-  };
-
-  const handleShowSearch = () => {
-    document.querySelector(".searchContainer")?.classList.add("activeSearch");
-    searchTimeOut = setTimeout(searchFocus, 100);
-  };
-
-  const handleCloseSearch = () => {
-    document
-      .querySelector(".searchContainer")
-      ?.classList.remove("activeSearch");
-    clearTimeout(searchTimeOut);
-  };
-
-  const handleCart = () => {
-    setCartModal(!cartModal);
-  };
-
-  const handleProfile = () => {
-    setProfileModal(!profileModal);
-  };
+  }, [token]);
 
   const handleSignOut = () => {
     Cookies.remove("LOGIN-INFO-USER");
@@ -249,7 +223,12 @@ const NavBar = () => {
             <div className="flex">
               <div className="cursor-pointer relative">
                 <div
-                  onClick={handleShowSearch}
+                  onClick={() => {
+                    setShowSearch(true);
+                    setTimeout(() => {
+                      searchInput.current.focus();
+                    }, 100);
+                  }}
                   className="!relative p-[10px] hover:bg-hover1 rounded-half"
                 >
                   <Image
@@ -281,7 +260,7 @@ const NavBar = () => {
                   <div className="pointer relative xsm:hidden sm:hidden l:flex">
                     <div
                       className="hover:bg-hover1 p-[10px] rounded-half !relative cursor-pointer cartIcon"
-                      onClick={handleCart}
+                      onClick={() => setCartModal(!cartModal)}
                     >
                       <Image
                         src="/icons/bag.svg"
@@ -330,10 +309,7 @@ const NavBar = () => {
                                         <h2 className="text-text text-[1.4em] font-normal">
                                           Size S
                                         </h2>
-                                        <div
-                                          className="!relative rounded-half"
-                                          onClick={handleDeleteProduct}
-                                        >
+                                        <div className="!relative rounded-half">
                                           <Image
                                             src="/icons/trash-can.svg"
                                             className="!relative max-w-[24px] max-h-[24px]"
@@ -392,7 +368,7 @@ const NavBar = () => {
                     <div className="h-full w-full ml-[10px] xsm:hidden sm:hidden l:flex">
                       <h3
                         className="cursor-pointer h-full w-full text-text text-[20px] flex shrink grow items-center profileName"
-                        onClick={handleProfile}
+                        onClick={() => setProfileModal(!profileModal)}
                       >
                         Lương Minh Quang
                       </h3>
@@ -405,7 +381,7 @@ const NavBar = () => {
                         fill
                         sizes="100vw"
                         priority={true}
-                        onClick={handleProfile}
+                        onClick={() => setProfileModal(!profileModal)}
                       />
                     </div>
                     {profileModal && (
@@ -551,8 +527,9 @@ const NavBar = () => {
         </div>
       </div>
       <div
-        onClick={(e) => e.stopPropagation()}
-        className="l:px-[15px] xsm:px-[15px] sm:px-[15px] searchContainer [&.activeSearch]:opacity-100 [&.activeSearch]:duration-300 [&.activeSearch]:visible invisible flex opacity-0 top-[0] absolute right-[0] left-[0] origin-top-right z-10 bg-primary h-full  justify-center items-center"
+        className={`l:px-[15px] xsm:px-[15px] sm:px-[15px] [&.activeSearch]:opacity-100 [&.activeSearch]:duration-300 [&.activeSearch]:visible invisible h-full flex opacity-0 top-[0] absolute right-[0] left-[0] origin-top-right z-10 bg-primary justify-center items-center ${
+          showSearch ? "activeSearch" : ""
+        }`}
       >
         <div className="!relative max-w-[1320px] w-full h-full flex items-center">
           <input
@@ -564,7 +541,7 @@ const NavBar = () => {
           />
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="cursor-pointer ml-[16px] stroke-[#868995] hover:stroke-button duration-200"
+            className="cursor-pointer ml-[16px] stroke-[#868995] hover:stroke-button duration-200 select-none"
             width="36"
             height="36"
             viewBox="0 0 24 24"
@@ -573,7 +550,7 @@ const NavBar = () => {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            onClick={handleCloseSearch}
+            onClick={() => setShowSearch(false)}
           >
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />

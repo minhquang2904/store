@@ -13,8 +13,6 @@ import BannerGroup from "../components/bannerGroup/bannerGroup";
 // );
 import TemplateProductSlider from "../components/template-product-slider/templateProductSlider";
 import RelatedProduct from "../components/relatedProduct/relatedProduct";
-import { Suspense } from "react";
-import LoadingPage from "./loadingPage";
 import TemplateProductView from "../components/template-product-view/templateProductView";
 
 const Home = () => {

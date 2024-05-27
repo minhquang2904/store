@@ -7,17 +7,20 @@ import { signToken } from "@/app/lib/jwt";
 export async function POST(req: NextRequest) {
   await connectDB();
   try {
-    const salt = await bcryptjs.genSalt(10);
-    const hashedPassword = await bcryptjs.hash(
-      process.env.ADMIN_PASSWORD!,
-      salt
-    );
+    const checkRole = await Admin.findOne({ role: "admin" });
+    if (!checkRole) {
+      const salt = await bcryptjs.genSalt(10);
+      const hashedPassword = await bcryptjs.hash(
+        process.env.ADMIN_PASSWORD!,
+        salt
+      );
 
-    await new Admin({
-      username: "admin",
-      password: hashedPassword,
-      role: "admin",
-    }).save();
+      await new Admin({
+        username: "admin",
+        password: hashedPassword,
+        role: "admin",
+      }).save();
+    }
 
     const { username, password } = await req.json();
     const usernameToLowerCase = username.toLowerCase();

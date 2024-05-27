@@ -54,15 +54,15 @@ const NavAdmin = ({ nav, handleShowNav }: any) => {
           <Link
             href="/admin/product"
             className={`flex items-center px-[16px] min-w-[220px] py-[10px] [&.activeNav]:bg-[#1c1c21] rounded-[8px] ${
-              pathname == "/admin/product" ? "activeNav" : ""
+              pathname.startsWith("/admin/product") ? "activeNav" : ""
             }`}
           >
             <IconProduct
-              color={pathname == "/admin/product" ? "#fff" : "#9a9cae"}
+              color={pathname.startsWith("/admin/product") ? "#fff" : "#9a9cae"}
             />
             <TitleNav
               title="Product"
-              check={pathname == "/admin/product" ? true : false}
+              check={pathname.startsWith("/admin/product") ? true : false}
               nav={nav}
             />
           </Link>

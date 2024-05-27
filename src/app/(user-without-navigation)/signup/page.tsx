@@ -5,14 +5,13 @@ import Link from "next/link";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
-import "./signup.scss";
+import style from "./signup.module.scss";
 import TitleAccount from "@/app/components/titleAccount/titleAccount";
 import SubTitleAccount from "@/app/components/subTitleAccount/subTitleAccount";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
 import FieldInput from "@/app/components/fieldInput/fieldInput";
 import ErrorInput from "@/app/components/errorInput/errorInput";
 import LabelInput from "@/app/components/labelInput/labelInput";
-import Loading from "@/app/components/loading/loading";
 import {
   Modal,
   ModalOverlay,
@@ -22,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 import ErrorMessage from "@/app/components/errorMessage/errorMessage";
 import Cookies from "js-cookie";
+import LoadingModal from "@/app/components/loadingModal/loadingModal";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
@@ -29,10 +29,6 @@ export default function Login() {
   const [error, setError] = useState(false);
   const emailRef: any = useRef(null);
   const router = useRouter();
-
-  useEffect(() => {
-    emailRef.current.focus();
-  }, []);
 
   const SignUpSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
@@ -85,7 +81,7 @@ export default function Login() {
   return (
     <>
       <TitleAccount title="Create New Account" />
-      <Link href="/login">
+      <Link href="/login" className="inline-block mb-[30px]">
         <SubTitleAccount title="Please login here" />
       </Link>
       {error && <ErrorMessage message=" User already exists" />}
@@ -105,7 +101,6 @@ export default function Login() {
                 name="email"
                 id="email"
                 placeholder="Example@gmail.com"
-                refer={emailRef}
               />
               <ErrorInput name="email" />
             </div>
@@ -133,7 +128,7 @@ export default function Login() {
           </Form>
         )}
       </Formik>
-      {loading && <Loading />}
+      <LoadingModal title="SignUp" loading={loading} />
       <ModalSuccess isOpen={modalSuccess} onClick={handleCloseModalSuccess} />
     </>
   );
@@ -153,21 +148,21 @@ const ModalSuccess = (props: any) => {
           <div className="flex justify-center">
             <div className="success-animation">
               <svg
-                className="checkmark"
+                className={`${style.checkmark}`}
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 52 52"
                 width="24"
                 height="24"
               >
                 <circle
-                  className="checkmark__circle"
+                  className={`${style.checkmark__circle}`}
                   cx="26"
                   cy="26"
                   r="25"
                   fill="none"
                 />
                 <path
-                  className="checkmark__check"
+                  className={`${style.checkmark__check}`}
                   fill="none"
                   d="M14.1 27.2l7.1 7.2 16.7-16.8"
                 />

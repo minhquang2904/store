@@ -1,7 +1,9 @@
 const ErrorMessage = (props: any) => {
-  const { message } = props;
+  const { message, styleCustom } = props;
   return (
-    <div className="text-secondary font-medium text-[1.6em] mb-[16px]">
+    <div
+      className={`text-secondary font-medium text-[1.6em] mb-[16px] ${styleCustom}`}
+    >
       {message}
     </div>
   );

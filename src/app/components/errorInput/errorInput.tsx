@@ -6,7 +6,7 @@ const ErrorInput = (props: any) => {
     <ErrorMessage
       name={name}
       component="div"
-      className="text-secondary text-[1.4em] mt-[4px] font-medium"
+      className="text-secondary text-[1.4em] mt-[4px] font-medium capitalize"
     />
   );
 };

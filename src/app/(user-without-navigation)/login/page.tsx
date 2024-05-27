@@ -11,19 +11,14 @@ import BtnAccount from "@/app/components/btnAccount/btnAccount";
 import FieldInput from "@/app/components/fieldInput/fieldInput";
 import ErrorInput from "@/app/components/errorInput/errorInput";
 import LabelInput from "@/app/components/labelInput/labelInput";
-import Loading from "@/app/components/loading/loading";
 import ErrorMessage from "@/app/components/errorMessage/errorMessage";
 import Cookies from "js-cookie";
+import LoadingModal from "@/app/components/loadingModal/loadingModal";
 
 export default function Login() {
-  const emailRef: any = useRef(null);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
-  useEffect(() => {
-    emailRef.current.focus();
-  }, []);
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
@@ -66,7 +61,7 @@ export default function Login() {
   return (
     <>
       <TitleAccount title="Welcome" />
-      <Link href="/signup">
+      <Link href="/signup" className="inline-block mb-[30px]">
         <SubTitleAccount title="Please sign up here" />
       </Link>
       {error && (
@@ -88,7 +83,6 @@ export default function Login() {
                 name="email"
                 id="email"
                 placeholder="Example@gmail.com"
-                refer={emailRef}
               />
               <ErrorInput name="email" />
             </div>
@@ -106,7 +100,7 @@ export default function Login() {
           </Form>
         )}
       </Formik>
-      {loading && <Loading />}
+      <LoadingModal title="Login" loading={loading} />
     </>
   );
 }

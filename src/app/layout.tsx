@@ -17,6 +17,7 @@ function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const data: any = 123;
   return (
     <html lang="en">
       <head>

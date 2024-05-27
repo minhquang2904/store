@@ -9,6 +9,7 @@ const config: Config = {
   theme: {
     boxShadow: {
       sm: "0 2px 20px rgba(0, 0, 0, 0.12)",
+      md: "2px 2px 20px rgba(0, 0, 0, 0.4)",
     },
     spacing: {
       layout: "1320px",

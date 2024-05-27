@@ -2,15 +2,15 @@
 
 import { Formik, Form } from "formik";
 import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import * as Yup from "yup";
+import { useRouter } from "next/navigation";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
 import ErrorInput from "@/app/components/errorInput/errorInput";
 import FieldInput from "@/app/components/fieldInput/fieldInput";
 import LabelInput from "@/app/components/labelInput/labelInput";
-import Loading from "@/app/components/loading/loading";
 import ErrorMessage from "@/app/components/errorMessage/errorMessage";
 import Cookies from "js-cookie";
+import LoadingModal from "@/app/components/loadingModal/loadingModal";
 
 const LoginAmin = () => {
   const usernameRef: any = useRef(null);
@@ -106,7 +106,7 @@ const LoginAmin = () => {
           </Formik>
         </div>
       </div>
-      {loading && <Loading />}
+      <LoadingModal title="Login" loading={loading} />
     </>
   );
 };

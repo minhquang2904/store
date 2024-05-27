@@ -1,16 +1,67 @@
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
-const HeaderAdmin = () => {
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useLayoutEffect, useState } from "react";
+const HeaderAdmin = (props: any) => {
+  const { childToParent } = props;
+  const pathname = usePathname();
   const router = useRouter();
+  const [pageData, setPageData] = useState(null) as any;
+
   const handleLogOut = () => {
     Cookies.remove("LOGIN-INFO-ADMIN");
     router.push("/admin/login");
   };
+
+  useLayoutEffect(() => {
+    if (pathname === "/admin") {
+      setPageData([
+        { id: 1, name: "add product", url: "/admin/product/add" },
+        { id: 2, name: "list product", url: "/admin/product/lists" },
+      ]);
+    }
+    if (pathname.startsWith("/admin/product")) {
+      setPageData([
+        {
+          id: 1,
+          name: "add product",
+          url: "/admin/product/add",
+        },
+        {
+          id: 2,
+          name: "lists product",
+          url: "/admin/product/lists",
+        },
+      ]);
+    }
+    if (pathname === "/admin/user") {
+      setPageData([
+        { id: 1, name: "add product", url: "/admin/product/add" },
+        { id: 2, name: "lists product", url: "/admin/product/lists" },
+      ]);
+    }
+  }, [pathname]);
+
   return (
     <div className="px-[30px] h-[80px] flex items-center justify-between">
-      <h1 className="text-text text-[1.6em] font-medium capitalize select-none">
-        DashBoard
-      </h1>
+      <div className="flex gap-x-[8px]">
+        {pageData &&
+          pageData.map((item: any) => {
+            return (
+              <Link
+                href={item.url}
+                key={item.id || null}
+                className={`hover:text-[#1B84FF] hover:bg-[#B6D6FB] duration-200 text-[1.6em] px-[16px] py-[8px] rounded-[16px] font-medium capitalize select-none ${
+                  pathname === item.url
+                    ? "text-[#1B84FF] bg-[#B6D6FB]"
+                    : "text-text"
+                }`}
+              >
+                {item.name || null}
+              </Link>
+            );
+          })}
+      </div>
       <div className="flex">
         <div
           className="p-[10px] cursor-pointer rounded-[4px] group"
