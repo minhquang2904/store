@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  experimental: {
+    middleware: true,
+  },
   env: {
     MONGO_URL: process.env.MONGO_URL,
     AREA_URL: process.env.AREA_URL,

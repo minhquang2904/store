@@ -1,6 +1,6 @@
 "use client";
 
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, useField } from "formik";
 import * as Yup from "yup";
 import TitlePageAmin from "@/app/components/titlePageAdmin/titlePageAdmin";
 import LabelInput from "@/app/components/labelInput/labelInput";
@@ -15,11 +15,13 @@ import {
   ModalFooter,
   ModalBody,
 } from "@chakra-ui/react";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import LoadingModal from "@/app/components/loadingModal/loadingModal";
 import ErrorMessage from "@/app/components/errorMessage/errorMessage";
 import LoadingLists from "@/app/components/loadingLists/loadingLists";
 import style from "./add.module.scss";
+import SubLabel from "@/app/components/subLabel/subLabel";
+import Image from "next/image";
 
 const AddProduct = () => {
   const [modalAdd, setModalAdd] = useState(false);
@@ -27,12 +29,123 @@ const AddProduct = () => {
   const [loading, setLoading] = useState(false);
   const [dataLoading, setDataLoading] = useState(null);
   const [resultModal, setResultModal] = useState(false);
+  const [areaCount, setAreaCount] = useState(null);
+  const [images, setImages] = useState([]) as any;
+  const [menu, setMenu] = useState(false);
+
+  const handleImageUpload = (event: any, setFieldValue: any) => {
+    const files = Array.from(event.target.files);
+    if (files.length < 7) {
+      const length = images.length + files.length;
+      if (length < 7) {
+        let newPreviews: any = [];
+        let newPreviewsSub: any = [];
+        let updatedImages = [...images];
+        files.forEach((file: any) => {
+          const reader = new FileReader();
+          const size = file.size;
+          const type = file.type.split("/").pop();
+          reader.onloadend = () => {
+            newPreviews.push({
+              data: reader.result,
+              size: size,
+              type: type,
+            });
+            newPreviewsSub = [...newPreviews];
+            if (newPreviews.length === files.length) {
+              newPreviewsSub.forEach((preview: any) => {
+                if (!images.some((value: any) => value.data === preview.data)) {
+                  updatedImages.push(preview);
+                }
+              });
+              setImages(updatedImages);
+              setFieldValue("files", updatedImages);
+            }
+          };
+          reader.readAsDataURL(file);
+        });
+        console.log(updatedImages);
+      }
+    }
+  };
+
+  const handleRemoveImage = (imageUrl: any, setFieldValue: any) => {
+    const newImages = images.filter((image: any) => image !== imageUrl);
+    setImages(newImages);
+    setFieldValue("files", newImages);
+  };
+
+  const initialValues = {
+    files: [],
+    name: "",
+    subName: "",
+    description: "",
+  };
 
   const productSchema = Yup.object().shape({
-    name: Yup.string().required("Username is required"),
+    files: Yup.mixed()
+      .test("is-limit-files-choose-min", "Select a minimum of 1 image", () => {
+        let valid = true;
+        const length = images.length;
+        if (length < 1) {
+          valid = false;
+        }
+        return valid;
+      })
+      .test("is-limit-files-choose-max", "Select a maximum of 6 images", () => {
+        let valid = true;
+        const length = images.length;
+        if (length > 6) {
+          valid = false;
+        }
+        return valid;
+      })
+      .test("is-file-too-big", "File exceeds 2MB", () => {
+        let valid = true;
+        const files = [...images];
+        if (files) {
+          files.forEach((file: any) => {
+            const size = file.size / 1024 / 1024;
+            if (size > 2) {
+              valid = false;
+            }
+          });
+        }
+        return valid;
+      })
+      .test("is-file-of-correct-type", "File is not of supported type", () => {
+        let valid = true;
+        const files = [...images];
+        if (files) {
+          files.forEach((file: any) => {
+            const type = file.type;
+            const validTypes = ["jpeg", "png", "jpg"];
+            if (!validTypes.includes(type)) {
+              valid = false;
+            }
+          });
+        }
+        return valid;
+      }),
+    name: Yup.string()
+      .required("Product Name is required")
+      .max(100, "The product name can only be a maximum of 100 characters"),
+    description: Yup.string()
+      .required("Description is required")
+      .max(1000, "The description can only be a maximum of 1000 characters"),
+    subName: Yup.string().max(
+      100,
+      "The sub-product name can only be a maximum of 100 characters"
+    ),
   });
 
+  const handleCountArea = (e: any, setFieldValue: any) => {
+    const value = e.target.value;
+    setFieldValue("description", value);
+  };
+
   const handleSubmit = (values: any, setSubmitting: any) => {
+    console.log("values", values);
     setSubmitting(false);
   };
 
@@ -44,61 +157,188 @@ const AddProduct = () => {
   const handleCloseModalAdd = () => {
     setModalAdd(false);
   };
+
+  const handleShowMenu = () => setMenu(!menu);
+
   return (
     <>
       <div className="flex justify-between mb-[16px]">
         <TitlePageAmin title="Product - Add Product" styleCustom="!mb-[0]" />
-        <div className="flex gap-x-[16px] text-[1.4em] uppercase">
-          <TitleAddType
-            title="categories"
-            id="categories"
-            onClick={handleShowModalAdd}
-          />
-          <TitleAddType title="size" id="sizes" onClick={handleShowModalAdd} />
-          <TitleAddType title="sex" id="sexs" onClick={handleShowModalAdd} />
-          <TitleAddType
-            title="color"
-            id="colors"
-            onClick={handleShowModalAdd}
-          />
+        <div className="flex gap-x-[16px] text-[1.4em] uppercase relative">
+          <div
+            className="p-[10px] rounded-[12px] cursor-pointer bg-[#222222b3]"
+            onClick={handleShowMenu}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+            >
+              <path
+                d="m0 0h24v24h-24z"
+                fill="#fff"
+                opacity="0"
+                transform="matrix(-1 0 0 -1 24 24)"
+              />
+              <path
+                d="m19 11h-6v-6a1 1 0 0 0 -2 0v6h-6a1 1 0 0 0 0 2h6v6a1 1 0 0 0 2 0v-6h6a1 1 0 0 0 0-2z"
+                fill="#fff"
+              />
+            </svg>
+          </div>
+          <div
+            className={`absolute top-[calc(100%+5px)] flex-col duration-200 bg-primary shadow-sm right-[0] w-[160px] rounded-[16px] ${
+              menu
+                ? "flex translate-y-[0] opacity-1 visible"
+                : "translate-y-[10px] opacity-0 invisible"
+            }`}
+          >
+            <TitleAddType
+              title="categories"
+              id="categories"
+              onClick={handleShowModalAdd}
+            />
+            <TitleAddType
+              title="Sub-Categories"
+              id="sub_categories"
+              onClick={handleShowModalAdd}
+            />
+            <TitleAddType
+              title="size"
+              id="sizes"
+              onClick={handleShowModalAdd}
+            />
+            <TitleAddType title="sex" id="sexs" onClick={handleShowModalAdd} />
+            <TitleAddType
+              title="color"
+              id="colors"
+              onClick={handleShowModalAdd}
+            />
+          </div>
         </div>
       </div>
       <div className="flex flex-col max-w-[700px]">
         <div>
           <Formik
-            initialValues={{ name: "" }}
+            initialValues={initialValues}
             validationSchema={productSchema}
+            validateOnChange={true}
             onSubmit={(values, { setSubmitting }) =>
               handleSubmit(values, setSubmitting)
             }
           >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, setFieldValue }) => (
               <Form className="flex flex-col gap-y-[20px]">
                 <div>
-                  <LabelInput name="name" />
+                  <div className="flex items-center justify-between">
+                    <LabelInput
+                      name="images"
+                      id="files"
+                      styleCustom="!mb-[0]"
+                    />
+                  </div>
+                  <SubLabel title="Choose minimum 1, maximum 6 picture - File not exceeds 2MB - Supported type(.png, .jpeg, .jpg)" />
+                  <div className="flex flex-col">
+                    <div className="flex gap-x-[20px] border-[2px] border-solid border-[#e2e3e6] p-[10px] rounded-[16px]">
+                      {images.map((image: any, index: any) => {
+                        return (
+                          <div
+                            key={index}
+                            className="relative inline-block group overflow-hidden rounded-[16px]"
+                          >
+                            <Image
+                              src={image.data}
+                              alt={`Uploaded ${index}`}
+                              className="object-cover object-top !h-[100px] !w-[100px] !relative"
+                              fill
+                              sizes="100vw"
+                            />
+                            <div className="absolute justify-center items-center top-[0] left-[0] w-full h-full group-hover:flex hidden bg-[rgba(0,0,0,0.4)]">
+                              <IconDelete
+                                onClick={() =>
+                                  handleRemoveImage(image, setFieldValue)
+                                }
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
+                      {images.length < 6 && (
+                        <div style={{ display: "inline-block" }}>
+                          <label htmlFor="upload-image">
+                            <div className="w-[100px] h-[100px] hover:bg-hover1 border-[2px] border-dashed border-[#e2e3e6] flex items-center justify-center cursor-pointer bg-[#eaecef] rounded-[16px]">
+                              <div className="p-[4px] bg-[#000000b3] rounded-[50%]">
+                                <IconPlus />
+                              </div>
+                            </div>
+                          </label>
+                          <input
+                            id="upload-image"
+                            name="files"
+                            type="file"
+                            style={{ display: "none" }}
+                            multiple={true}
+                            accept=".png,.jpg,.jpeg"
+                            onChange={(event: any) =>
+                              handleImageUpload(event, setFieldValue)
+                            }
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <ErrorInput name="files" />
+                  </div>
+                </div>
+                <div>
+                  <LabelInput name="name" styleCustom="!mb-[0]" />
+                  <SubLabel title="Product name must not exceed 100 characters." />
                   <FieldInput
                     type="text"
                     name="name"
                     id="name"
-                    placeholder="User Name"
+                    placeholder="Example: DRY-EX Short Sleeve T-Shirt"
                     styleCustom="!border-[#ABAEB1]"
                   />
                   <ErrorInput name="name" />
                 </div>
                 <div>
+                  <LabelInput
+                    name="SubName (optional)"
+                    id="subName"
+                    styleCustom="!mb-[0]"
+                  />
+                  <SubLabel title="Sub-product name must not exceed 100 characters" />
+                  <FieldInput
+                    type="text"
+                    name="subName"
+                    id="subName"
+                    placeholder="Example: DRY-EX Short Sleeve T-Shirt"
+                    styleCustom="!border-[#ABAEB1]"
+                  />
+                  <ErrorInput name="subName" />
+                </div>
+                <div>
+                  <LabelInput name="description" styleCustom="!mb-[0]" />
+                  <SubLabel title="Product name must not exceed 1000 characters." />
                   <Field
+                    onChange={(e: any) => handleCountArea(e, setFieldValue)}
                     as="textarea"
                     id="description"
                     name="description"
                     rows="4"
+                    placeholder="Example: Made from 100% soft cotton, it is breathable and lightweight, making it ideal for warm weather,..."
                     className="w-full resize-none xsm:text-subMobile sm:text-subTablet l:text-subDesktop font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[#ABAEB1] border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
                   />
+                  <div className="flex justify-end">
+                    <h1 className="text-text text-[1.3em]">10/1000</h1>
+                  </div>
+                  <ErrorInput name="description" />
                 </div>
                 <div className="flex justify-end">
                   <BtnAccount
                     disabled={isSubmitting}
                     type="submit"
-                    title="Login"
                     styleCustom="max-w-[160px]"
                   />
                 </div>
@@ -130,7 +370,7 @@ const TitleAddType = ({ title, onClick, id }: any) => {
   return (
     <div
       id={id}
-      className="py-[10px] cursor-pointer font-medium px-[8px] text-text hover:text-opacity-70 duration-100"
+      className="py-[10px] text-center cursor-pointer font-medium px-[16px] text-text hover:text-opacity-70 duration-100"
       onClick={onClick}
     >
       {title}
@@ -154,7 +394,19 @@ const ModalAdd = (props: any) => {
   const [changeLists, setChangeLists] = useState(false);
   const [getData, setGetData] = useState(null) as any;
   const [loadingLists, setLoadingLists] = useState(false);
-  const [sortedItems, setSortedItems] = useState(null);
+  const [getCategories, setCategories] = useState(null) as any;
+
+  useLayoutEffect(() => {
+    if (type === "sub_categories") {
+      setLoadingLists(true);
+      fetch("/api/admin/categories")
+        .then((res) => res.json())
+        .then((data) => {
+          setLoadingLists(false);
+          setCategories(data.data);
+        });
+    }
+  }, [type]);
 
   useLayoutEffect(() => {
     if (!isOpen) {
@@ -377,39 +629,120 @@ const ModalAdd = (props: any) => {
               )}
             </div>
             <ModalBody className="flex flex-col" padding={"8px 16px"}>
-              <Formik
-                initialValues={{ [type]: "" }}
-                validationSchema={typeSchema}
-                onSubmit={(values, { setSubmitting }) =>
-                  handleSubmit(values, setSubmitting)
-                }
-              >
-                {({ isSubmitting }) => (
-                  <Form className="flex flex-col gap-y-[20px]">
-                    <div>
-                      <LabelInput name={type} styleCustom="!mb-[0]" />
-                      <h3 className="text-[1.3em] text-[#8d8c8c] mb-[16px]">
-                        Make it short - You can only enter up to 10 characters
-                      </h3>
-                      <FieldInput
-                        type="text"
-                        name={type}
-                        id={type}
-                        placeholder={"Enter " + type + "..."}
-                        styleCustom="!border-[#ABAEB1]"
-                      />
-                      <ErrorInput name={type} />
-                    </div>
-                    <div className="flex justify-end gap-x-[8px]">
-                      <BtnAccount
-                        disabled={isSubmitting}
-                        type="submit"
-                        styleCustom="max-w-[130px] !border-button !mt-[20px]"
-                      />
-                    </div>
-                  </Form>
-                )}
-              </Formik>
+              {type === "sub_categories" ? (
+                <Formik
+                  initialValues={{ [type]: "", categories: "" }}
+                  validationSchema={Yup.object().shape({
+                    [type]: Yup.string()
+                      .max(
+                        10,
+                        `${type} name can only contain a maximum of 10 characters.`
+                      )
+                      .required(`${type} is required`),
+                    categories: Yup.string().required("Categories is required"),
+                  })}
+                  validateOnBlur={false}
+                  onSubmit={(values, { setSubmitting }) =>
+                    handleSubmit(values, setSubmitting)
+                  }
+                >
+                  {({ isSubmitting }) => (
+                    <>
+                      {loadingLists && <LoadingLists />}
+                      {getCategories && (
+                        <Form className="flex flex-col gap-y-[20px]">
+                          <div>
+                            <LabelInput
+                              name="categories"
+                              styleCustom="!mb-[0]"
+                            />
+                            <h3 className="text-[1.3em] text-[#8d8c8c] mb-[16px]">
+                              Make it short - You can only enter up to 10
+                              characters
+                            </h3>
+                            <Field
+                              as="select"
+                              name="categories"
+                              className="xsm:text-subMobile uppercase sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[#ABAEB1] border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
+                            >
+                              <option value="" label="Select category" />
+                              {getCategories.map((option: any) => {
+                                return (
+                                  <option
+                                    key={option._id}
+                                    value={option._id}
+                                    className="py-[8px]"
+                                  >
+                                    {option.categories}
+                                  </option>
+                                );
+                              })}
+                            </Field>
+                            <ErrorInput name="categories" />
+                          </div>
+                          <div>
+                            <LabelInput name={type} styleCustom="!mb-[0]" />
+                            <h3 className="text-[1.3em] text-[#8d8c8c] mb-[16px]">
+                              Make it short - You can only enter up to 10
+                              characters
+                            </h3>
+                            <FieldInput
+                              type="text"
+                              name={type}
+                              id={type}
+                              placeholder={"Enter " + type + "..."}
+                              styleCustom="!border-[#ABAEB1]"
+                            />
+                            <ErrorInput name={type} />
+                          </div>
+                          <div className="flex justify-end gap-x-[8px]">
+                            <BtnAccount
+                              disabled={isSubmitting}
+                              type="submit"
+                              styleCustom="max-w-[130px] !border-button !mt-[20px]"
+                            />
+                          </div>
+                        </Form>
+                      )}
+                    </>
+                  )}
+                </Formik>
+              ) : (
+                <Formik
+                  initialValues={{ [type]: "" }}
+                  validationSchema={typeSchema}
+                  validateOnBlur={false}
+                  onSubmit={(values, { setSubmitting }) =>
+                    handleSubmit(values, setSubmitting)
+                  }
+                >
+                  {({ isSubmitting }) => (
+                    <Form className="flex flex-col gap-y-[20px]">
+                      <div>
+                        <LabelInput name={type} styleCustom="!mb-[0]" />
+                        <h3 className="text-[1.3em] text-[#8d8c8c] mb-[16px]">
+                          Make it short - You can only enter up to 10 characters
+                        </h3>
+                        <FieldInput
+                          type="text"
+                          name={type}
+                          id={type}
+                          placeholder={"Enter " + type + "..."}
+                          styleCustom="!border-[#ABAEB1]"
+                        />
+                        <ErrorInput name={type} />
+                      </div>
+                      <div className="flex justify-end gap-x-[8px]">
+                        <BtnAccount
+                          disabled={isSubmitting}
+                          type="submit"
+                          styleCustom="max-w-[130px] !border-button !mt-[20px]"
+                        />
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
+              )}
             </ModalBody>
           </>
         )}
@@ -425,6 +758,51 @@ const TitleTable = ({ title, styleCustom }: any) => {
     >
       {title}
     </th>
+  );
+};
+
+const IconDelete = ({ onClick }: any) => {
+  return (
+    <svg
+      fill="none"
+      height="24"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+      className="cursor-pointer"
+      onClick={onClick}
+    >
+      <g stroke="#fff" strokeWidth="1.5">
+        <path d="m5.05063 8.73418c-.8449-1.12655-.04109-2.73418 1.36709-2.73418h11.16458c1.4082 0 2.212 1.60763 1.3671 2.73418-.6163.82166-.9494 1.82102-.9494 2.84812v6.4177c0 2.2091-1.7909 4-4 4h-4c-2.20914 0-4-1.7909-4-4v-6.4177c0-1.0271-.33312-2.02646-.94937-2.84812z" />
+        <g strokeLinecap="round">
+          <path d="m14 17v-6" strokeLinejoin="round" />
+          <path d="m10 17v-6" strokeLinejoin="round" />
+          <path d="m16 6-.5442-1.63246c-.2722-.81668-1.0365-1.36754-1.8973-1.36754h-3.117c-.86084 0-1.62512.55086-1.89735 1.36754l-.54415 1.63246" />
+        </g>
+      </g>
+    </svg>
+  );
+};
+
+const IconPlus = () => {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      width="22"
+      height="22"
+    >
+      <path
+        d="m0 0h24v24h-24z"
+        fill="#fff"
+        opacity="0"
+        transform="matrix(-1 0 0 -1 24 24)"
+      />
+      <path
+        d="m19 11h-6v-6a1 1 0 0 0 -2 0v6h-6a1 1 0 0 0 0 2h6v6a1 1 0 0 0 2 0v-6h6a1 1 0 0 0 0-2z"
+        fill="#fff"
+      />
+    </svg>
   );
 };
 
