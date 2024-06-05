@@ -19,7 +19,7 @@ const LoadingModal = ({ title, loading, styleCustom, resultModal }: any) => {
             <div></div>
           </div>
         )}
-        <h1 className="text-white text-[1.4em] uppercase font-medium select-none ">
+        <h1 className="text-white text-[1.4em] uppercase font-medium select-none line-clamp-1">
           {title || "Loading..."}
         </h1>
       </div>

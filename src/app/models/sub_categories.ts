@@ -2,6 +2,7 @@ import { Schema, models, model } from "mongoose";
 
 const subCategoriesSchema = new Schema({
   sub_categories: { type: [String], default: [] },
+  categories: { type: String, default: "" },
   categoryId: {
     type: Schema.Types.ObjectId,
     ref: "Categories",

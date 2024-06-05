@@ -6,26 +6,45 @@ export async function POST(req: NextRequest) {
   await connectDB();
   try {
     const { sizes } = await req.json();
-    const sizeToLowerCase = sizes.toLowerCase();
-    const type: any = await Size.findOne({
-      sizes: sizeToLowerCase,
+    const splitString = sizes.split(",");
+    const cleanedStrings = splitString.map((s: any) =>
+      s
+        .replace(/\s{2,}/g, " ")
+        .trim()
+        .toLowerCase()
+    );
+
+    const filterArray = cleanedStrings.filter((value: any) => value != "");
+    let mySet = new Set(filterArray);
+    let result = Array.from(mySet);
+
+    let typeCheck: any = [];
+    const type: any = await Size.find();
+    type.forEach((value: any) => {
+      typeCheck.push(value.sizes);
     });
 
     if (type) {
-      return NextResponse.json({
-        message: "Size is Exist",
-        status: 400,
-      });
+      const filterSubCategories = typeCheck.filter((value: any) =>
+        result.includes(value)
+      );
+      if (filterSubCategories.length > 0) {
+        return NextResponse.json({
+          message: "Size is Exist",
+          status: 400,
+        });
+      }
     }
 
-    const newSize = await new Size({
-      sizes: sizeToLowerCase,
-    }).save();
+    await result.map(async (value: any) => {
+      return await new Size({
+        sizes: value,
+      }).save();
+    });
 
     return NextResponse.json({
       message: "Add Size Successfully",
       status: 200,
-      newSize: newSize.size,
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message, status: 500 });

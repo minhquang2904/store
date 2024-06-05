@@ -6,26 +6,45 @@ export async function POST(req: NextRequest) {
   await connectDB();
   try {
     const { colors } = await req.json();
-    const colorToLowerCase = colors.toLowerCase();
-    const type: any = await Colors.findOne({
-      colors: colorToLowerCase,
+    const splitString = colors.split(",");
+    const cleanedStrings = splitString.map((s: any) =>
+      s
+        .replace(/\s{2,}/g, " ")
+        .trim()
+        .toLowerCase()
+    );
+
+    const filterArray = cleanedStrings.filter((value: any) => value != "");
+    let mySet = new Set(filterArray);
+    let result = Array.from(mySet);
+
+    let typeCheck: any = [];
+    const type: any = await Colors.find();
+    type.forEach((value: any) => {
+      typeCheck.push(value.colors);
     });
 
     if (type) {
-      return NextResponse.json({
-        message: "Color is Exist",
-        status: 400,
-      });
+      const filterSubCategories = typeCheck.filter((value: any) =>
+        result.includes(value)
+      );
+      if (filterSubCategories.length > 0) {
+        return NextResponse.json({
+          message: "Color is Exist",
+          status: 400,
+        });
+      }
     }
 
-    const newColor = await new Colors({
-      colors: colorToLowerCase,
-    }).save();
+    await result.map(async (value: any) => {
+      return await new Colors({
+        colors: value,
+      }).save();
+    });
 
     return NextResponse.json({
       message: "Add Color Successfully",
       status: 200,
-      newColor: newColor.colors,
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message, status: 500 });

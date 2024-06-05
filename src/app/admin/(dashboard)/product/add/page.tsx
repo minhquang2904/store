@@ -29,10 +29,11 @@ const AddProduct = () => {
   const [loading, setLoading] = useState(false);
   const [dataLoading, setDataLoading] = useState(null);
   const [resultModal, setResultModal] = useState(false);
-  const [areaCount, setAreaCount] = useState(null);
+  const [areaCount, setAreaCount] = useState(null) as any;
   const [images, setImages] = useState([]) as any;
   const [menu, setMenu] = useState(false);
-
+  const menuRef: any = useRef(null);
+  const iconMenuRef: any = useRef(null);
   const handleImageUpload = (event: any, setFieldValue: any) => {
     const files = Array.from(event.target.files);
     if (files.length < 7) {
@@ -141,6 +142,7 @@ const AddProduct = () => {
 
   const handleCountArea = (e: any, setFieldValue: any) => {
     const value = e.target.value;
+    setAreaCount(value);
     setFieldValue("description", value);
   };
 
@@ -152,6 +154,7 @@ const AddProduct = () => {
   const handleShowModalAdd = (e: any) => {
     setDataModal(e.target.id);
     setModalAdd(true);
+    setMenu(false);
   };
 
   const handleCloseModalAdd = () => {
@@ -159,6 +162,24 @@ const AddProduct = () => {
   };
 
   const handleShowMenu = () => setMenu(!menu);
+
+  const handleClickOutSide = (e: any) => {
+    if (
+      menuRef.current &&
+      !menuRef.current.contains(e.target) &&
+      iconMenuRef.current &&
+      !iconMenuRef.current.contains(e.target)
+    ) {
+      setMenu(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutSide);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutSide);
+    };
+  }, []);
 
   return (
     <>
@@ -168,6 +189,7 @@ const AddProduct = () => {
           <div
             className="p-[10px] rounded-[12px] cursor-pointer bg-[#222222b3]"
             onClick={handleShowMenu}
+            ref={iconMenuRef}
           >
             <svg
               viewBox="0 0 24 24"
@@ -188,6 +210,7 @@ const AddProduct = () => {
             </svg>
           </div>
           <div
+            ref={menuRef}
             className={`absolute top-[calc(100%+5px)] flex-col duration-200 bg-primary shadow-sm right-[0] w-[160px] rounded-[16px] ${
               menu
                 ? "flex translate-y-[0] opacity-1 visible"
@@ -240,7 +263,7 @@ const AddProduct = () => {
                   </div>
                   <SubLabel title="Choose minimum 1, maximum 6 picture - File not exceeds 2MB - Supported type(.png, .jpeg, .jpg)" />
                   <div className="flex flex-col">
-                    <div className="flex gap-x-[20px] border-[2px] border-solid border-[#e2e3e6] p-[10px] rounded-[16px]">
+                    <div className="flex gap-x-[20px] border-[1px] bg-white border-solid border-[#ABAEB1] p-[10px] rounded-[16px]">
                       {images.map((image: any, index: any) => {
                         return (
                           <div
@@ -267,7 +290,7 @@ const AddProduct = () => {
                       {images.length < 6 && (
                         <div style={{ display: "inline-block" }}>
                           <label htmlFor="upload-image">
-                            <div className="w-[100px] h-[100px] hover:bg-hover1 border-[2px] border-dashed border-[#e2e3e6] flex items-center justify-center cursor-pointer bg-[#eaecef] rounded-[16px]">
+                            <div className="w-[100px] h-[100px] hover:bg-hover1 border-[1px] border-dashed border-[#ABAEB1] flex items-center justify-center cursor-pointer bg-[#eaecef] rounded-[16px]">
                               <div className="p-[4px] bg-[#000000b3] rounded-[50%]">
                                 <IconPlus />
                               </div>
@@ -330,10 +353,18 @@ const AddProduct = () => {
                     placeholder="Example: Made from 100% soft cotton, it is breathable and lightweight, making it ideal for warm weather,..."
                     className="w-full resize-none xsm:text-subMobile sm:text-subTablet l:text-subDesktop font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[#ABAEB1] border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
                   />
-                  <div className="flex justify-end">
-                    <h1 className="text-text text-[1.3em]">10/1000</h1>
-                  </div>
                   <ErrorInput name="description" />
+                  <div className="flex justify-end">
+                    <h1
+                      className={`text-[1.3em] ${
+                        areaCount && areaCount.length > 1000
+                          ? "text-secondary"
+                          : "text-text "
+                      }`}
+                    >
+                      {(areaCount && areaCount.length) || 0} / 1000
+                    </h1>
+                  </div>
                 </div>
                 <div className="flex justify-end">
                   <BtnAccount
@@ -418,11 +449,21 @@ const ModalAdd = (props: any) => {
 
   const typeSchema = Yup.object().shape({
     [type]: Yup.string()
-      .max(10, `${type} name can only contain a maximum of 10 characters.`)
+      .max(100, `${type} name can only contain a maximum of 100 characters.`)
+      .matches(/^[a-zA-Z ,]+$/, "contains special characters or numbers")
       .required(`${type} is required`),
   });
 
   const handleSubmit = (values: any, setSubmitting: any) => {
+    let obj: any;
+    if (type === "sub_categories") {
+      obj = {
+        sub_categories: values.sub_categories,
+      };
+      const jsonParse = JSON.parse(values.categories);
+      obj.id = jsonParse._id;
+      obj.categories = jsonParse.categories;
+    }
     const cate = values[type];
     setDataLoading(`Add ${type} : ${cate}`);
     setLoading(true);
@@ -433,7 +474,7 @@ const ModalAdd = (props: any) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(type === "sub_categories" ? obj : values),
       })
         .then((res) => res.json())
         .then((data) => {
@@ -475,11 +516,18 @@ const ModalAdd = (props: any) => {
       fetch(`/api/admin/${type}`, { method: "GET" })
         .then((res) => res.json())
         .then((data) => {
+          let sortedArray: any;
           setLoadingLists(false);
           if (data.status == 200) {
-            const sortedArray = [...data.data].sort((a, b) =>
-              a[type].localeCompare(b[type])
-            );
+            if (type === "sub_categories") {
+              sortedArray = [...data.data].sort((a, b) =>
+                a.categories.localeCompare(b.categories)
+              );
+            } else {
+              sortedArray = [...data.data].sort((a, b) =>
+                a[type].localeCompare(b[type])
+              );
+            }
             setGetData(sortedArray);
           }
         });
@@ -498,6 +546,32 @@ const ModalAdd = (props: any) => {
             setLoadingLists(false);
             getLists();
           }
+        });
+    } catch (error: any) {
+      console.log("Delete Failed", error.message);
+    }
+  };
+
+  const handleDeleteSubCategories = (item: any, id: any) => {
+    setLoadingLists(true);
+
+    let values: any = {
+      item: item,
+      sub_categories_id: id,
+    };
+
+    try {
+      fetch(`/api/admin/${type}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setLoadingLists(false);
+          getLists();
         });
     } catch (error: any) {
       console.log("Delete Failed", error.message);
@@ -566,49 +640,123 @@ const ModalAdd = (props: any) => {
                 >
                   {getData.length > 0 ? (
                     <>
-                      <table>
-                        <thead>
-                          <tr>
-                            <TitleTable title="type" />
-                            <TitleTable title="action" />
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {getData.map((data: any) => {
-                            return (
-                              <tr key={data._id}>
-                                <td className="font-normal w-full p-[10px] text-text text-[1.6em] text-start uppercase">
-                                  {data[type]}
-                                </td>
-                                <td
-                                  className="flex justify-center items-center p-[10px]"
-                                  onClick={() => handleDelete(data._id)}
-                                >
-                                  <svg
-                                    fill="none"
-                                    height="20"
-                                    viewBox="0 0 24 24"
-                                    width="20"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="cursor-pointer"
-                                  >
-                                    <g
-                                      stroke="#ff6f61"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth="2"
-                                    >
-                                      <path d="m3 6h18m-16 0v14c0 1.1046.89543 2 2 2h10c1.1046 0 2-.8954 2-2v-14m-11 0v-2c0-1.10457.89543-2 2-2h4c1.1046 0 2 .89543 2 2v2"></path>
-                                      <path d="m14 11v6"></path>
-                                      <path d="m10 11v6"></path>
-                                    </g>
-                                  </svg>
-                                </td>
+                      {type === "sub_categories" ? (
+                        <>
+                          <table>
+                            <thead>
+                              <tr>
+                                <TitleTable title="Sub-Categories" />
+                                <TitleTable title="Categories" />
+                                <TitleTable title="action" />
                               </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
+                            </thead>
+                            <tbody>
+                              {getData.map(
+                                (category: any, categoryIndex: any) => {
+                                  return category.sub_categories
+                                    .sort((a: any, b: any) =>
+                                      a.localeCompare(b)
+                                    )
+                                    .map(
+                                      (
+                                        sub_categories: any,
+                                        subCategoryIndex: any
+                                      ) => {
+                                        return (
+                                          <tr
+                                            key={`${subCategoryIndex}-${categoryIndex}-${sub_categories}-${category}`}
+                                          >
+                                            <td className="font-normal w-full p-[10px] text-text text-[1.6em] text-start uppercase">
+                                              {sub_categories}
+                                            </td>
+                                            <td className="font-normal w-full p-[10px] text-text text-[1.6em] text-start uppercase">
+                                              <h1>{category.categories}</h1>
+                                            </td>
+                                            <td
+                                              className="flex justify-center items-center p-[10px]"
+                                              onClick={() =>
+                                                handleDeleteSubCategories(
+                                                  sub_categories,
+                                                  category._id
+                                                )
+                                              }
+                                            >
+                                              <svg
+                                                fill="none"
+                                                height="20"
+                                                viewBox="0 0 24 24"
+                                                width="20"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                className="cursor-pointer"
+                                              >
+                                                <g
+                                                  stroke="#ff6f61"
+                                                  strokeLinecap="round"
+                                                  strokeLinejoin="round"
+                                                  strokeWidth="2"
+                                                >
+                                                  <path d="m3 6h18m-16 0v14c0 1.1046.89543 2 2 2h10c1.1046 0 2-.8954 2-2v-14m-11 0v-2c0-1.10457.89543-2 2-2h4c1.1046 0 2 .89543 2 2v2"></path>
+                                                  <path d="m14 11v6"></path>
+                                                  <path d="m10 11v6"></path>
+                                                </g>
+                                              </svg>
+                                            </td>
+                                          </tr>
+                                        );
+                                      }
+                                    );
+                                }
+                              )}
+                            </tbody>
+                          </table>
+                        </>
+                      ) : (
+                        <>
+                          <table>
+                            <thead>
+                              <tr>
+                                <TitleTable title="type" />
+                                <TitleTable title="action" />
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {getData.map((data: any) => {
+                                return (
+                                  <tr key={data._id}>
+                                    <td className="font-normal w-full p-[10px] text-text text-[1.6em] text-start uppercase">
+                                      {data[type]}
+                                    </td>
+                                    <td
+                                      className="flex justify-center items-center p-[10px]"
+                                      onClick={() => handleDelete(data._id)}
+                                    >
+                                      <svg
+                                        fill="none"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        width="20"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="cursor-pointer"
+                                      >
+                                        <g
+                                          stroke="#ff6f61"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                        >
+                                          <path d="m3 6h18m-16 0v14c0 1.1046.89543 2 2 2h10c1.1046 0 2-.8954 2-2v-14m-11 0v-2c0-1.10457.89543-2 2-2h4c1.1046 0 2 .89543 2 2v2"></path>
+                                          <path d="m14 11v6"></path>
+                                          <path d="m10 11v6"></path>
+                                        </g>
+                                      </svg>
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </>
+                      )}
                     </>
                   ) : (
                     <div className="text-center text-[1.6em] text-text font-normal">
@@ -635,8 +783,12 @@ const ModalAdd = (props: any) => {
                   validationSchema={Yup.object().shape({
                     [type]: Yup.string()
                       .max(
-                        10,
-                        `${type} name can only contain a maximum of 10 characters.`
+                        100,
+                        `${type} name can only contain a maximum of 100 characters.`
+                      )
+                      .matches(
+                        /^[a-zA-Z ,-]+$/,
+                        "contains special characters or numbers"
                       )
                       .required(`${type} is required`),
                     categories: Yup.string().required("Categories is required"),
@@ -657,34 +809,57 @@ const ModalAdd = (props: any) => {
                               styleCustom="!mb-[0]"
                             />
                             <h3 className="text-[1.3em] text-[#8d8c8c] mb-[16px]">
-                              Make it short - You can only enter up to 10
-                              characters
+                              Please select a main category for your product.
                             </h3>
-                            <Field
-                              as="select"
-                              name="categories"
-                              className="xsm:text-subMobile uppercase sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[#ABAEB1] border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
-                            >
-                              <option value="" label="Select category" />
-                              {getCategories.map((option: any) => {
-                                return (
-                                  <option
-                                    key={option._id}
-                                    value={option._id}
-                                    className="py-[8px]"
-                                  >
-                                    {option.categories}
-                                  </option>
-                                );
-                              })}
-                            </Field>
+                            <div className="relative">
+                              <Field
+                                as="select"
+                                name="categories"
+                                className="xsm:text-subMobile appearance-none capitalize sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[#ABAEB1] border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
+                              >
+                                <option value="" label="Select category" />
+                                {getCategories
+                                  .sort((a: any, b: any) =>
+                                    a.categories.localeCompare(b.categories)
+                                  )
+                                  .map((option: any) => {
+                                    const jsonString = JSON.stringify(option);
+                                    return (
+                                      <option
+                                        key={option._id}
+                                        value={jsonString}
+                                      >
+                                        {option.categories}
+                                      </option>
+                                    );
+                                  })}
+                              </Field>
+                              <label className="absolute top-[50%] translate-y-[-50%] right-[16px]">
+                                <svg
+                                  fill="none"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  width="18"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="m4 8 8 8 8-8"
+                                    stroke="#000"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                  />
+                                </svg>
+                              </label>
+                            </div>
+
                             <ErrorInput name="categories" />
                           </div>
                           <div>
                             <LabelInput name={type} styleCustom="!mb-[0]" />
                             <h3 className="text-[1.3em] text-[#8d8c8c] mb-[16px]">
-                              Make it short - You can only enter up to 10
-                              characters
+                              Please enter product subcategories - maximum 100
+                              characters - separated by commas `&#44;`.
                             </h3>
                             <FieldInput
                               type="text"
@@ -721,13 +896,14 @@ const ModalAdd = (props: any) => {
                       <div>
                         <LabelInput name={type} styleCustom="!mb-[0]" />
                         <h3 className="text-[1.3em] text-[#8d8c8c] mb-[16px]">
-                          Make it short - You can only enter up to 10 characters
+                          Please enter product {type} - maximum 100 characters -
+                          separated by commas `&#44;`.
                         </h3>
                         <FieldInput
                           type="text"
                           name={type}
                           id={type}
-                          placeholder={"Enter " + type + "..."}
+                          placeholder={"Example: " + `${type}1, ${type}2,...`}
                           styleCustom="!border-[#ABAEB1]"
                         />
                         <ErrorInput name={type} />

@@ -6,26 +6,45 @@ export async function POST(req: NextRequest) {
   await connectDB();
   try {
     const { sexs } = await req.json();
-    const sexToLowerCase = sexs.toLowerCase();
-    const type: any = await Sex.findOne({
-      sexs: sexToLowerCase,
+    const splitString = sexs.split(",");
+    const cleanedStrings = splitString.map((s: any) =>
+      s
+        .replace(/\s{2,}/g, " ")
+        .trim()
+        .toLowerCase()
+    );
+
+    const filterArray = cleanedStrings.filter((value: any) => value != "");
+    let mySet = new Set(filterArray);
+    let result = Array.from(mySet);
+
+    let typeCheck: any = [];
+    const type: any = await Sex.find();
+    type.forEach((value: any) => {
+      typeCheck.push(value.sexs);
     });
 
     if (type) {
-      return NextResponse.json({
-        message: "Sex is Exist",
-        status: 400,
-      });
+      const filterType = typeCheck.filter((value: any) =>
+        result.includes(value)
+      );
+      if (filterType.length > 0) {
+        return NextResponse.json({
+          message: "Sex is Exist",
+          status: 400,
+        });
+      }
     }
 
-    const newSex = await new Sex({
-      sexs: sexToLowerCase,
-    }).save();
+    await result.map(async (value: any) => {
+      return await new Sex({
+        sexs: value,
+      }).save();
+    });
 
     return NextResponse.json({
       message: "Add Sex Successfully",
       status: 200,
-      newSex: newSex.sex,
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message, status: 500 });

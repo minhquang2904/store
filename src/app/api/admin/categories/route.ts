@@ -6,26 +6,47 @@ export async function POST(req: NextRequest) {
   await connectDB();
   try {
     const { categories } = await req.json();
-    const categoriesToLowerCase = categories.toLowerCase();
-    const type: any = await Categories.findOne({
-      categories: categoriesToLowerCase,
+    const splitString = categories.split(",");
+    const cleanedStrings = splitString.map((s: any) =>
+      s
+        .replace(/\s{2,}/g, " ")
+        .trim()
+        .toLowerCase()
+    );
+
+    const filterArray = cleanedStrings.filter((value: any) => value != "");
+    let mySet = new Set(filterArray);
+    let result = Array.from(mySet);
+
+    let typeCheck: any = [];
+    const type: any = await Categories.find();
+    type.forEach((value: any) => {
+      typeCheck.push(value.categories);
     });
 
     if (type) {
-      return NextResponse.json({
-        message: "Categories is Exist",
-        status: 400,
-      });
+      const filterSubCategories = typeCheck.filter((value: any) =>
+        result.includes(value)
+      );
+
+      if (filterSubCategories.length > 0) {
+        return NextResponse.json({
+          message: "Categories is Exist",
+          status: 400,
+          data: filterSubCategories,
+        });
+      }
     }
 
-    const newCategories = await new Categories({
-      categories: categoriesToLowerCase,
-    }).save();
+    await result.map(async (value: any) => {
+      return await new Categories({
+        categories: value,
+      }).save();
+    });
 
     return NextResponse.json({
       message: "Add Categories Successfully",
       status: 200,
-      newCategories: newCategories.categories,
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message, status: 500 });
