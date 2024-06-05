@@ -783,8 +783,8 @@ const ModalAdd = (props: any) => {
                   validationSchema={Yup.object().shape({
                     [type]: Yup.string()
                       .max(
-                        100,
-                        `${type} name can only contain a maximum of 100 characters.`
+                        500,
+                        `${type} name can only contain a maximum of 500 characters.`
                       )
                       .matches(
                         /^[a-zA-Z ,-]+$/,
@@ -858,7 +858,7 @@ const ModalAdd = (props: any) => {
                           <div>
                             <LabelInput name={type} styleCustom="!mb-[0]" />
                             <h3 className="text-[1.3em] text-[#8d8c8c] mb-[16px]">
-                              Please enter product subcategories - maximum 100
+                              Please enter product subcategories - maximum 500
                               characters - separated by commas `&#44;`.
                             </h3>
                             <FieldInput
