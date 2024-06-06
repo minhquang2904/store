@@ -1,6 +1,6 @@
 "use client";
 
-import { Formik, Form, Field, useField } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import TitlePageAmin from "@/app/components/titlePageAdmin/titlePageAdmin";
 import LabelInput from "@/app/components/labelInput/labelInput";
@@ -22,18 +22,24 @@ import LoadingLists from "@/app/components/loadingLists/loadingLists";
 import style from "./add.module.scss";
 import SubLabel from "@/app/components/subLabel/subLabel";
 import Image from "next/image";
+import Loading from "@/app/components/loading/loading";
+import Select from "react-select";
 
 const AddProduct = () => {
   const [modalAdd, setModalAdd] = useState(false);
   const [dataModal, setDataModal] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [dataLoading, setDataLoading] = useState(null);
+  const [dataLoading, setDataLoading] = useState(null) as any;
+  const [loadingPage, setLoadingPage] = useState(false);
   const [resultModal, setResultModal] = useState(false);
   const [areaCount, setAreaCount] = useState(null) as any;
   const [images, setImages] = useState([]) as any;
   const [menu, setMenu] = useState(false);
+  const [selectedColors, setSelectedColors] = useState([]);
+  const [errorData, setErrorData] = useState(null) as any;
   const menuRef: any = useRef(null);
   const iconMenuRef: any = useRef(null);
+
   const handleImageUpload = (event: any, setFieldValue: any) => {
     const files = Array.from(event.target.files);
     if (files.length < 7) {
@@ -65,7 +71,6 @@ const AddProduct = () => {
           };
           reader.readAsDataURL(file);
         });
-        console.log(updatedImages);
       }
     }
   };
@@ -76,11 +81,222 @@ const AddProduct = () => {
     setFieldValue("files", newImages);
   };
 
+  const handleCountArea = (e: any, setFieldValue: any) => {
+    const value = e.target.value;
+    setAreaCount(value);
+    setFieldValue("description", value);
+  };
+
+  const handleShowModalAdd = (e: any) => {
+    setDataModal(e.target.id);
+    setModalAdd(true);
+    setMenu(false);
+  };
+
+  const handleCloseModalAdd = () => {
+    setModalAdd(false);
+  };
+
+  const handleShowMenu = () => setMenu(!menu);
+
+  const handleClickOutSide = (e: any) => {
+    if (
+      menuRef.current &&
+      !menuRef.current.contains(e.target) &&
+      iconMenuRef.current &&
+      !iconMenuRef.current.contains(e.target)
+    ) {
+      setMenu(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutSide);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutSide);
+    };
+  }, []);
+
+  const fetchData = async (type: any) => {
+    setLoadingPage(true);
+    try {
+      const response = await fetch(`/api/admin/${type}`);
+      const json = await response.json();
+      return json.data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const [dataCategories, setDataCategories] = useState(null) as any;
+  const [dataSubCategories, setDataSubCategories] = useState(null) as any;
+  const [selectedCategory, setSelectedCategory] = useState(null) as any;
+  const [checkDataCategories, setCheckDataCategories] = useState(false);
+
+  const [dataSize, setDataSize] = useState(null) as any;
+  const [dataSex, setDataSex] = useState(null) as any;
+  const [dataColor, setDataColor] = useState(null) as any;
+  const [checkDataType, setCheckDataType] = useState(false);
+
+  useLayoutEffect(() => {
+    const getDataCategories = async () => {
+      const data = await fetchData("categories");
+      setLoadingPage(false);
+      setDataCategories(data);
+    };
+    const getDataSubCategories = async () => {
+      const data = await fetchData("sub_categories");
+      setLoadingPage(false);
+      setDataSubCategories(data);
+    };
+    getDataSubCategories();
+    getDataCategories();
+  }, [checkDataCategories]);
+
+  useLayoutEffect(() => {
+    const getSize = async () => {
+      const data = await fetchData("sizes");
+      setLoadingPage(false);
+      setDataSize(data);
+    };
+    const getSex = async () => {
+      const data = await fetchData("sexs");
+      setLoadingPage(false);
+      setDataSex(data);
+    };
+    try {
+      setLoadingPage(true);
+      fetch(`/api/admin/colors`, { method: "GET" })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status == 200) {
+            const colors = data.data.map((color: any) => ({
+              value: color.colors,
+              label: color.colors,
+            }));
+            setLoadingPage(false);
+            setDataColor(colors);
+          }
+        });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+
+    getSize();
+    getSex();
+  }, [checkDataType]);
+
+  const handleCategoryChange = (e: any, setFieldValue: any) => {
+    setSelectedCategory(e.target.value);
+    setFieldValue("categories", e.target.value);
+  };
+
+  const filteredSubCategories =
+    dataSubCategories &&
+    dataSubCategories.filter((sub: any) => sub.categories === selectedCategory);
+
+  const handleChangePrice = (e: any, setFieldValue: any, values: any) => {
+    const price = e.target.value;
+    setFieldValue("price", Number(price));
+
+    const discount = values.discount;
+
+    const discountedPrice = Math.round(price - (price * discount) / 100);
+
+    setFieldValue("discountedPrice", discountedPrice);
+  };
+  const handleChangeDiscount = (e: any, setFieldValue: any, values: any) => {
+    const discount = e.target.value;
+    setFieldValue("discount", Number(discount));
+
+    const price = values.price;
+
+    const discountedPrice = Math.round(price - (price * discount) / 100);
+
+    setFieldValue("discountedPrice", discountedPrice);
+  };
+
+  const handleColorChange = (selected: any, setFieldValue: any) => {
+    setSelectedColors(selected);
+    setFieldValue("colors", selected);
+  };
+
+  const customStyles = {
+    control: (provided: any) => ({
+      ...provided,
+      borderRadius: "12px",
+      borderColor: "#ABAEB1",
+      padding: "0.25rem",
+      "&:hover": {
+        background: "#e3e7f3",
+      },
+      fontSize: "1rem",
+    }),
+    multiValue: (provided: any) => ({
+      ...provided,
+      backgroundColor: "#D8DADC",
+      borderRadius: "12px",
+      padding: "0.25rem",
+      fontSize: "1.17rem",
+      textTransform: "capitalize",
+    }),
+    multiValueLabel: (provided: any) => ({
+      ...provided,
+      color: "#131118",
+      textTransform: "capitalize",
+    }),
+    multiValueRemove: (provided: any) => ({
+      ...provided,
+      color: "#131118",
+      "&:hover": {
+        backgroundColor: "transparent",
+      },
+    }),
+    placeholder: (provided: any) => ({
+      ...provided,
+      color: "#a0aec0",
+      fontSize: "0.875rem",
+      textTransform: "capitalize",
+    }),
+    menu: (provided: any) => ({
+      ...provided,
+      fontSize: "1rem",
+      textTransform: "capitalize",
+    }),
+  };
+
+  const createInitialValues = async (colors: string[], sizes: string[]) => {
+    const initialValues: { [key: string]: number } = {};
+
+    if (!dataColor || !dataSize) {
+      return initialValues;
+    }
+
+    await Promise.all(
+      colors.map(async (color: any) => {
+        sizes.map((size: any) => {
+          initialValues[`${color.value}_${size.sizes}_quantity`] = 0;
+        });
+      })
+    );
+    return initialValues;
+  };
+
+  const colorSizeInitialValues = createInitialValues(selectedColors, dataSize);
+  const [formValues, setFormValues] = useState(colorSizeInitialValues) as any;
+
   const initialValues = {
     files: [],
     name: "",
     subName: "",
     description: "",
+    categories: "",
+    sub_categories: "",
+    sexs: "",
+    price: 0,
+    discount: 0,
+    discountedPrice: 0,
+    colors: [],
   };
 
   const productSchema = Yup.object().shape({
@@ -130,59 +346,122 @@ const AddProduct = () => {
       }),
     name: Yup.string()
       .required("Product Name is required")
-      .max(100, "The product name can only be a maximum of 100 characters"),
+      .max(100, "The product name can only be a maximum of 100 characters")
+      .matches(/^[a-zA-Z -.]+$/, "Contains special characters or Numbers"),
     description: Yup.string()
       .required("Description is required")
-      .max(1000, "The description can only be a maximum of 1000 characters"),
-    subName: Yup.string().max(
-      100,
-      "The sub-product name can only be a maximum of 100 characters"
-    ),
+      .max(1000, "The description can only be a maximum of 1000 characters")
+      .matches(/^[a-zA-Z0-9 -.]+$/, "Contains special characters or Numbers"),
+    subName: Yup.string()
+      .max(100, "The sub-product name can only be a maximum of 100 characters")
+      .matches(/^[a-zA-Z -.]+$/, "Contains special characters or Numbers"),
+    categories: Yup.string().required("Categories is required"),
+    sub_categories: Yup.string().required("Sub-Categories is required"),
+    sexs: Yup.string().required("Sex is required"),
+    price: Yup.number()
+      .required("Price is required")
+      .notOneOf([0], "Price must be greater than 0"),
+    discount: Yup.number().required("Discount is required"),
+    discountedPrice: Yup.number().required("Discounted Price is required"),
+    colors: Yup.array()
+      .of(
+        Yup.object().shape({
+          value: Yup.string().required("Color value is required"),
+          label: Yup.string().required("Color label is required"),
+        })
+      )
+      .min(1, "Please select at least one color")
+      .required("Required"),
   });
 
-  const handleCountArea = (e: any, setFieldValue: any) => {
-    const value = e.target.value;
-    setAreaCount(value);
-    setFieldValue("description", value);
-  };
+  const handleSubmit = (values: any, setSubmitting: any, resetForm: any) => {
+    const hasAtLeastOneSizePerColor = selectedColors.every((color: any) => {
+      const colorSizes = dataSize.map(
+        (size: any) => formValues[`${color.value}_${size.sizes}_quantity`]
+      );
+      return colorSizes.some((value: any) => value > 0);
+    });
 
-  const handleSubmit = (values: any, setSubmitting: any) => {
-    console.log("values", values);
-    setSubmitting(false);
-  };
+    if (!hasAtLeastOneSizePerColor) {
+      alert(
+        "Each color must have at least one size with a quantity greater than 0"
+      );
+      setSubmitting(false);
+      return;
+    }
 
-  const handleShowModalAdd = (e: any) => {
-    setDataModal(e.target.id);
-    setModalAdd(true);
-    setMenu(false);
-  };
+    const sizeData = Object.entries(formValues).map(([key, value]) => {
+      const [color, size, quantity] = key.split("_");
+      return {
+        size,
+        amount: Number(value),
+        color,
+      };
+    });
 
-  const handleCloseModalAdd = () => {
-    setModalAdd(false);
-  };
+    const filterColor = sizeData.filter((color: any) =>
+      selectedColors.some(
+        (selectedColor: any) => selectedColor.value === color.color
+      )
+    );
 
-  const handleShowMenu = () => setMenu(!menu);
+    const filterAmount = filterColor.filter((amount: any) => amount.amount > 0);
+    const totalQuanlity = filterAmount.reduce((acc: any, cur: any) => {
+      return acc + cur.amount;
+    }, 0);
 
-  const handleClickOutSide = (e: any) => {
-    if (
-      menuRef.current &&
-      !menuRef.current.contains(e.target) &&
-      iconMenuRef.current &&
-      !iconMenuRef.current.contains(e.target)
-    ) {
-      setMenu(false);
+    const submitValues = {
+      size: filterAmount,
+      quantity: totalQuanlity,
+      ...values,
+    };
+
+    try {
+      setLoading(true);
+      fetch(`/api/admin/product`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(submitValues),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status == 200) {
+            setDataLoading("Successfully");
+            setResultModal(true);
+            setErrorData(null);
+            setImages([]);
+            setFormValues(colorSizeInitialValues);
+            setSelectedColors([]);
+            setTimeout(() => {
+              setLoading(false);
+            }, 800);
+            setTimeout(() => {
+              setResultModal(false);
+            }, 1000);
+            resetForm();
+          }
+          if (data.status == 400) {
+            setDataLoading("Failed");
+            setErrorData(data.message);
+            setResultModal(true);
+            setTimeout(() => {
+              setLoading(false);
+            }, 800);
+            setTimeout(() => {
+              setResultModal(false);
+            }, 1000);
+          }
+          setSubmitting(false);
+        });
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
   };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutSide);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutSide);
-    };
-  }, []);
-
   return (
     <>
+      {loadingPage && <Loading />}
       <div className="flex justify-between mb-[16px]">
         <TitlePageAmin title="Product - Add Product" styleCustom="!mb-[0]" />
         <div className="flex gap-x-[16px] text-[1.4em] uppercase relative">
@@ -247,11 +526,11 @@ const AddProduct = () => {
             initialValues={initialValues}
             validationSchema={productSchema}
             validateOnChange={true}
-            onSubmit={(values, { setSubmitting }) =>
-              handleSubmit(values, setSubmitting)
+            onSubmit={(values, { setSubmitting, resetForm }) =>
+              handleSubmit(values, setSubmitting, resetForm)
             }
           >
-            {({ isSubmitting, setFieldValue }) => (
+            {({ isSubmitting, setFieldValue, values }) => (
               <Form className="flex flex-col gap-y-[20px]">
                 <div>
                   <div className="flex items-center justify-between">
@@ -320,7 +599,7 @@ const AddProduct = () => {
                     type="text"
                     name="name"
                     id="name"
-                    placeholder="Example: DRY-EX Short Sleeve T-Shirt"
+                    placeholder="Enter product name"
                     styleCustom="!border-[#ABAEB1]"
                   />
                   <ErrorInput name="name" />
@@ -336,7 +615,7 @@ const AddProduct = () => {
                     type="text"
                     name="subName"
                     id="subName"
-                    placeholder="Example: DRY-EX Short Sleeve T-Shirt"
+                    placeholder="Enter sub-name (optional)"
                     styleCustom="!border-[#ABAEB1]"
                   />
                   <ErrorInput name="subName" />
@@ -350,7 +629,7 @@ const AddProduct = () => {
                     id="description"
                     name="description"
                     rows="4"
-                    placeholder="Example: Made from 100% soft cotton, it is breathable and lightweight, making it ideal for warm weather,..."
+                    placeholder="Enter product description"
                     className="w-full resize-none xsm:text-subMobile sm:text-subTablet l:text-subDesktop font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[#ABAEB1] border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
                   />
                   <ErrorInput name="description" />
@@ -366,6 +645,303 @@ const AddProduct = () => {
                     </h1>
                   </div>
                 </div>
+                <div>
+                  <LabelInput name="categories" styleCustom="!mb-[0]" />
+                  <h3 className="text-[1.3em] text-[#8d8c8c] mb-[16px]">
+                    Please select a main category for your product.
+                  </h3>
+                  <div className="relative">
+                    <Field
+                      as="select"
+                      name="categories"
+                      className="xsm:text-subMobile appearance-none capitalize sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[#ABAEB1] border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
+                      onChange={(e: any) =>
+                        handleCategoryChange(e, setFieldValue)
+                      }
+                    >
+                      <option value="" label="Select category" />
+                      {dataCategories &&
+                        dataCategories
+                          .sort((a: any, b: any) =>
+                            a.categories.localeCompare(b.categories)
+                          )
+                          .map((option: any) => {
+                            return (
+                              <option
+                                key={option._id}
+                                value={option.categories}
+                              >
+                                {option.categories}
+                              </option>
+                            );
+                          })}
+                    </Field>
+                    <label className="absolute top-[50%] translate-y-[-50%] right-[16px]">
+                      <svg
+                        fill="none"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        width="18"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m4 8 8 8 8-8"
+                          stroke="#000"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                    </label>
+                  </div>
+
+                  <ErrorInput name="categories" />
+                </div>
+                <div>
+                  <LabelInput name="sub_categories" styleCustom="!mb-[0]" />
+                  <h3 className="text-[1.3em] text-[#8d8c8c] mb-[16px]">
+                    Please select a main sub_categories for your product.
+                  </h3>
+                  <div className="relative">
+                    <Field
+                      as="select"
+                      name="sub_categories"
+                      className="xsm:text-subMobile appearance-none capitalize sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[#ABAEB1] border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
+                    >
+                      <option value="" label="Select sub_categories" />
+                      {selectedCategory &&
+                        filteredSubCategories.map((category: any) =>
+                          category.sub_categories
+                            .sort((a: any, b: any) => a.localeCompare(b))
+                            .map((sub_categories: any, index: any) => {
+                              return (
+                                <option
+                                  key={`${category}-${index}-${sub_categories}`}
+                                  value={sub_categories}
+                                >
+                                  {sub_categories}
+                                </option>
+                              );
+                            })
+                        )}
+                    </Field>
+                    <label className="absolute top-[50%] translate-y-[-50%] right-[16px]">
+                      <svg
+                        fill="none"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        width="18"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m4 8 8 8 8-8"
+                          stroke="#000"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                    </label>
+                  </div>
+                  <ErrorInput name="sub_categories" />
+                </div>
+                <div>
+                  <LabelInput name="sexs" styleCustom="!mb-[0]" />
+                  <h3 className="text-[1.3em] text-[#8d8c8c] mb-[16px]">
+                    Please select a main sexs for your product.
+                  </h3>
+                  <div className="relative">
+                    <Field
+                      as="select"
+                      name="sexs"
+                      className="xsm:text-subMobile appearance-none capitalize sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[#ABAEB1] border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
+                    >
+                      <option value="" label="Select sexs" />
+                      {dataSex &&
+                        dataSex
+                          .sort((a: any, b: any) =>
+                            a.sexs.localeCompare(b.sexs)
+                          )
+                          .map((option: any) => {
+                            return (
+                              <option
+                                key={option._id}
+                                value={option.sexs}
+                                className="capitalized"
+                              >
+                                {option.sexs}
+                              </option>
+                            );
+                          })}
+                    </Field>
+                    <label className="absolute top-[50%] translate-y-[-50%] right-[16px]">
+                      <svg
+                        fill="none"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        width="18"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m4 8 8 8 8-8"
+                          stroke="#000"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                    </label>
+                  </div>
+                  <ErrorInput name="sexs" />
+                </div>
+                <div>
+                  <LabelInput name="price" styleCustom="!mb-[0]" />
+                  <SubLabel title="The price must be greater than 0 - unit ($)" />
+                  <Field
+                    type="number"
+                    name="price"
+                    id="price"
+                    placeholder="Enter product price"
+                    onChange={(e: any) =>
+                      handleChangePrice(e, setFieldValue, values)
+                    }
+                    className="!border-[#ABAEB1] xsm:text-subMobile sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-button border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
+                  />
+                  <ErrorInput name="price" />
+                </div>
+                <div className="flex gap-x-[20px]">
+                  <div className="w-[50%]">
+                    <LabelInput name="discount" styleCustom="!mb-[0]" />
+                    <SubLabel title="Discount based on (%)" />
+                    <div className="relative overflow-hidden">
+                      <Field
+                        type="number"
+                        name="discount"
+                        id="discount"
+                        placeholder="Enter product discount"
+                        onChange={(e: any) =>
+                          handleChangeDiscount(e, setFieldValue, values)
+                        }
+                        className="border-[#ABAEB1] pr-[60px] xsm:text-subMobile sm:text-subTablet l:text-subDesktop w-full font-medium pt-[16px] pl-[16px] pb-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
+                      />
+                      <div className="absolute top-[50%] right-[0] translate-y-[-50%] flex items-center bg-[#ABAEB1] rounded-r-[12px] px-[16px] h-full">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#fff"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <line x1="19" y1="5" x2="5" y2="19" />
+                          <circle cx="6.5" cy="6.5" r="2.5" />
+                          <circle cx="17.5" cy="17.5" r="2.5" />
+                        </svg>
+                      </div>
+                    </div>
+                    <ErrorInput name="discount" />
+                  </div>
+                  <div className="w-[50%]">
+                    <LabelInput
+                      name="discounted price"
+                      id="discountedPrice"
+                      styleCustom="!mb-[0]"
+                    />
+                    <SubLabel title="Discounted price is based on price and discount" />
+                    <Field
+                      type="number"
+                      name="discountedPrice"
+                      id="discountedPrice"
+                      placeholder="Enter product price"
+                      className="!border-[#ABAEB1] select-none cursor-not-allowed opacity-50  xsm:text-subMobile sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-button border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
+                      readOnly={true}
+                    />
+                    <ErrorInput name="discountedPrice" />
+                  </div>
+                </div>
+                <div>
+                  <LabelInput name="colors" styleCustom="!mb-[0]" />
+                  <SubLabel title="Multi-select Colors" />
+                  <Field name="colors">
+                    {({ field, form }: any) => (
+                      <Select
+                        isMulti
+                        name="colors"
+                        options={dataColor}
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                        placeholder="Please select product colors..."
+                        instanceId="myUniqueSelectId"
+                        value={values.colors}
+                        onChange={(selected) =>
+                          handleColorChange(selected, setFieldValue)
+                        }
+                        styles={customStyles}
+                      />
+                    )}
+                  </Field>
+                  <ErrorInput name="colors" />
+                </div>
+                <div>
+                  {selectedColors.map((color: any, colorIndex: any) => {
+                    return (
+                      <div
+                        key={`${color.value}-${colorIndex}`}
+                        className="mb-[20px]"
+                      >
+                        <h2 className="text-text text-[1.4em] capitalize font-normal">
+                          {color.label}
+                        </h2>
+                        <SubLabel
+                          title={`The color ${color.value} must have at least one size with a quantity greater than 0`}
+                        />
+                        <div className="flex gap-x-[16px]">
+                          {dataSize
+                            .sort((a: any, b: any) =>
+                              a.sizes.localeCompare(b.sizes)
+                            )
+                            .map((size: any) => {
+                              return (
+                                <div
+                                  key={`${color.value}-${colorIndex}-${size.sizes}-${size._id}`}
+                                  className="w-[20%] flex items-center"
+                                >
+                                  <label className="text-text text-[1.4em] uppercase mr-[8px]">
+                                    {size.sizes}
+                                  </label>
+                                  <Field
+                                    type="number"
+                                    min="0"
+                                    name={`${color.value}_${size.sizes}_quantity`}
+                                    placeholder="0"
+                                    value={
+                                      formValues[
+                                        `${color.value}_${size.sizes}_quantity`
+                                      ] || 0
+                                    }
+                                    onChange={(e: any) => {
+                                      setFormValues({
+                                        ...formValues,
+                                        [`${color.value}_${size.sizes}_quantity`]:
+                                          e.target.value,
+                                      });
+                                    }}
+                                    className="border-[#ABAEB1] px-[16px] py-[2px] xsm:text-subMobile sm:text-subTablet l:text-subDesktop w-full font-medium xsm:py-[10px] sm:py-[2px] text-[1.6em] border-solid border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
+                                  />
+                                </div>
+                              );
+                            })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                {errorData && (
+                  <ErrorMessage message={errorData} styleCustom="!mb-[0px]" />
+                )}
                 <div className="flex justify-end">
                   <BtnAccount
                     disabled={isSubmitting}
@@ -386,6 +962,10 @@ const AddProduct = () => {
         setLoading={setLoading}
         setDataLoading={setDataLoading}
         setResultModal={setResultModal}
+        setCheckDataCategories={setCheckDataCategories}
+        checkDataCategories={checkDataCategories}
+        setCheckDataType={setCheckDataType}
+        checkDataType={checkDataType}
       />
       <LoadingModal
         title={dataLoading}
@@ -418,6 +998,10 @@ const ModalAdd = (props: any) => {
     setLoading,
     setDataLoading,
     setResultModal,
+    setCheckDataCategories,
+    checkDataCategories,
+    setCheckDataType,
+    checkDataType,
   } = props;
   const type = data;
   const [error, setError] = useState(false);
@@ -444,13 +1028,17 @@ const ModalAdd = (props: any) => {
       setChangeLists(false);
       setError(false);
       setGetData(null);
+      (type == "categories" || type == "sub_categories") &&
+        setCheckDataCategories(!checkDataCategories);
+      (type == "sizes" || type == "sexs" || type == "colors") &&
+        setCheckDataType(!checkDataType);
     }
   }, [isOpen]);
 
   const typeSchema = Yup.object().shape({
     [type]: Yup.string()
-      .max(100, `${type} name can only contain a maximum of 100 characters.`)
-      .matches(/^[a-zA-Z ,]+$/, "contains special characters or numbers")
+      .max(500, `${type} name can only contain a maximum of 500 characters.`)
+      .matches(/^[a-zA-Z ,-]+$/, "contains special characters or numbers")
       .required(`${type} is required`),
   });
 
@@ -896,7 +1484,7 @@ const ModalAdd = (props: any) => {
                       <div>
                         <LabelInput name={type} styleCustom="!mb-[0]" />
                         <h3 className="text-[1.3em] text-[#8d8c8c] mb-[16px]">
-                          Please enter product {type} - maximum 100 characters -
+                          Please enter product {type} - maximum 500 characters -
                           separated by commas `&#44;`.
                         </h3>
                         <FieldInput

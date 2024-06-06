@@ -1,5 +1,6 @@
 import connectDB from "@/app/config/connectDB";
 import Categories from "@/app/models/categories";
+import SubCategories from "@/app/models/sub_categories";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -78,6 +79,9 @@ export async function DELETE(req: NextRequest) {
   try {
     const searchParams = req.nextUrl.searchParams;
     const id = searchParams.get("id");
+
+    await SubCategories.deleteOne({ categoryId: id });
+
     const data: any = await Categories.findByIdAndDelete(id);
 
     if (data) {
