@@ -140,11 +140,14 @@ const ListsProduct = () => {
           </tbody>
         </table>
       </div>
-      <ModalDelete
-        isOpen={modalDelete}
-        onClose={handleCloseModalDelete}
-        data={dataModalDelete}
-      />
+
+      {modalDelete && (
+        <ModalDelete
+          isOpen={modalDelete}
+          onClose={handleCloseModalDelete}
+          data={dataModalDelete}
+        />
+      )}
     </>
   );
 };
@@ -210,7 +213,7 @@ const ModalDelete = (props: any) => {
             Delete Product
           </h1>
           <p className="text-text text-[1.6em] text-center capitalize">
-            {data.name}
+            {data.name || null}
           </p>
         </ModalBody>
         <ModalFooter className="flex xsm:flex-col sm:flex-col l:flex-row gap-x-[10px] gap-y-[10px]">
