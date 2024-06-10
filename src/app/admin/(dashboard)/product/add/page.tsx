@@ -36,47 +36,34 @@ const AddProduct = () => {
   const [images, setImages] = useState([]) as any;
   const [menu, setMenu] = useState(false);
   const [selectedColors, setSelectedColors] = useState([]);
-  const [errorData, setErrorData] = useState(null) as any;
   const menuRef: any = useRef(null);
   const iconMenuRef: any = useRef(null);
+  const formData = new FormData();
 
   const handleImageUpload = (event: any, setFieldValue: any) => {
     const files = Array.from(event.target.files);
+
     if (files.length < 7) {
       const length = images.length + files.length;
       if (length < 7) {
-        let newPreviews: any = [];
-        let newPreviewsSub: any = [];
-        let updatedImages = [...images];
-        files.forEach((file: any) => {
-          const reader = new FileReader();
-          const size = file.size;
-          const type = file.type.split("/").pop();
-          reader.onloadend = () => {
-            newPreviews.push({
-              data: reader.result,
-              size: size,
-              type: type,
-            });
-            newPreviewsSub = [...newPreviews];
-            if (newPreviews.length === files.length) {
-              newPreviewsSub.forEach((preview: any) => {
-                if (!images.some((value: any) => value.data === preview.data)) {
-                  updatedImages.push(preview);
-                }
-              });
-              setImages(updatedImages);
-              setFieldValue("files", updatedImages);
-            }
-          };
-          reader.readAsDataURL(file);
-        });
+        let fileObjects = files.map((file: any) => ({
+          url: URL.createObjectURL(file),
+          files: file,
+          lastModified: file.lastModified,
+          size: file.size,
+          type: file.type.split("/").pop(),
+        }));
+        let newArrImage = [...images, ...fileObjects];
+        setImages(newArrImage);
+        setFieldValue("files", newArrImage);
       }
     }
   };
 
-  const handleRemoveImage = (imageUrl: any, setFieldValue: any) => {
-    const newImages = images.filter((image: any) => image !== imageUrl);
+  const handleRemoveImage = (lastModified: any, setFieldValue: any) => {
+    const newImages = images.filter(
+      (image: any) => image.lastModified !== lastModified
+    );
     setImages(newImages);
     setFieldValue("files", newImages);
   };
@@ -317,13 +304,14 @@ const AddProduct = () => {
         }
         return valid;
       })
-      .test("is-file-too-big", "File exceeds 2MB", () => {
+      .test("is-file-too-big", "File exceeds 1MB", () => {
         let valid = true;
         const files = [...images];
+
         if (files) {
           files.forEach((file: any) => {
             const size = file.size / 1024 / 1024;
-            if (size > 2) {
+            if (size > 1) {
               valid = false;
             }
           });
@@ -374,6 +362,10 @@ const AddProduct = () => {
       .required("Required"),
   });
 
+  const clearString = (value: any) => {
+    return value.replace(/\s\s+/g, " ").toLowerCase().trim();
+  };
+
   const handleSubmit = (values: any, setSubmitting: any, resetForm: any) => {
     const hasAtLeastOneSizePerColor = selectedColors.every((color: any) => {
       const colorSizes = dataSize.map(
@@ -406,31 +398,38 @@ const AddProduct = () => {
     );
 
     const filterAmount = filterColor.filter((amount: any) => amount.amount > 0);
-    const totalQuanlity = filterAmount.reduce((acc: any, cur: any) => {
+
+    const totalQuantity = filterAmount.reduce((acc: any, cur: any) => {
       return acc + cur.amount;
     }, 0);
 
-    const submitValues = {
-      size: filterAmount,
-      quantity: totalQuanlity,
-      ...values,
-    };
+    formData.append("name", clearString(values.name));
+    formData.append("subName", clearString(values.subName));
+    formData.append("description", clearString(values.description));
+    formData.append("categories", values.categories);
+    formData.append("sub_categories", values.sub_categories);
+    formData.append("sexs", values.sexs);
+    formData.append("price", values.price);
+    formData.append("discount", values.discount);
+    formData.append("discountedPrice", values.discountedPrice);
+    formData.append("colors", JSON.stringify(values.colors));
+    formData.append("quantity", totalQuantity);
+    formData.append("size", JSON.stringify(filterAmount));
+    images.forEach((data: any) => {
+      formData.append("files", data.files);
+    });
 
     try {
       setLoading(true);
       fetch(`/api/admin/product`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(submitValues),
+        body: formData,
       })
         .then((res) => res.json())
         .then((data) => {
           if (data.status == 200) {
             setDataLoading("Successfully");
             setResultModal(true);
-            setErrorData(null);
             setImages([]);
             setFormValues(colorSizeInitialValues);
             setSelectedColors([]);
@@ -444,7 +443,6 @@ const AddProduct = () => {
           }
           if (data.status == 400) {
             setDataLoading("Failed");
-            setErrorData(data.message);
             setResultModal(true);
             setTimeout(() => {
               setLoading(false);
@@ -453,12 +451,16 @@ const AddProduct = () => {
               setResultModal(false);
             }, 1000);
           }
+          if (data.status == 500) {
+            alert(data.message);
+          }
           setSubmitting(false);
         });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
   return (
     <>
       {loadingPage && <Loading />}
@@ -540,17 +542,17 @@ const AddProduct = () => {
                       styleCustom="!mb-[0]"
                     />
                   </div>
-                  <SubLabel title="Choose minimum 1, maximum 6 picture - File not exceeds 2MB - Supported type(.png, .jpeg, .jpg)" />
+                  <SubLabel title="Choose minimum 1, maximum 6 picture - File not exceeds 1MB - Supported type(.png, .jpeg, .jpg)" />
                   <div className="flex flex-col">
                     <div className="flex gap-x-[20px] border-[1px] bg-white border-solid border-[#ABAEB1] p-[10px] rounded-[16px]">
-                      {images.map((image: any, index: any) => {
+                      {images.map((data: any, index: any) => {
                         return (
                           <div
                             key={index}
                             className="relative inline-block group overflow-hidden rounded-[16px]"
                           >
                             <Image
-                              src={image.data}
+                              src={data.url}
                               alt={`Uploaded ${index}`}
                               className="object-cover object-top !h-[100px] !w-[100px] !relative"
                               fill
@@ -559,7 +561,10 @@ const AddProduct = () => {
                             <div className="absolute justify-center items-center top-[0] left-[0] w-full h-full group-hover:flex hidden bg-[rgba(0,0,0,0.4)]">
                               <IconDelete
                                 onClick={() =>
-                                  handleRemoveImage(image, setFieldValue)
+                                  handleRemoveImage(
+                                    data.lastModified,
+                                    setFieldValue
+                                  )
                                 }
                               />
                             </div>
@@ -939,9 +944,6 @@ const AddProduct = () => {
                     );
                   })}
                 </div>
-                {errorData && (
-                  <ErrorMessage message={errorData} styleCustom="!mb-[0px]" />
-                )}
                 <div className="flex justify-end">
                   <BtnAccount
                     disabled={isSubmitting}

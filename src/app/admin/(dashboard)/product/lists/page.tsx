@@ -2,7 +2,7 @@
 import ContentTable from "@/app/components/contentTable/conentTable";
 import TitlePageAmin from "@/app/components/titlePageAdmin/titlePageAdmin";
 import TitleTable from "@/app/components/titleTable/titleTable";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import Loading from "@/app/components/loading/loading";
 import {
   Modal,
@@ -12,14 +12,26 @@ import {
   ModalFooter,
   ModalBody,
 } from "@chakra-ui/react";
+import LoadingModal from "@/app/components/loadingModal/loadingModal";
+import Link from "next/link";
+import Image from "next/image";
+import LabelInput from "@/app/components/labelInput/labelInput";
+import style from "./lists.module.scss";
 
 const ListsProduct = () => {
   const [products, setProducts] = useState([]) as any;
   const [loading, setLoading] = useState(false);
   const [modalDelete, setModalDelete] = useState(false);
+  const [modalSee, setModalSee] = useState(false);
+  const [modalImage, setModalImage] = useState(false) as any;
   const [dataModalDelete, setDataModalDelete] = useState(null) as any;
+  const [dataModalSee, setDataModalSee] = useState(null) as any;
+  const [dataModalImage, setDataModalImage] = useState(null) as any;
+  const [resultModal, setResultModal] = useState(false);
+  const [dataLoading, setDataLoading] = useState(null) as any;
+  const [loadingModal, setLoadingModal] = useState(false) as any;
 
-  useLayoutEffect(() => {
+  const fetchData = () => {
     setLoading(true);
     try {
       fetch(`/api/admin/product`)
@@ -35,8 +47,12 @@ const ListsProduct = () => {
           }
         });
     } catch (error) {
-      console.error("Error in useLayoutEffect: ", error);
+      console.error("Error in fetchData: ", error);
     }
+  };
+
+  useLayoutEffect(() => {
+    fetchData();
   }, []);
 
   const handleShowModalDelete = (id: any, name: any) => {
@@ -44,6 +60,15 @@ const ListsProduct = () => {
     setModalDelete(true);
   };
   const handleCloseModalDelete = () => setModalDelete(false);
+
+  const handleShowModalDetail = (product: any) => {
+    setDataModalSee(product);
+    setModalSee(true);
+  };
+
+  const handleCloseModalDetail = () => setModalSee(false);
+
+  const handleCloseModalImage = () => setModalImage(false);
   return (
     <>
       {loading && <Loading />}
@@ -77,7 +102,10 @@ const ListsProduct = () => {
                   <ContentTable title={product.discount} />
                   <ContentTable title={product.discountedPrice} />
                   <td className="font-normal px-[10px] py-[14px] text-text text-[1.6em] text-start capitalize flex gap-x-[14px]">
-                    <div className="inline-block cursor-pointer bg-[#FFF3CD] p-[8px] rounded-[12px] hover:opacity-80 duration-200">
+                    <div
+                      className="inline-block cursor-pointer bg-[#FFF3CD] p-[8px] rounded-[12px] hover:opacity-80 duration-200"
+                      onClick={() => handleShowModalDetail(product)}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         height="22"
@@ -94,7 +122,10 @@ const ListsProduct = () => {
                         <circle cx="12" cy="12" r="3"></circle>
                       </svg>
                     </div>
-                    <div className="inline-block cursor-pointer bg-[#CCE5FF] p-[8px] rounded-[12px] hover:opacity-80 duration-200">
+                    <Link
+                      href={`/admin/product/lists/${product._id}`}
+                      className="inline-block cursor-pointer bg-[#CCE5FF] p-[8px] rounded-[12px] hover:opacity-80 duration-200"
+                    >
                       <svg
                         fill="none"
                         height="22"
@@ -108,7 +139,7 @@ const ListsProduct = () => {
                           <path d="m19.8496 9.82978c-.07 0-.14-.01-.2-.03-2.63-.74-4.72-2.83-5.46-5.46-.11-.4.12-.81.52-.93.4-.11.81.12.92.52.6 2.13 2.29 3.82 4.42 4.42.4.11.63.53.52.93-.09.34-.39.55-.72.55z" />
                         </g>
                       </svg>
-                    </div>
+                    </Link>
                     <div
                       className="inline-block cursor-pointer bg-[#F8D7DA] p-[8px] rounded-[12px] hover:opacity-80 duration-200"
                       onClick={() =>
@@ -140,33 +171,385 @@ const ListsProduct = () => {
           </tbody>
         </table>
       </div>
-
+      <LoadingModal
+        title={dataLoading}
+        loading={loadingModal}
+        resultModal={resultModal}
+        styleCustom="max-w-[300px]"
+      />
+      {modalImage && (
+        <ModalImage
+          data={dataModalImage}
+          onClose={handleCloseModalImage}
+          isOpen={modalImage}
+        />
+      )}
+      {modalSee && (
+        <ModalSee
+          isOpen={modalSee}
+          onClose={handleCloseModalDetail}
+          data={dataModalSee}
+          setModalImage={setModalImage}
+          setDataModalImage={setDataModalImage}
+        />
+      )}
       {modalDelete && (
         <ModalDelete
           isOpen={modalDelete}
           onClose={handleCloseModalDelete}
           data={dataModalDelete}
+          setProducts={setProducts}
+          setResultModal={setResultModal}
+          setDataLoading={setDataLoading}
+          setLoadingModal={setLoadingModal}
+          fetchData={fetchData}
         />
       )}
     </>
   );
 };
 
+const ModalImage = (props: any) => {
+  const { data, isOpen, onClose } = props;
+  const [index, setIndex] = useState(0) as any;
+
+  useEffect(() => {
+    setIndex(data?.index);
+  }, [isOpen]);
+
+  const handleNext = () =>
+    index < data.files.length - 1 ? setIndex(index + 1) : setIndex(0);
+
+  const handlePrev = () =>
+    index > 0 ? setIndex(index - 1) : setIndex(data.files.length - 1);
+  return (
+    <div className="fixed flex z-[5000] duration-200 top-[0] bottom-[0] left-[0] right-[0] items-center justify-center">
+      <div className="absolute w-full h-full bg-[rgba(0,0,0,0.6)]"></div>
+      <div>
+        <div
+          className="absolute right-[30px] top-[30px] cursor-pointer hover:opacity-80 duration-200"
+          onClick={onClose}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#fff"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </div>
+        <div className="relative">
+          {data?.files.length > 1 && (
+            <>
+              <div
+                className="absolute left-[-260px] w-[200px] h-full cursor-pointer bg-[transparent] hover:bg-[rgba(0,0,0,0.05)] flex items-center justify-center"
+                onClick={handlePrev}
+              >
+                <svg
+                  fill="none"
+                  height="50"
+                  viewBox="0 0 24 24"
+                  width="50"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="m15 19.9201-6.52003-6.52c-.77-.77-.77-2.03 0-2.8l6.52003-6.52002"
+                    stroke="#fff"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeMiterlimit="10"
+                    strokeWidth="1.5"
+                  />
+                </svg>
+              </div>
+              <div
+                className="absolute right-[-260px] w-[200px] h-full cursor-pointer bg-[transparent] hover:bg-[rgba(0,0,0,0.05)] flex items-center justify-center"
+                onClick={handleNext}
+              >
+                <svg
+                  fill="none"
+                  height="50"
+                  viewBox="0 0 24 24"
+                  width="50"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="m8.91003 19.9201 6.51997-6.52c.77-.77.77-2.03 0-2.8l-6.51997-6.52002"
+                    stroke="#fff"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeMiterlimit="10"
+                    strokeWidth="1.5"
+                  />
+                </svg>
+              </div>
+            </>
+          )}
+          {data && (
+            <Image
+              src={`/uploads/products/${data.files[index]}`}
+              alt={`Uploaded ${data.files[index]}`}
+              className="!max-h-[auto] !max-w-[1000px] !relative object-cover object-center select-none"
+              fill
+              sizes="(max-width: 100px) 100vw"
+              loading="lazy"
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ModalSee = (props: any) => {
+  const { isOpen, onClose, data, setModalImage, setDataModalImage } = props;
+
+  const {
+    _id,
+    name,
+    files,
+    subName,
+    description,
+    categories,
+    sub_categories,
+    sexs,
+    price,
+    quantity,
+    discount,
+    discountedPrice,
+    colors,
+    size,
+  } = data;
+  const jsonColors = JSON.parse(colors);
+  const jsonSize = JSON.parse(size);
+
+  let result: any = {};
+  for (let obj of jsonSize) {
+    let key = obj.color;
+    if (!result[key]) {
+      result[key] = {
+        color: obj.color,
+        sizes: [{ size: obj.size, amount: obj.amount }],
+      };
+    } else {
+      result[key].sizes.push({ size: obj.size, amount: obj.amount });
+    }
+  }
+  let newArrSize = Object.values(result);
+  const handleShowModalImage = (files: any, index: any) => {
+    setDataModalImage({ files, index });
+    setModalImage(true);
+  };
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent
+        rounded={"20px"}
+        padding={"0px 10px 10px 10px "}
+        margin={"auto 15px auto 15px"}
+        className="min-w-[800px]"
+      >
+        <ModalBody
+          className={`${style.tableScroll} flex flex-col gap-y-[20px] overflow-y-auto max-h-[600px]`}
+        >
+          <h1 className="text-[2.2em] text-text mb-[12px] capitalize">
+            {name}
+          </h1>
+          <div>
+            <LabelInput name="images" styleCustom="!mb-[4px]" />
+            <div className="flex gap-x-[20px]">
+              {files &&
+                files.map((url: any, index: any) => {
+                  return (
+                    <div
+                      key={url}
+                      className="relative inline-block group overflow-hidden rounded-[16px] !h-[100px] !w-[100px] cursor-pointer"
+                      onClick={() => handleShowModalImage(files, index)}
+                    >
+                      <div className="!relative group duration-200">
+                        <Image
+                          src={`/uploads/products/${url}`}
+                          alt={`Uploaded ${index}`}
+                          className="object-cover object-top !h-[100px] !w-[100px] !relative"
+                          fill
+                          sizes="(max-width: 100px) 100vw"
+                          loading="lazy"
+                        />
+                        <div className="absolute bg-[rgba(0,0,0,0.7)] top-[0] left-[0] bottom-[0] right-[0] hidden group-hover:flex justify-center items-center">
+                          <svg
+                            fill="none"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g fill="#fff">
+                              <path d="m5 6c0-.55228.44772-1 1-1h2c.55228 0 1-.44772 1-1s-.44772-1-1-1h-2c-1.65685 0-3 1.34315-3 3v2c0 .55228.44772 1 1 1s1-.44772 1-1z" />
+                              <path d="m5 18c0 .5523.44772 1 1 1h2c.55228 0 1 .4477 1 1s-.44772 1-1 1h-2c-1.65685 0-3-1.3431-3-3v-2c0-.5523.44772-1 1-1s1 .4477 1 1z" />
+                              <path d="m18 5c.5523 0 1 .44772 1 1v2c0 .55228.4477 1 1 1s1-.44772 1-1v-2c0-1.65685-1.3431-3-3-3h-2c-.5523 0-1 .44772-1 1s.4477 1 1 1z" />
+                              <path d="m19 18c0 .5523-.4477 1-1 1h-2c-.5523 0-1 .4477-1 1s.4477 1 1 1h2c1.6569 0 3-1.3431 3-3v-2c0-.5523-.4477-1-1-1s-1 .4477-1 1z" />
+                            </g>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+          <div className="flex">
+            <div className="w-[50%]">
+              <LabelInput name="subName" styleCustom="!mb-[4px]" />
+              <TitleSee title={subName} />
+            </div>
+            <div className="w-[50%]">
+              <LabelInput name="categories" styleCustom="!mb-[4px]" />
+              <TitleSee title={categories} />
+            </div>
+          </div>
+          <div className="flex">
+            <div className="w-[50%]">
+              <LabelInput name="sub_categories" styleCustom="!mb-[4px]" />
+              <TitleSee title={sub_categories} />
+            </div>
+            <div className="w-[50%]">
+              <LabelInput name="sexs" styleCustom="!mb-[4px]" />
+              <TitleSee title={sexs} />
+            </div>
+          </div>
+          <div className="flex">
+            <div className="w-[50%]">
+              <LabelInput name="price" styleCustom="!mb-[4px]" />
+              <TitleSee title={price} />
+            </div>
+            <div className="w-[50%]">
+              <LabelInput name="discount" styleCustom="!mb-[4px]" />
+              <TitleSee title={discount} />
+            </div>
+          </div>
+          <div className="flex">
+            <div className="w-[50%]">
+              <LabelInput name="discounted Price" styleCustom="!mb-[4px]" />
+              <TitleSee title={discountedPrice} />
+            </div>
+            <div className="w-[50%]">
+              <LabelInput name="quantity" styleCustom="!mb-[4px]" />
+              <TitleSee title={quantity} />
+            </div>
+          </div>
+          <div>
+            <LabelInput name="quantity" styleCustom="!mb-[4px]" />
+            <div className="flex gap-x-[12px]">
+              {jsonColors.map((color: any, index: any) => {
+                return (
+                  <TitleSee
+                    key={`${color}-${index}`}
+                    title={color.value}
+                    styleCustom="border-[1px] py-[8px] px-[16px] border-solid border-button rounded-[20px]"
+                  />
+                );
+              })}
+            </div>
+          </div>
+          <div>
+            <LabelInput name="size" styleCustom="!mb-[4px]" />
+            <div className="flex flex-col gap-y-[12px]">
+              {newArrSize.map((color: any, colorIndex: any) => {
+                return (
+                  <div key={colorIndex} className="mb-[4px]">
+                    <TitleSee key={`color-${colorIndex}`} title={color.color} />
+                    <div className="flex gap-x-[20px]">
+                      {color.sizes.map((size: any, sizeIndex: any) => {
+                        return (
+                          <TitleSee
+                            key={`size-${colorIndex}-${sizeIndex}`}
+                            title={`${size.size} - ${size.amount}`}
+                            styleCustom="!uppercase"
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div>
+            <LabelInput name="description" styleCustom="!mb-[4px]" />
+            <TitleSee title={description} />
+          </div>
+        </ModalBody>
+        <ModalFooter className="flex xsm:flex-col sm:flex-col l:flex-row gap-x-[10px] gap-y-[10px]">
+          <ButtonModal
+            onClick={onClose}
+            title="Cancel"
+            styleCustom="border-button bg-white xsm:w-full sm:w-[50%]"
+          />
+          <Link
+            href={`/admin/product/lists/${_id}`}
+            className="text-[1.6em] text-white text-center font-normal sm:w-[50%] outline-none capitalize px-[20px] py-[8px] w-[120px] h-[42px] rounded-[12px] border-[1px] border-solid border-[#1b84ff] hover:opacity-80 bg-[#1b84ff]"
+          >
+            Update
+          </Link>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+};
+
 const ModalDelete = (props: any) => {
-  const { isOpen, onClose, data } = props;
+  const {
+    isOpen,
+    onClose,
+    data,
+    setProducts,
+    setResultModal,
+    setDataLoading,
+    setLoadingModal,
+    fetchData,
+  } = props;
   const color = "#ff6f61";
+  const [btnDisabled, setBtnDisabled] = useState(false) as any;
+
   const handleDeleteProduct = () => {
-    fetch(`/api/admin/product?id=${data.id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === 200) {
-          console.log(data.message);
-        } else {
-          console.error(data.message);
-        }
-      });
+    setLoadingModal(true);
+    setDataLoading(`DELETE : ${data.name}`);
+    setBtnDisabled(true);
+    try {
+      fetch(`/api/admin/product?id=${data.id}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === 200) {
+            setProducts((prev: any) =>
+              prev.filter((item: any) => item._id !== data.id)
+            );
+            setDataLoading("Successfully");
+            setResultModal(true);
+            setTimeout(() => {
+              setLoadingModal(false);
+            }, 800);
+            setTimeout(() => {
+              setResultModal(false);
+            }, 1000);
+            onClose();
+            setBtnDisabled(false);
+            fetchData();
+          } else {
+            console.error(data.message);
+          }
+        });
+    } catch (error) {
+      console.error("Error in handleDeleteProduct: ", error);
+    }
   };
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -224,8 +607,9 @@ const ModalDelete = (props: any) => {
           />
           <ButtonModal
             onClick={handleDeleteProduct}
-            title="Delete"
+            title={btnDisabled ? "Deleting" : "Delete"}
             styleCustom="bg-secondary text-white xsm:w-full sm:w-full"
+            disabled={btnDisabled}
           />
         </ModalFooter>
       </ModalContent>
@@ -233,12 +617,25 @@ const ModalDelete = (props: any) => {
   );
 };
 
+const TitleSee = ({ title, styleCustom }: any) => {
+  return (
+    <div className={`text-text text-[1.6em] capitalize ${styleCustom}`}>
+      {title}
+    </div>
+  );
+};
+
 const ButtonModal = (props: any) => {
-  const { styleCustom, onClick, title } = props;
+  const { styleCustom, onClick, title, disabled } = props;
   return (
     <button
       onClick={onClick}
-      className={`text-[1.6em] font-normal outline-none capitalize px-[20px] py-[8px] w-[120px] h-[42px] rounded-[12px] ${styleCustom} border-[1px] border-solid hover:opacity-80`}
+      className={`text-[1.6em] font-normal outline-none capitalize px-[20px] py-[8px] w-[120px] h-[42px] rounded-[12px] ${styleCustom} border-[1px] border-solid hover:opacity-80 ${
+        disabled
+          ? "cursor-not-allowed opacity-80"
+          : "cursor-pointer opacity-100"
+      }`}
+      disabled={disabled || false}
     >
       {title}
     </button>
