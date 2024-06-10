@@ -5,12 +5,6 @@ import { promises as fs } from "fs";
 import { writeFile } from "fs/promises";
 import path from "path";
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 const uploadDir = path.join(process.cwd(), "public", "uploads/products");
 
 export async function PUT(req: any) {
@@ -20,7 +14,7 @@ export async function PUT(req: any) {
     const data = await req.formData();
     const files = data.getAll("files");
     const id = data.get("id");
-
+    console.log(files);
     const product = await Product.findById(id);
 
     if (product) {
