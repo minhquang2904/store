@@ -3,7 +3,12 @@ import Product from "@/app/models/product";
 import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import { writeFile } from "fs/promises";
+<<<<<<< HEAD
+
+import { UploadImage } from "@/app/lib/upload-image";
+=======
 import path from "path";
+>>>>>>> parent of aba1247 (fix image)
 
 const uploadDir = path.join(process.cwd(), "public", "uploads/products");
 
