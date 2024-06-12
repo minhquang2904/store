@@ -32,6 +32,14 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
   const [productName, setProductName] = useState("") as any;
   const [productSubName, setProductSubName] = useState("") as any;
   const [productDescription, setProductDescription] = useState("") as any;
+  const [productCategories, setProductCategories] = useState("") as any;
+  const [productSubCategories, setProductSubCategories] = useState("") as any;
+  const [productSexs, setProductSexs] = useState("") as any;
+  const [productPrice, setProductPrice] = useState(0) as any;
+  const [productDiscount, setProductDiscount] = useState(0) as any;
+  const [productDiscountedPrice, setProductDiscountedPrice] = useState(
+    0
+  ) as any;
   const formData = new FormData();
   const router = useRouter();
 
@@ -95,6 +103,12 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
       setProductName(data.products.name);
       setProductSubName(data.products.subName);
       setProductDescription(data.products.description);
+      setProductCategories(data.products.categories);
+      setProductSubCategories(data.products.sub_categories);
+      setProductSexs(data.products.sexs);
+      setProductPrice(data.products.price);
+      setProductDiscount(data.products.discount);
+      setProductDiscountedPrice(data.products.discountedPrice);
       setLoading(false);
       setFormValues(filteredValues);
     }
@@ -205,12 +219,12 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
     name: productName || "",
     subName: productSubName || "",
     description: productDescription || "",
-    categories: product.categories || "",
-    sub_categories: product.sub_categories || "",
-    sexs: product.sexs || "",
-    price: product.price || 0,
-    discount: product.discount || 0,
-    discountedPrice: product.discountedPrice || 0,
+    categories: productCategories || "",
+    sub_categories: productSubCategories || "",
+    sexs: productSexs || "",
+    price: productPrice || 0,
+    discount: productDiscount || 0,
+    discountedPrice: productDiscountedPrice || 0,
     colors: [...selectedColors],
   };
 
@@ -287,7 +301,9 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
       .required("Price is required")
       .notOneOf([0], "Price must be greater than 0"),
     discount: Yup.number().required("Discount is required"),
-    discountedPrice: Yup.number().required("Discounted Price is required"),
+    discountedPrice: Yup.number()
+      .required("Discounted Price is required")
+      .min(1, "Discounted Price must be greater than 0"),
     colors: Yup.array()
       .of(
         Yup.object().shape({
@@ -352,6 +368,7 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
 
   const handleCategoryChange = (e: any, setFieldValue: any) => {
     setSelectedCategory(e.target.value);
+    setProductCategories(e.target.value);
     setFieldValue("categories", e.target.value);
   };
 
@@ -363,23 +380,27 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
 
   const handleChangePrice = (e: any, setFieldValue: any, values: any) => {
     const price = e.target.value;
+    setProductPrice(Number(price));
     setFieldValue("price", Number(price));
 
     const discount = values.discount;
 
     const discountedPrice = Math.round(price - (price * discount) / 100);
 
+    setProductDiscountedPrice(discountedPrice);
     setFieldValue("discountedPrice", discountedPrice);
   };
 
   const handleChangeDiscount = (e: any, setFieldValue: any, values: any) => {
     const discount = e.target.value;
+    setProductDiscount(Number(discount));
     setFieldValue("discount", Number(discount));
 
     const price = values.price;
 
     const discountedPrice = Math.round(price - (price * discount) / 100);
 
+    setProductDiscountedPrice(discountedPrice);
     setFieldValue("discountedPrice", discountedPrice);
   };
 
@@ -475,7 +496,7 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
       console.error("Error fetching data:", error);
     }
   };
-  console.log("product", productName);
+
   return (
     <>
       {loading && <Loading />}
@@ -638,6 +659,7 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
                       onChange={(e: any) =>
                         handleCategoryChange(e, setFieldValue)
                       }
+                      value={values.categories}
                     >
                       <option value="" label="Select category" />
                       {dataCategories &&
@@ -683,6 +705,11 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
                   </h3>
                   <div className="relative">
                     <Field
+                      value={values.sub_categories}
+                      onChange={(e: any) => {
+                        setProductSubCategories(e.target.value);
+                        setFieldValue("sub_categories", e.target.value);
+                      }}
                       as="select"
                       name="sub_categories"
                       className="xsm:text-subMobile appearance-none capitalize sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[#ABAEB1] border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
@@ -731,6 +758,11 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
                   </h3>
                   <div className="relative">
                     <Field
+                      value={values.sexs}
+                      onChange={(e: any) => {
+                        setProductSexs(e.target.value);
+                        setFieldValue("sexs", e.target.value);
+                      }}
                       as="select"
                       name="sexs"
                       className="xsm:text-subMobile appearance-none capitalize sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[#ABAEB1] border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
@@ -784,6 +816,7 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
                     onChange={(e: any) =>
                       handleChangePrice(e, setFieldValue, values)
                     }
+                    value={values.price}
                     className="!border-[#ABAEB1] xsm:text-subMobile sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-button border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
                   />
                   <ErrorInput name="price" />
@@ -801,6 +834,7 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
                         onChange={(e: any) =>
                           handleChangeDiscount(e, setFieldValue, values)
                         }
+                        value={values.discount}
                         className="border-[#ABAEB1] pr-[60px] xsm:text-subMobile sm:text-subTablet l:text-subDesktop w-full font-medium pt-[16px] pl-[16px] pb-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
                       />
                       <div className="absolute top-[50%] right-[0] translate-y-[-50%] flex items-center bg-[#ABAEB1] rounded-r-[12px] px-[16px] h-full">
@@ -837,6 +871,7 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
                       placeholder="Enter product price"
                       className="!border-[#ABAEB1] select-none cursor-not-allowed opacity-50  xsm:text-subMobile sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-button border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
                       readOnly={true}
+                      value={values.discountedPrice}
                     />
                     <ErrorInput name="discountedPrice" />
                   </div>
