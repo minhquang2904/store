@@ -9,7 +9,6 @@ import SubLabel from "@/app/components/subLabel/subLabel";
 import ErrorInput from "@/app/components/errorInput/errorInput";
 import * as Yup from "yup";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
-import FieldInput from "@/app/components/fieldInput/fieldInput";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
 import LoadingModal from "@/app/components/loadingModal/loadingModal";
@@ -29,7 +28,10 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
   const [dataLoading, setDataLoading] = useState(null) as any;
   const [loadingStatus, setLoadingStatus] = useState(false);
   const [resultModal, setResultModal] = useState(false);
-
+  const [overlay, setOverlay] = useState(false);
+  const [productName, setProductName] = useState("") as any;
+  const [productSubName, setProductSubName] = useState("") as any;
+  const [productDescription, setProductDescription] = useState("") as any;
   const formData = new FormData();
   const router = useRouter();
 
@@ -90,6 +92,9 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
       setAreaCount(data.products.description);
       setSelectedCategory(data.products.categories);
       setSelectedColors(colorParse);
+      setProductName(data.products.name);
+      setProductSubName(data.products.subName);
+      setProductDescription(data.products.description);
       setLoading(false);
       setFormValues(filteredValues);
     }
@@ -197,9 +202,9 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
 
   const initialValues = {
     files: [],
-    name: product.name || "",
-    subName: product.subName || "",
-    description: product.description || "",
+    name: productName || "",
+    subName: productSubName || "",
+    description: productDescription || "",
     categories: product.categories || "",
     sub_categories: product.sub_categories || "",
     sexs: product.sexs || "",
@@ -341,6 +346,7 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
   const handleCountArea = (e: any, setFieldValue: any) => {
     const value = e.target.value;
     setAreaCount(value);
+    setProductDescription(e.target.value);
     setFieldValue("description", value);
   };
 
@@ -435,10 +441,10 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
       formData.append("files", data.files || data.public_id);
     });
 
-    setSubmitting(false);
     try {
+      setOverlay(true);
       setLoadingStatus(true);
-      setDataLoading(`Update ${values.name.slice(0, 10)}...`);
+      setDataLoading(`Update - ${values.name.slice(0, 10)}...`);
       fetch(`/api/admin/product`, {
         method: "PUT",
         body: formData,
@@ -455,6 +461,7 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
           if (data.status == 500) {
             alert(data.message);
           }
+          setOverlay(false);
           setResultModal(true);
           setTimeout(() => {
             setLoadingStatus(false);
@@ -468,7 +475,7 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
       console.error("Error fetching data:", error);
     }
   };
-
+  console.log("product", productName);
   return (
     <>
       {loading && <Loading />}
@@ -563,6 +570,11 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
                     id="name"
                     placeholder="Enter product name"
                     styleCustom="!border-[#ABAEB1]"
+                    value={values.name}
+                    onChange={(e: any) => {
+                      setProductName(e.target.value);
+                      setFieldValue("name", e.target.value);
+                    }}
                   />
                   <ErrorInput name="name" />
                 </div>
@@ -579,6 +591,11 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
                     id="subName"
                     placeholder="Enter sub-name (optional)"
                     styleCustom="!border-[#ABAEB1]"
+                    value={values.subName}
+                    onChange={(e: any) => {
+                      setProductSubName(e.target.value);
+                      setFieldValue("subName", e.target.value);
+                    }}
                   />
                   <ErrorInput name="subName" />
                 </div>
@@ -586,6 +603,7 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
                   <LabelInput name="description" styleCustom="!mb-[0]" />
                   <SubLabel title="Product name must not exceed 1000 characters." />
                   <Field
+                    value={values.description}
                     onChange={(e: any) => handleCountArea(e, setFieldValue)}
                     as="textarea"
                     id="description"
@@ -918,7 +936,27 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
         resultModal={resultModal}
         styleCustom="max-w-[300px]"
       />
+      {overlay && (
+        <div className="fixed top-[0] bottom-[0] left-[0] right-[0] backdrop-blur-sm"></div>
+      )}
     </>
+  );
+};
+
+const FieldInput = (props: any) => {
+  const { type, name, styleCustom, placeholder, refer, onChange, value } =
+    props;
+  return (
+    <Field
+      onChange={onChange}
+      type={type}
+      name={name}
+      id={name}
+      value={value}
+      placeholder={placeholder}
+      innerRef={refer}
+      className={`${styleCustom} xsm:text-subMobile sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-button border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out`}
+    />
   );
 };
 
