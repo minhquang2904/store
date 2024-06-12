@@ -16,6 +16,7 @@
     "@next/env": "^14.2.3",
     "axios": "^1.6.8",
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.2.0",
     "cookie-cutter": "^0.2.0",
     "formidable": "^3.5.1",
     "formik": "^2.4.6",

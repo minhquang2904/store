@@ -232,7 +232,10 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
         const files = [...images];
         if (files) {
           files.forEach((file: any) => {
-            if (typeof file === "object") {
+            if (
+              typeof file === "object" &&
+              file.hasOwnProperty("lastModified")
+            ) {
               const size = file.size / 1024 / 1024;
               if (size > 1) {
                 valid = false;
@@ -247,7 +250,10 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
         const files = [...images];
         if (files) {
           files.forEach((file: any) => {
-            if (typeof file === "object") {
+            if (
+              typeof file === "object" &&
+              file.hasOwnProperty("lastModified")
+            ) {
               const type = file.type;
               const validTypes = ["jpeg", "png", "jpg"];
               if (!validTypes.includes(type)) {
@@ -426,9 +432,10 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
     formData.append("quantity", totalQuantity);
     formData.append("size", JSON.stringify(filterAmount));
     images.forEach((data: any) => {
-      formData.append("files", data.files || data);
+      formData.append("files", data.files || data.public_id);
     });
-    console.log(values.name);
+
+    setSubmitting(false);
     try {
       setLoadingStatus(true);
       setDataLoading(`Update ${values.name.slice(0, 10)}...`);
@@ -441,27 +448,20 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
           if (data.status == 200) {
             getProductsId();
             setDataLoading("Successfully");
-            setResultModal(true);
-            setTimeout(() => {
-              setLoadingStatus(false);
-            }, 800);
-            setTimeout(() => {
-              setResultModal(false);
-            }, 1000);
           }
           if (data.status == 400) {
             setDataLoading("Failed");
-            setResultModal(true);
-            setTimeout(() => {
-              setLoadingStatus(false);
-            }, 800);
-            setTimeout(() => {
-              setResultModal(false);
-            }, 1000);
           }
           if (data.status == 500) {
             alert(data.message);
           }
+          setResultModal(true);
+          setTimeout(() => {
+            setLoadingStatus(false);
+          }, 800);
+          setTimeout(() => {
+            setResultModal(false);
+          }, 1000);
           setSubmitting(false);
         });
     } catch (error) {
@@ -511,7 +511,7 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
                             className="!relative inline-block group overflow-hidden rounded-[16px]"
                           >
                             <Image
-                              src={data.url || `/uploads/products/${data}`}
+                              src={data.url}
                               alt={`Uploaded ${index}`}
                               className="object-cover object-top !h-[100px] !w-[100px] !relative"
                               fill

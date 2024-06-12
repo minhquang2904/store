@@ -12,7 +12,6 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
 } from "@chakra-ui/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -36,6 +35,7 @@ const AddProduct = () => {
   const [images, setImages] = useState([]) as any;
   const [menu, setMenu] = useState(false);
   const [selectedColors, setSelectedColors] = useState([]);
+  const [overlay, setOverlay] = useState(false);
   const menuRef: any = useRef(null);
   const iconMenuRef: any = useRef(null);
   const formData = new FormData();
@@ -420,6 +420,8 @@ const AddProduct = () => {
     });
 
     try {
+      setOverlay(true);
+      setDataLoading(`ADD -  ${values.name.slice(0, 10)}...`);
       setLoading(true);
       fetch(`/api/admin/product`, {
         method: "POST",
@@ -427,33 +429,27 @@ const AddProduct = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          if (data.status == 200) {
+          if (data.status === 200) {
             setDataLoading("Successfully");
-            setResultModal(true);
             setImages([]);
             setFormValues(colorSizeInitialValues);
             setSelectedColors([]);
-            setTimeout(() => {
-              setLoading(false);
-            }, 800);
-            setTimeout(() => {
-              setResultModal(false);
-            }, 1000);
             resetForm();
           }
-          if (data.status == 400) {
+          if (data.status === 400) {
             setDataLoading("Failed");
-            setResultModal(true);
-            setTimeout(() => {
-              setLoading(false);
-            }, 800);
-            setTimeout(() => {
-              setResultModal(false);
-            }, 1000);
           }
-          if (data.status == 500) {
+          if (data.status === 500) {
             alert(data.message);
           }
+          setResultModal(true);
+          setTimeout(() => {
+            setLoading(false);
+          }, 800);
+          setTimeout(() => {
+            setResultModal(false);
+          }, 1000);
+          setOverlay(false);
           setSubmitting(false);
         });
     } catch (error) {
@@ -975,6 +971,9 @@ const AddProduct = () => {
         resultModal={resultModal}
         styleCustom="max-w-[300px]"
       />
+      {overlay && (
+        <div className="fixed top-[0] bottom-[0] left-[0] right-[0] backdrop-blur-sm"></div>
+      )}
     </>
   );
 };

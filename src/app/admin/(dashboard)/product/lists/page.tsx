@@ -294,7 +294,7 @@ const ModalImage = (props: any) => {
           )}
           {data && (
             <Image
-              src={`/uploads/products/${data.files[index]}`}
+              src={data.files[index].url}
               alt={`Uploaded ${data.files[index]}`}
               className="!max-h-[auto] !max-w-[1000px] !relative object-cover object-center select-none"
               fill
@@ -352,7 +352,7 @@ const ModalSee = (props: any) => {
       <ModalOverlay />
       <ModalContent
         rounded={"20px"}
-        padding={"0px 10px 10px 10px "}
+        padding={"30px 10px 10px 10px "}
         margin={"auto 15px auto 15px"}
         className="min-w-[800px]"
       >
@@ -366,17 +366,17 @@ const ModalSee = (props: any) => {
             <LabelInput name="images" styleCustom="!mb-[4px]" />
             <div className="flex gap-x-[20px]">
               {files &&
-                files.map((url: any, index: any) => {
+                files.map((file: any, index: any) => {
                   return (
                     <div
-                      key={url}
+                      key={file.public_id}
                       className="relative inline-block group overflow-hidden rounded-[16px] !h-[100px] !w-[100px] cursor-pointer"
                       onClick={() => handleShowModalImage(files, index)}
                     >
                       <div className="!relative group duration-200">
                         <Image
-                          src={`/uploads/products/${url}`}
-                          alt={`Uploaded ${index}`}
+                          src={file.url}
+                          alt={`Image ${index}`}
                           className="object-cover object-top !h-[100px] !w-[100px] !relative"
                           fill
                           sizes="(max-width: 100px) 100vw"

@@ -1,23 +1,18 @@
 import connectDB from "@/app/config/connectDB";
 import Product from "@/app/models/product";
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import { writeFile } from "fs/promises";
-import path from "path";
+import { DeleteImage, UploadImage } from "@/app/lib/upload-image";
 
-const uploadDir = path.join(process.cwd(), "public", "uploads/products");
-
-export async function PUT(req: any) {
+export async function PUT(req: NextRequest) {
   await connectDB();
 
   try {
     const data = await req.formData();
-    const files = data.getAll("files");
     const id = data.get("id");
-    console.log(files);
     const product = await Product.findById(id);
 
     if (product) {
+      const files = data.getAll("files");
       const name = data.get("name");
       const subName = data.get("subName");
       const description = data.get("description");
@@ -48,7 +43,7 @@ export async function PUT(req: any) {
 
       if (newArrFilesString.length > 0) {
         newArrFileOld.filter((file: any) => {
-          if (newArrFilesString.includes(file)) {
+          if (newArrFilesString.includes(file.public_id)) {
             newArrFileSave.push(file);
           } else {
             newArrFileDelete.push(file);
@@ -60,9 +55,8 @@ export async function PUT(req: any) {
 
       if (newArrFileDelete.length > 0) {
         for (const file of newArrFileDelete) {
-          const filePath = `${uploadDir}/${file}`;
           try {
-            await fs.unlink(filePath);
+            await DeleteImage(file.public_id);
           } catch (error: any) {
             return NextResponse.json({
               message: `Error deleting file: ${error.message}`,
@@ -74,15 +68,14 @@ export async function PUT(req: any) {
 
       if (newArrFilesObject.length > 0) {
         for (const file of newArrFilesObject) {
-          const uniqueSuffix =
-            Date.now() + "-" + Math.round(Math.random() * 1e9);
-          const newFileName = `${uniqueSuffix}-${file.name}`;
-          const newFilePath = `${uploadDir}/${newFileName}`;
-          const bytes = await file.arrayBuffer();
-          const buffer = Buffer.from(bytes);
-          newArrFileSave.push(newFileName);
+          const uploadImage: any = await UploadImage(file, "products");
+          newArrFileSave.push({
+            url: uploadImage.secure_url,
+            public_id: uploadImage.public_id,
+            created_at: uploadImage.created_at,
+            updated_at: uploadImage.created_at,
+          });
           try {
-            await writeFile(newFilePath, buffer);
           } catch (error: any) {
             return NextResponse.json({
               message: `Error saving file: ${error.message}`,
@@ -125,7 +118,6 @@ export async function PUT(req: any) {
 
 export async function POST(req: any) {
   await connectDB();
-  await fs.mkdir(uploadDir, { recursive: true });
   try {
     const data = await req.formData();
     const name = data.get("name");
@@ -142,16 +134,16 @@ export async function POST(req: any) {
     const size = data.get("size");
     const files = data.getAll("files");
 
-    let newArrFile: any = [];
+    const urlImage = [];
     for (const file of files) {
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-      const newFileName = `${uniqueSuffix}-${file.name}`;
-      const newFilePath = `${uploadDir}/${newFileName}`;
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      newArrFile.push(newFileName);
       try {
-        await writeFile(newFilePath, buffer);
+        const uploadImage: any = await UploadImage(file, "products");
+        urlImage.push({
+          url: uploadImage.secure_url,
+          public_id: uploadImage.public_id,
+          created_at: uploadImage.created_at,
+          updated_at: uploadImage.created_at,
+        });
       } catch (error: any) {
         return NextResponse.json({
           message: `Error saving file: ${error.message}`,
@@ -161,7 +153,7 @@ export async function POST(req: any) {
     }
 
     await new Product({
-      files: newArrFile,
+      files: urlImage,
       name,
       subName,
       description,
@@ -231,25 +223,20 @@ export async function DELETE(req: NextRequest) {
     const id = searchParams.get("id");
     const product = await Product.findById(id);
 
-    if (product) {
-      for (const file of product.files) {
-        const filePath = `${uploadDir}/${file}`;
-        try {
-          await fs.unlink(filePath);
-        } catch (error: any) {
-          return NextResponse.json({
-            message: `Error deleting file: ${error.message}`,
-            status: 500,
-          });
-        }
-      }
-      await Product.findByIdAndDelete(id);
+    if (id) {
+      const files = product.files;
+      const publicIds = files.map((file: any) => file.public_id);
 
+      const deleteImage = await DeleteImage(publicIds);
+      console.log(deleteImage);
+
+      await Product.findByIdAndDelete(id);
       return NextResponse.json({
         message: "Delete product Successfully",
         status: 200,
       });
     }
+
     return NextResponse.json({
       message: "Delete product Failed",
       status: 400,

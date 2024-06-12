@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, model, models } from "mongoose";
+import { Schema, Document, model, models } from "mongoose";
 
 interface IProduct extends Document {
   files: string[];
@@ -16,7 +16,14 @@ interface IProduct extends Document {
 
 const productSchema: Schema = new Schema({
   files: {
-    type: [String],
+    type: [
+      {
+        url: { type: String, required: true },
+        public_id: { type: String, required: true },
+        created_at: { type: Date, required: true },
+        updated_at: { type: Date, required: true },
+      },
+    ],
     default: [],
   },
   name: {
