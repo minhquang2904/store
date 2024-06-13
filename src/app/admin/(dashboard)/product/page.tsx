@@ -5,15 +5,17 @@ import Link from "next/link";
 import { useLayoutEffect, useState } from "react";
 
 const ProductAdmin = ({ data }: any) => {
-  const [inventory, setInventory] = useState(null);
+  const [inventory, setInventory] = useState(null) as any;
 
   useLayoutEffect(() => {
     try {
       fetch("/api/admin/inventory")
         .then((res) => res.json())
         .then((data) => {
-          console.log(data.data[0].totalQuantity);
-          setInventory(data.data[0].totalQuantity);
+          if (data.status == 200) {
+            console.log(data.data[0].totalQuantity);
+            setInventory(data.data[0].totalQuantity);
+          }
         });
     } catch (err: any) {
       console.log(err.message);
@@ -47,7 +49,9 @@ const ProductAdmin = ({ data }: any) => {
           </div>
           <div>
             <h3 className="text-[#717171] text-[1.4em]">Total products</h3>
-            <h1 className="text-text text-[1.6em] font-medium">{inventory}</h1>
+            <h1 className="text-text text-[1.6em] font-medium">
+              {inventory || 0}
+            </h1>
           </div>
         </Link>
       </div>

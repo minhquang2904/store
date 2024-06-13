@@ -173,10 +173,7 @@ export async function POST(req: any) {
         const count = await Product.countDocuments({});
         await Inventory.findOneAndUpdate(
           { inventoryId: process.env.INVENTORY_ID },
-          {
-            $set: { totalQuantity: count },
-          },
-          { upsert: true, new: true }
+          { totalQuantity: count }
         );
       });
     return NextResponse.json({
@@ -246,10 +243,7 @@ export async function DELETE(req: NextRequest) {
         const count = await Product.countDocuments({});
         await Inventory.findOneAndUpdate(
           { inventoryId: process.env.INVENTORY_ID },
-          {
-            $set: { totalQuantity: count },
-          },
-          { upsert: true, new: true }
+          { totalQuantity: count }
         );
       });
       return NextResponse.json({

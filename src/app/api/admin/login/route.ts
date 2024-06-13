@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import Admin from "@/app/models/admin";
 import { signToken } from "@/app/lib/jwt";
+import Inventory from "@/app/models/inventory";
 
 export async function POST(req: NextRequest) {
   await connectDB();
@@ -25,6 +26,9 @@ export async function POST(req: NextRequest) {
     const { username, password } = await req.json();
     const usernameToLowerCase = username.toLowerCase();
     const admin = await Admin.findOne({ username: usernameToLowerCase });
+    const inventory = await Inventory.findOne({
+      inventoryId: process.env.INVENTORY_ID,
+    });
 
     if (admin) {
       const isMatch = await bcryptjs.compare(password, admin.password);
@@ -37,6 +41,13 @@ export async function POST(req: NextRequest) {
           username: usernameToLowerCase,
           role,
         });
+
+        if (!inventory) {
+          await new Inventory({
+            inventoryId: process.env.INVENTORY_ID,
+            totalQuantity: 0,
+          }).save();
+        }
 
         return NextResponse.json({
           message: "Login Success!",
