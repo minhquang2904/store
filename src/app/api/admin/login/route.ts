@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
 
         if (!inventory) {
           await new Inventories({
+            inventoryId: process.env.INVENTORY_ID,
             totalQuantity: 0,
           }).save();
         }

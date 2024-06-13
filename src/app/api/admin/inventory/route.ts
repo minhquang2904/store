@@ -7,14 +7,12 @@ export const revalidate = 0;
 export async function GET(req: NextRequest) {
   await connectDB();
   try {
-    const inventoriesCount = await Inventories.find();
-    const product = await Product.find();
-    if (inventoriesCount) {
+    const inventory = await Inventories.find();
+    if (inventory) {
       return NextResponse.json({
         message: "Get product Successfully",
         status: 200,
-        data: inventoriesCount,
-        dataProduct: product,
+        data: inventory,
       });
     }
     return NextResponse.json({

@@ -6,19 +6,17 @@ import { useEffect, useState } from "react";
 
 const ProductAdmin = () => {
   const [inventory, setInventory] = useState(null) as any;
-
+  const [loadingData, setLoadingData] = useState(false) as any;
   const fetchData = async () => {
+    setLoadingData(true);
     try {
-      await fetch("/api/admin/inventories", {
-        next: { revalidate: 10 },
-      })
+      await fetch("/api/admin/inventory")
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
-            console.log(data.data);
-            // console.log(data.data[0].totalQuantity);
-            // setInventory(data.data[0].totalQuantity);
+            setInventory(data.data[0].totalQuantity);
           }
+          setLoadingData(false);
           if (data.status === 400) {
             console.error(data.message);
           }
@@ -39,7 +37,7 @@ const ProductAdmin = () => {
         <Link
           href="/admin/product/lists"
           className={`${style.hoverCard} ${
-            !inventory && "animate-pulse"
+            loadingData && "animate-pulse"
           } inline-flex px-[16px] py-[12px] max-w-[200px] w-full bg-[#f1f1f5] shadow-sm rounded-[16px] cursor-pointer`}
         >
           <div className="flex items-center justify-center mr-[16px] w-[45px] h-[45px] bg-[#E5E7E9] rounded-[50%]">

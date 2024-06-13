@@ -1,6 +1,7 @@
 import { Schema, models, model } from "mongoose";
 
 const inventorySchema = new Schema({
+  inventoryId: String,
   totalQuantity: {
     type: Number,
     default: 0,

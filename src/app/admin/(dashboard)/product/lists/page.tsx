@@ -30,28 +30,6 @@ const ListsProduct = () => {
   const [resultModal, setResultModal] = useState(false);
   const [dataLoading, setDataLoading] = useState(null) as any;
   const [loadingModal, setLoadingModal] = useState(false) as any;
-  const fetchDataInven = () => {
-    try {
-      fetch("/api/admin/total_quantity")
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.status === 200) {
-            console.log("fetchDataInven", data);
-            // console.log(data.data[0].totalQuantity);
-            // setInventory(data.data[0].totalQuantity);
-          }
-          if (data.status === 400) {
-            console.error(data.message);
-          }
-        });
-    } catch (error) {
-      console.error("Error in fetchData: ", error);
-    }
-  };
-
-  useLayoutEffect(() => {
-    fetchDataInven();
-  }, []);
 
   const fetchData = () => {
     setLoading(true);
@@ -60,7 +38,6 @@ const ListsProduct = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
-            console.log(data);
             const dataReverse = data.data.reverse();
             setLoading(false);
             setProducts(dataReverse);
@@ -226,7 +203,6 @@ const ListsProduct = () => {
           setDataLoading={setDataLoading}
           setLoadingModal={setLoadingModal}
           fetchData={fetchData}
-          fetchDataInven={fetchDataInven}
         />
       )}
     </>
@@ -538,7 +514,6 @@ const ModalDelete = (props: any) => {
     setDataLoading,
     setLoadingModal,
     fetchData,
-    fetchDataInven,
   } = props;
   const color = "#ff6f61";
   const [btnDisabled, setBtnDisabled] = useState(false) as any;
@@ -568,7 +543,6 @@ const ModalDelete = (props: any) => {
             onClose();
             setBtnDisabled(false);
             fetchData();
-            fetchDataInven();
           } else {
             console.error(data.message);
           }
