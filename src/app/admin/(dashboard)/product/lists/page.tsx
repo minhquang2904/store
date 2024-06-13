@@ -17,6 +17,7 @@ import Link from "next/link";
 import Image from "next/image";
 import LabelInput from "@/app/components/labelInput/labelInput";
 import style from "./lists.module.scss";
+import Pagination from "@/app/components/pagination/pagination";
 
 const ListsProduct = () => {
   const [products, setProducts] = useState([]) as any;
@@ -30,30 +31,33 @@ const ListsProduct = () => {
   const [resultModal, setResultModal] = useState(false);
   const [dataLoading, setDataLoading] = useState(null) as any;
   const [loadingModal, setLoadingModal] = useState(false) as any;
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loadingData, setLoadingData] = useState(true);
   const fetchData = () => {
-    setLoading(true);
+    setLoadingData(true);
     try {
-      fetch(`/api/admin/product`)
+      fetch(`/api/admin/product?page=${currentPage}&limit=10`)
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
             const dataReverse = data.data.reverse();
-            setLoading(false);
+            setTotalPages(data.totalPages);
             setProducts(dataReverse);
-          } else if (data.status === 400) {
-            setLoading(false);
+          }
+          if (data.status === 400) {
             console.error(data.message);
           }
+          setLoadingData(false);
         });
     } catch (error) {
       console.error("Error in fetchData: ", error);
     }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentPage]);
 
   const handleShowModalDelete = (id: any, name: any) => {
     setDataModalDelete({ id, name });
@@ -69,6 +73,14 @@ const ListsProduct = () => {
   const handleCloseModalDetail = () => setModalSee(false);
 
   const handleCloseModalImage = () => setModalImage(false);
+
+  const handlePageChange = (page: any) => {
+    if (page >= 1 && page <= totalPages) {
+      currentPage != page && setProducts();
+      setCurrentPage(page);
+    }
+  };
+
   return (
     <>
       {loading && <Loading />}
@@ -76,7 +88,7 @@ const ListsProduct = () => {
         title="Product - Lists Product"
         style={{ fontSize: "14px" }}
       />
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto min-h-[705px] relative">
         <table className="min-w-full">
           <thead>
             <tr>
@@ -170,6 +182,20 @@ const ListsProduct = () => {
               ))}
           </tbody>
         </table>
+        {loadingData && (
+          <div className="absolute top-[0] bottom-[0] left-[0] right-[0] flex items-center justify-center">
+            <div className="flex-col gap-[20px] w-full flex items-center justify-center">
+              <div className="w-[60px] h-[60px] border-[4px] text-button text-4xl animate-spin border-[#D1D5DB] flex items-center justify-center border-t-button rounded-full"></div>
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="pb-[16px]">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
       <LoadingModal
         title={dataLoading}

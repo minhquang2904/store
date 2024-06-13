@@ -350,7 +350,9 @@ const AddProduct = () => {
       .required("Price is required")
       .notOneOf([0], "Price must be greater than 0"),
     discount: Yup.number().required("Discount is required"),
-    discountedPrice: Yup.number().required("Discounted Price is required"),
+    discountedPrice: Yup.number()
+      .required("Discounted Price is required")
+      .min(1, "Discounted Price must be greater than 0"),
     colors: Yup.array()
       .of(
         Yup.object().shape({

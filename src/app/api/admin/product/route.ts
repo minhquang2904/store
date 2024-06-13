@@ -206,15 +206,23 @@ export async function GET(req: NextRequest) {
         });
       }
     }
+    const page = Number(searchParams.get("page"));
+    const limit = Number(searchParams.get("limit"));
 
-    const products = await Product.find();
-    const InventoriesCount = await Inventories.find();
+    const products = await Product.find({})
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+    const count = await Product.countDocuments();
+
     if (products) {
       return NextResponse.json({
         message: "Get product Successfully",
         status: 200,
         data: products,
-        dataInventoriesCount: InventoriesCount,
+        totalPages: Math.ceil(count / limit),
+        currentPage: page,
       });
     }
     return NextResponse.json({

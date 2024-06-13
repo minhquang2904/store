@@ -4,6 +4,7 @@ import bcryptjs from "bcryptjs";
 import Admin from "@/app/models/admin";
 import { signToken } from "@/app/lib/jwt";
 import Inventories from "@/app/models/inventories";
+import Product from "@/app/models/product";
 
 export async function POST(req: NextRequest) {
   await connectDB();
@@ -43,9 +44,10 @@ export async function POST(req: NextRequest) {
         });
 
         if (!inventory) {
+          const count = await Product.countDocuments({});
           await new Inventories({
             inventoryId: process.env.INVENTORY_ID,
-            totalQuantity: 0,
+            totalQuantity: count,
           }).save();
         }
 

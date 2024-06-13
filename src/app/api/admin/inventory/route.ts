@@ -1,10 +1,9 @@
 import connectDB from "@/app/config/connectDB";
 import Inventories from "@/app/models/inventories";
-import Product from "@/app/models/product";
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 export const revalidate = 0;
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   await connectDB();
   try {
     const inventory = await Inventories.find();
