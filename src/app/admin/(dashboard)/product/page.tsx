@@ -13,7 +13,7 @@ const ProductAdmin = ({ data }: any) => {
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
-            console.log(data.data);
+            console.log(data);
             console.log(data.data[0].totalQuantity);
             setInventory(data.data[0].totalQuantity);
           }
