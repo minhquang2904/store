@@ -7,20 +7,29 @@ import { useLayoutEffect, useState } from "react";
 const ProductAdmin = ({ data }: any) => {
   const [inventory, setInventory] = useState(null) as any;
 
-  useLayoutEffect(() => {
+  const fetchData = () => {
     try {
-      fetch("/api/admin/inventory")
+      fetch(`/api/admin/inventory`)
         .then((res) => res.json())
         .then((data) => {
-          if (data.status == 200) {
+          if (data.status === 200) {
+            console.log(data.data);
             console.log(data.data[0].totalQuantity);
             setInventory(data.data[0].totalQuantity);
           }
+          if (data.status === 400) {
+            console.error(data.message);
+          }
         });
-    } catch (err: any) {
-      console.log(err.message);
+    } catch (error) {
+      console.error("Error in fetchData: ", error);
     }
-  });
+  };
+
+  useLayoutEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <>
       <TitlePageAmin title="Product" />
