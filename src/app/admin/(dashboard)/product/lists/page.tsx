@@ -30,11 +30,9 @@ const ListsProduct = () => {
   const [resultModal, setResultModal] = useState(false);
   const [dataLoading, setDataLoading] = useState(null) as any;
   const [loadingModal, setLoadingModal] = useState(false) as any;
-  const fetchDataInven = async () => {
+  const fetchDataInven = () => {
     try {
-      await fetch("/api/admin/inventories", {
-        next: { revalidate: 10 },
-      })
+      fetch("/api/admin/total_quantity", { method: "GET" })
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
