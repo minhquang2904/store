@@ -205,12 +205,13 @@ export async function GET(req: NextRequest) {
     }
 
     const products = await Product.find();
-
+    const InventoriesCount = await Inventories.find();
     if (products) {
       return NextResponse.json({
         message: "Get product Successfully",
         status: 200,
         data: products,
+        dataInventoriesCount: InventoriesCount,
       });
     }
     return NextResponse.json({
