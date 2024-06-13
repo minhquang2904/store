@@ -10,7 +10,7 @@ export async function GET() {
     return NextResponse.json({
       message: "Get inventory Successfully",
       status: 200,
-      quantity: inventory[0].totalQuantity,
+      data: inventory,
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message, status: 500 });

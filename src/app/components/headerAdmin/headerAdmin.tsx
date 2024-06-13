@@ -36,7 +36,7 @@ const HeaderAdmin = (props: any) => {
     }
     if (pathname === "/admin/user") {
       setPageData([
-        { id: 1, name: "add product", url: "/admin/product/add" },
+        { id: 1, name: "add product", url: "/admin/user/add" },
         { id: 2, name: "lists product", url: "/admin/product/lists" },
       ]);
     }

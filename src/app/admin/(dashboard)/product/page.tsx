@@ -16,7 +16,8 @@ const ProductAdmin = ({ data }: any) => {
   useEffect(() => {
     const fetchData = async () => {
       const result = await getData();
-      setInventory(result.quantity);
+      console.log(result.data[0].totalQuantity);
+      setInventory(result.data[0].totalQuantity);
     };
     fetchData();
   }, []);
