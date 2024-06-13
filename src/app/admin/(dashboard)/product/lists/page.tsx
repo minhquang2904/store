@@ -38,6 +38,7 @@ const ListsProduct = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
+            console.log(data);
             const dataReverse = data.data.reverse();
             setLoading(false);
             setProducts(dataReverse);
@@ -51,8 +52,28 @@ const ListsProduct = () => {
     }
   };
 
+  const fetchDataInven = () => {
+    try {
+      const timestamp = new Date().getTime();
+      fetch(`/api/admin/inventory?timestamp=${timestamp}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === 200) {
+            console.log(data.data[0]);
+            console.log(data.data[0].totalQuantity);
+          }
+          if (data.status === 400) {
+            console.error(data.message);
+          }
+        });
+    } catch (error) {
+      console.error("Error in fetchData: ", error);
+    }
+  };
+
   useLayoutEffect(() => {
     fetchData();
+    fetchDataInven();
   }, []);
 
   const handleShowModalDelete = (id: any, name: any) => {
