@@ -8,13 +8,11 @@ export async function GET() {
 
   try {
     const inventory: any = await Inventory.find();
-    const data: any = await Categories.find();
     if (inventory) {
       return NextResponse.json({
         message: "Get Inventory Successfully",
         status: 200,
         data: inventory,
-        dataCategories: data,
       });
     }
     return NextResponse.json({
