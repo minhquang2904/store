@@ -2,14 +2,15 @@
 import TitlePageAmin from "@/app/components/titlePageAdmin/titlePageAdmin";
 import style from "./product.module.scss";
 import Link from "next/link";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const ProductAdmin = () => {
   const [inventory, setInventory] = useState(null) as any;
 
   const fetchData = () => {
     try {
-      fetch(`/api/admin/inventory`)
+      const timestamp = new Date().getTime();
+      fetch(`/api/admin/inventory?timestamp=${timestamp}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
@@ -26,7 +27,7 @@ const ProductAdmin = () => {
     }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     fetchData();
   }, []);
 
