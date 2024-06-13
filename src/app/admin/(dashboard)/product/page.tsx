@@ -2,24 +2,22 @@
 import TitlePageAmin from "@/app/components/titlePageAdmin/titlePageAdmin";
 import style from "./product.module.scss";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-
-const getData = async () => {
-  const res = await fetch("/api/admin/inventory");
-  const data = await res.json();
-  return data;
-};
+import { useEffect, useLayoutEffect, useState } from "react";
 
 const ProductAdmin = ({ data }: any) => {
   const [inventory, setInventory] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await getData();
-      console.log(result.data[0].totalQuantity);
-      setInventory(result.data[0].totalQuantity);
-    };
-    fetchData();
+  useLayoutEffect(() => {
+    try {
+      fetch("/api/admin/inventory")
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data.data[0].totalQuantity);
+          setInventory(data.data[0].totalQuantity);
+        });
+    } catch (err: any) {
+      console.log(err.message);
+    }
   }, []);
   return (
     <>
