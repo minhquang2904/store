@@ -1,0 +1,10 @@
+@media screen and (min-width: 992px) {
+  .hoverCard {
+    transform: scale(1) translateZ(0);
+    transition: 0.2s ease;
+    perspective: 2500px;
+    &:hover {
+      transform: scale(1.08) translateZ(0); // Ensures the scale transformation is optimized
+    }
+  }
+}

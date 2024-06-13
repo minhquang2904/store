@@ -2,6 +2,7 @@ import connectDB from "@/app/config/connectDB";
 import Product from "@/app/models/product";
 import { NextRequest, NextResponse } from "next/server";
 import { DeleteImage, UploadImage } from "@/app/lib/upload-image";
+import Inventory from "@/app/models/inventory";
 
 export async function PUT(req: NextRequest) {
   await connectDB();
@@ -166,8 +167,18 @@ export async function POST(req: any) {
       colors,
       quantity,
       size,
-    }).save();
-
+    })
+      .save()
+      .then(async () => {
+        const count = await Product.countDocuments({});
+        await Inventory.findOneAndUpdate(
+          { inventoryId: process.env.INVENTORY_ID },
+          {
+            $set: { totalQuantity: count },
+          },
+          { upsert: true, new: true }
+        );
+      });
     return NextResponse.json({
       message: "Add Product Successfully",
       status: 200,
@@ -200,6 +211,7 @@ export async function GET(req: NextRequest) {
     }
 
     const products = await Product.find();
+
     if (products) {
       return NextResponse.json({
         message: "Get product Successfully",
@@ -230,7 +242,16 @@ export async function DELETE(req: NextRequest) {
       const deleteImage = await DeleteImage(publicIds);
       console.log(deleteImage);
 
-      await Product.findByIdAndDelete(id);
+      await Product.findByIdAndDelete(id).then(async () => {
+        const count = await Product.countDocuments({});
+        await Inventory.findOneAndUpdate(
+          { inventoryId: process.env.INVENTORY_ID },
+          {
+            $set: { totalQuantity: count },
+          },
+          { upsert: true, new: true }
+        );
+      });
       return NextResponse.json({
         message: "Delete product Successfully",
         status: 200,

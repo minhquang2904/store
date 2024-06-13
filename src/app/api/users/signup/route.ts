@@ -7,7 +7,6 @@ export async function POST(req: NextRequest) {
   await connectDB();
   try {
     const { email, password } = await req.json();
-
     const user = await User.findOne({ email });
     if (user) {
       return NextResponse.json({ message: "User already exists", status: 400 });
