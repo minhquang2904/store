@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import Admin from "@/app/models/admin";
 import { signToken } from "@/app/lib/jwt";
-import Inventory from "@/app/models/inventory";
+import Inventories from "@/app/models/inventories";
 
 export async function POST(req: NextRequest) {
   await connectDB();
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     const { username, password } = await req.json();
     const usernameToLowerCase = username.toLowerCase();
     const admin = await Admin.findOne({ username: usernameToLowerCase });
-    const inventory = await Inventory.findOne({
+    const inventory = await Inventories.findOne({
       inventoryId: process.env.INVENTORY_ID,
     });
 
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
         });
 
         if (!inventory) {
-          await new Inventory({
+          await new Inventories({
             inventoryId: process.env.INVENTORY_ID,
             totalQuantity: 0,
           }).save();

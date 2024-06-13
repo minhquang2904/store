@@ -2,7 +2,7 @@ import connectDB from "@/app/config/connectDB";
 import Product from "@/app/models/product";
 import { NextRequest, NextResponse } from "next/server";
 import { DeleteImage, UploadImage } from "@/app/lib/upload-image";
-import Inventory from "@/app/models/inventory";
+import Inventories from "@/app/models/inventories";
 
 export async function PUT(req: NextRequest) {
   await connectDB();
@@ -171,7 +171,7 @@ export async function POST(req: any) {
       .save()
       .then(async () => {
         const count = await Product.countDocuments({});
-        await Inventory.findOneAndUpdate(
+        await Inventories.findOneAndUpdate(
           { inventoryId: process.env.INVENTORY_ID },
           { totalQuantity: count }
         );
@@ -241,7 +241,7 @@ export async function DELETE(req: NextRequest) {
 
       await Product.findByIdAndDelete(id).then(async () => {
         const count = await Product.countDocuments({});
-        await Inventory.findOneAndUpdate(
+        await Inventories.findOneAndUpdate(
           { inventoryId: process.env.INVENTORY_ID },
           { totalQuantity: count }
         );

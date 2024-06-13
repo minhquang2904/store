@@ -8,6 +8,6 @@ const inventorySchema = new Schema({
   },
 });
 
-const Inventory = models.Inventory || model("Inventory", inventorySchema);
+const Inventories = models.Inventories || model("Inventories", inventorySchema);
 
-export default Inventory;
+export default Inventories;
