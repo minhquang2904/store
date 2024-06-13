@@ -10,13 +10,13 @@ const ProductAdmin = () => {
   const fetchData = () => {
     try {
       const timestamp = new Date().getTime();
-      fetch(`/api/admin/inventory?timestamp=${timestamp}`)
+      fetch(`/api/admin/inventories?timestamp=${timestamp}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
-            console.log(data);
-            console.log(data.data[0].totalQuantity);
-            setInventory(data.data[0].totalQuantity);
+            console.log(data.data);
+            // console.log(data.data[0].totalQuantity);
+            // setInventory(data.data[0].totalQuantity);
           }
           if (data.status === 400) {
             console.error(data.message);

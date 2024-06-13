@@ -171,10 +171,7 @@ export async function POST(req: any) {
       .save()
       .then(async () => {
         const count = await Product.countDocuments({});
-        await Inventories.findOneAndUpdate(
-          { inventoryId: process.env.INVENTORY_ID },
-          { totalQuantity: count }
-        );
+        await new Inventories({ totalQuantity: count }).save();
       });
     return NextResponse.json({
       message: "Add Product Successfully",
@@ -241,10 +238,7 @@ export async function DELETE(req: NextRequest) {
 
       await Product.findByIdAndDelete(id).then(async () => {
         const count = await Product.countDocuments({});
-        await Inventories.findOneAndUpdate(
-          { inventoryId: process.env.INVENTORY_ID },
-          { totalQuantity: count }
-        );
+        await new Inventories({ totalQuantity: count }).save();
       });
       return NextResponse.json({
         message: "Delete product Successfully",
