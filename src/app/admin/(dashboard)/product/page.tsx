@@ -4,7 +4,7 @@ import style from "./product.module.scss";
 import Link from "next/link";
 import { useLayoutEffect, useState } from "react";
 
-const ProductAdmin = ({ data }: any) => {
+const ProductAdmin = () => {
   const [inventory, setInventory] = useState(null) as any;
 
   const fetchData = () => {
