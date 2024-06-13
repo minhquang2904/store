@@ -38,7 +38,7 @@ const ListsProduct = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
-            console.log("fetchDataInven", data.data);
+            console.log("fetchDataInven", data);
             // console.log(data.data[0].totalQuantity);
             // setInventory(data.data[0].totalQuantity);
           }
