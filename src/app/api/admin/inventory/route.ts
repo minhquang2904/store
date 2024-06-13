@@ -7,6 +7,7 @@ export async function GET() {
 
   try {
     const inventory: any = await Inventory.find();
+    console.log(inventory);
     return NextResponse.json({
       message: "Get inventory Successfully",
       status: 200,

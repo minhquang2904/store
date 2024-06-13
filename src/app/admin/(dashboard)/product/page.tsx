@@ -2,7 +2,7 @@
 import TitlePageAmin from "@/app/components/titlePageAdmin/titlePageAdmin";
 import style from "./product.module.scss";
 import Link from "next/link";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 const ProductAdmin = ({ data }: any) => {
   const [inventory, setInventory] = useState(null);
@@ -18,7 +18,7 @@ const ProductAdmin = ({ data }: any) => {
     } catch (err: any) {
       console.log(err.message);
     }
-  }, []);
+  });
   return (
     <>
       <TitlePageAmin title="Product" />
