@@ -7,10 +7,12 @@ import { useEffect, useState } from "react";
 const ProductAdmin = () => {
   const [inventory, setInventory] = useState(null) as any;
 
-  const fetchData = () => {
+  const fetchData = async () => {
     try {
       const timestamp = new Date().getTime();
-      fetch(`/api/admin/inventories?timestamp=${timestamp}`)
+      await fetch("/api/admin/inventories", {
+        cache: "no-store",
+      })
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
