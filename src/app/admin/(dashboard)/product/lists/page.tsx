@@ -32,7 +32,7 @@ const ListsProduct = () => {
   const [loadingModal, setLoadingModal] = useState(false) as any;
   const fetchDataInven = () => {
     try {
-      fetch("/api/admin/total_quantity", { method: "GET" })
+      fetch("/api/admin/total_quantity")
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
