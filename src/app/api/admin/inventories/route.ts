@@ -1,21 +1,20 @@
 import connectDB from "@/app/config/connectDB";
 import Inventories from "@/app/models/inventories";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   await connectDB();
-
   try {
-    const inventory: any = await Inventories.find();
-    if (inventory) {
+    const InventoriesCount = await Inventories.find();
+    if (InventoriesCount) {
       return NextResponse.json({
-        message: "Get Inventory Successfully",
+        message: "Get product Successfully",
         status: 200,
-        data: inventory,
+        data: InventoriesCount,
       });
     }
     return NextResponse.json({
-      message: "Get Inventory Failed",
+      message: "Get product Failed",
       status: 400,
     });
   } catch (error: any) {
