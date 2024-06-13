@@ -3,7 +3,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
 const HeaderAdmin = (props: any) => {
-  const { childToParent } = props;
+  const { childToParent, dataDecode } = props;
+
   const pathname = usePathname();
   const router = useRouter();
   const [pageData, setPageData] = useState(null) as any;
@@ -35,9 +36,11 @@ const HeaderAdmin = (props: any) => {
       ]);
     }
     if (pathname === "/admin/user") {
+      setPageData([{ id: 1, name: "List user", url: "/admin/user/lists" }]);
+    }
+    if (pathname === "/admin/order") {
       setPageData([
-        { id: 1, name: "add product", url: "/admin/user/add" },
-        { id: 2, name: "lists product", url: "/admin/product/newOrders" },
+        { id: 1, name: "New Orders", url: "/admin/user/newOrders" },
       ]);
     }
   }, [pathname]);
@@ -62,7 +65,10 @@ const HeaderAdmin = (props: any) => {
             );
           })}
       </div>
-      <div className="flex">
+      <div className="flex items-center">
+        <div className="text-text text-[1.6em] uppercase mr-[16px] font-medium">
+          {dataDecode?.username}
+        </div>
         <div
           className="p-[10px] cursor-pointer rounded-[4px] group"
           onClick={handleLogOut}

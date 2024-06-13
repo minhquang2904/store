@@ -27,7 +27,6 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [modalSuccess, setModalSuccess] = useState(false);
   const [error, setError] = useState(false);
-  const emailRef: any = useRef(null);
   const router = useRouter();
 
   const SignUpSchema = Yup.object().shape({
@@ -40,7 +39,11 @@ export default function Login() {
       .required("Confirm Password is required"),
   });
 
-  const handleSubmit = async (values: any, setSubmitting: any) => {
+  const handleSubmit = async (
+    values: any,
+    setSubmitting: any,
+    resetForm: any
+  ) => {
     try {
       setLoading(true);
       fetch("/api/users/signup", {
@@ -52,20 +55,15 @@ export default function Login() {
       })
         .then((res) => res.json())
         .then((data) => {
-          setLoading(false);
           if (data.status == 200) {
-            Cookies.set("LOGIN-INFO-USER", data.token, {
-              sameSite: "strict",
-              secure: true,
-              path: "/",
-              expires: 7,
-            });
             setModalSuccess(true);
             error && setError(false);
+            resetForm();
           }
           if (data.status == 400) {
             setError(true);
           }
+          setLoading(false);
         });
       setSubmitting(false);
     } catch (error: any) {
@@ -75,7 +73,7 @@ export default function Login() {
 
   const handleCloseModalSuccess = () => {
     setModalSuccess(false);
-    router.push("/");
+    router.push("/login");
   };
 
   return (
@@ -88,8 +86,8 @@ export default function Login() {
       <Formik
         initialValues={{ email: "", password: "", confirmPassword: "" }}
         validationSchema={SignUpSchema}
-        onSubmit={(values, { setSubmitting }) =>
-          handleSubmit(values, setSubmitting)
+        onSubmit={(values, { setSubmitting, resetForm }) =>
+          handleSubmit(values, setSubmitting, resetForm)
         }
       >
         {({ isSubmitting }) => (
@@ -101,6 +99,7 @@ export default function Login() {
                 name="email"
                 id="email"
                 placeholder="Example@gmail.com"
+                autocomplete="email"
               />
               <ErrorInput name="email" />
             </div>
@@ -111,6 +110,7 @@ export default function Login() {
                 name="password"
                 id="password"
                 placeholder="Password"
+                autocomplete="new-password"
               />
               <ErrorInput name="password" />
             </div>
@@ -121,6 +121,7 @@ export default function Login() {
                 name="confirmPassword"
                 id="confirmPassword"
                 placeholder="Confirm Password"
+                autocomplete="new-password"
               />
               <ErrorInput name="confirmPassword" />
             </div>
@@ -181,7 +182,7 @@ const ModalSuccess = (props: any) => {
             className="text-white bg-[#30B87B] px-[60px] py-[8px] text-[2em] mt-[32px] mb-[7px] rounded-[30px]"
             onClick={onClick}
           >
-            OKAY
+            LOGIN
           </button>
         </ModalBody>
       </ModalContent>

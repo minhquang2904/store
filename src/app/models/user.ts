@@ -4,6 +4,18 @@ const userSchema = new Schema({
   email: { type: String, default: "" },
   password: { type: String, default: "" },
   role: { type: String, default: "" },
+  lastName: { type: String, default: "" },
+  firstName: { type: String, default: "" },
+  address_list: [
+    {
+      street: { type: String, default: "" },
+      city: { type: String, default: "" },
+      district: { type: String, default: "" },
+      ward: { type: String, default: "" },
+      address: { type: String, default: "" },
+    },
+  ],
+  phone: { type: String, default: "" },
   image: {
     url: { type: String, default: "" },
     public_id: { type: String, default: "" },

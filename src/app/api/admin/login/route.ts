@@ -5,6 +5,8 @@ import Admin from "@/app/models/admin";
 import { signToken } from "@/app/lib/jwt";
 import Inventories from "@/app/models/inventories";
 import Product from "@/app/models/product";
+import TotalUser from "@/app/models/numberUser";
+import User from "@/app/models/user";
 
 export async function POST(req: NextRequest) {
   await connectDB();
@@ -30,6 +32,9 @@ export async function POST(req: NextRequest) {
     const inventory = await Inventories.findOne({
       inventoryId: process.env.INVENTORY_ID,
     });
+    const totalUser = await TotalUser.findOne({
+      numberUserId: process.env.TOTAL_USER_ID,
+    });
 
     if (admin) {
       const isMatch = await bcryptjs.compare(password, admin.password);
@@ -48,6 +53,14 @@ export async function POST(req: NextRequest) {
           await new Inventories({
             inventoryId: process.env.INVENTORY_ID,
             totalQuantity: count,
+          }).save();
+        }
+
+        if (!totalUser) {
+          const count = await User.countDocuments({});
+          await new TotalUser({
+            numberUserId: process.env.TOTAL_USER_ID,
+            totalUser: count,
           }).save();
         }
 

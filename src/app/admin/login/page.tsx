@@ -83,6 +83,7 @@ const LoginAmin = () => {
                     id="username"
                     placeholder="User Name"
                     refer={usernameRef}
+                    autocomplete="username"
                   />
                   <ErrorInput name="username" />
                 </div>
@@ -93,6 +94,7 @@ const LoginAmin = () => {
                     name="password"
                     id="password"
                     placeholder="Password"
+                    autocomplete="current-password"
                   />
                   <ErrorInput name="password" />
                 </div>

@@ -83,6 +83,7 @@ export default function Login() {
                 name="email"
                 id="email"
                 placeholder="Example@gmail.com"
+                autocomplete="email"
               />
               <ErrorInput name="email" />
             </div>
@@ -93,6 +94,7 @@ export default function Login() {
                 name="password"
                 id="password"
                 placeholder="Password"
+                autocomplete="password"
               />
               <ErrorInput name="password" />
             </div>

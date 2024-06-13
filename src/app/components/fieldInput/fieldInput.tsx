@@ -1,9 +1,10 @@
 import { Field } from "formik";
 
 const FieldInput = (props: any) => {
-  const { type, name, styleCustom, placeholder, refer } = props;
+  const { type, name, styleCustom, placeholder, refer, autocomplete } = props;
   return (
     <Field
+      autoComplete={autocomplete}
       type={type}
       name={name}
       id={name}

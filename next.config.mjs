@@ -13,6 +13,7 @@ const nextConfig = {
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
     CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
     INVENTORY_ID: process.env.INVENTORY_ID,
+    TOTAL_USER_ID: process.env.TOTAL_USER_ID,
   },
 };
 

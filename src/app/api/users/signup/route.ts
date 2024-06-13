@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import User from "@/app/models/user";
 import { signToken } from "@/app/lib/jwt";
+import TotalUser from "@/app/models/numberUser";
+
 export async function POST(req: NextRequest) {
   await connectDB();
   try {
@@ -21,6 +23,13 @@ export async function POST(req: NextRequest) {
     });
 
     const users = await newUser.save();
+
+    const count = await User.countDocuments({});
+    await TotalUser.findOneAndUpdate(
+      { numberUserId: process.env.TOTAL_USER_ID },
+      { totalUser: count }
+    );
+
     const token = await signToken({
       id: users._id,
       email: users.email,
