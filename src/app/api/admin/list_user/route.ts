@@ -1,7 +1,6 @@
 import connectDB from "@/app/config/connectDB";
-import Product from "@/app/models/product";
-import User from "@/app/models/user";
 import { NextRequest, NextResponse } from "next/server";
+import User from "@/app/models/user";
 
 export async function GET(req: NextRequest) {
   await connectDB();
@@ -11,24 +10,24 @@ export async function GET(req: NextRequest) {
     const page = Number(searchParams.get("page"));
     const limit = Number(searchParams.get("limit"));
 
-    const users = await Product.find({})
+    const users = await User.find({})
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
 
-    const count = await Product.countDocuments();
+    const count = await User.countDocuments();
 
     if (users) {
       return NextResponse.json({
-        message: "Get List User Successfully",
+        message: "Get product Successfully",
         status: 200,
-        data: Product,
+        data: users,
         totalPages: Math.ceil(count / limit),
         currentPage: page,
       });
     }
     return NextResponse.json({
-      message: "Get List User Failed",
+      message: "Get product Failed",
       status: 400,
     });
   } catch (error: any) {
