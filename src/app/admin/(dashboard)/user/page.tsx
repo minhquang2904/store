@@ -21,7 +21,6 @@ const UserAdmin = () => {
       console.log(data);
       setTotalUser(data.totalUser);
     });
-
     return () => {
       pusher.unsubscribe("user-channel");
     };
