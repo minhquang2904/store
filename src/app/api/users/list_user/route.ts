@@ -5,23 +5,22 @@ export async function GET(req: NextRequest) {
   await connectDB();
   try {
     const searchParams = req.nextUrl.searchParams;
-    const data: any = await User.find();
 
     const page = Number(searchParams.get("page"));
     const limit = Number(searchParams.get("limit"));
 
-    const user = await User.find({})
+    const users = await User.find({})
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
 
     const count = await User.countDocuments();
 
-    if (data) {
+    if (users) {
       return NextResponse.json({
         message: "Get List User Successfully",
         status: 200,
-        data: user,
+        data: users,
         totalPages: Math.ceil(count / limit),
         currentPage: page,
       });
