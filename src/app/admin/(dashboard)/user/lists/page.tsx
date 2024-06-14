@@ -29,14 +29,14 @@ const ListUser = () => {
   const fetchData = () => {
     setLoadingData(true);
     try {
-      fetch(`/api/admin/product?page=${currentPage}&limit=10`)
+      fetch(`/api/admin/list_user?page=${currentPage}&limit=10`)
         .then((res) => res.json())
         .then((data) => {
           console.log("data", data);
           if (data.status === 200) {
-            const dataReverse = data.data.reverse();
-            setTotalPages(data.totalPages);
-            setUsers(dataReverse);
+            // const dataReverse = data.data.reverse();
+            // setTotalPages(data.totalPages);
+            // setUsers(dataReverse);
           }
           if (data.status === 400) {
             console.error(data.message);
