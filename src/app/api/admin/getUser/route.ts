@@ -8,6 +8,23 @@ export async function GET(req: NextRequest) {
   await connectDB();
   try {
     const searchParams = req.nextUrl.searchParams;
+    const id = searchParams.get("id");
+
+    if (id) {
+      const productId = await User.findById(id);
+      if (productId) {
+        return NextResponse.json({
+          message: "Get product Successfully",
+          status: 200,
+          products: productId,
+        });
+      } else {
+        return NextResponse.json({
+          message: "Get product Failed",
+          status: 400,
+        });
+      }
+    }
     const page = Number(searchParams.get("page"));
     const limit = Number(searchParams.get("limit"));
 
