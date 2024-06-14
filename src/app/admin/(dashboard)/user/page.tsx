@@ -9,22 +9,22 @@ const UserAdmin = () => {
   const [totalUser, setTotalUser] = useState(null) as any;
   const [loadingData, setLoadingData] = useState(false) as any;
 
-  useEffect(() => {
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-    });
-    console.log("pusher", pusher);
+  // useEffect(() => {
+  //   const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+  //     cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+  //   });
+  //   console.log("pusher", pusher);
 
-    const channel = pusher.subscribe("user-channel");
-    console.log("channel", channel);
-    channel.bind("user-registered", function (data: any) {
-      console.log(data);
-      setTotalUser(data.totalUser);
-    });
-    return () => {
-      pusher.unsubscribe("user-channel");
-    };
-  }, []);
+  //   const channel = pusher.subscribe("user-channel");
+  //   console.log("channel", channel);
+  //   channel.bind("user-registered", function (data: any) {
+  //     console.log(data);
+  //     setTotalUser(data.totalUser);
+  //   });
+  //   return () => {
+  //     pusher.unsubscribe("user-channel");
+  //   };
+  // }, []);
 
   const fetchData = async () => {
     setLoadingData(true);
