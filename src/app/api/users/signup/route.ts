@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     );
 
     pusher.trigger("user-channel", "user-registered", {
-      totalUser: count ? count : 1,
+      totalUser: count,
     });
 
     const token = await signToken({
