@@ -8,8 +8,8 @@ export async function GET(req: NextRequest) {
   await connectDB();
   try {
     const searchParams = req.nextUrl.searchParams;
-    // const page = Number(searchParams.get("page"));
-    // const limit = Number(searchParams.get("limit"));
+    const page = Number(searchParams.get("page"));
+    const limit = Number(searchParams.get("limit"));
 
     const data: any = await User.find();
     if (data) {
