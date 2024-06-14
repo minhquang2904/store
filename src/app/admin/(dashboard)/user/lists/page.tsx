@@ -69,7 +69,8 @@ const ListUser = () => {
   };
   return (
     <>
-      <div>
+      123
+      {/* <div>
         <TitlePageAmin title="USER - LIST USER" />
         <div className="overflow-x-auto min-h-[705px] relative">
           <table className="min-w-full">
@@ -182,7 +183,7 @@ const ListUser = () => {
           setModalImage={setModalImage}
           setDataModalImage={setDataModalImage}
         />
-      )}
+      )} */}
     </>
   );
 };

@@ -661,5 +661,4 @@ const ButtonModal = (props: any) => {
     </button>
   );
 };
-
 export default ListsProduct;
