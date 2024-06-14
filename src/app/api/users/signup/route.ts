@@ -5,6 +5,7 @@ import User from "@/app/models/user";
 import { signToken } from "@/app/lib/jwt";
 import TotalUser from "@/app/models/numberUser";
 import pusher from "@/app/lib/pusher";
+export const revalidate = 0;
 
 export async function POST(req: NextRequest) {
   await connectDB();
