@@ -43,6 +43,9 @@ const ListsProduct = () => {
             const dataReverse = data.data.reverse();
             setTotalPages(data.totalPages);
             setProducts(dataReverse);
+            if (data.data.length == 0) {
+              setCurrentPage(data.totalPages);
+            }
           }
           if (data.status === 400) {
             console.error(data.message);
