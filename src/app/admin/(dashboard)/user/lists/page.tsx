@@ -25,48 +25,48 @@ const ListUser = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // console.log("data", "test--------------------");
-  // const fetchData = () => {
-  //   setLoadingData(true);
-  //   try {
-  //     fetch(`/api/users/list_user?page=${currentPage}&limit=10`)
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         console.log("data", data);
-  //         if (data.status === 200) {
-  //           const dataReverse = data.data.reverse();
-  //           setTotalPages(data.totalPages);
-  //           setUsers(dataReverse);
-  //         }
-  //         if (data.status === 400) {
-  //           console.error(data.message);
-  //         }
-  //         setLoadingData(false);
-  //       });
-  //   } catch (error) {
-  //     console.error("Error in fetchData: ", error);
-  //   }
-  // };
+  console.log("data", "test--------------------");
+  const fetchData = () => {
+    setLoadingData(true);
+    try {
+      fetch(`/api/users/list_user?page=${currentPage}&limit=10`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("data", data);
+          if (data.status === 200) {
+            const dataReverse = data.data.reverse();
+            setTotalPages(data.totalPages);
+            setUsers(dataReverse);
+          }
+          if (data.status === 400) {
+            console.error(data.message);
+          }
+          setLoadingData(false);
+        });
+    } catch (error) {
+      console.error("Error in fetchData: ", error);
+    }
+  };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, [currentPage]);
+  useEffect(() => {
+    fetchData();
+  }, [currentPage]);
 
-  // const handleShowModalDetail = (user: any) => {
-  //   setDataModalSee(user);
-  //   setModalSee(true);
-  // };
+  const handleShowModalDetail = (user: any) => {
+    setDataModalSee(user);
+    setModalSee(true);
+  };
 
-  // const handleCloseModalDetail = () => setModalSee(false);
+  const handleCloseModalDetail = () => setModalSee(false);
 
-  // const handleCloseModalImage = () => setModalImage(false);
+  const handleCloseModalImage = () => setModalImage(false);
 
-  // const handlePageChange = (page: any) => {
-  //   if (page >= 1 && page <= totalPages) {
-  //     setLoadingData(true);
-  //     setCurrentPage(page);
-  //   }
-  // };
+  const handlePageChange = (page: any) => {
+    if (page >= 1 && page <= totalPages) {
+      setLoadingData(true);
+      setCurrentPage(page);
+    }
+  };
   return (
     <>
       123
