@@ -3,6 +3,7 @@ import Product from "@/app/models/product";
 import { NextRequest, NextResponse } from "next/server";
 import { DeleteImage, UploadImage } from "@/app/lib/upload-image";
 import Inventories from "@/app/models/inventories";
+import User from "@/app/models/user";
 
 export async function PUT(req: NextRequest) {
   await connectDB();
@@ -209,18 +210,18 @@ export async function GET(req: NextRequest) {
     const page = Number(searchParams.get("page"));
     const limit = Number(searchParams.get("limit"));
 
-    const products = await Product.find({})
+    const users = await User.find({})
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
 
-    const count = await Product.countDocuments();
+    const count = await User.countDocuments();
 
-    if (products) {
+    if (users) {
       return NextResponse.json({
         message: "Get product Successfully",
         status: 200,
-        data: products,
+        data: users,
         totalPages: Math.ceil(count / limit),
         currentPage: page,
       });
