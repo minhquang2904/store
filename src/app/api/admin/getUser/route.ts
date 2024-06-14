@@ -1,6 +1,7 @@
 import connectDB from "@/app/config/connectDB";
 import User from "@/app/models/user";
 import { NextRequest, NextResponse } from "next/server";
+export const revalidate = 0;
 
 export async function GET(req: NextRequest) {
   await connectDB();
