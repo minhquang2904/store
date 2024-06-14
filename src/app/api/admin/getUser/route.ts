@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
     const limit = Number(searchParams.get("limit"));
 
     const users = await User.find({})
+      .sort({ createdAt: -1 })
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
