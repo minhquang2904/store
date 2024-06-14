@@ -29,7 +29,7 @@ const ListUser = () => {
   const fetchData = () => {
     setLoadingData(true);
     try {
-      fetch(`/api/users/list_user?page=${currentPage}&limit=10`)
+      fetch(`/api/admin/product?page=${currentPage}&limit=10`)
         .then((res) => res.json())
         .then((data) => {
           console.log("data", data);
