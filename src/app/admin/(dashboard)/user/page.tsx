@@ -10,8 +10,8 @@ const UserAdmin = () => {
   const [loadingData, setLoadingData] = useState(false) as any;
 
   useEffect(() => {
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+    const pusher = new Pusher(process.env.PUSHER_KEY!, {
+      cluster: process.env.PUSHER_CLUSTER!,
     });
 
     const channel = pusher.subscribe("user-channel");
