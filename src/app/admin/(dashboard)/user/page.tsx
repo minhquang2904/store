@@ -13,8 +13,10 @@ const UserAdmin = () => {
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
     });
+    console.log("pusher", pusher);
 
     const channel = pusher.subscribe("user-channel");
+    console.log("channel", channel);
     channel.bind("user-registered", function (data: any) {
       console.log(data);
       setTotalUser(data.totalUser);
