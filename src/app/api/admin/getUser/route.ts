@@ -25,6 +25,9 @@ export async function GET(req: NextRequest) {
         data: users,
         totalPages: Math.ceil(count / limit),
         currentPage: page,
+        count: count,
+        page: page,
+        limit: limit,
       });
     }
     return NextResponse.json({
