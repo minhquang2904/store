@@ -33,6 +33,7 @@ const ListUser = () => {
         .then((data) => {
           if (data.status === 200) {
             const dataReverse = data.data.reverse();
+            console.log(data);
             setTotalPages(data.totalPages);
             setUsers(dataReverse);
           }

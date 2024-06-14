@@ -16,6 +16,7 @@ const UserAdmin = () => {
 
     const channel = pusher.subscribe("user-channel");
     channel.bind("user-registered", function (data: any) {
+      console.log(data);
       setTotalUser(data.totalUser);
     });
 
