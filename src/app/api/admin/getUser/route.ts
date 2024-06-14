@@ -1,12 +1,13 @@
 import connectDB from "@/app/config/connectDB";
 import Categories from "@/app/models/categories";
 import SubCategories from "@/app/models/sub_categories";
+import User from "@/app/models/user";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
   await connectDB();
   try {
-    const data: any = await Categories.find();
+    const data: any = await User.find();
     if (data) {
       return NextResponse.json({
         message: "Get Categories Successfully",
