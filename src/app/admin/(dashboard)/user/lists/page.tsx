@@ -34,9 +34,9 @@ const ListUser = () => {
         .then((data) => {
           console.log("data", data);
           if (data.status === 200) {
-            // const dataReverse = data.data.reverse();
-            // setTotalPages(data.totalPages);
-            // setUsers(dataReverse);
+            const dataReverse = data.data.reverse();
+            setTotalPages(data.totalPages);
+            setUsers(dataReverse);
           }
           if (data.status === 400) {
             console.error(data.message);
@@ -69,8 +69,7 @@ const ListUser = () => {
   };
   return (
     <>
-      123
-      {/* <div>
+      <div>
         <TitlePageAmin title="USER - LIST USER" />
         <div className="overflow-x-auto min-h-[705px] relative">
           <table className="min-w-full">
@@ -183,7 +182,7 @@ const ListUser = () => {
           setModalImage={setModalImage}
           setDataModalImage={setDataModalImage}
         />
-      )} */}
+      )}
     </>
   );
 };

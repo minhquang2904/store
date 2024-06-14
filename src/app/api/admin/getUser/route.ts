@@ -1,28 +1,33 @@
 import connectDB from "@/app/config/connectDB";
-import Categories from "@/app/models/categories";
-import SubCategories from "@/app/models/sub_categories";
 import User from "@/app/models/user";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   await connectDB();
   try {
-    const url = req.nextUrl.clone(); // Clone the NextUrl object
+    const url = req.nextUrl.clone();
     const searchParams = new URLSearchParams(url.searchParams);
+
     const page = Number(searchParams.get("page"));
     const limit = Number(searchParams.get("limit"));
-    console.log("searchParams", page, limit);
 
-    const data: any = await User.find();
-    if (data) {
+    const users = await User.find({})
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+    const count = await User.countDocuments();
+    if (users) {
       return NextResponse.json({
-        message: "Get Categories Successfully",
+        message: "Get users Successfully",
         status: 200,
-        data: data,
+        data: users,
+        totalPages: Math.ceil(count / limit),
+        currentPage: page,
       });
     }
     return NextResponse.json({
-      message: "Get Categories Failed",
+      message: "Get users Failed",
       status: 400,
     });
   } catch (error: any) {
