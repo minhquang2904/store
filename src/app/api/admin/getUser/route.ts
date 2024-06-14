@@ -1,51 +1,21 @@
 import connectDB from "@/app/config/connectDB";
-import Product from "@/app/models/product";
+import Categories from "@/app/models/categories";
+import SubCategories from "@/app/models/sub_categories";
 import { NextRequest, NextResponse } from "next/server";
-import { DeleteImage, UploadImage } from "@/app/lib/upload-image";
-import Inventories from "@/app/models/inventories";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   await connectDB();
   try {
-    const searchParams = req.nextUrl.searchParams;
-    const id = searchParams.get("id");
-
-    if (id) {
-      const productId = await Product.findById(id);
-      if (productId) {
-        return NextResponse.json({
-          message: "Get product Successfully",
-          status: 200,
-          products: productId,
-        });
-      } else {
-        return NextResponse.json({
-          message: "Get product Failed",
-          status: 400,
-        });
-      }
-    }
-    const page = Number(searchParams.get("page"));
-    const limit = Number(searchParams.get("limit"));
-
-    const products = await Product.find({})
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
-      .exec();
-
-    const count = await Product.countDocuments();
-
-    if (products) {
+    const data: any = await Categories.find();
+    if (data) {
       return NextResponse.json({
-        message: "Get product Successfully",
+        message: "Get Categories Successfully",
         status: 200,
-        data: products,
-        totalPages: Math.ceil(count / limit),
-        currentPage: page,
+        data: data,
       });
     }
     return NextResponse.json({
-      message: "Get product Failed",
+      message: "Get Categories Failed",
       status: 400,
     });
   } catch (error: any) {
