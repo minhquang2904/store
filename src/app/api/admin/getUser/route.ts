@@ -17,6 +17,7 @@ export async function GET(req: NextRequest) {
       .exec();
 
     const count = await User.countDocuments();
+
     if (users) {
       return NextResponse.json({
         message: "Get users Successfully",

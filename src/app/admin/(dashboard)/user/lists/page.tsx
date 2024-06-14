@@ -25,14 +25,13 @@ const ListUser = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  console.log("data", "test--------------------");
   const fetchData = () => {
     setLoadingData(true);
     try {
       fetch(`/api/admin/getUser?page=${currentPage}&limit=10`)
         .then((res) => res.json())
         .then((data) => {
-          console.log("data", data);
+          console.log(data);
           if (data.status === 200) {
             const dataReverse = data.data.reverse();
             setTotalPages(data.totalPages);
