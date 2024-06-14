@@ -3,10 +3,27 @@ import TitlePageAmin from "@/app/components/titlePageAdmin/titlePageAdmin";
 import style from "./user.module.scss";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Pusher from "pusher-js";
 
 const UserAdmin = () => {
   const [totalUser, setTotalUser] = useState(null) as any;
   const [loadingData, setLoadingData] = useState(false) as any;
+
+  useEffect(() => {
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+    });
+
+    const channel = pusher.subscribe("user-channel");
+    channel.bind("user-registered", function (data: any) {
+      setTotalUser(data.totalUser);
+    });
+
+    return () => {
+      pusher.unsubscribe("user-channel");
+    };
+  }, []);
+
   const fetchData = async () => {
     setLoadingData(true);
     try {
@@ -25,7 +42,6 @@ const UserAdmin = () => {
       console.error("Error in fetchData: ", error);
     }
   };
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -34,7 +50,7 @@ const UserAdmin = () => {
       <TitlePageAmin title="User" />
       <div>
         <Link
-          href="/admin/product/user/lists"
+          href="/admin/user/lists"
           className={`${style.hoverCard} ${
             loadingData && "animate-pulse"
           } inline-flex px-[16px] py-[12px] max-w-[200px] w-full bg-[#f1f1f5] shadow-sm rounded-[16px] cursor-pointer`}

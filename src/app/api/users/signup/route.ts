@@ -4,6 +4,7 @@ import bcryptjs from "bcryptjs";
 import User from "@/app/models/user";
 import { signToken } from "@/app/lib/jwt";
 import TotalUser from "@/app/models/numberUser";
+import pusher from "@/app/lib/pusher";
 
 export async function POST(req: NextRequest) {
   await connectDB();
@@ -31,11 +32,16 @@ export async function POST(req: NextRequest) {
       { upsert: true, new: true }
     );
 
+    pusher.trigger("user-channel", "user-registered", {
+      totalUser: count ? count : 1,
+    });
+
     const token = await signToken({
       id: users._id,
       email: users.email,
       role: users.role,
     });
+
     return NextResponse.json({
       message: "User signed up successfully!",
       status: 200,

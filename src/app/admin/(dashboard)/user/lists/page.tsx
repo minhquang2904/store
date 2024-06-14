@@ -13,24 +13,27 @@ import {
 import style from "./lists.module.scss";
 import LabelInput from "@/app/components/labelInput/labelInput";
 import Image from "next/image";
-import Link from "next/link";
+import Pagination from "@/app/components/pagination/pagination";
 
 const ListUser = () => {
   const [loadingData, setLoadingData] = useState(false);
   const [users, setUsers] = useState([]) as any;
   const [modalSee, setModalSee] = useState(false);
   const [dataModalSee, setDataModalSee] = useState(null) as any;
+  const [modalImage, setModalImage] = useState(false) as any;
+  const [dataModalImage, setDataModalImage] = useState(null) as any;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const fetchData = () => {
     setLoadingData(true);
     try {
-      fetch(`/api/users/`)
+      fetch(`/api/users?page=${currentPage}&limit=10`)
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
             const dataReverse = data.data.reverse();
-            console.log(dataReverse);
-            // setTotalPages(data.totalPages);
+            setTotalPages(data.totalPages);
             setUsers(dataReverse);
           }
           if (data.status === 400) {
@@ -45,7 +48,7 @@ const ListUser = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentPage]);
 
   const handleShowModalDetail = (user: any) => {
     setDataModalSee(user);
@@ -53,6 +56,15 @@ const ListUser = () => {
   };
 
   const handleCloseModalDetail = () => setModalSee(false);
+
+  const handleCloseModalImage = () => setModalImage(false);
+
+  const handlePageChange = (page: any) => {
+    if (page >= 1 && page <= totalPages) {
+      setLoadingData(true);
+      setCurrentPage(page);
+    }
+  };
   return (
     <>
       <div>
@@ -76,7 +88,7 @@ const ListUser = () => {
                     key={user._id}
                     className={`${loadingData ? "animate-pulse" : ""}`}
                   >
-                    <ContentTable title={user.email} />
+                    <ContentTable title={user.email} styleCustom="!lowercase" />
                     <ContentTable
                       title={user.firstName ? user.firstName : "N/A"}
                     />
@@ -146,11 +158,27 @@ const ListUser = () => {
           </table>
         </div>
       </div>
+      <div className="pb-[16px]">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
+      {modalImage && (
+        <ModalImage
+          data={dataModalImage}
+          onClose={handleCloseModalImage}
+          isOpen={modalImage}
+        />
+      )}
       {modalSee && (
         <ModalSee
           isOpen={modalSee}
           onClose={handleCloseModalDetail}
           data={dataModalSee}
+          setModalImage={setModalImage}
+          setDataModalImage={setDataModalImage}
         />
       )}
     </>
@@ -158,7 +186,7 @@ const ListUser = () => {
 };
 
 const ModalSee = (props: any) => {
-  const { isOpen, onClose, data } = props;
+  const { isOpen, onClose, data, setModalImage, setDataModalImage } = props;
 
   const {
     image,
@@ -173,6 +201,10 @@ const ModalSee = (props: any) => {
     phone,
   } = data;
 
+  const handleShowModalImage = (url: any) => {
+    setDataModalImage(url);
+    setModalImage(true);
+  };
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -189,7 +221,7 @@ const ModalSee = (props: any) => {
             {image && (
               <div
                 className="relative inline-block group overflow-hidden rounded-[16px] !h-[100px] !w-[100px] cursor-pointer"
-                // onClick={() => handleShowModalImage(files, index)}
+                onClick={() => handleShowModalImage(image.url)}
               >
                 <div className="!relative group duration-200">
                   <Image
@@ -281,11 +313,52 @@ const ModalSee = (props: any) => {
           <ButtonModal
             onClick={onClose}
             title="Cancel"
-            styleCustom="border-button bg-white xsm:w-full sm:w-[50%]"
+            styleCustom="border-button bg-white xsm:w-full sm:w-full"
           />
         </ModalFooter>
       </ModalContent>
     </Modal>
+  );
+};
+
+const ModalImage = (props: any) => {
+  const { url, onClose } = props;
+
+  return (
+    <div className="fixed flex z-[5000] duration-200 top-[0] bottom-[0] left-[0] right-[0] items-center justify-center">
+      <div className="absolute w-full h-full bg-[rgba(0,0,0,0.6)]"></div>
+      <div>
+        <div
+          className="absolute right-[30px] top-[30px] cursor-pointer hover:opacity-80 duration-200"
+          onClick={onClose}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#fff"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </div>
+        <div className="relative">
+          <Image
+            src={url || "/images/avatar-profile.png"}
+            alt={`Uploaded ${url}`}
+            className="!max-h-[300px] !max-w-[300px] !relative object-cover object-center select-none"
+            fill
+            sizes="(max-width: 100px) 100vw"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 
