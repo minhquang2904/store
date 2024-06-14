@@ -2,8 +2,7 @@
 import ContentTable from "@/app/components/contentTable/conentTable";
 import TitlePageAmin from "@/app/components/titlePageAdmin/titlePageAdmin";
 import TitleTable from "@/app/components/titleTable/titleTable";
-import { useEffect, useLayoutEffect, useState } from "react";
-import Loading from "@/app/components/loading/loading";
+import { useEffect, useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -21,7 +20,6 @@ import Pagination from "@/app/components/pagination/pagination";
 
 const ListsProduct = () => {
   const [products, setProducts] = useState([]) as any;
-  const [loading, setLoading] = useState(false);
   const [modalDelete, setModalDelete] = useState(false);
   const [modalSee, setModalSee] = useState(false);
   const [modalImage, setModalImage] = useState(false) as any;
@@ -33,7 +31,8 @@ const ListsProduct = () => {
   const [loadingModal, setLoadingModal] = useState(false) as any;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [loadingData, setLoadingData] = useState(true);
+  const [loadingData, setLoadingData] = useState(false);
+
   const fetchData = () => {
     setLoadingData(true);
     try {
@@ -76,14 +75,13 @@ const ListsProduct = () => {
 
   const handlePageChange = (page: any) => {
     if (page >= 1 && page <= totalPages) {
-      currentPage != page && setProducts();
+      setLoadingData(true);
       setCurrentPage(page);
     }
   };
 
   return (
     <>
-      {loading && <Loading />}
       <TitlePageAmin
         title="Product - Lists Product"
         style={{ fontSize: "14px" }}
@@ -105,7 +103,10 @@ const ListsProduct = () => {
           <tbody>
             {products &&
               products.map((product: any) => (
-                <tr key={product._id}>
+                <tr
+                  key={product._id}
+                  className={`${loadingData ? "animate-pulse" : ""}`}
+                >
                   <ContentTable title={product.name} />
                   <ContentTable title={product.categories} />
                   <ContentTable title={product.sub_categories} />
@@ -182,13 +183,6 @@ const ListsProduct = () => {
               ))}
           </tbody>
         </table>
-        {loadingData && (
-          <div className="absolute top-[0] bottom-[0] left-[0] right-[0] flex items-center justify-center">
-            <div className="flex-col gap-[20px] w-full flex items-center justify-center">
-              <div className="w-[60px] h-[60px] border-[4px] text-button text-4xl animate-spin border-[#D1D5DB] flex items-center justify-center border-t-button rounded-full"></div>
-            </div>
-          </div>
-        )}
       </div>
       <div className="pb-[16px]">
         <Pagination
@@ -667,4 +661,5 @@ const ButtonModal = (props: any) => {
     </button>
   );
 };
+
 export default ListsProduct;

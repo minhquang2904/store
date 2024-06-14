@@ -15,6 +15,12 @@ export async function POST(req: NextRequest) {
       if (isMatch) {
         const id = user._id;
         const role = user.role;
+        // const  date = new Date();
+        // const localTimeString = date.toLocaleString();
+        await User.findByIdAndUpdate(id, {
+          loginAt: new Date(),
+        });
+
         const token = await signToken({
           id,
           email: emailToLowerCase,

@@ -42,12 +42,16 @@ export default async function middleware(req: any) {
     const checkToken: any = await verifyToken(accessTokenAdmin.value);
     const error: any = checkToken.code;
     if (
-      error == "ERR_JWS_INVALID" &&
+      (error == "ERR_JWS_INVALID" ||
+        error == "ERR_JWS_SIGNATURE_VERIFICATION_FAILED" ||
+        error == "ERR_JWT_EXPIRED") &&
       pathname.startsWith("/admin") &&
       pathname != "/admin/login"
     ) {
       const absoluteURL = new URL("/admin/login", req.nextUrl.origin);
-      return NextResponse.redirect(absoluteURL.toString());
+      const response = NextResponse.redirect(absoluteURL.toString());
+      response.cookies.delete("LOGIN-INFO-ADMIN");
+      return response;
     }
     if (error != "ERR_JWS_INVALID" && pathname == "/admin/login") {
       const absoluteURL = new URL("/admin", req.nextUrl.origin);

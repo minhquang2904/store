@@ -4,7 +4,7 @@ const SECRET_KEY: any = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
 
 export async function signToken(payload: any) {
   const iat = Math.floor(Date.now() / 1000);
-  const exp = iat + 60 * 60;
+  const exp = iat + 60 * 60 * 24;
   return new SignJWT({ ...payload })
     .setProtectedHeader({ alg: "HS256", typ: "JWT" })
     .setExpirationTime(exp)

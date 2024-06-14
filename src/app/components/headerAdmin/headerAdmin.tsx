@@ -35,7 +35,7 @@ const HeaderAdmin = (props: any) => {
         },
       ]);
     }
-    if (pathname === "/admin/user") {
+    if (pathname.startsWith("/admin/user")) {
       setPageData([{ id: 1, name: "List user", url: "/admin/user/lists" }]);
     }
     if (pathname === "/admin/order") {

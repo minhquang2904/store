@@ -34,7 +34,7 @@ const UserAdmin = () => {
       <TitlePageAmin title="User" />
       <div>
         <Link
-          href="/admin/product/lists"
+          href="/admin/product/user/lists"
           className={`${style.hoverCard} ${
             loadingData && "animate-pulse"
           } inline-flex px-[16px] py-[12px] max-w-[200px] w-full bg-[#f1f1f5] shadow-sm rounded-[16px] cursor-pointer`}

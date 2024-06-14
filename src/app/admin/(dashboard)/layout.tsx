@@ -27,7 +27,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           if (data.status === 200) {
             setDataDecode(data.payload);
           }
-          if (data.status === 400) {
+          if (data.status === 400 || data.status === 500) {
             Cookies.remove("LOGIN-INFO-ADMIN");
             router.push("/admin/login");
           }

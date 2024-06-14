@@ -22,6 +22,7 @@ const userSchema = new Schema({
     created_at: { type: Date, default: "" },
     updated_at: { type: Date, default: "" },
   },
+  status: { type: String, default: "active" },
   loginAt: { type: Date, default: Date.now },
   logoutAt: { type: Date, default: Date.now },
   action: { type: String, default: "System" },

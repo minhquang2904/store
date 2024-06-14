@@ -27,7 +27,8 @@ export async function POST(req: NextRequest) {
     const count = await User.countDocuments({});
     await TotalUser.findOneAndUpdate(
       { numberUserId: process.env.TOTAL_USER_ID },
-      { totalUser: count }
+      { totalUser: count },
+      { upsert: true, new: true }
     );
 
     const token = await signToken({
