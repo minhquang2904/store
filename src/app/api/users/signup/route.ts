@@ -6,6 +6,7 @@ import { signToken } from "@/app/lib/jwt";
 import TotalUser from "@/app/models/numberUser";
 import pusher from "@/app/lib/pusher";
 export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   await connectDB();
@@ -33,7 +34,7 @@ export async function POST(req: NextRequest) {
       { upsert: true, new: true }
     );
 
-    pusher.trigger("user-channel", "user-registered", {
+    await pusher.trigger("user-channel", "user-registered", {
       totalUser: count,
     });
 
