@@ -210,6 +210,7 @@ export async function GET(req: NextRequest) {
     const limit = Number(searchParams.get("limit"));
 
     const products = await Product.find({})
+      .sort({ created_at: -1 })
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();

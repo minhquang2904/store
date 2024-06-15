@@ -16,10 +16,7 @@ const HeaderAdmin = (props: any) => {
 
   useLayoutEffect(() => {
     if (pathname === "/admin") {
-      setPageData([
-        { id: 1, name: "add product", url: "/admin/product/add" },
-        { id: 2, name: "list product", url: "/admin/product/lists" },
-      ]);
+      setPageData([]);
     }
     if (pathname.startsWith("/admin/product")) {
       setPageData([

@@ -46,7 +46,7 @@ const UserAdmin = () => {
     fetchData();
   }, []);
   return (
-    <div>
+    <>
       <TitlePageAmin title="User" />
       <div>
         <Link
@@ -79,7 +79,7 @@ const UserAdmin = () => {
           </div>
         </Link>
       </div>
-    </div>
+    </>
   );
 };
 

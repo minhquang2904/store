@@ -40,9 +40,8 @@ const ListsProduct = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
-            const dataReverse = data.data.reverse();
             setTotalPages(data.totalPages);
-            setProducts(dataReverse);
+            setProducts(data.data);
             if (data.data.length == 0) {
               setCurrentPage(data.totalPages);
             }
