@@ -12,6 +12,7 @@
   --btn-color: #131118;
   --template-product-color: #00000080;
   --template-product-discount-color: #ff6f61;
+  scroll-padding: 0;
 }
 
 @media (prefers-color-scheme: dark) {

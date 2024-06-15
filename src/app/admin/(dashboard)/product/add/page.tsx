@@ -542,7 +542,7 @@ const AddProduct = () => {
                   </div>
                   <SubLabel title="Choose minimum 1, maximum 6 picture - File not exceeds 1MB - Supported type(.png, .jpeg, .jpg)" />
                   <div className="flex flex-col">
-                    <div className="flex gap-x-[20px] border-[1px] bg-white border-solid border-[#ABAEB1] p-[10px] rounded-[16px]">
+                    <div className="flex flex-wrap gap-x-[20px] xsm:gap-y-[16px] xsm:justify-center border-[1px] bg-white border-solid border-[#ABAEB1] p-[10px] rounded-[16px]">
                       {images.map((data: any, index: any) => {
                         return (
                           <div
@@ -812,8 +812,8 @@ const AddProduct = () => {
                   />
                   <ErrorInput name="price" />
                 </div>
-                <div className="flex gap-x-[20px]">
-                  <div className="w-[50%]">
+                <div className="flex gap-x-[20px] xsm:flex-col xsm:gap-y-[20px]">
+                  <div className="w-[50%] xsm:w-full">
                     <LabelInput name="discount" styleCustom="!mb-[0]" />
                     <SubLabel title="Discount based on (%)" />
                     <div className="relative overflow-hidden">
@@ -847,7 +847,7 @@ const AddProduct = () => {
                     </div>
                     <ErrorInput name="discount" />
                   </div>
-                  <div className="w-[50%]">
+                  <div className="w-[50%] xsm:w-full">
                     <LabelInput
                       name="discounted price"
                       id="discountedPrice"
@@ -901,7 +901,7 @@ const AddProduct = () => {
                         <SubLabel
                           title={`The color ${color.value} must have at least one size with a quantity greater than 0`}
                         />
-                        <div className="flex gap-x-[16px]">
+                        <div className="flex gap-x-[16px] xsm:flex-wrap xsm:gap-y-[16px]">
                           {dataSize
                             .sort((a: any, b: any) =>
                               a.sizes.localeCompare(b.sizes)
@@ -910,7 +910,7 @@ const AddProduct = () => {
                               return (
                                 <div
                                   key={`${color.value}-${colorIndex}-${size.sizes}-${size._id}`}
-                                  className="w-[20%] flex items-center"
+                                  className="w-[20%] xsm:basis-1/4 flex items-center xsm:shrink"
                                 >
                                   <label className="text-text text-[1.4em] uppercase mr-[8px]">
                                     {size.sizes}
@@ -946,7 +946,7 @@ const AddProduct = () => {
                   <BtnAccount
                     disabled={isSubmitting}
                     type="submit"
-                    styleCustom="max-w-[160px]"
+                    styleCustom="max-w-[160px] xsm:!mt-[16px]"
                   />
                 </div>
               </Form>

@@ -60,6 +60,10 @@ const ListsProduct = () => {
     fetchData();
   }, [currentPage]);
 
+  useEffect(() => {
+    document.title = "Luxe Loft | " + "List name";
+  }, []);
+
   const handleShowModalDelete = (id: any, name: any) => {
     setDataModalDelete({ id, name });
     setModalDelete(true);
@@ -109,9 +113,15 @@ const ListsProduct = () => {
                   key={product._id}
                   className={`${loadingData ? "animate-pulse" : ""}`}
                 >
-                  <ContentTable title={product.name} />
+                  <ContentTable
+                    title={product.name}
+                    styleCustom="xsm:!min-w-[140px] xsm:!py-[0]"
+                  />
                   <ContentTable title={product.categories} />
-                  <ContentTable title={product.sub_categories} />
+                  <ContentTable
+                    title={product.sub_categories}
+                    styleCustom="xsm:!min-w-[140px] line-clamp-1"
+                  />
                   <ContentTable title={product.quantity} />
                   <ContentTable title={product.price} />
                   <ContentTable title={product.discount} />
@@ -376,7 +386,7 @@ const ModalSee = (props: any) => {
         rounded={"20px"}
         padding={"30px 10px 10px 10px "}
         margin={"auto 15px auto 15px"}
-        className="min-w-[800px]"
+        className="l:min-w-[800px] xsm:!max-w-[400px]"
       >
         <ModalBody
           className={`${style.tableScroll} flex flex-col gap-y-[20px] overflow-y-auto max-h-[600px]`}
@@ -386,7 +396,7 @@ const ModalSee = (props: any) => {
           </h1>
           <div>
             <LabelInput name="images" styleCustom="!mb-[4px]" />
-            <div className="flex gap-x-[20px]">
+            <div className="flex xsm:gap-x-[12px] xsm:gap-y-[12px] l:gap-x-[20px] xsm:flex-wrap">
               {files &&
                 files.map((file: any, index: any) => {
                   return (
@@ -426,45 +436,21 @@ const ModalSee = (props: any) => {
                 })}
             </div>
           </div>
-          <div className="flex">
-            <div className="w-[50%]">
-              <LabelInput name="subName" styleCustom="!mb-[4px]" />
-              <TitleSee title={subName} />
-            </div>
-            <div className="w-[50%]">
-              <LabelInput name="categories" styleCustom="!mb-[4px]" />
-              <TitleSee title={categories} />
-            </div>
+          <div className="flex xsm:flex-col xsm:gap-y-[16px]">
+            <LabelAndInput label="subName" title={subName} />
+            <LabelAndInput label="categories" title={categories} />
           </div>
-          <div className="flex">
-            <div className="w-[50%]">
-              <LabelInput name="sub_categories" styleCustom="!mb-[4px]" />
-              <TitleSee title={sub_categories} />
-            </div>
-            <div className="w-[50%]">
-              <LabelInput name="sexs" styleCustom="!mb-[4px]" />
-              <TitleSee title={sexs} />
-            </div>
+          <div className="flex xsm:flex-col xsm:gap-y-[16px]">
+            <LabelAndInput label="sub_categories" title={sub_categories} />
+            <LabelAndInput label="sexs" title={sexs} />
           </div>
-          <div className="flex">
-            <div className="w-[50%]">
-              <LabelInput name="price" styleCustom="!mb-[4px]" />
-              <TitleSee title={price} />
-            </div>
-            <div className="w-[50%]">
-              <LabelInput name="discount" styleCustom="!mb-[4px]" />
-              <TitleSee title={discount} />
-            </div>
+          <div className="flex xsm:flex-col xsm:gap-y-[16px]">
+            <LabelAndInput label="price" title={price} />
+            <LabelAndInput label="discount" title={discount} />
           </div>
-          <div className="flex">
-            <div className="w-[50%]">
-              <LabelInput name="discounted Price" styleCustom="!mb-[4px]" />
-              <TitleSee title={discountedPrice} />
-            </div>
-            <div className="w-[50%]">
-              <LabelInput name="quantity" styleCustom="!mb-[4px]" />
-              <TitleSee title={quantity} />
-            </div>
+          <div className="flex xsm:flex-col xsm:gap-y-[16px]">
+            <LabelAndInput label="discounted Price" title={discountedPrice} />
+            <LabelAndInput label="quantity" title={quantity} />
           </div>
           <div>
             <LabelInput name="quantity" styleCustom="!mb-[4px]" />
@@ -487,7 +473,7 @@ const ModalSee = (props: any) => {
                 return (
                   <div key={colorIndex} className="mb-[4px]">
                     <TitleSee key={`color-${colorIndex}`} title={color.color} />
-                    <div className="flex gap-x-[20px]">
+                    <div className="flex gap-x-[20px] flex-wrap xsm:gap-y-[4px]">
                       {color.sizes.map((size: any, sizeIndex: any) => {
                         return (
                           <TitleSee
@@ -516,13 +502,22 @@ const ModalSee = (props: any) => {
           />
           <Link
             href={`/admin/product/lists/${_id}`}
-            className="text-[1.6em] text-white text-center font-normal sm:w-[50%] outline-none capitalize px-[20px] py-[8px] w-[120px] h-[42px] rounded-[12px] border-[1px] border-solid border-[#1b84ff] hover:opacity-80 bg-[#1b84ff]"
+            className="text-[1.6em] xsm:w-full text-white text-center font-normal sm:w-[50%] outline-none capitalize px-[20px] py-[8px] w-[120px] h-[42px] rounded-[12px] border-[1px] border-solid border-[#1b84ff] hover:opacity-80 bg-[#1b84ff] cursor-pointer "
           >
             Update
           </Link>
         </ModalFooter>
       </ModalContent>
     </Modal>
+  );
+};
+
+const LabelAndInput = ({ label, title, styleCustom }: any) => {
+  return (
+    <div className={`w-[50%] ${styleCustom}`}>
+      <LabelInput name={label} styleCustom="!mb-[4px]" />
+      <TitleSee title={title} />
+    </div>
   );
 };
 

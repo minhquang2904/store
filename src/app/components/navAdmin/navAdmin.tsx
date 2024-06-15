@@ -5,15 +5,15 @@ const NavAdmin = ({ nav, handleShowNav }: any) => {
   return (
     <>
       <div
-        className={`fixed bottom-[0] top-[0] left-[0] duration-200 bg-button ${
-          nav ? "w-[75px] " : " w-[265px] "
+        className={`fixed z-[1000] xsm:overflow-hidden bottom-[0] top-[0] left-[0] duration-200 bg-button ${
+          nav ? "xsm:w-[0] l:w-[75px]" : "xsm:w-[265px] l:w-[265px]"
         }`}
       >
         <div className="w-full px-[20px] relative border-dashed border-b-[1px] border-[#22242e]">
           <LogoNav nav={nav} />
           <div
             onClick={handleShowNav}
-            className="group hover:bg-hover1 absolute cursor-pointer right-[-15px] w-[30px] h-[30px] bg-[#fff] rounded-[4px] top-[50%] translate-y-[-50%] flex justify-center items-center"
+            className="group xsm:hidden hover:bg-hover1 absolute cursor-pointer right-[-15px] w-[30px] h-[30px] bg-[#fff] rounded-[4px] top-[50%] translate-y-[-50%] flex justify-center items-center"
           >
             <svg
               fill="none"

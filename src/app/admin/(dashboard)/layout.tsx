@@ -60,15 +60,27 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const handleShowNav = () => {
     setNav(!nav);
   };
+
   return (
     <>
       {loading && <Loading />}
+      {!nav && (
+        <div
+          className="z-[500] bg-[rgba(0,0,0,0.7)] xsm:fixed xsm:top-[0] xsm:right-[0] xsm:left-[0] xsm:bottom-[0]"
+          onClick={handleShowNav}
+        ></div>
+      )}
       <CustomContext.Provider value={path}>
         <div className="bg-[#F3F4F4] min-h-[100vh] mainLayout">
           <NavAdmin nav={nav} handleShowNav={handleShowNav} />
-          <main className={`${nav ? "pl-[75px]" : "pl-[265px]"} duration-200`}>
-            <HeaderAdmin dataDecode={dataDecode} />
-            <div className="px-[30px] py-[20px]">{children}</div>
+          <main
+            className={`${nav ? "l:pl-[75px]" : "l:pl-[265px]"} duration-200`}
+          >
+            <HeaderAdmin
+              dataDecode={dataDecode}
+              childToParent={handleShowNav}
+            />
+            <div className="xsm:px-[15px] px-[30px] py-[20px]">{children}</div>
           </main>
         </div>
       </CustomContext.Provider>
