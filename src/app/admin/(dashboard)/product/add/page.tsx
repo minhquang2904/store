@@ -905,7 +905,7 @@ const AddProduct = () => {
                         <SubLabel
                           title={`The color ${color.value} must have at least one size with a quantity greater than 0`}
                         />
-                        <div className="flex gap-x-[16px] xsm:flex-wrap xsm:gap-y-[16px]">
+                        <div className="flex justify-between gap-x-[16px] xsm:flex-wrap">
                           {dataSize
                             .sort((a: any, b: any) =>
                               a.sizes.localeCompare(b.sizes)

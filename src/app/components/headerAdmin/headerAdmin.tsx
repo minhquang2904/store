@@ -43,7 +43,7 @@ const HeaderAdmin = (props: any) => {
   }, [pathname]);
 
   return (
-    <div className="xsm:px-[15px] px-[30px] xsm:h-[100px] sm:h-[100px] l:h-[80px] flex l:items-center l:justify-between xsm:flex-col-reverse xsm:justify-center sm:flex-col-reverse sm:justify-center">
+    <div className="xsm:px-[15px] px-[30px] xsm:h-[100px] sm:h-[100px] l:h-[80px] flex l:items-center l:justify-between xsm:flex-col-reverse xsm:justify-center sm:flex-col-reverse sm:justify-center l:flex-row">
       <div className="flex gap-x-[8px]">
         {pageData &&
           pageData.map((item: any) => {
