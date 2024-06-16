@@ -1,16 +1,18 @@
 "use client";
-import { ReactNode, useLayoutEffect, useState } from "react";
+import { ReactNode, useEffect, useLayoutEffect, useState } from "react";
 import NavAdmin from "@/app/components/navAdmin/navAdmin";
 import HeaderAdmin from "@/app/components/headerAdmin/headerAdmin";
 import { CustomContext } from "@/app/context/context";
 import Cookies from "js-cookie";
 import Loading from "@/app/components/loading/loading";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 const Layout = ({ children }: { children: ReactNode }) => {
   const token = Cookies.get("LOGIN-INFO-ADMIN");
   const [dataDecode, setDataDecode] = useState();
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const pathName = usePathname();
 
   useLayoutEffect(() => {
     setLoading(true);
@@ -60,6 +62,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const handleShowNav = () => {
     setNav(!nav);
   };
+
+  useEffect(() => {
+    window.innerWidth <= 768 && setNav(true);
+  }, [pathName]);
 
   return (
     <>
