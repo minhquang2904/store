@@ -72,7 +72,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
       {loading && <Loading />}
       {!nav && (
         <div
-          className="z-[500] bg-[rgba(0,0,0,0.7)] xsm:fixed xsm:top-[0] xsm:right-[0] xsm:left-[0] xsm:bottom-[0]"
+          className="z-[500] bg-[rgba(0,0,0,0.7)] xsm:fixed sm:fixed l:relative top-[0] right-[0] left-[0] bottom-[0]"
           onClick={handleShowNav}
         ></div>
       )}

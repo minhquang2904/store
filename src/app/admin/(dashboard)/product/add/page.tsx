@@ -546,7 +546,7 @@ const AddProduct = () => {
                   </div>
                   <SubLabel title="Choose minimum 1, maximum 6 picture - File not exceeds 1MB - Supported type(.png, .jpeg, .jpg)" />
                   <div className="flex flex-col">
-                    <div className="flex flex-wrap gap-x-[20px] xsm:gap-y-[16px] xsm:justify-center border-[1px] bg-white border-solid border-[#ABAEB1] p-[10px] rounded-[16px]">
+                    <div className="flex flex-wrap l:gap-x-[20px] xsm:gap-x-[20px] sm:gap-x-[14px]   xsm:gap-y-[16px] sm:gap-y-[16px] xsm:justify-center border-[1px] bg-white border-solid border-[#ABAEB1] p-[10px] rounded-[16px]">
                       {images.map((data: any, index: any) => {
                         return (
                           <div

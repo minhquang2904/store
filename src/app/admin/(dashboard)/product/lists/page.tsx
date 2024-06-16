@@ -410,7 +410,7 @@ const ModalSee = (props: any) => {
         rounded={"20px"}
         padding={"30px 10px 10px 10px "}
         margin={"auto 15px auto 15px"}
-        className="l:min-w-[800px] xsm:!max-w-[400px]"
+        className="l:min-w-[800px] xsm:!max-w-[400px] sm:min-w-[700px]"
       >
         <ModalBody
           className={`${style.tableScroll} flex flex-col gap-y-[20px] overflow-y-auto max-h-[600px] xsm:!px-[10px]`}
@@ -420,7 +420,7 @@ const ModalSee = (props: any) => {
           </h1>
           <div>
             <LabelInput name="images" styleCustom="!mb-[4px]" />
-            <div className="flex xsm:gap-x-[12px] xsm:gap-y-[12px] l:gap-x-[20px] xsm:flex-wrap">
+            <div className="flex xsm:gap-x-[12px] xsm:gap-y-[12px] l:gap-x-[20px] sm:gap-x-[12px] xsm:flex-wrap">
               {files &&
                 files.map((file: any, index: any) => {
                   return (
@@ -522,11 +522,11 @@ const ModalSee = (props: any) => {
           <ButtonModal
             onClick={onClose}
             title="Cancel"
-            styleCustom="border-button bg-white xsm:w-full sm:w-[50%]"
+            styleCustom="border-button bg-white xsm:w-full sm:w-full l:w-[50%]"
           />
           <Link
             href={`/admin/product/lists/${_id}`}
-            className="text-[1.6em] xsm:w-full text-white text-center font-normal sm:w-[50%] outline-none capitalize px-[20px] py-[8px] w-[120px] h-[42px] rounded-[12px] border-[1px] border-solid border-[#1b84ff] hover:opacity-80 bg-[#1b84ff] cursor-pointer "
+            className="text-[1.6em] xsm:w-full sm:w-full l:w-[50%] text-white text-center font-normal outline-none capitalize px-[20px] py-[8px] w-[120px] h-[42px] rounded-[12px] border-[1px] border-solid border-[#1b84ff] hover:opacity-80 bg-[#1b84ff] cursor-pointer "
           >
             Update
           </Link>

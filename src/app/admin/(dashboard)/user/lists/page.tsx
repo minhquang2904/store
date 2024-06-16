@@ -14,6 +14,7 @@ import style from "./lists.module.scss";
 import LabelInput from "@/app/components/labelInput/labelInput";
 import Image from "next/image";
 import Pagination from "@/app/components/pagination/pagination";
+import LoadingTable from "@/app/components/loadingTable/loadingTable";
 
 const ListUser = () => {
   const [loadingData, setLoadingData] = useState(false);
@@ -168,6 +169,7 @@ const ListUser = () => {
                 ))}
             </tbody>
           </table>
+          {users.length === 0 && <LoadingTable />}
         </div>
       </div>
       <div className="pb-[16px]">
@@ -232,10 +234,10 @@ const ModalSee = (props: any) => {
         rounded={"20px"}
         padding={"30px 10px 10px 10px "}
         margin={"auto 15px auto 15px"}
-        className="min-w-[800px]"
+        className="l:min-w-[800px] xsm:!max-w-[400px] sm:min-w-[700px]"
       >
         <ModalBody
-          className={`${style.tableScroll} flex flex-col gap-y-[20px] overflow-y-auto max-h-[600px]`}
+          className={`${style.tableScroll} flex flex-col gap-y-[20px] xsm:gap-y-[16px] overflow-y-auto max-h-[600px]`}
         >
           <div className="inline-block">
             {image && (
@@ -272,42 +274,30 @@ const ModalSee = (props: any) => {
               </div>
             )}
           </div>
-          <div className="flex">
-            <div className="w-[50%]">
-              <LabelInput name="First Name" styleCustom="!mb-[4px]" />
-              <TitleSee title={firstName || "N/A"} />
-            </div>
-            <div className="w-[50%]">
-              <LabelInput name="last name" styleCustom="!mb-[4px]" />
-              <TitleSee title={lastName || "N/A"} />
-            </div>
+          <div className="flex xsm:flex-col xsm:gap-y-[16px]">
+            <LabelAndInput label="First Name" title={firstName || "N/A"} />
+            <LabelAndInput label="last name" title={lastName || "N/A"} />
           </div>
-          <div className="flex">
-            <div className="w-[50%]">
-              <LabelInput name="email" styleCustom="!mb-[4px]" />
-              <TitleSee title={email || "N/A"} styleCustom="!lowercase" />
-            </div>
-            <div className="w-[50%]">
-              <LabelInput name="role" styleCustom="!mb-[4px]" />
-              <TitleSee title={role || "N/A"} />
-            </div>
+          <div className="flex xsm:flex-col xsm:gap-y-[16px]">
+            <LabelAndInput
+              label="email"
+              title={email || "N/A"}
+              styleCustomSee="!lowercase"
+            />
+            <LabelAndInput label="role" title={role || "N/A"} />
           </div>
-          <div className="flex">
-            <div className="w-[50%]">
-              <LabelInput name="login At" styleCustom="!mb-[4px]" />
-              <TitleSee
-                title={new Date(loginAt).toLocaleString("en-GB") || "N/A"}
-              />
-            </div>
-            <div className="w-[50%]">
-              <LabelInput name="logout At" styleCustom="!mb-[4px]" />
-              <TitleSee
-                title={new Date(logoutAt).toLocaleString("en-GB") || "N/A"}
-              />
-            </div>
+          <div className="flex xsm:flex-col xsm:gap-y-[16px]">
+            <LabelAndInput
+              label="login At"
+              title={new Date(loginAt).toLocaleString("en-GB") || "N/A"}
+            />
+            <LabelAndInput
+              label="logout At"
+              title={new Date(logoutAt).toLocaleString("en-GB") || "N/A"}
+            />
           </div>
-          <div className="flex">
-            <div className="w-[50%]">
+          <div className="flex xsm:flex-col xsm:gap-y-[16px]">
+            <div className="w-[50%] xsm:w-full">
               <LabelInput name="Status" styleCustom="!mb-[4px]" />
               <div
                 className={`${
@@ -319,10 +309,7 @@ const ModalSee = (props: any) => {
                 {status}
               </div>
             </div>
-            <div className="w-[50%]">
-              <LabelInput name="number phone" styleCustom="!mb-[4px]" />
-              <TitleSee title={phone || "N/A"} />
-            </div>
+            <LabelAndInput label="number phone" title={phone || "N/A"} />
           </div>
           <div className="inline-block">
             <LabelInput name="Address" styleCustom="!mb-[4px]" />
@@ -338,6 +325,15 @@ const ModalSee = (props: any) => {
         </ModalFooter>
       </ModalContent>
     </Modal>
+  );
+};
+
+const LabelAndInput = ({ label, title, styleCustom, styleCustomSee }: any) => {
+  return (
+    <div className={`w-[50%] xsm:w-full ${styleCustom}`}>
+      <LabelInput name={label} styleCustom="!mb-[4px]" />
+      <TitleSee title={title} styleCustom={styleCustomSee} />
+    </div>
   );
 };
 
@@ -419,7 +415,7 @@ const ModalBlock = (props: any) => {
         rounded={"20px"}
         padding={"30px 10px 10px 10px "}
         margin={"auto 15px auto 15px"}
-        className="min-w-[400px]"
+        className="min-w-[400px] max-w-[400px]"
       >
         <ModalBody>
           <div className="flex justify-center mb-[40px]">
@@ -458,7 +454,7 @@ const ModalBlock = (props: any) => {
           <ButtonModal
             onClick={handleBlockUser}
             title={status === "active" ? "Block" : "UnBlock"}
-            styleCustom="border-[#F8D7DA] xsm:w-full sm:w-full bg-[#F8D7DA] text-[#ff6f61]"
+            styleCustom="border-[#F8D7DA] !font-medium xsm:w-full sm:w-full bg-[#F8D7DA] text-[#ff6f61]"
           />
         </ModalFooter>
       </ModalContent>

@@ -43,7 +43,7 @@ const HeaderAdmin = (props: any) => {
   }, [pathname]);
 
   return (
-    <div className="xsm:px-[15px] px-[30px] xsm:h-[100px] l:h-[80px] flex l:items-center l:justify-between xsm:flex-col-reverse xsm:justify-center">
+    <div className="xsm:px-[15px] px-[30px] xsm:h-[100px] sm:h-[100px] l:h-[80px] flex l:items-center l:justify-between xsm:flex-col-reverse xsm:justify-center sm:flex-col-reverse sm:justify-center">
       <div className="flex gap-x-[8px]">
         {pageData &&
           pageData.map((item: any) => {
@@ -51,9 +51,9 @@ const HeaderAdmin = (props: any) => {
               <Link
                 href={item.url}
                 key={item.id || null}
-                className={`l:hover:text-[#1B84FF] l:hover:bg-[#B6D6FB] duration-200 text-[1.6em] xsm:mr-[16px] l:px-[16px] py-[8px] rounded-[16px] font-medium capitalize select-none ${
+                className={`l:hover:text-[#1B84FF] l:hover:bg-[#B6D6FB] duration-200 text-[1.6em] xsm:mr-[16px] sm:mr-[16px] l:px-[16px] py-[8px] rounded-[16px] font-medium capitalize select-none ${
                   pathname === item.url
-                    ? "text-[#1B84FF] l:bg-[#B6D6FB] "
+                    ? "text-[#1B84FF] l:bg-[#B6D6FB]"
                     : "l:text-text"
                 }`}
               >
@@ -62,7 +62,7 @@ const HeaderAdmin = (props: any) => {
             );
           })}
       </div>
-      <div className="flex items-center xsm:justify-between">
+      <div className="flex items-center xsm:justify-between sm:justify-between">
         <div className="xsm:inline-block l:hidden" onClick={childToParent}>
           <svg
             width="24"
