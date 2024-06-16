@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { username, password } = await req.json();
-    const usernameToLowerCase = username.toLowerCase();
+    const usernameToLowerCase = username.toLowerCase().trim();
     const admin = await Admin.findOne({ username: usernameToLowerCase });
     const inventory = await Inventories.findOne({
       inventoryId: process.env.INVENTORY_ID,

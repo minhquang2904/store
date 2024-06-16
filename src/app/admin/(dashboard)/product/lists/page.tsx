@@ -2,7 +2,7 @@
 import ContentTable from "@/app/components/contentTable/conentTable";
 import TitlePageAmin from "@/app/components/titlePageAdmin/titlePageAdmin";
 import TitleTable from "@/app/components/titleTable/titleTable";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -17,6 +17,7 @@ import Image from "next/image";
 import LabelInput from "@/app/components/labelInput/labelInput";
 import style from "./lists.module.scss";
 import Pagination from "@/app/components/pagination/pagination";
+import LoadingTable from "@/app/components/loadingTable/loadingTable";
 
 const ListsProduct = () => {
   const [products, setProducts] = useState([]) as any;
@@ -61,7 +62,7 @@ const ListsProduct = () => {
   }, [currentPage]);
 
   useEffect(() => {
-    document.title = "Luxe Loft | " + "List name";
+    document.title = "Luxe Loft | " + "List products";
   }, []);
 
   const handleShowModalDelete = (id: any, name: any) => {
@@ -195,6 +196,7 @@ const ListsProduct = () => {
               ))}
           </tbody>
         </table>
+        {products.length === 0 && <LoadingTable />}
       </div>
       <div className="pb-[16px]">
         <Pagination
@@ -244,6 +246,7 @@ const ListsProduct = () => {
 const ModalImage = (props: any) => {
   const { data, isOpen, onClose } = props;
   const [index, setIndex] = useState(0) as any;
+  const touchStartX = useRef(0);
 
   useEffect(() => {
     setIndex(data?.index);
@@ -254,6 +257,21 @@ const ModalImage = (props: any) => {
 
   const handlePrev = () =>
     index > 0 ? setIndex(index - 1) : setIndex(data.files.length - 1);
+
+  const handleTouchStart = (e: any) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: any) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    if (touchEndX < touchStartX.current) {
+      setIndex((prevIndex: any) => (prevIndex + 1) % data.files.length);
+    } else if (touchEndX > touchStartX.current) {
+      setIndex(
+        (prevIndex: any) =>
+          (prevIndex - 1 + data.files.length) % data.files.length
+      );
+    }
+  };
   return (
     <div className="fixed flex z-[5000] duration-200 top-[0] bottom-[0] left-[0] right-[0] items-center justify-center">
       <div className="absolute w-full h-full bg-[rgba(0,0,0,0.6)]"></div>
@@ -279,7 +297,7 @@ const ModalImage = (props: any) => {
         </div>
         <div className="relative">
           {data?.files.length > 1 && (
-            <>
+            <div className="xsm:hidden">
               <div
                 className="absolute left-[-260px] w-[200px] h-full cursor-pointer bg-[transparent] hover:bg-[rgba(0,0,0,0.05)] flex items-center justify-center"
                 onClick={handlePrev}
@@ -322,18 +340,24 @@ const ModalImage = (props: any) => {
                   />
                 </svg>
               </div>
-            </>
+            </div>
           )}
-          {data && (
-            <Image
-              src={data.files[index].url}
-              alt={`Uploaded ${data.files[index]}`}
-              className="!max-h-[auto] !max-w-[1000px] !relative object-cover object-center select-none"
-              fill
-              sizes="(max-width: 100px) 100vw"
-              loading="lazy"
-            />
-          )}
+          <div
+            className="max-w-[800px] max-h-[auto] !relative"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            {data && (
+              <Image
+                src={data.files[index].url}
+                alt={`Uploaded ${data.files[index]}`}
+                className="!max-h-[auto] !max-w-[800px] xsm:!max-w-[400px] !relative object-cover object-center select-none"
+                fill
+                sizes="(max-width: 100px) 100vw"
+                loading="lazy"
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -389,7 +413,7 @@ const ModalSee = (props: any) => {
         className="l:min-w-[800px] xsm:!max-w-[400px]"
       >
         <ModalBody
-          className={`${style.tableScroll} flex flex-col gap-y-[20px] overflow-y-auto max-h-[600px]`}
+          className={`${style.tableScroll} flex flex-col gap-y-[20px] overflow-y-auto max-h-[600px] xsm:!px-[10px]`}
         >
           <h1 className="text-[2.2em] text-text mb-[12px] capitalize">
             {name}
@@ -453,8 +477,8 @@ const ModalSee = (props: any) => {
             <LabelAndInput label="quantity" title={quantity} />
           </div>
           <div>
-            <LabelInput name="quantity" styleCustom="!mb-[4px]" />
-            <div className="flex gap-x-[12px]">
+            <LabelInput name="Colors" styleCustom="!mb-[4px]" />
+            <div className="flex gap-x-[12px] flex-wrap gap-y-[8px]">
               {jsonColors.map((color: any, index: any) => {
                 return (
                   <TitleSee
@@ -494,7 +518,7 @@ const ModalSee = (props: any) => {
             <TitleSee title={description} />
           </div>
         </ModalBody>
-        <ModalFooter className="flex xsm:flex-col sm:flex-col l:flex-row gap-x-[10px] gap-y-[10px]">
+        <ModalFooter className="flex xsm:flex-col sm:flex-col l:flex-row gap-x-[10px] gap-y-[10px] xsm:!px-[10px]">
           <ButtonModal
             onClick={onClose}
             title="Cancel"

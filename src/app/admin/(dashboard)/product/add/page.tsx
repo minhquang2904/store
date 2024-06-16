@@ -40,6 +40,10 @@ const AddProduct = () => {
   const iconMenuRef: any = useRef(null);
   const formData = new FormData();
 
+  useEffect(() => {
+    document.title = "Luxe Loft | " + "Add products";
+  }, []);
+
   const handleImageUpload = (event: any, setFieldValue: any) => {
     const files = Array.from(event.target.files);
 
@@ -910,9 +914,9 @@ const AddProduct = () => {
                               return (
                                 <div
                                   key={`${color.value}-${colorIndex}-${size.sizes}-${size._id}`}
-                                  className="w-[20%] xsm:basis-1/4 flex items-center xsm:shrink"
+                                  className="w-[20%] xsm:w-[16.6666667%] flex items-center xsm:shrink xsm:flex-col"
                                 >
-                                  <label className="text-text text-[1.4em] uppercase mr-[8px]">
+                                  <label className="text-text text-[1.5em] uppercase mr-[8px] xsm:mr-[0] xsm:font-medium">
                                     {size.sizes}
                                   </label>
                                   <Field
@@ -932,7 +936,7 @@ const AddProduct = () => {
                                           e.target.value,
                                       });
                                     }}
-                                    className="border-[#ABAEB1] px-[16px] py-[2px] xsm:text-subMobile sm:text-subTablet l:text-subDesktop w-full font-medium xsm:py-[10px] sm:py-[2px] text-[1.6em] border-solid border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
+                                    className="border-[#ABAEB1] xsm:text-center px-[16px] py-[2px] xsm:text-subMobile sm:text-subTablet l:text-subDesktop w-full font-medium xsm:py-[10px] sm:py-[2px] text-[1.6em] border-solid border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
                                   />
                                 </div>
                               );
