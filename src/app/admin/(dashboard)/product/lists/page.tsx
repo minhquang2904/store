@@ -33,6 +33,8 @@ const ListsProduct = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loadingData, setLoadingData] = useState(false);
+  const [loadingTable, setLoadingTable] = useState(true);
+  const [noProduct, setNoProduct] = useState(false) as any;
 
   const fetchData = () => {
     setLoadingData(true);
@@ -43,6 +45,7 @@ const ListsProduct = () => {
           if (data.status === 200) {
             setTotalPages(data.totalPages);
             setProducts(data.data);
+            data.data.length > 0 ? setNoProduct(false) : setNoProduct(true);
             if (data.data.length == 0) {
               setCurrentPage(data.totalPages);
             }
@@ -51,6 +54,7 @@ const ListsProduct = () => {
             console.error(data.message);
           }
           setLoadingData(false);
+          setLoadingTable(false);
         });
     } catch (error) {
       console.error("Error in fetchData: ", error);
@@ -121,7 +125,7 @@ const ListsProduct = () => {
                   <ContentTable title={product.categories} />
                   <ContentTable
                     title={product.sub_categories}
-                    styleCustom="xsm:!min-w-[140px] line-clamp-1"
+                    styleCustom="xsm:!min-w-[140px]"
                   />
                   <ContentTable title={product.quantity} />
                   <ContentTable title={product.price} />
@@ -196,7 +200,19 @@ const ListsProduct = () => {
               ))}
           </tbody>
         </table>
-        {products.length === 0 && <LoadingTable />}
+        {products.length === 0 && loadingTable && <LoadingTable />}
+        {noProduct && (
+          <div className="w-full h-full justify-center items-center flex mt-[100px]">
+            <Image
+              src="/images/no_product.png"
+              alt={"no_product"}
+              className="!max-h-[400px] !max-w-[400px] xsm:!max-w-[400px] !relative select-none"
+              fill
+              sizes="(max-width: 100px) 100vw"
+              loading="lazy"
+            />
+          </div>
+        )}
       </div>
       <div className="pb-[16px]">
         <Pagination
@@ -381,13 +397,12 @@ const ModalSee = (props: any) => {
     discount,
     discountedPrice,
     colors,
-    size,
+    sizes,
   } = data;
   const jsonColors = JSON.parse(colors);
-  const jsonSize = JSON.parse(size);
 
   let result: any = {};
-  for (let obj of jsonSize) {
+  for (let obj of sizes) {
     let key = obj.color;
     if (!result[key]) {
       result[key] = {
@@ -399,6 +414,7 @@ const ModalSee = (props: any) => {
     }
   }
   let newArrSize = Object.values(result);
+
   const handleShowModalImage = (files: any, index: any) => {
     setDataModalImage({ files, index });
     setModalImage(true);
@@ -410,7 +426,7 @@ const ModalSee = (props: any) => {
         rounded={"20px"}
         padding={"30px 10px 10px 10px "}
         margin={"auto 15px auto 15px"}
-        className="l:min-w-[800px] xsm:!max-w-[400px] sm:min-w-[700px]"
+        className="l:min-w-[800px] xsm:!max-w-[400px] sm:min-w-[700px] xsm:max-h-[600px]"
       >
         <ModalBody
           className={`${style.tableScroll} flex flex-col gap-y-[20px] overflow-y-auto max-h-[600px] xsm:!px-[10px]`}

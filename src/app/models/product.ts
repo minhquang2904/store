@@ -74,10 +74,23 @@ const productSchema: Schema = new Schema({
     required: true,
     default: 0,
   },
-  size: {
-    type: String,
-    required: true,
-  },
+  sizes: [
+    {
+      color: {
+        type: String,
+        required: true,
+      },
+      size: {
+        type: String,
+        required: true,
+      },
+      amount: {
+        type: Number,
+        required: true,
+        default: 0,
+      },
+    },
+  ],
   created_at: {
     type: Date,
     default: Date.now,

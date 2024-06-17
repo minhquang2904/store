@@ -25,7 +25,26 @@ export async function PUT(req: NextRequest) {
       const discountedPrice = data.get("discountedPrice");
       const colors = data.get("colors");
       const quantity = data.get("quantity");
-      const size = data.get("size");
+      const size: any = data.get("size");
+
+      const sizeParse = JSON.parse(size);
+      const existingSizes = [...product.sizes];
+
+      const newArrSizeExist: any = [];
+      const newArrSize: any = [];
+
+      sizeParse.forEach((newSize: any) => {
+        const exists = existingSizes.some((oldSize: any) => {
+          return (
+            oldSize.size === newSize.size && oldSize.color === newSize.color
+          );
+        });
+        if (exists) {
+          newArrSizeExist.push(newSize);
+        } else {
+          newArrSize.push(newSize);
+        }
+      });
 
       let newArrFileOld: any = [...product.files];
       let newArrFilesString: any = [];
@@ -99,7 +118,7 @@ export async function PUT(req: NextRequest) {
         discountedPrice: discountedPrice,
         colors: colors,
         quantity: quantity,
-        size: size,
+        sizes: [...newArrSizeExist, ...newArrSize],
       });
 
       return NextResponse.json({
@@ -134,6 +153,7 @@ export async function POST(req: any) {
     const quantity = data.get("quantity");
     const size = data.get("size");
     const files = data.getAll("files");
+    const sizeParse = JSON.parse(size);
 
     const urlImage = [];
     for (const file of files) {
@@ -166,7 +186,7 @@ export async function POST(req: any) {
       discountedPrice,
       colors,
       quantity,
-      size,
+      sizes: [...sizeParse],
     })
       .save()
       .then(async () => {
@@ -247,7 +267,6 @@ export async function DELETE(req: NextRequest) {
       const publicIds = files.map((file: any) => file.public_id);
 
       const deleteImage = await DeleteImage(publicIds);
-      console.log(deleteImage);
 
       await Product.findByIdAndDelete(id).then(async () => {
         const count = await Product.countDocuments({});

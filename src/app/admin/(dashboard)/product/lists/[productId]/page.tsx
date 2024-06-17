@@ -90,8 +90,10 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
     });
     const data = await res.json();
     const colorParse = JSON.parse(data.products.colors);
-    const sizeParse = JSON.parse(data.products.size);
-    const mergedValues = mergeApiDataWithInitialValues(sizeParse, colorParse);
+    const mergedValues = mergeApiDataWithInitialValues(
+      data.products.sizes,
+      colorParse
+    );
     const filteredValues = filterMergedValues(mergedValues);
 
     if (data.status === 200) {

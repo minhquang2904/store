@@ -2,10 +2,14 @@
 import MenuProfile from "@/app/components/menuProfile/menuProfile";
 import React from "react";
 import { ReactNode } from "react";
-
+import useAuth from "@/app/hooks/useAuth";
+import Loading from "@/app/components/loading/loading";
 const Layout = ({ children }: { children: ReactNode }) => {
+  const { user, loadingAuth } = useAuth();
+  console.log(user, loadingAuth);
   return (
     <>
+      {loadingAuth && <Loading />}
       <div className="flex justify-center items-center px-pLayout">
         <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
           <h1 className="sm:text-[3.2em] xsm:text-[2.8em] font-medium capitalize text-text mb-[30px]">
