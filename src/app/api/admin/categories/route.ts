@@ -1,5 +1,6 @@
 import connectDB from "@/app/config/connectDB";
 import Categories from "@/app/models/categories";
+import Product from "@/app/models/product";
 import SubCategories from "@/app/models/sub_categories";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -79,11 +80,21 @@ export async function DELETE(req: NextRequest) {
   try {
     const searchParams = req.nextUrl.searchParams;
     const id = searchParams.get("id");
+    const products = await Product.find({}, { categories: 1, _id: 0 });
+    const categories = await Categories.findById(id, { categories: 1, _id: 0 });
+
+    for (const value of products) {
+      if (value.categories === categories.categories) {
+        return NextResponse.json({
+          message: `Delete Categories Failed, ${categories.categories} is used`,
+          status: 400,
+        });
+      }
+    }
 
     await SubCategories.deleteOne({ categoryId: id });
 
     const data: any = await Categories.findByIdAndDelete(id);
-
     if (data) {
       return NextResponse.json({
         message: "Delete Categories Successfully",

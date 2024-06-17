@@ -1075,27 +1075,21 @@ const ModalAdd = (props: any) => {
         .then((data) => {
           if (data.status == 200) {
             setDataLoading("Successfully");
-            setResultModal(true);
+            setError(false);
             setModalAdd(false);
-            setTimeout(() => {
-              setLoading(false);
-            }, 800);
-            setTimeout(() => {
-              setResultModal(false);
-            }, 1000);
           }
           if (data.status == 400) {
             setDataLoading("Failed");
             setErrorData(data.message);
             setError(true);
-            setResultModal(true);
-            setTimeout(() => {
-              setLoading(false);
-            }, 800);
-            setTimeout(() => {
-              setResultModal(false);
-            }, 1000);
           }
+          setResultModal(true);
+          setTimeout(() => {
+            setLoading(false);
+          }, 800);
+          setTimeout(() => {
+            setResultModal(false);
+          }, 1000);
           setTimeout(() => {
             setSubmitting(false);
           }, 1200);
@@ -1137,10 +1131,16 @@ const ModalAdd = (props: any) => {
       fetch(`/api/admin/${type}?id=${id}`, { method: "DELETE" })
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           if (data.status == 200) {
-            setLoadingLists(false);
+            setError(false);
             getLists();
           }
+          if (data.status == 400) {
+            setErrorData(data.message);
+            setError(true);
+          }
+          setLoadingLists(false);
         });
     } catch (error: any) {
       console.log("Delete Failed", error.message);
@@ -1165,8 +1165,15 @@ const ModalAdd = (props: any) => {
       })
         .then((res) => res.json())
         .then((data) => {
+          if (data.status == 200) {
+            getLists();
+            setError(false);
+          }
+          if (data.status == 400) {
+            setErrorData(data.message);
+            setError(true);
+          }
           setLoadingLists(false);
-          getLists();
         });
     } catch (error: any) {
       console.log("Delete Failed", error.message);
@@ -1208,7 +1215,10 @@ const ModalAdd = (props: any) => {
               className={`select-none cursor-pointer font-medium ${
                 changeLists ? "text-text" : "text-[#1B84FF]"
               }`}
-              onClick={() => setChangeLists(false)}
+              onClick={() => {
+                setError(false);
+                setChangeLists(false);
+              }}
             >
               Add
             </h1>
@@ -1218,6 +1228,7 @@ const ModalAdd = (props: any) => {
               }`}
               onClick={() => {
                 getLists();
+                setError(false);
                 setChangeLists(true);
               }}
             >
@@ -1227,6 +1238,11 @@ const ModalAdd = (props: any) => {
         </ModalHeader>
         {changeLists ? (
           <>
+            <div className="px-[16px]">
+              {error && (
+                <ErrorMessage message={errorData} styleCustom="!mb-[0px]" />
+              )}
+            </div>
             {getData && (
               <>
                 <ModalBody
