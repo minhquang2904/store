@@ -8,8 +8,7 @@ import IconListsProduct from "../iconListsProduct/iconListProduct";
 import { useRouter } from "next/navigation";
 
 import { data } from "@/app/data";
-const NavBar = ({ dataUser }: any) => {
-  console.log("dataUser", dataUser);
+const NavBar = ({ users }: any) => {
   const pathname = usePathname();
   const searchInput: any = useRef(null);
   const [dataList, setDataList] = useState(data);
@@ -20,6 +19,12 @@ const NavBar = ({ dataUser }: any) => {
   const [user, setUser] = useState(null) as any;
   const { push } = useRouter();
 
+  useEffect(() => {
+    if (users) {
+      setUser(users);
+      console.log("users", users);
+    }
+  }, [users]);
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
 
   const checkNavActive = (url: string): string => {

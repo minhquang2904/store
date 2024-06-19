@@ -29,15 +29,13 @@ const Layout = ({ children }: { children: ReactNode }) => {
             }
           });
       }
-      setDataUser(users);
-      console.log("setUser---setUser");
     }
-  }, [id]);
+  }, [pathName, id]);
   return (
     <>
       {loadingAuth && <Loading />}
       <div className="bg-[#F3F4F4] min-h-[100vh] mainLayout">
-        <NavBar dataUser={dataUser} />
+        <NavBar users={users} />
         {/* <NavBar id={id} loading Auth={loadingAuth} /> */}
         <main>{children}</main>
         <Support />
