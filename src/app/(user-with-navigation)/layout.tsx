@@ -12,11 +12,10 @@ import useFetchUser from "../hooks/useFetchUser";
 const protectedRoutes = ["/cart", "/profile", "/like"];
 
 const Layout = ({ children }: { children: ReactNode }) => {
-  const { id, loadingAuth } = useAuth();
+  const { id, loadingAuth, setLoadingAuth } = useAuth();
   const users = useFetchUser({ id });
   const pathName = usePathname();
   const { push } = useRouter();
-  const [dataUser, setDataUser] = useState(null) as any;
 
   useEffect(() => {
     if (!loadingAuth) {
@@ -35,7 +34,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <>
       {loadingAuth && <Loading />}
       <div className="bg-[#F3F4F4] min-h-[100vh] mainLayout">
-        <NavBar users={users} />
+        <NavBar users={users} setLoadingAuth={setLoadingAuth} />
         {/* <NavBar id={id} loading Auth={loadingAuth} /> */}
         <main>{children}</main>
         <Support />

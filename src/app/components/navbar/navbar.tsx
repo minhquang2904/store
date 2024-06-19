@@ -8,7 +8,7 @@ import IconListsProduct from "../iconListsProduct/iconListProduct";
 import { useRouter } from "next/navigation";
 
 import { data } from "@/app/data";
-const NavBar = ({ users }: any) => {
+const NavBar = ({ users, setLoadingAuth }: any) => {
   const pathname = usePathname();
   const searchInput: any = useRef(null);
   const [dataList, setDataList] = useState(data);
@@ -22,6 +22,7 @@ const NavBar = ({ users }: any) => {
   useEffect(() => {
     if (users) {
       setUser(users);
+      setLoadingAuth(false);
       console.log("users", users);
     }
   }, [users]);
@@ -379,7 +380,7 @@ const NavBar = ({ users }: any) => {
                         className="cursor-pointer h-full w-full text-text text-[20px] flex shrink grow items-center profileName"
                         onClick={() => setProfileModal(!profileModal)}
                       >
-                        {user.email}
+                        {user?.email}
                       </h3>
                     </div>
                     <div className="xsm:block l:hidden !relative">
