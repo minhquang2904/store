@@ -4,10 +4,10 @@ const useFetchUser = ({ id }: any) => {
   const [user, setUser] = useState(null) as any;
 
   useEffect(() => {
-    console.log("re-render", "re-render");
-    // if (!id) {
-    //   return;
-    // }
+    console.log("re-render re-render re-render");
+    if (!id) {
+      return;
+    }
     const fetchDataWithToken = async () => {
       try {
         await fetch("/api/users/information_user", {

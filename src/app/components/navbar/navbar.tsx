@@ -1,17 +1,14 @@
 import Link from "next/link";
 import style from "./navbar.module.scss";
 import Image from "next/image";
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import NoItemCart from "../noItemCart/noItemCart";
 import IconListsProduct from "../iconListsProduct/iconListProduct";
 import { useRouter } from "next/navigation";
-import useFetchUser from "@/app/hooks/useFetchUser";
 
-const NavBar = ({ id }: any) => {
-  const data = useFetchUser({ id });
-  console.log("id-----", id);
-
+import { data } from "@/app/data";
+const NavBar = () => {
   const pathname = usePathname();
   const searchInput: any = useRef(null);
   const [dataList, setDataList] = useState(data);
@@ -19,15 +16,8 @@ const NavBar = ({ id }: any) => {
   const [showSearch, setShowSearch] = useState(false);
   const [cartModal, setCartModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
-  const [user, setUser] = useState(data) as any;
+  const [user, setUser] = useState(null) as any;
   const { push } = useRouter();
-
-  // console.log("user", user);
-  useLayoutEffect(() => {
-    console.log("useEffect -- -- ----- start", user);
-    setUser(data);
-  }, [data]);
-  console.log("useEffect -- -- ----- end", user);
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
 

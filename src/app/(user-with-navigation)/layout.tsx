@@ -14,8 +14,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const { id, loadingAuth } = useAuth();
   const pathName = usePathname();
   const { push } = useRouter();
-
-  console.log("---------id", id, loadingAuth);
+  console.log("id", id);
   useEffect(() => {
     if (!loadingAuth) {
       if (protectedRoutes.includes(pathName) && !id) {
@@ -29,11 +28,16 @@ const Layout = ({ children }: { children: ReactNode }) => {
       }
     }
   }, [id]);
+
+  useEffect(() => {
+    console.log("re-render re-render re-render");
+  }, [id]);
   return (
     <>
       {loadingAuth && <Loading />}
       <div className="bg-[#F3F4F4] min-h-[100vh] mainLayout">
-        <NavBar id={id} loadingAuth={loadingAuth} />
+        <NavBar />
+        {/* <NavBar id={id} loadingAuth={loadingAuth} /> */}
         <main>{children}</main>
         <Support />
         <Footer />
