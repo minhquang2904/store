@@ -1,7 +1,7 @@
 import Link from "next/link";
 import style from "./navbar.module.scss";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import NoItemCart from "../noItemCart/noItemCart";
 import IconListsProduct from "../iconListsProduct/iconListProduct";
@@ -23,10 +23,11 @@ const NavBar = ({ id }: any) => {
   const { push } = useRouter();
 
   // console.log("user", user);
-  useEffect(() => {
-    console.log("data", user);
+  useLayoutEffect(() => {
+    console.log("useEffect -- -- ----- start", user);
     setUser(data);
   }, [data]);
+  console.log("useEffect -- -- ----- end", user);
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
 
