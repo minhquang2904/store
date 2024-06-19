@@ -15,7 +15,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const pathName = usePathname();
   const { push } = useRouter();
 
-  // console.log("id", id, loadingAuth);
+  console.log("---------id", id, loadingAuth);
   useEffect(() => {
     if (!loadingAuth) {
       if (protectedRoutes.includes(pathName) && !id) {

@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
-const protectedRoutes = ["/cart", "/profile", "/like"];
-
 const useAuth = () => {
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [user, setUser] = useState(null) as any;

@@ -10,7 +10,7 @@ import useFetchUser from "@/app/hooks/useFetchUser";
 
 const NavBar = ({ id }: any) => {
   const data = useFetchUser({ id });
-  console.log("id", id);
+  console.log("id-----", id);
 
   const pathname = usePathname();
   const searchInput: any = useRef(null);
