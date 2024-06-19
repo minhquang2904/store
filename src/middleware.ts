@@ -10,7 +10,6 @@ const protectedRoutes = [
   "/profile",
   "/reviewOrder",
 ];
-
 const loginRoutes = ["/login", "/signup"];
 
 export default async function middleware(req: any) {
