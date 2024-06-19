@@ -16,7 +16,6 @@ const useAuth = () => {
           .then((result) => {
             const status = result.status;
             const data = result.data;
-            console.log("data", data);
             if (status === 200) {
               setUser(data);
             }

@@ -4,6 +4,7 @@ const useFetchUser = ({ id }: any) => {
   const [user, setUser] = useState(null) as any;
 
   useEffect(() => {
+    console.log("re-render", "re-render");
     if (!id) {
       return;
     }
