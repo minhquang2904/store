@@ -26,12 +26,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
             }
           });
       }
+      console.log("re-render re-render re-render");
     }
   }, [id]);
 
-  useEffect(() => {
-    console.log("re-render re-render re-render");
-  }, [id]);
   return (
     <>
       {loadingAuth && <Loading />}

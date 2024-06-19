@@ -5,7 +5,7 @@ const useAuth = () => {
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [user, setUser] = useState(null) as any;
   const path = usePathname();
-  console.log("result result result");
+  console.log("result result result user", user);
 
   useEffect(() => {
     const fetchDataWithToken = async () => {
@@ -30,7 +30,6 @@ const useAuth = () => {
         console.error("There was a problem with token validation:", error);
       }
     };
-
     fetchDataWithToken();
   }, [path]);
 
