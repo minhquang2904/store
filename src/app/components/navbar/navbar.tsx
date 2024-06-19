@@ -139,6 +139,7 @@ const NavBar = ({ users, setLoadingAuth }: any) => {
         .then((result) => {
           if (result.status === 200) {
             push("/login");
+            setLoadingAuth(false);
           }
         });
     } catch (error) {

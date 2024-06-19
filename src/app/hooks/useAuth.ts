@@ -8,6 +8,7 @@ const useAuth = () => {
 
   useEffect(() => {
     const fetchDataWithToken = async () => {
+      console.log("fetchDataWithToken");
       try {
         const res = await fetch("/api/users/validation-token");
         const result = await res.json();
