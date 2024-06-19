@@ -17,7 +17,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     id && setUserId(id);
   }, [id]);
-  const users = useFetchUser({ id: userId });
+  const dataUser = useFetchUser({ id: userId });
+  const [users, setUsers] = useState(null);
+  useEffect(() => {
+    if (dataUser) {
+      setUsers(dataUser);
+    }
+  }, [dataUser]);
+
   const pathName = usePathname();
   const { push } = useRouter();
   console.log("id", id);

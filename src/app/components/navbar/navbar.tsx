@@ -23,7 +23,7 @@ const NavBar = ({ users, setLoadingAuth }: any) => {
     if (users) {
       setUser(users);
       // setLoadingAuth(false);
-      // console.log("users", users);
+      console.log("users", users);
     }
   }, [users]);
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];

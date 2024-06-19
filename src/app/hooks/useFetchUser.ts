@@ -28,7 +28,9 @@ const useFetchUser = ({ id }: any) => {
         console.error("Get user Failed!", error);
       }
     };
-    fetchDataWithToken();
+    if (!user) {
+      fetchDataWithToken();
+    }
   }, [id]);
 
   return user;
