@@ -3,23 +3,24 @@ import style from "./navbar.module.scss";
 import Image from "next/image";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { login, data } from "@/app/data";
+import { data } from "@/app/data";
 import NoItemCart from "../noItemCart/noItemCart";
 import IconListsProduct from "../iconListsProduct/iconListProduct";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import useFetchUser from "@/app/hooks/useFetchUser";
 
-const NavBar = () => {
+const NavBar = ({ id }: any) => {
+  const user = useFetchUser({ id });
+
+  const pathname = usePathname();
   const searchInput: any = useRef(null);
   const [dataList, setDataList] = useState(data);
   const [navBottom, setNavBottom] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [cartModal, setCartModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
-  const [token, setToken] = useState("");
-  const pathname = usePathname();
-  const router = useRouter();
-  const accessToken: any = Cookies.get("LOGIN-INFO-USER");
+  const { push } = useRouter();
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
 
@@ -127,13 +128,18 @@ const NavBar = () => {
     };
   }, [pathname]);
 
-  useLayoutEffect(() => {
-    setToken(accessToken);
-  }, [token]);
-
   const handleSignOut = () => {
-    Cookies.remove("LOGIN-INFO-USER");
-    router.push("/login");
+    try {
+      fetch("/api/users/logout", { method: "POST" })
+        .then((res) => res.json())
+        .then((result) => {
+          if (result.status === 200) {
+            push("/login");
+          }
+        });
+    } catch (error) {
+      console.error("Sign out failed!", error);
+    }
   };
 
   return (
@@ -241,7 +247,7 @@ const NavBar = () => {
                   />
                 </div>
               </div>
-              {!token ? (
+              {!user ? (
                 <Link
                   className="hover:bg-hover1 cursor-pointer p-[10px] rounded-full relative"
                   href="/login"
@@ -362,7 +368,7 @@ const NavBar = () => {
                 </>
               )}
 
-              {token ? (
+              {user ? (
                 <>
                   <div className="flex items-center relative">
                     <div className="h-full w-full ml-[10px] xsm:hidden sm:hidden l:flex">
@@ -370,7 +376,7 @@ const NavBar = () => {
                         className="cursor-pointer h-full w-full text-text text-[20px] flex shrink grow items-center profileName"
                         onClick={() => setProfileModal(!profileModal)}
                       >
-                        Lương Minh Quang
+                        {user.email}
                       </h3>
                     </div>
                     <div className="xsm:block l:hidden !relative">

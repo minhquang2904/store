@@ -1,24 +1,15 @@
 import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import Cookies from "js-cookie";
+import { usePathname } from "next/navigation";
 
 const useAuth = () => {
   const [loadingAuth, setLoadingAuth] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null) as any;
   const path = usePathname();
-  const router = useRouter();
-  const token = Cookies.get("LOGIN-INFO-USER");
 
   useEffect(() => {
     const fetchDataWithToken = async () => {
       try {
-        await fetch("/api/users/validation-token", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ token }),
-        })
+        await fetch("/api/users/validation-token")
           .then((res) => res.json())
           .then((result) => {
             const status = result.status;
@@ -28,27 +19,22 @@ const useAuth = () => {
               setUser(data);
             }
             if (status === 400) {
-              console.log(result.message);
-              Cookies.remove("LOGIN-INFO-USER");
-              router.push("/login");
+              // console.log(result.message);
             }
             if (status === 500) {
-              console.log(result.error);
-              Cookies.remove("LOGIN-INFO-USER");
-              router.push("/login");
+              // console.log(result.error);
             }
             setLoadingAuth(false);
           });
       } catch (error) {
         console.error("There was a problem with token validation:", error);
-        Cookies.remove("LOGIN-INFO-USER");
-        router.push("/login");
       }
     };
 
     fetchDataWithToken();
   }, [path]);
-  return { user, loadingAuth };
+
+  return { id: user?.id, loadingAuth };
 };
 
 export default useAuth;

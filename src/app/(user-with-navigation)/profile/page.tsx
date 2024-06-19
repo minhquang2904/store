@@ -1,5 +1,7 @@
 "use client";
 import Image from "next/image";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
 import {
   Modal,
   ModalOverlay,
@@ -10,67 +12,21 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Loading from "@/app/components/loading/loading";
-
-const renderCity = (area: any, citis: any, district: any, ward: any) => {
-  for (const x of area) {
-    citis.options[citis.options.length] = new Option(x.Name, x.Id);
-  }
-  citis.addEventListener("change", () => {
-    district.length = 1;
-    ward.length = 1;
-    if (citis.value != "") {
-      const result = area.filter((n: any) => n.Id === citis.value);
-
-      for (const k of result[0].Districts) {
-        district.options[district.options.length] = new Option(k.Name, k.Id);
-      }
-    }
-  });
-
-  district.addEventListener("change", () => {
-    ward.length = 1;
-    const dataCity = area.filter((n: any) => n.Id === citis.value);
-    if (district.value != "") {
-      const dataWards = dataCity[0].Districts.filter(
-        (n: any) => n.Id === district.value
-      )[0].Wards;
-
-      for (const w of dataWards) {
-        ward.options[ward.options.length] = new Option(w.Name, w.Id);
-      }
-    }
-  });
-};
+import FieldInput from "@/app/components/fieldInput/fieldInput";
+import ErrorInput from "@/app/components/errorInput/errorInput";
+import LabelInput from "@/app/components/labelInput/labelInput";
+import BtnAccount from "@/app/components/btnAccount/btnAccount";
 
 const Profile = () => {
   const [modalEditProfile, setModalEditProfile] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [area, setArea] = useState();
-  const AREA_URL: any = process.env.AREA_URL;
 
   const handleCloseModalEditProfile = () => setModalEditProfile(false);
-  const handleShowModalEditProfile = () => {
-    setLoading(true);
-    getDataArea(AREA_URL).then((data) => {
-      setArea(data);
-      setLoading(false);
-      setModalEditProfile(true);
-    });
-  };
-
-  useEffect(() => {
-    if (area && modalEditProfile) {
-      const getElement = setTimeout(() => {
-        const citis = document.querySelector("#cityAdd");
-        const district = document.querySelector("#districtAdd");
-        const ward = document.querySelector("#wardAdd");
-        renderCity(area, citis, district, ward);
-      }, 10);
-      return () => clearTimeout(getElement);
-    }
-  }, [modalEditProfile]);
+  const handleShowModalEditProfile = () => setModalEditProfile(true);
+  const user: any = "";
   return (
     <>
+      {/* {loadingAuth && <Loading />} */}
       <div>
         <div className="flex justify-between items-center">
           <div className="!relative max-w-[80px] max-h-[80px] w-full">
@@ -110,11 +66,13 @@ const Profile = () => {
               title="First Name"
               styleCustom="sm:w-[50%] xsm:w-[100%]"
               readOnly={true}
+              value={user?.firstName || "N/A"}
             />
             <InputModal
               title="Last Name"
               styleCustom="sm:w-[50%] xsm:w-[100%]"
               readOnly={true}
+              value={user?.lastName || "N/A"}
             />
           </div>
           <div className="flex gap-x-[20px] xsm:flex-col">
@@ -122,11 +80,13 @@ const Profile = () => {
               title="Phone Number"
               styleCustom="sm:w-[50%] xsm:w-[100%]"
               readOnly={true}
+              value={user?.phone || "N/A"}
             />
             <InputModal
               title="Email Address"
               styleCustom="sm:w-[50%] xsm:w-[100%]"
               readOnly={true}
+              value={user?.email || "N/A"}
             />
           </div>
           <div className="flex gap-x-[20px]">
@@ -134,38 +94,34 @@ const Profile = () => {
               title="Address"
               styleCustom="w-[100%]"
               readOnly={true}
+              // value={user?.address.length > 1 ? user?.address_list : "N/A"}
             />
           </div>
         </div>
       </div>
-      <ModalAdd
-        isOpen={modalEditProfile}
-        onClose={handleCloseModalEditProfile}
-      />
+      {modalEditProfile && (
+        <ModalAdd
+          isOpen={modalEditProfile}
+          onClose={handleCloseModalEditProfile}
+          setLoading={setLoading}
+        />
+      )}
       {loading && <Loading />}
     </>
   );
 };
 
-const LabelInput = (props: any) => {
-  const { title } = props;
-  return (
-    <label className="text-text capitalize text-[1.6em] mb-[8px] font-medium">
-      {title}
-    </label>
-  );
-};
-
 const InputModal = (props: any) => {
-  const { title, type, placeholder, styleCustom, readOnly } = props;
+  const { title, type, placeholder, styleCustom, readOnly, value } = props;
   return (
     <div className={`flex flex-col mb-[16px] ${styleCustom}`}>
       <LabelInput title={title} />
       <input
+        value={value}
         readOnly={readOnly}
         type={type}
         placeholder={placeholder}
-        className="outline-none border-[1px] border-solid border-button px-[16px] py-[10px] rounded-[12px] text-[1.6em] text-text"
+        className="outline-none border-[1px] border-button px-[16px] py-[10px] rounded-[12px] text-[1.6em] text-text"
       />
     </div>
   );
@@ -183,130 +139,291 @@ const ButtonModal = (props: any) => {
   );
 };
 
-const InputOptionModal = (props: any) => {
-  const { title, subTitle, id, name, data } = props;
-  return (
-    <div className="flex flex-col mb-[16px]">
-      <LabelInput title={title} />
-      <div className="relative">
-        <select
-          id={id}
-          name={name}
-          className="border-[1px] border-solid border-button px-[16px] py-[10px] rounded-[12px] text-[1.6em] text-text outline-none appearance-none w-full"
-          defaultValue=""
-        >
-          <option value="">{subTitle}</option>
-        </select>
-        <label
-          className="absolute top-[50%] translate-y-[-50%] right-[16px]"
-          htmlFor={id}
-        >
-          <svg
-            fill="none"
-            height="18"
-            viewBox="0 0 24 24"
-            width="18"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="m4 8 8 8 8-8"
-              stroke="#000"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-            />
-          </svg>
-        </label>
-      </div>
-    </div>
-  );
-};
-
 const ModalAdd = (props: any) => {
-  const { isOpen, onClose } = props;
+  const { isOpen, onClose, setLoading } = props;
+  const [area, setArea] = useState([]) as any;
+  const [city, setCity] = useState([]) as any;
+  const [district, setDistrict] = useState([]) as any;
+
+  const initialValues = {
+    firstName: "",
+  };
+
+  const userSchema = Yup.object().shape({
+    firstName: Yup.string()
+      .required("Product Name is required")
+      .max(100, "The product name can only be a maximum of 100 characters")
+      .matches(/^[a-zA-Z]+$/, "Contains special characters or Numbers"),
+  });
+
+  useEffect(() => {
+    const fetchDataArea = async () => {
+      setLoading(true);
+      try {
+        await fetch(process.env.AREA_URL!)
+          .then((res) => res.json())
+          .then((data) => {
+            setArea(data);
+            setLoading(false);
+          });
+      } catch (error: any) {
+        console.log("Get area Failed!", error);
+      }
+    };
+    fetchDataArea();
+  }, []);
+
+  useEffect(() => {
+    if (!city) {
+      setDistrict([]);
+    }
+  }, [city]);
+
+  const handleSubmit = (values: any, setSubmitting: any, resetForm: any) => {
+    console.log("values", values);
+    setSubmitting(true);
+  };
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent
         rounded={"20px"}
-        padding={"10px"}
+        padding={"10px 2px 10px 2px"}
         margin={"auto 15px auto 15px"}
-        maxWidth={"500px"}
+        className="xsm:!max-w-[400px] xsm:!max-h-[600px]"
       >
-        <ModalHeader padding={"8px 16px"}>
+        <ModalHeader padding={"8px 16px 10px 8px"}>
           <div>
             <h1>Edit Profile</h1>
           </div>
         </ModalHeader>
-        <ModalBody className="flex flex-col" padding={"8px 16px"}>
-          <div className="flex justify-between gap-x-[20px] xsm:flex-col">
-            <InputModal
-              title="First Name"
-              type="text"
-              placeholder="Enter First Name"
-              styleCustom={"sm:w-[50%] xsm:w-[100%]"}
-            />
-            <InputModal
-              title="Last Name"
-              type="text"
-              placeholder="Enter Last Name"
-              styleCustom={"sm:w-[50%] xsm:w-[100%]"}
-            />
-          </div>
-          <InputModal
-            title="mobile number"
-            type="text"
-            placeholder="Enter Mobile Number"
-          />
-          <InputModal
-            title="Email Address"
-            type="text"
-            placeholder="Enter Email Address"
-          />
-          <InputOptionModal
-            title="City"
-            subTitle="Choose city"
-            id="cityAdd"
-            name="cityAdd"
-          />
-          <InputOptionModal
-            title="District"
-            subTitle="Choose district"
-            id="districtAdd"
-            name="districtAdd"
-          />
-          <InputOptionModal
-            title="Ward"
-            subTitle="Choose ward"
-            id="wardAdd"
-            name="wardAdd"
-          />
-          <InputModal
-            title="Street Name, Building, House No."
-            type="text"
-            placeholder="Street Name, Building, House No."
-          />
-        </ModalBody>
-        <ModalFooter padding={"8px 16px"} className="flex gap-x-[10px]">
-          <ButtonModal
-            onClick={onClose}
-            title="Cancel"
-            styleCustom="border-button bg-white"
-          />
-          <ButtonModal
-            onClick={onClose}
-            title="Save"
-            styleCustom="bg-button text-white"
-          />
-        </ModalFooter>
+
+        <Formik
+          initialValues={initialValues}
+          validationSchema={userSchema}
+          validateOnChange={true}
+          onSubmit={(values, { setSubmitting, resetForm }) =>
+            handleSubmit(values, setSubmitting, resetForm)
+          }
+        >
+          {({ isSubmitting, setFieldValue, values }) => (
+            <Form className="flex flex-col gap-y-[16px] overflow-hidden">
+              <div className="flex flex-col gap-y-[20px] overflow-y-auto px-[8px]">
+                <div className="flex justify-between gap-x-[20px] gap-y-[20px] xsm:flex-col">
+                  <div className="sm:w-[50%] xsm:w-[100%]">
+                    <LabelInput
+                      name="First Name"
+                      id="firstName"
+                      styleCustom="!mb-[4px]"
+                    />
+                    <FieldInput
+                      type="text"
+                      name="firstName"
+                      placeholder="Enter first name"
+                      styleCustom="!border-[#ABAEB1]"
+                    />
+                    <ErrorInput name="firstName" />
+                  </div>
+                  <div className="sm:w-[50%] xsm:w-[100%]">
+                    <LabelInput
+                      name="Last Name"
+                      id="lastName"
+                      styleCustom="!mb-[4px]"
+                    />
+                    <FieldInput
+                      type="text"
+                      name="lastName"
+                      placeholder="Enter last name"
+                      styleCustom="!border-[#ABAEB1]"
+                    />
+                    <ErrorInput name="lastName" />
+                  </div>
+                </div>
+                <div>
+                  <LabelInput
+                    name="Phone Number"
+                    id="phone"
+                    styleCustom="!mb-[4px]"
+                  />
+                  <FieldInput
+                    type="text"
+                    name="phone"
+                    placeholder="Enter phone number"
+                    styleCustom="!border-[#ABAEB1]"
+                  />
+                  <ErrorInput name="phone" />
+                </div>
+                <div>
+                  <LabelInput name="Email" id="email" styleCustom="!mb-[4px]" />
+                  <FieldInput
+                    type="text"
+                    name="email"
+                    placeholder="Enter email"
+                    styleCustom="!border-[#ABAEB1]"
+                  />
+                  <ErrorInput name="email" />
+                </div>
+                <div>
+                  <LabelInput name="city" styleCustom="!mb-[4px]" />
+                  <div className="relative">
+                    <Field
+                      as="select"
+                      name="city"
+                      className="xsm:text-subMobile appearance-none capitalize sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[#ABAEB1] border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
+                      onChange={(e: any) => {
+                        const result = area.filter(
+                          (n: any) => n.Name === e.target.value
+                        );
+                        setFieldValue("city", e.target.value);
+                        setCity(result[0]?.Districts);
+                      }}
+                    >
+                      <option value="" label="Select city" />
+                      {area?.map((option: any) => {
+                        return (
+                          <option key={option.Id} value={option.Name}>
+                            {option.Name}
+                          </option>
+                        );
+                      })}
+                    </Field>
+                    <label className="absolute top-[50%] translate-y-[-50%] right-[16px]">
+                      <svg
+                        fill="none"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        width="18"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m4 8 8 8 8-8"
+                          stroke="#000"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                    </label>
+                  </div>
+                  <ErrorInput name="city" />
+                </div>
+                <div>
+                  <LabelInput name="district" styleCustom="!mb-[4px]" />
+                  <div className="relative">
+                    <Field
+                      as="select"
+                      name="district"
+                      className="xsm:text-subMobile appearance-none capitalize sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[#ABAEB1] border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
+                      onChange={(e: any) => {
+                        const result = city.filter(
+                          (n: any) => n.Name === e.target.value
+                        );
+                        setFieldValue("district", e.target.value);
+                        setDistrict(result[0]?.Wards);
+                      }}
+                    >
+                      <option value="" label="Select district" />
+                      {city?.map((option: any) => {
+                        return (
+                          <option key={option.Id} value={option.Name}>
+                            {option.Name}
+                          </option>
+                        );
+                      })}
+                    </Field>
+                    <label className="absolute top-[50%] translate-y-[-50%] right-[16px]">
+                      <svg
+                        fill="none"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        width="18"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m4 8 8 8 8-8"
+                          stroke="#000"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                    </label>
+                  </div>
+                  <ErrorInput name="district" />
+                </div>
+                <div>
+                  <LabelInput name="ward" styleCustom="!mb-[4px]" />
+                  <div className="relative">
+                    <Field
+                      as="select"
+                      name="ward"
+                      className="xsm:text-subMobile appearance-none capitalize sm:text-subTablet l:text-subDesktop w-full font-medium p-[16px] xsm:py-[10px] sm:py-[10px] text-[1.6em] border-solid border-[#ABAEB1] border-[1px] rounded-[12px] outline-none text-text hover:bg-[rgba(151,179,231,0.3)] duration-300 ease-out"
+                      onChange={(e: any) => {
+                        setFieldValue("ward", e.target.value);
+                      }}
+                    >
+                      <option value="" label="Select ward" />
+                      {district?.map((option: any) => {
+                        return (
+                          <option key={option.Id} value={option.Name}>
+                            {option.Name}
+                          </option>
+                        );
+                      })}
+                    </Field>
+                    <label className="absolute top-[50%] translate-y-[-50%] right-[16px]">
+                      <svg
+                        fill="none"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        width="18"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m4 8 8 8 8-8"
+                          stroke="#000"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                    </label>
+                  </div>
+                  <ErrorInput name="ward" />
+                </div>
+                <div>
+                  <LabelInput
+                    name="Street Name, Building, House No."
+                    id="street"
+                    styleCustom="!mb-[4px]"
+                  />
+                  <FieldInput
+                    type="text"
+                    name="street"
+                    placeholder="Street Name, Building, House No."
+                    styleCustom="!border-[#ABAEB1]"
+                  />
+                  <ErrorInput name="street" />
+                </div>
+              </div>
+              <div className="flex gap-x-[10px] justify-end mt-[16px]">
+                <ButtonModal
+                  onClick={onClose}
+                  title="Cancel"
+                  styleCustom="border-button bg-white"
+                />
+                <BtnAccount
+                  // disabled={isSubmitting}
+                  type="submit"
+                  styleCustom="max-w-[120px] !mt-[0] !px-[20px] !py-[8px] !border-button !rounded-[12px]"
+                />
+              </div>
+            </Form>
+          )}
+        </Formik>
       </ModalContent>
     </Modal>
   );
-};
-
-const getDataArea = async (url: any) => {
-  const res = await fetch(url);
-  return res.json();
 };
 
 export default Profile;

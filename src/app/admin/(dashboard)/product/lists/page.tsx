@@ -289,9 +289,9 @@ const ModalImage = (props: any) => {
     }
   };
   return (
-    <div className="fixed flex z-[5000] duration-200 top-[0] bottom-[0] left-[0] right-[0] items-center justify-center">
+    <div className="fixed flex z-[5000] duration-200 top-[0] bottom-[0] left-[0] right-[0] items-center">
       <div className="absolute w-full h-full bg-[rgba(0,0,0,0.6)]"></div>
-      <div>
+      <div className="w-full">
         <div
           className="absolute right-[30px] top-[30px] cursor-pointer hover:opacity-80 duration-200"
           onClick={onClose}
@@ -311,11 +311,11 @@ const ModalImage = (props: any) => {
             <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         </div>
-        <div className="relative">
+        <div className="relative w-full flex justify-center">
           {data?.files.length > 1 && (
             <div className="xsm:hidden">
               <div
-                className="absolute left-[-260px] w-[200px] h-full cursor-pointer bg-[transparent] hover:bg-[rgba(0,0,0,0.05)] flex items-center justify-center"
+                className="absolute left-[0] top-[0] w-[200px] h-full cursor-pointer bg-[transparent] hover:bg-[rgba(0,0,0,0.05)] flex justify-center items-center"
                 onClick={handlePrev}
               >
                 <svg
@@ -336,7 +336,7 @@ const ModalImage = (props: any) => {
                 </svg>
               </div>
               <div
-                className="absolute right-[-260px] w-[200px] h-full cursor-pointer bg-[transparent] hover:bg-[rgba(0,0,0,0.05)] flex items-center justify-center"
+                className="absolute right-[0] top-[0] w-[200px] h-full cursor-pointer bg-[transparent] hover:bg-[rgba(0,0,0,0.05)] flex items-center justify-center"
                 onClick={handleNext}
               >
                 <svg

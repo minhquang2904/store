@@ -16,7 +16,7 @@ import Cookies from "js-cookie";
 import LoadingModal from "@/app/components/loadingModal/loadingModal";
 
 export default function Login() {
-  const router = useRouter();
+  const { push } = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
@@ -41,13 +41,7 @@ export default function Login() {
         .then((data) => {
           setLoading(false);
           if (data.status == 200) {
-            Cookies.set("LOGIN-INFO-USER", data.token, {
-              sameSite: "strict",
-              secure: true,
-              path: "/",
-              expires: 7,
-            });
-            router.push("/");
+            push("/");
           }
           if (data.status == 400) {
             setError(true);

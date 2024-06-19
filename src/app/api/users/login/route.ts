@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import User from "@/app/models/user";
 import { signToken } from "@/app/lib/jwt";
+import { createCookie } from "@/app/lib/cookie";
 
 export async function POST(req: NextRequest) {
   await connectDB();
@@ -15,8 +16,7 @@ export async function POST(req: NextRequest) {
       if (isMatch) {
         const id = user._id;
         const role = user.role;
-        // const  date = new Date();
-        // const localTimeString = date.toLocaleString();
+
         await User.findByIdAndUpdate(id, {
           loginAt: new Date(),
         });
@@ -26,10 +26,22 @@ export async function POST(req: NextRequest) {
           email: emailToLowerCase,
           role,
         });
-        return NextResponse.json({
-          message: "Login Success!",
+
+        const seralized = await createCookie(
+          process.env.LOGIN_INFO_USER!,
+          token
+        );
+
+        const response = {
+          message: "Authenticated!",
           status: 200,
-          token: token,
+        };
+
+        return new Response(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            "Set-Cookie": seralized,
+          },
         });
       }
       return NextResponse.json({ message: "Login Failed", status: 400 });
