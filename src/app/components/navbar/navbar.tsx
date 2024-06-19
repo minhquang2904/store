@@ -10,8 +10,7 @@ import { useRouter } from "next/navigation";
 import useFetchUser from "@/app/hooks/useFetchUser";
 
 const NavBar = ({ id }: any) => {
-  const user = useFetchUser({ id });
-  console.log("user", user);
+  const data = useFetchUser({ id });
 
   const pathname = usePathname();
   const searchInput: any = useRef(null);
@@ -20,7 +19,13 @@ const NavBar = ({ id }: any) => {
   const [showSearch, setShowSearch] = useState(false);
   const [cartModal, setCartModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
+  const [user, setUser] = useState(data) as any;
   const { push } = useRouter();
+
+  console.log("user", user);
+  useEffect(() => {
+    setUser(data);
+  }, [data]);
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
 
