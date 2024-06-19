@@ -8,7 +8,8 @@ import IconListsProduct from "../iconListsProduct/iconListProduct";
 import { useRouter } from "next/navigation";
 
 import { data } from "@/app/data";
-const NavBar = () => {
+const NavBar = ({ dataUser }: any) => {
+  console.log("dataUser", dataUser);
   const pathname = usePathname();
   const searchInput: any = useRef(null);
   const [dataList, setDataList] = useState(data);
