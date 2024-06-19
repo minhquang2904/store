@@ -16,6 +16,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const users = useFetchUser({ id });
   const pathName = usePathname();
   const { push } = useRouter();
+  console.log("id", id);
 
   useEffect(() => {
     if (!loadingAuth) {
@@ -35,7 +36,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
       {loadingAuth && <Loading />}
       <div className="bg-[#F3F4F4] min-h-[100vh] mainLayout">
         <NavBar users={users} setLoadingAuth={setLoadingAuth} />
-        {/* <NavBar id={id} loading Auth={loadingAuth} /> */}
         <main>{children}</main>
         <Support />
         <Footer />

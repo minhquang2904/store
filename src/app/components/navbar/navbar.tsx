@@ -22,8 +22,8 @@ const NavBar = ({ users, setLoadingAuth }: any) => {
   useEffect(() => {
     if (users) {
       setUser(users);
-      setLoadingAuth(false);
-      console.log("users", users);
+      // setLoadingAuth(false);
+      // console.log("users", users);
     }
   }, [users]);
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];

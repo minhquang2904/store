@@ -5,7 +5,6 @@ const useAuth = () => {
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [user, setUser] = useState(null) as any;
   const path = usePathname();
-  console.log("result result result user", user);
 
   useEffect(() => {
     const fetchDataWithToken = async () => {
@@ -15,7 +14,6 @@ const useAuth = () => {
 
         const status = result.status;
         const data = result.data;
-        console.log("result", data);
         if (status === 200) {
           setUser(data);
         }
@@ -25,13 +23,19 @@ const useAuth = () => {
         if (status === 500) {
           // console.log(result.error);
         }
-        // setLoadingAuth(false);
+        setLoadingAuth(false);
       } catch (error) {
         console.error("There was a problem with token validation:", error);
+        setLoadingAuth(false);
       }
     };
-    fetchDataWithToken();
-  }, [path]);
+
+    if (!user) {
+      fetchDataWithToken();
+    } else {
+      setLoadingAuth(false);
+    }
+  }, [path, user]);
 
   return { id: user?.id, loadingAuth, setLoadingAuth };
 };
