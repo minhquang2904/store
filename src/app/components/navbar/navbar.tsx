@@ -16,16 +16,16 @@ const NavBar = ({ users, setLoadingAuth }: any) => {
   const [showSearch, setShowSearch] = useState(false);
   const [cartModal, setCartModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
-  const [user, setUser] = useState(null) as any;
+  const [user, setUser] = useState(users) as any;
   const { push } = useRouter();
 
   useEffect(() => {
     if (users) {
       setUser(users);
-      // setLoadingAuth(false);
-      console.log("users", users);
+      setLoadingAuth(false);
     }
   }, [users]);
+
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
 
   const checkNavActive = (url: string): string => {
