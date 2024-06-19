@@ -13,7 +13,11 @@ const protectedRoutes = ["/cart", "/profile", "/like"];
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const { id, loadingAuth, setLoadingAuth } = useAuth();
-  const users = useFetchUser({ id });
+  const [userId, setUserId] = useState(null);
+  useEffect(() => {
+    id && setUserId(id);
+  }, [id]);
+  const users = useFetchUser({ id: userId });
   const pathName = usePathname();
   const { push } = useRouter();
   console.log("id", id);
