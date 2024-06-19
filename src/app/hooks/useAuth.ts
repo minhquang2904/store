@@ -23,17 +23,13 @@ const useAuth = () => {
         if (status === 500) {
           // console.log(result.error);
         }
-        setLoadingAuth(false);
       } catch (error) {
         console.error("There was a problem with token validation:", error);
-        setLoadingAuth(false);
       }
     };
 
     if (!user) {
       fetchDataWithToken();
-    } else {
-      setLoadingAuth(false);
     }
   }, [path, user]);
 
