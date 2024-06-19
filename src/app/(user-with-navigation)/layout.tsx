@@ -6,6 +6,7 @@ import Support from "@/app/components/support/support";
 import NavBar from "../components/navbar/navbar";
 import useAuth from "../hooks/useAuth";
 import { usePathname, useRouter } from "next/navigation";
+import Loading from "../components/loading/loading";
 
 const protectedRoutes = ["/cart", "/profile", "/like"];
 
@@ -29,12 +30,15 @@ const Layout = ({ children }: { children: ReactNode }) => {
     }
   }, [id]);
   return (
-    <div className="bg-[#F3F4F4] min-h-[100vh] mainLayout">
-      <NavBar id={id} />
-      <main>{children}</main>
-      <Support />
-      <Footer />
-    </div>
+    <>
+      {loadingAuth && <Loading />}
+      <div className="bg-[#F3F4F4] min-h-[100vh] mainLayout">
+        <NavBar id={id} loadingAuth={loadingAuth} />
+        <main>{children}</main>
+        <Support />
+        <Footer />
+      </div>
+    </>
   );
 };
 

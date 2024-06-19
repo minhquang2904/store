@@ -7,11 +7,11 @@ import { data } from "@/app/data";
 import NoItemCart from "../noItemCart/noItemCart";
 import IconListsProduct from "../iconListsProduct/iconListProduct";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 import useFetchUser from "@/app/hooks/useFetchUser";
 
 const NavBar = ({ id }: any) => {
   const user = useFetchUser({ id });
+  console.log("user", user);
 
   const pathname = usePathname();
   const searchInput: any = useRef(null);
