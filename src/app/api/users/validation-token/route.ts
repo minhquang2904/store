@@ -17,12 +17,25 @@ export async function GET(req: NextRequest) {
     // console.log("exp", new Date(decode.payload.exp * 1000).toString());
     // console.log("iat", new Date(decode.payload.iat * 1000).toString());
     if (user) {
+      if (user.status === "active") {
+        return NextResponse.json({
+          message: "Authenticated successfully!",
+          status: 200,
+          data: {
+            id: user._id,
+            email: user.email,
+            role: user.role,
+            lastName: user.lastName,
+            firstName: user.firstName,
+            phone: user.phone,
+            image: user.image,
+            address: user.address,
+          },
+        });
+      }
       return NextResponse.json({
-        message: "Authenticated successfully!",
-        status: 200,
-        data: {
-          id: user._id,
-        },
+        message: "Your account has been blocked",
+        status: 400,
       });
     }
     if (decode?.code == "ERR_JWS_SIGNATURE_VERIFICATION_FAILED") {

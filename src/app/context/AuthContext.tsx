@@ -1,25 +1,20 @@
-import React, {
-  createContext,
-  useContext,
-  ReactNode,
-  useState,
-  useEffect,
-} from "react";
+"use client";
+import React, { createContext, useContext, ReactNode } from "react";
 
 import useAuth from "../hooks/useAuth";
 
 interface AuthContextType {
-  id: any;
+  user: any;
   loadingAuth: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { id, loadingAuth } = useAuth();
+  const { user, loadingAuth } = useAuth();
 
   return (
-    <AuthContext.Provider value={{ id, loadingAuth }}>
+    <AuthContext.Provider value={{ user, loadingAuth }}>
       {children}
     </AuthContext.Provider>
   );

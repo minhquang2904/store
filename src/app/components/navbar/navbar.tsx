@@ -10,8 +10,8 @@ import { data } from "@/app/data";
 import { useAuthContext } from "@/app/context/AuthContext";
 
 const NavBar = () => {
-  const { id, loadingAuth } = useAuthContext();
-  console.log(id, loadingAuth);
+  const { user } = useAuthContext();
+
   const pathname = usePathname();
   const searchInput: any = useRef(null);
   const [dataList, setDataList] = useState(data);
@@ -19,7 +19,7 @@ const NavBar = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [cartModal, setCartModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
-  const [user, setUser] = useState(null) as any;
+  // const [user, setUser] = useState(null) as any;
   const { push } = useRouter();
 
   // useEffect(() => {
