@@ -24,6 +24,7 @@ const useAuth = () => {
         if (status === 500) {
           // console.log(result.error);
         }
+        setLoadingAuth(false);
       } catch (error) {
         console.error("There was a problem with token validation:", error);
       }

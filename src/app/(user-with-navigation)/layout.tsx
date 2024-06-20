@@ -8,38 +8,38 @@ import useAuth from "../hooks/useAuth";
 import { usePathname, useRouter } from "next/navigation";
 import Loading from "../components/loading/loading";
 import useFetchUser from "../hooks/useFetchUser";
+import { AuthProvider } from "../context/AuthContext";
 
 const protectedRoutes = ["/cart", "/profile", "/like"];
 
 const Layout = ({ children }: { children: ReactNode }) => {
-  const { id, loadingAuth, setLoadingAuth } = useAuth();
-  const users = useFetchUser({ id });
-  const pathName = usePathname();
-  const { push } = useRouter();
+  // const users = useFetchUser({ id });
+  // const pathName = usePathname();
+  // const { push } = useRouter();
 
-  useEffect(() => {
-    if (!loadingAuth) {
-      if (protectedRoutes.includes(pathName) && !id) {
-        fetch("/api/users/logout", { method: "POST" })
-          .then((res) => res.json())
-          .then((result) => {
-            if (result.status === 200) {
-              push("/login");
-            }
-          });
-      }
-    }
-  }, [pathName, id]);
+  // useEffect(() => {
+  //   if (!loadingAuth) {
+  //     if (protectedRoutes.includes(pathName) && !id) {
+  //       fetch("/api/users/logout", { method: "POST" })
+  //         .then((res) => res.json())
+  //         .then((result) => {
+  //           if (result.status === 200) {
+  //             push("/login");
+  //           }
+  //         });
+  //     }
+  //   }
+  // }, [pathName, id]);
   return (
-    <>
-      {loadingAuth && <Loading />}
+    <AuthProvider>
+      {/* {loadingAuth && <Loading />} */}
       <div className="bg-[#F3F4F4] min-h-[100vh] mainLayout">
-        <NavBar users={users} setLoadingAuth={setLoadingAuth} />
+        <NavBar />
         <main>{children}</main>
         <Support />
         <Footer />
       </div>
-    </>
+    </AuthProvider>
   );
 };
 

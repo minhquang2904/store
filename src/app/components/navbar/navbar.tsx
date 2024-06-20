@@ -6,9 +6,12 @@ import { usePathname } from "next/navigation";
 import NoItemCart from "../noItemCart/noItemCart";
 import IconListsProduct from "../iconListsProduct/iconListProduct";
 import { useRouter } from "next/navigation";
-
 import { data } from "@/app/data";
-const NavBar = ({ users, setLoadingAuth }: any) => {
+import { useAuthContext } from "@/app/context/AuthContext";
+
+const NavBar = () => {
+  const { id, loadingAuth } = useAuthContext();
+  console.log(id, loadingAuth);
   const pathname = usePathname();
   const searchInput: any = useRef(null);
   const [dataList, setDataList] = useState(data);
@@ -16,15 +19,15 @@ const NavBar = ({ users, setLoadingAuth }: any) => {
   const [showSearch, setShowSearch] = useState(false);
   const [cartModal, setCartModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
-  const [user, setUser] = useState(users) as any;
+  const [user, setUser] = useState(null) as any;
   const { push } = useRouter();
 
-  useEffect(() => {
-    if (users) {
-      setUser(users);
-      setLoadingAuth(false);
-    }
-  }, [users]);
+  // useEffect(() => {
+  //   if (users) {
+  //     setUser(users);
+  //     setLoadingAuth(false);
+  //   }
+  // }, [users]);
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
 
@@ -139,7 +142,7 @@ const NavBar = ({ users, setLoadingAuth }: any) => {
         .then((result) => {
           if (result.status === 200) {
             push("/login");
-            setLoadingAuth(false);
+            // setLoadingAuth(false);
           }
         });
     } catch (error) {

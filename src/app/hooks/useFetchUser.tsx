@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+
+const MyContext = createContext(null);
 
 const useFetchUser = ({ id }: any) => {
   const [user, setUser] = useState(null) as any;
