@@ -21,7 +21,6 @@ function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>Title</title>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className={`${jost.className} bg-[#F3F4F4]`}>

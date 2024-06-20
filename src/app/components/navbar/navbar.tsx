@@ -140,8 +140,10 @@ const NavBar = () => {
       fetch("/api/users/logout", { method: "POST" })
         .then((res) => res.json())
         .then((result) => {
+          console.log(result);
           if (result.status === 200) {
             push("/login");
+            console.log("Logout successfully!");
             // setLoadingAuth(false);
           }
         });
