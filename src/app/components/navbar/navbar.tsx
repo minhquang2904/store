@@ -10,7 +10,7 @@ import { data } from "@/app/data";
 import { useAuthContext } from "@/app/context/AuthContext";
 
 const NavBar = () => {
-  const { user } = useAuthContext();
+  const { user, setUser, setLoadingAuth } = useAuthContext();
 
   const pathname = usePathname();
   const searchInput: any = useRef(null);
@@ -136,16 +136,16 @@ const NavBar = () => {
   }, [pathname]);
 
   const handleSignOut = () => {
+    setLoadingAuth(true);
     try {
       fetch("/api/users/logout", { method: "POST" })
         .then((res) => res.json())
         .then((result) => {
-          console.log(result);
           if (result.status === 200) {
+            setUser(null);
             push("/login");
-            console.log("Logout successfully!");
-            // setLoadingAuth(false);
           }
+          setLoadingAuth(false);
         });
     } catch (error) {
       console.error("Sign out failed!", error);

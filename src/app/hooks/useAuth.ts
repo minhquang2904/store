@@ -43,7 +43,7 @@ const useAuth = () => {
     }
   }, [path, user]);
 
-  return { user, loadingAuth, setLoadingAuth };
+  return { user, loadingAuth, setLoadingAuth, setUser };
 };
 
 export default useAuth;
