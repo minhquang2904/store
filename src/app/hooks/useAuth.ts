@@ -33,7 +33,7 @@ const useAuth = () => {
     if (!user) {
       fetchDataWithToken();
     }
-  }, [user]);
+  }, [path, user]);
 
   return { id: user?.id, loadingAuth, setLoadingAuth };
 };
