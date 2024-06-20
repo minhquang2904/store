@@ -1,3 +1,4 @@
+"use client";
 import type { Metadata } from "next";
 import "./globals.css";
 import { Jost } from "next/font/google";
@@ -8,9 +9,9 @@ const jost = Jost({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-export const metadata: Metadata = {
-  title: "Luxe Loft",
-};
+// export const metadata: Metadata = {
+//   title: "Luxe Loft",
+// };
 
 function RootLayout({
   children,
@@ -23,7 +24,9 @@ function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className={`${jost.className} bg-[#F3F4F4]`}>
-        <ChakraProvider>{children}</ChakraProvider>
+        <AuthProvider>
+          <ChakraProvider>{children}</ChakraProvider>
+        </AuthProvider>
       </body>
     </html>
   );

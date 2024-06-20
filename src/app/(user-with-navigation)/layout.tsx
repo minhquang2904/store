@@ -31,7 +31,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   //   }
   // }, [pathName, id]);
   return (
-    <AuthProvider>
+    <>
       {/* {loadingAuth && <Loading />} */}
       <div className="bg-[#F3F4F4] min-h-[100vh] mainLayout">
         <NavBar />
@@ -39,7 +39,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <Support />
         <Footer />
       </div>
-    </AuthProvider>
+    </>
   );
 };
 
