@@ -9,13 +9,33 @@ export async function GET(req: NextRequest) {
   const cookieStore = cookies();
   try {
     const token = cookieStore.get(process.env.LOGIN_INFO_USER!);
+    if (!token) {
+      return NextResponse.json({
+        message: "Unauthorized Failed!",
+        status: 401,
+      });
+    }
     const { value }: any = token;
+    if (!value) {
+      cookies().delete(process.env.LOGIN_INFO_USER!);
+      return NextResponse.json({
+        message: "Authenticated Failed!",
+        status: 400,
+      });
+    }
     const decode: any = await verifyToken(value);
     const data = await decode?.payload;
     const user = await User.findById(data.id);
     // console.log("data", decode);
     // console.log("exp", new Date(decode.payload.exp * 1000).toString());
     // console.log("iat", new Date(decode.payload.iat * 1000).toString());
+    if (!user) {
+      cookies().delete(process.env.LOGIN_INFO_USER!);
+      return NextResponse.json({
+        message: "User not found",
+        status: 404,
+      });
+    }
     if (user) {
       if (user.status === "active") {
         return NextResponse.json({
@@ -33,12 +53,15 @@ export async function GET(req: NextRequest) {
           },
         });
       }
+      cookies().delete(process.env.LOGIN_INFO_USER!);
       return NextResponse.json({
-        message: "Your account has been blocked",
-        status: 400,
+        message: "User is not active",
+        status: 403,
       });
     }
+
     if (decode?.code == "ERR_JWS_SIGNATURE_VERIFICATION_FAILED") {
+      cookies().delete(process.env.LOGIN_INFO_USER!);
       return NextResponse.json({
         message: "Authenticated Failed!",
         status: 400,
@@ -49,6 +72,7 @@ export async function GET(req: NextRequest) {
       status: 400,
     });
   } catch (error: any) {
+    cookies().delete(process.env.LOGIN_INFO_USER!);
     return NextResponse.json({ error: error.message, status: 500 });
   }
 }

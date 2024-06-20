@@ -19,7 +19,7 @@ export default function Login() {
   const { push } = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
+  const [dataError, setDataError] = useState(null) as any;
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string()
@@ -44,6 +44,11 @@ export default function Login() {
             push("/");
           }
           if (data.status == 400) {
+            setDataError(data.message);
+            setError(true);
+          }
+          if (data.status == 403) {
+            setDataError(data.message);
             setError(true);
           }
         });
@@ -58,9 +63,7 @@ export default function Login() {
       <Link href="/signup" className="inline-block mb-[30px]">
         <SubTitleAccount title="Please sign up here" />
       </Link>
-      {error && (
-        <ErrorMessage message="Your account or password is incorrect" />
-      )}
+      {error && <ErrorMessage message={dataError} />}
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={LoginSchema}

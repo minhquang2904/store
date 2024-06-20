@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const urlPageLogin = ["/signup", "/login", "/admin/login"];
 const useAuth = () => {
   const [loadingAuth, setLoadingAuth] = useState(false);
   const [user, setUser] = useState(null) as any;
   const path = usePathname();
-
+  const { push } = useRouter();
   const endpoint = path.startsWith("/admin")
     ? ""
     : "/api/users/validation-token";
@@ -26,14 +26,21 @@ const useAuth = () => {
             setUser(data);
           }
           if (status === 400) {
-            // console.log(result.message);
+            push("/login");
           }
           if (status === 500) {
-            // console.log(result.error);
+            push("/login");
+          }
+          if (status === 403) {
+            push("/login");
+          }
+          if (status === 404) {
+            push("/login");
           }
           setLoadingAuth(false);
         } catch (error) {
           console.error("There was a problem with token validation:", error);
+          setLoadingAuth(false);
         }
       };
 
