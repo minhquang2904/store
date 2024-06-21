@@ -159,8 +159,6 @@ const ModalAdd = (props: any) => {
   const [district, setDistrict] = useState([]) as any;
   const formData = new FormData();
   const { user } = useAuthContext();
-  // console.log(area);
-  // console.log(user);
 
   const updateCityAndDistrict = (
     area: any[],

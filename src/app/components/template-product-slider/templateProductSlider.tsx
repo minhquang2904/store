@@ -42,7 +42,7 @@ const settings = {
   infinite: false,
   speed: 400,
   slidesToShow: 4,
-  slidesToScroll: 4,
+  slidesToScroll: 1,
   nextArrow: <SampleNextArrow />,
   prevArrow: <SamplePrevArrow />,
   responsive: [
@@ -72,6 +72,7 @@ const settings = {
 
 const TemplateProductSlider = () => {
   const [dataList, setData] = useState(data);
+  const [product, setProduct] = useState(null) as any;
 
   const handleChangeType = (e: any) => {
     const id = e.target.id;
@@ -100,6 +101,29 @@ const TemplateProductSlider = () => {
       ? slideArrow.forEach((item: any) => (item.style.display = "none"))
       : slideArrow.forEach((item: any) => (item.style.display = "block"));
   }, [dataList]);
+
+  useEffect(() => {
+    const fetchDataProduct = async () => {
+      try {
+        const response = await fetch("/api/product/discount");
+        const result = await response.json();
+        const status = result.status;
+        const data = result.data;
+        if (status === 200) {
+          setProduct(data);
+        }
+        if (status === 404) {
+          console.log("No product found!");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (!product) {
+      fetchDataProduct();
+    }
+  }, [product]);
 
   return (
     <div className="flex justify-center items-center px-pLayout">
@@ -146,48 +170,46 @@ const TemplateProductSlider = () => {
         </div>
         <div className="slider-container">
           <Slider {...settings}>
-            {dataList.map((item: any) => {
+            {product?.map((item: any) => {
               return (
-                <div key={item.id} className="block px-pCard">
+                <div key={item._id} className="block px-pCard">
                   <Link
                     className="block shadow-sm pb-[20px]"
-                    href="/productDetail"
+                    href={`/productDetail/${item._id}/`}
                   >
                     <div className="!relative">
                       <Image
-                        src={item.url}
+                        src={item.files[0].url}
                         className="!relative w-full max-h-400px"
                         alt="Product 1"
                         fill
                         sizes="(max-width: 312px) 100vw"
                       />
-                      {item.discount && (
-                        <div className="absolute top-[20px] left-[0]">
-                          <p className="text-white bg-secondary text-center text-[1.2em] font-semibold uppercase px-[12px] py-[6px]">
-                            Sale
-                          </p>
-                        </div>
-                      )}
+                      <div className="absolute top-[20px] left-[0]">
+                        <p className="text-white bg-secondary text-center text-[1.2em] font-semibold uppercase px-[12px] py-[6px]">
+                          Sale
+                        </p>
+                      </div>
                     </div>
                     <div className="mt-[18px] mx-[10px] mb-[0]">
                       <div>
                         <h1 className="text-text text-[1.6em] font-semibold capitalize min-h-[48px] line-clamp-2">
-                          {item.title}
+                          {item.name}
                         </h1>
                       </div>
                       <div className="my-[6px] mx-[0]">
                         <h1 className="text-text text-[1.6em] font-medium capitalize min-h-[24px] line-clamp-1">
-                          {item.subTitle}
+                          {item.subName}
                         </h1>
                       </div>
                       <div className="flex justify-between">
                         <p className="text-[#00000080] text-[1.6em] font-medium capitalize">
-                          {item.type}
+                          {item.categories}
                         </p>
                         <div className="flex font-medium">
-                          {item.discount ? (
+                          {item.discount > 0 ? (
                             <h3 className="text-[1.6em] ml-[10px] text-secondary">
-                              {item.discount}
+                              {item.discountedPrice}
                             </h3>
                           ) : (
                             <h3 className="text-[1.6em] text-secondary">
