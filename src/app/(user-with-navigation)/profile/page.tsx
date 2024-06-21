@@ -2,31 +2,27 @@
 import Image from "next/image";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-} from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Loading from "@/app/components/loading/loading";
 import FieldInput from "@/app/components/fieldInput/fieldInput";
 import ErrorInput from "@/app/components/errorInput/errorInput";
 import LabelInput from "@/app/components/labelInput/labelInput";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
+import { useAuthContext } from "@/app/context/AuthContext";
+import style from "./profile.module.scss";
 
 const Profile = () => {
+  const { user } = useAuthContext();
+
   const [modalEditProfile, setModalEditProfile] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [area, setArea] = useState(null) as any;
 
   const handleCloseModalEditProfile = () => setModalEditProfile(false);
   const handleShowModalEditProfile = () => setModalEditProfile(true);
-  const user: any = "";
   return (
     <>
-      {/* {loadingAuth && <Loading />} */}
       <div>
         <div className="flex justify-between items-center">
           <div className="!relative max-w-[80px] max-h-[80px] w-full">
@@ -62,39 +58,54 @@ const Profile = () => {
         </div>
         <div className="mt-[32px]">
           <div className="flex gap-x-[20px] xsm:flex-col">
-            <InputModal
-              title="First Name"
-              styleCustom="sm:w-[50%] xsm:w-[100%]"
-              readOnly={true}
-              value={user?.firstName || "N/A"}
-            />
-            <InputModal
-              title="Last Name"
-              styleCustom="sm:w-[50%] xsm:w-[100%]"
-              readOnly={true}
-              value={user?.lastName || "N/A"}
-            />
+            <div className="w-full sm:w-[50%] xsm:w-[100%]">
+              <LabelInput name="First Name" styleCustom="!mb-[0px]" />
+              <InputModal
+                title="First Name"
+                styleCustom="w-full"
+                readOnly={true}
+                value={user?.firstName || "N/A"}
+              />
+            </div>
+            <div className="w-full sm:w-[50%] xsm:w-[100%]">
+              <LabelInput name="Last Name" styleCustom="!mb-[0px]" />
+              <InputModal
+                title="Last Name"
+                styleCustom="w-full"
+                readOnly={true}
+                value={user?.lastName || "N/A"}
+              />
+            </div>
           </div>
           <div className="flex gap-x-[20px] xsm:flex-col">
-            <InputModal
-              title="Phone Number"
-              styleCustom="sm:w-[50%] xsm:w-[100%]"
-              readOnly={true}
-              value={user?.phone || "N/A"}
-            />
-            <InputModal
-              title="Email Address"
-              styleCustom="sm:w-[50%] xsm:w-[100%]"
-              readOnly={true}
-              value={user?.email || "N/A"}
-            />
+            <div className="w-full sm:w-[50%] xsm:w-[100%]">
+              <LabelInput name="Number Phone" styleCustom="!mb-[0px]" />
+              <InputModal
+                title="Phone Number"
+                styleCustom="w-full"
+                readOnly={true}
+                value={user?.phone || "N/A"}
+              />
+            </div>
+            <div className="w-full sm:w-[50%] xsm:w-[100%]">
+              <LabelInput name="Email" styleCustom="!mb-[0px]" />
+              <InputModal
+                title="Email Address"
+                styleCustom="w-full"
+                readOnly={true}
+                value={user?.email || "N/A"}
+              />
+            </div>
           </div>
-          <div className="flex gap-x-[20px]">
+          <div className="flex flex-col gap-x-[20px]">
+            <LabelInput name="Address" styleCustom="!mb-[0px]" />
             <InputModal
               title="Address"
               styleCustom="w-[100%]"
               readOnly={true}
-              // value={user?.address.length > 1 ? user?.address_list : "N/A"}
+              value={
+                user?.address.length > 0 ? user?.address[0].addressFull : "N/A"
+              }
             />
           </div>
         </div>
@@ -104,6 +115,8 @@ const Profile = () => {
           isOpen={modalEditProfile}
           onClose={handleCloseModalEditProfile}
           setLoading={setLoading}
+          area={area}
+          setArea={setArea}
         />
       )}
       {loading && <Loading />}
@@ -140,20 +153,74 @@ const ButtonModal = (props: any) => {
 };
 
 const ModalAdd = (props: any) => {
-  const { isOpen, onClose, setLoading } = props;
-  const [area, setArea] = useState([]) as any;
+  const { isOpen, onClose, setLoading, area, setArea } = props;
+
   const [city, setCity] = useState([]) as any;
   const [district, setDistrict] = useState([]) as any;
+  const formData = new FormData();
+  const { user } = useAuthContext();
+  // console.log(area);
+  // console.log(user);
+
+  const updateCityAndDistrict = (
+    area: any[],
+    user: any,
+    setCity: (city: any) => void,
+    setDistrict: (district: any) => void
+  ) => {
+    if (!area || !user || !user.address || !user.address[0]) {
+      setCity([]);
+      setDistrict([]);
+      return;
+    }
+    const filteredCity = area.filter(
+      (n: any) => n.Name === user.address[0].city
+    );
+
+    if (filteredCity.length > 0) {
+      setCity(filteredCity[0].Districts);
+
+      const filteredDistrict = filteredCity[0].Districts.filter(
+        (n: any) => n.Name === user.address[0].district
+      );
+
+      setDistrict(filteredDistrict[0].Wards);
+    } else {
+      setCity([]);
+      setDistrict([]);
+    }
+  };
+
+  useEffect(() => {
+    if (area && user) {
+      updateCityAndDistrict(area, user, setCity, setDistrict);
+    }
+  }, [area, user]);
 
   const initialValues = {
-    firstName: "",
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    phone: user?.phone || "",
+    city: user?.address[0]?.city || "",
+    district: user?.address[0]?.district || "",
+    ward: user?.address[0]?.ward || "",
+    street: user?.address[0]?.street || "",
   };
 
   const userSchema = Yup.object().shape({
     firstName: Yup.string()
-      .required("Product Name is required")
-      .max(100, "The product name can only be a maximum of 100 characters")
-      .matches(/^[a-zA-Z]+$/, "Contains special characters or Numbers"),
+      .required("First Name is required")
+      .max(50, "The first name can only be a maximum of 50 characters"),
+    lastName: Yup.string()
+      .required("Last Name is required")
+      .max(50, "The last name can only be a maximum of 50 characters"),
+    phone: Yup.string()
+      .required("Phone is required")
+      .matches(/^[0-9]+$/, "Only number"),
+    city: Yup.string().required("City is required"),
+    district: Yup.string().required("District is required"),
+    ward: Yup.string().required("Ward is required"),
+    street: Yup.string().required("Street is required"),
   });
 
   useEffect(() => {
@@ -170,7 +237,9 @@ const ModalAdd = (props: any) => {
         console.log("Get area Failed!", error);
       }
     };
-    fetchDataArea();
+    if (!area) {
+      fetchDataArea();
+    }
   }, []);
 
   useEffect(() => {
@@ -179,9 +248,36 @@ const ModalAdd = (props: any) => {
     }
   }, [city]);
 
-  const handleSubmit = (values: any, setSubmitting: any, resetForm: any) => {
-    console.log("values", values);
-    setSubmitting(true);
+  const handleSubmit = (values: any, setSubmitting: any) => {
+    formData.set("id", user.id);
+    formData.set("firstName", values.firstName);
+    formData.set("lastName", values.lastName);
+    formData.set("phone", values.phone.toString());
+    formData.set("city", values.city);
+    formData.set("district", values.district);
+    formData.set("ward", values.ward);
+    formData.set("street", values.street);
+
+    try {
+      setSubmitting(true);
+      fetch("/api/users/profile", {
+        method: "PUT",
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          const status = result.status;
+          if (status === 200) {
+            onClose();
+          }
+          if (status === 400) {
+            console.log(result.message);
+          }
+        });
+      setSubmitting(false);
+    } catch (error) {
+      console.log("Error", error);
+    }
   };
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -190,25 +286,24 @@ const ModalAdd = (props: any) => {
         rounded={"20px"}
         padding={"10px 2px 10px 2px"}
         margin={"auto 15px auto 15px"}
-        className="xsm:!max-w-[400px] xsm:!max-h-[600px]"
+        className="xsm:!max-w-[400px] xsm:!max-h-[600px] max-h-[800px]"
       >
-        <ModalHeader padding={"8px 16px 10px 8px"}>
-          <div>
-            <h1>Edit Profile</h1>
-          </div>
-        </ModalHeader>
-
+        <div className="xsm:px-[16px] px-[24px] py-[10px]">
+          <h1 className="text-text text-[2em] font-medium">Edit Profile</h1>
+        </div>
         <Formik
           initialValues={initialValues}
           validationSchema={userSchema}
           validateOnChange={true}
-          onSubmit={(values, { setSubmitting, resetForm }) =>
-            handleSubmit(values, setSubmitting, resetForm)
+          onSubmit={(values, { setSubmitting }) =>
+            handleSubmit(values, setSubmitting)
           }
         >
           {({ isSubmitting, setFieldValue, values }) => (
-            <Form className="flex flex-col gap-y-[16px] overflow-hidden">
-              <div className="flex flex-col gap-y-[20px] overflow-y-auto px-[8px]">
+            <Form className="flex flex-col gap-y-[16px] overflow-hidden xsm:px-[4px] px-[12px]">
+              <div
+                className={`flex flex-col gap-y-[20px] overflow-y-auto px-[12px] ${style.tableScroll}`}
+              >
                 <div className="flex justify-between gap-x-[20px] gap-y-[20px] xsm:flex-col">
                   <div className="sm:w-[50%] xsm:w-[100%]">
                     <LabelInput
@@ -254,16 +349,6 @@ const ModalAdd = (props: any) => {
                   <ErrorInput name="phone" />
                 </div>
                 <div>
-                  <LabelInput name="Email" id="email" styleCustom="!mb-[4px]" />
-                  <FieldInput
-                    type="text"
-                    name="email"
-                    placeholder="Enter email"
-                    styleCustom="!border-[#ABAEB1]"
-                  />
-                  <ErrorInput name="email" />
-                </div>
-                <div>
                   <LabelInput name="city" styleCustom="!mb-[4px]" />
                   <div className="relative">
                     <Field
@@ -275,6 +360,8 @@ const ModalAdd = (props: any) => {
                           (n: any) => n.Name === e.target.value
                         );
                         setFieldValue("city", e.target.value);
+                        setFieldValue("district", "");
+                        setFieldValue("ward", "");
                         setCity(result[0]?.Districts);
                       }}
                     >
@@ -319,6 +406,7 @@ const ModalAdd = (props: any) => {
                           (n: any) => n.Name === e.target.value
                         );
                         setFieldValue("district", e.target.value);
+                        setFieldValue("ward", "");
                         setDistrict(result[0]?.Wards);
                       }}
                     >
@@ -406,14 +494,14 @@ const ModalAdd = (props: any) => {
                   <ErrorInput name="street" />
                 </div>
               </div>
-              <div className="flex gap-x-[10px] justify-end mt-[16px]">
+              <div className="flex gap-x-[10px] justify-end mt-[16px] px-[12px]">
                 <ButtonModal
                   onClick={onClose}
                   title="Cancel"
                   styleCustom="border-button bg-white"
                 />
                 <BtnAccount
-                  // disabled={isSubmitting}
+                  disabled={isSubmitting}
                   type="submit"
                   styleCustom="max-w-[120px] !mt-[0] !px-[20px] !py-[8px] !border-button !rounded-[12px]"
                 />

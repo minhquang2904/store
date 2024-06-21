@@ -136,7 +136,7 @@ const NavBar = () => {
   }, [pathname]);
 
   const handleSignOut = () => {
-    // setLoadingAuth(true);
+    setLoadingAuth(true);
     try {
       fetch("/api/users/logout", { method: "POST" })
         .then((res) => res.json())

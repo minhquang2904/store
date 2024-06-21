@@ -25,16 +25,13 @@ const useAuth = () => {
           if (status === 200) {
             setUser(data);
           }
-          if (status === 400) {
-            push("/login");
-          }
-          if (status === 500) {
-            push("/login");
-          }
-          if (status === 403) {
-            push("/login");
-          }
-          if (status === 404) {
+          if (
+            status === 400 ||
+            status === 500 ||
+            status === 403 ||
+            status === 404
+          ) {
+            setUser(null);
             push("/login");
           }
           setLoadingAuth(false);

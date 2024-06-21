@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ReactNode } from "react";
 import Footer from "@/app/components/footer/footer";
 import Support from "@/app/components/support/support";
@@ -7,11 +7,9 @@ import NavBar from "../components/navbar/navbar";
 import { useAuthContext } from "../context/AuthContext";
 import Loading from "../components/loading/loading";
 
-const protectedRoutes = ["/cart", "/profile", "/like"];
-
 const Layout = ({ children }: { children: ReactNode }) => {
-  const { user, loadingAuth } = useAuthContext();
-  console.log("user - layout", user, loadingAuth);
+  const { loadingAuth } = useAuthContext();
+
   return (
     <>
       {loadingAuth && <Loading />}
