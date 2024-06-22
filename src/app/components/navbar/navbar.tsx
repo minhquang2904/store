@@ -144,10 +144,10 @@ const NavBar = () => {
           if (result.status === 200) {
             setUser(null);
             setTimeout(() => {
-              push("/");
-              setLoadingAuth(false);
+              push("/login");
             }, 100);
           }
+          setLoadingAuth(false);
         });
     } catch (error) {
       console.error("Sign out failed!", error);
@@ -155,7 +155,6 @@ const NavBar = () => {
   };
 
   const handleLoginClick = () => {
-    console.log("Login");
     push("/login");
   };
   return (
