@@ -154,6 +154,9 @@ const NavBar = () => {
     }
   };
 
+  const handleLoginClick = () => {
+    push("/login");
+  };
   return (
     <div className="headerContainer min-h-80 flex justify-center items-center sticky top-[0] left-[0] right-[0] bg-primary z-20 l:px-pLayout xsm:px-pLayout sm:px-[15px]">
       <div className="flex w-full max-w-layout">
@@ -260,9 +263,9 @@ const NavBar = () => {
                 </div>
               </div>
               {!user ? (
-                <Link
+                <div
                   className="hover:bg-hover1 cursor-pointer p-[10px] rounded-full relative"
-                  href="/login"
+                  onClick={handleLoginClick}
                 >
                   <Image
                     src="/icons/bag.svg"
@@ -272,7 +275,7 @@ const NavBar = () => {
                     sizes="100vw"
                     priority={true}
                   />
-                </Link>
+                </div>
               ) : (
                 <>
                   <div className="pointer relative xsm:hidden sm:hidden l:flex">
