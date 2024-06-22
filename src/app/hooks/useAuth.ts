@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-const urlPageLogin = ["/signup", "/login", "/admin/login"];
+const urlPageLogin = ["/signup", "/login"];
 const useAuth = () => {
   const [loadingAuth, setLoadingAuth] = useState(false);
   const [user, setUser] = useState(null) as any;
@@ -41,11 +41,9 @@ const useAuth = () => {
         }
       };
 
-      if (!user) {
-        fetchDataWithToken();
-      }
+      fetchDataWithToken();
     }
-  }, [path, user]);
+  }, [path]);
 
   return { user, loadingAuth, setLoadingAuth, setUser };
 };

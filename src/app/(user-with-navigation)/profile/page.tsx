@@ -271,14 +271,14 @@ const ModalAdd = (props: any) => {
           if (status === 400) {
             console.log(result.message);
           }
+          setSubmitting(false);
         });
-      setSubmitting(false);
     } catch (error) {
       console.log("Error", error);
     }
   };
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={() => {}}>
       <ModalOverlay />
       <ModalContent
         rounded={"20px"}
@@ -496,12 +496,12 @@ const ModalAdd = (props: any) => {
                 <ButtonModal
                   onClick={onClose}
                   title="Cancel"
-                  styleCustom="border-button bg-white"
+                  styleCustom="border-button bg-white max-w-[140px] w-full"
                 />
                 <BtnAccount
                   disabled={isSubmitting}
                   type="submit"
-                  styleCustom="max-w-[120px] !mt-[0] !px-[20px] !py-[8px] !border-button !rounded-[12px]"
+                  styleCustom="max-w-[140px] !mt-[0] !px-[20px] !py-[8px] !border-button !rounded-[12px]"
                 />
               </div>
             </Form>
