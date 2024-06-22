@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Loading from "@/app/components/loading/loading";
 import FieldInput from "@/app/components/fieldInput/fieldInput";
 import ErrorInput from "@/app/components/errorInput/errorInput";
@@ -11,23 +11,32 @@ import LabelInput from "@/app/components/labelInput/labelInput";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
 import { useAuthContext } from "@/app/context/AuthContext";
 import style from "./profile.module.scss";
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
 
 const Profile = () => {
   const { user } = useAuthContext();
 
   const [modalEditProfile, setModalEditProfile] = useState(false);
+  const [modalCropImage, setModalCropImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [area, setArea] = useState(null) as any;
 
   const handleCloseModalEditProfile = () => setModalEditProfile(false);
   const handleShowModalEditProfile = () => setModalEditProfile(true);
+  const handleCloseModalCropImage = () => setModalCropImage(false);
+  const handleShowModalCropImage = () => setModalCropImage(true);
+
+  const [fileImage, setFileImage] = useState(null) as any;
+  const [croppedImage, setCroppedImage] = useState(null);
+
   return (
     <>
       <div>
         <div className="flex justify-between items-center">
           <div className="!relative max-w-[80px] max-h-[80px] w-full">
             <Image
-              src="/images/profile.png"
+              src={user?.image[0]?.url || "/images/avatar-profile.png"}
               alt="Bag"
               className="!relative max-w-[80px] max-h-[80px] w-full h-full rounded-[50%] object-cover"
               fill
@@ -110,6 +119,14 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      {modalCropImage && (
+        <ModalCropImage
+          isOpen={modalCropImage}
+          onClose={handleCloseModalCropImage}
+          setFileImage={setFileImage}
+          setCroppedImage={setCroppedImage}
+        />
+      )}
       {modalEditProfile && (
         <ModalAdd
           isOpen={modalEditProfile}
@@ -117,6 +134,11 @@ const Profile = () => {
           setLoading={setLoading}
           area={area}
           setArea={setArea}
+          handleShowModalCropImage={handleShowModalCropImage}
+          fileImage={fileImage}
+          setFileImage={setFileImage}
+          setCroppedImage={setCroppedImage}
+          croppedImage={croppedImage}
         />
       )}
       {loading && <Loading />}
@@ -152,13 +174,118 @@ const ButtonModal = (props: any) => {
   );
 };
 
-const ModalAdd = (props: any) => {
-  const { isOpen, onClose, setLoading, area, setArea } = props;
+const ModalCropImage = (props: any) => {
+  const { isOpen, onClose, setFileImage, setCroppedImage } = props;
+  const [image, setImage] = useState("");
+  const [isCropperVisible, setIsCropperVisible] = useState(false);
 
+  const cropperRef = useRef(null) as any;
+
+  const maxWidth = 300;
+  const maxHeight = 300;
+
+  const onCrop = () => {
+    const cropper = cropperRef.current.cropper;
+    const canvas = cropper.getCroppedCanvas({
+      width: maxWidth,
+      height: maxHeight,
+    });
+
+    canvas.toBlob((blob: any) => {
+      const file = blobToFile(blob, "croppedImage.jpg");
+      const url: any = URL.createObjectURL(blob);
+      setCroppedImage(url);
+      setFileImage(file);
+    }, "image/jpeg");
+  };
+
+  const blobToFile = (blob: any, fileName: any) => {
+    return new File([blob], fileName, {
+      type: blob.type,
+      lastModified: Date.now(),
+    });
+  };
+
+  const onImageChange = (e: any) => {
+    e.preventDefault();
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const reader = new FileReader() as any;
+      reader.onload = () => {
+        setImage(reader.result);
+        setIsCropperVisible(true);
+      };
+      reader.readAsDataURL(files[0]);
+    }
+  };
+  const handleConfirmCrop = () => {
+    onCrop();
+    onClose();
+    setIsCropperVisible(false);
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={() => {}}>
+      <ModalOverlay />
+      <ModalContent
+        rounded={"20px"}
+        padding={"10px 2px 10px 2px"}
+        margin={"auto 15px auto 15px"}
+        className="xsm:!max-w-[400px] xsm:!max-h-[600px] max-h-[800px]"
+      >
+        <h1
+          className="text-text text-[2em] font-medium cursor-pointer"
+          onClick={onClose}
+        >
+          close
+        </h1>
+        <div className="xsm:px-[16px] px-[24px] py-[10px] flex justify-between">
+          <h1 className="text-text text-[2em] font-medium">Crop Image</h1>
+        </div>
+        <div className="px-[24px]">
+          <input type="file" accept="image/*" onChange={onImageChange} />
+        </div>
+        {isCropperVisible && (
+          <div>
+            <Cropper
+              src={image}
+              style={{ height: 400, width: "100%" }}
+              initialAspectRatio={1}
+              aspectRatio={1}
+              guides={false}
+              ref={cropperRef}
+            />
+            <button
+              onClick={handleConfirmCrop}
+              className="text-white text-[1.6em] bg-text"
+            >
+              Save
+            </button>
+          </div>
+        )}
+      </ModalContent>
+    </Modal>
+  );
+};
+
+const ModalAdd = (props: any) => {
+  const {
+    isOpen,
+    onClose,
+    setLoading,
+    area,
+    setArea,
+    handleShowModalCropImage,
+    fileImage,
+    setFileImage,
+    croppedImage,
+    setCroppedImage,
+  } = props;
+  console.log("croppedImage", croppedImage);
   const [city, setCity] = useState([]) as any;
   const [district, setDistrict] = useState([]) as any;
   const formData = new FormData();
-  const { user } = useAuthContext();
+  const { user, triggerFetch } = useAuthContext();
 
   const updateCityAndDistrict = (
     area: any[],
@@ -247,6 +374,7 @@ const ModalAdd = (props: any) => {
   }, [city]);
 
   const handleSubmit = (values: any, setSubmitting: any) => {
+    formData.set("file", fileImage || user?.image[0]?.url);
     formData.set("id", user.id);
     formData.set("firstName", values.firstName);
     formData.set("lastName", values.lastName);
@@ -266,6 +394,9 @@ const ModalAdd = (props: any) => {
         .then((result) => {
           const status = result.status;
           if (status === 200) {
+            triggerFetch();
+            setFileImage(null);
+            setCroppedImage(null);
             onClose();
           }
           if (status === 400) {
@@ -302,6 +433,40 @@ const ModalAdd = (props: any) => {
               <div
                 className={`flex flex-col gap-y-[20px] overflow-y-auto px-[12px] ${style.tableScroll}`}
               >
+                <div>
+                  <div className="relative inline-block">
+                    <Image
+                      src={
+                        croppedImage ||
+                        user?.image[0]?.url ||
+                        "/images/avatar-profile.png"
+                      }
+                      alt={`Uploaded image of ${user?.firstName} ${user?.lastName}`}
+                      className="object-cover object-top !h-[100px] !w-[100px] !relative rounded-[50%]"
+                      fill
+                      sizes="100vw"
+                    />
+                    <div className="absolute top-[4px] right-[4px] z-100 bg-white p-[5px] rounded-[50%] flex justify-center items-center">
+                      <label
+                        className="inline-block cursor-pointer"
+                        onClick={handleShowModalCropImage}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 512 512"
+                          width="14"
+                          height="14"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M29.663,482.25l.087.087a24.847,24.847,0,0,0,17.612,7.342,25.178,25.178,0,0,0,8.1-1.345l142.006-48.172,272.5-272.5A88.832,88.832,0,0,0,344.334,42.039l-272.5,272.5L23.666,456.541A24.844,24.844,0,0,0,29.663,482.25Zm337.3-417.584a56.832,56.832,0,0,1,80.371,80.373L411.5,180.873,331.127,100.5ZM99.744,331.884,308.5,123.127,388.873,203.5,180.116,412.256,58.482,453.518Z"
+                            className="ci-primary"
+                          />
+                        </svg>
+                      </label>
+                    </div>
+                  </div>
+                </div>
                 <div className="flex justify-between gap-x-[20px] gap-y-[20px] xsm:flex-col">
                   <div className="sm:w-[50%] xsm:w-[100%]">
                     <LabelInput

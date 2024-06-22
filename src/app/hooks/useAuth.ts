@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-const urlPageLogin = ["/signup", "/login"];
+const urlPageLogin = ["/signup", "/login", "/admin/login"];
 const useAuth = () => {
   const [loadingAuth, setLoadingAuth] = useState(false);
   const [user, setUser] = useState(null) as any;
   const path = usePathname();
   const { push } = useRouter();
+  const [fetchAgain, setFetchAgain] = useState(false);
+
+  const triggerFetch = () => setFetchAgain(true);
+
   const endpoint = path.startsWith("/admin")
     ? ""
     : "/api/users/validation-token";
@@ -35,17 +39,24 @@ const useAuth = () => {
             push("/login");
           }
           setLoadingAuth(false);
+          setFetchAgain(false);
         } catch (error) {
           console.error("There was a problem with token validation:", error);
           setLoadingAuth(false);
+          setFetchAgain(false);
         }
       };
 
-      fetchDataWithToken();
+      if (!user) {
+        fetchDataWithToken();
+      }
+      if (fetchAgain && user) {
+        fetchDataWithToken();
+      }
     }
-  }, [path]);
+  }, [path, user, fetchAgain]);
 
-  return { user, loadingAuth, setLoadingAuth, setUser };
+  return { user, loadingAuth, setLoadingAuth, setUser, triggerFetch };
 };
 
 export default useAuth;

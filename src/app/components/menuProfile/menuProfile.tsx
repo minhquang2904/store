@@ -1,10 +1,13 @@
+import { useAuthContext } from "@/app/context/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useContext } from "react";
 
 const MenuProfile = () => {
+  const { user } = useAuthContext();
+
   const pathname = usePathname();
-  const colorIconOrder = "#131118";
 
   const checkActiveMenu = (url: any, active: any, inactive: any) => {
     return pathname === `${url}` ? `${active}` : `${inactive}`;
@@ -13,17 +16,19 @@ const MenuProfile = () => {
     <div className="l:w-[20%] xsm:w-full sm:w-full sm:flex-row sm:flex l:block">
       <div className="!relative l:flex items-center xsm:hidden sm:hidden">
         <Image
-          src="/images/profile.png"
+          src={user?.image[0]?.url || "/images/avatar-profile.png"}
           alt="Bag"
           className="!relative !w-[51px] !h-[51px] rounded-[50%] object-cover"
           fill
           sizes="(max-width: 51px) 100vw"
         />
         <div className="ml-[16px]">
-          <h1 className="text-text text-[1.6em] font-bold">Robert fox</h1>
-          <p className="text-text text-[1.4em] font-normal">
-            example@gmail.com
-          </p>
+          <h1 className="text-text text-[1.6em] font-bold">
+            {user?.firstName && user?.lastName
+              ? user?.lastName + " " + user?.firstName
+              : "User"}
+          </h1>
+          <p className="text-text text-[1.4em] font-normal">{user?.email}</p>
         </div>
       </div>
       <div className="l:mt-[32px] l:ml-[0] xsm:flex sm:flex sm:gap-x-[20px] xsm:gap-x-[20px] l:block">

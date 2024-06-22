@@ -143,7 +143,7 @@ const NavBar = () => {
         .then((result) => {
           if (result.status === 200) {
             setUser(null);
-            push("/login");
+            push("/");
           }
           setLoadingAuth(false);
         });

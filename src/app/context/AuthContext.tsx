@@ -8,16 +8,18 @@ interface AuthContextType {
   loadingAuth: boolean;
   setUser: any;
   setLoadingAuth: any;
+  triggerFetch: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { user, loadingAuth, setUser, setLoadingAuth } = useAuth();
+  const { user, loadingAuth, setUser, setLoadingAuth, triggerFetch } =
+    useAuth();
 
   return (
     <AuthContext.Provider
-      value={{ user, loadingAuth, setUser, setLoadingAuth }}
+      value={{ user, loadingAuth, setUser, setLoadingAuth, triggerFetch }}
     >
       {children}
     </AuthContext.Provider>
