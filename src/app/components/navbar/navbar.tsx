@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import style from "./navbar.module.scss";
 import Image from "next/image";
@@ -19,15 +20,7 @@ const NavBar = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [cartModal, setCartModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
-  // const [user, setUser] = useState(null) as any;
   const { push } = useRouter();
-
-  // useEffect(() => {
-  //   if (users) {
-  //     setUser(users);
-  //     setLoadingAuth(false);
-  //   }
-  // }, [users]);
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
 
@@ -152,6 +145,7 @@ const NavBar = () => {
   };
 
   const handleLoginClick = () => {
+    console.log("Login");
     push("/login");
   };
   return (
@@ -530,14 +524,14 @@ const NavBar = () => {
                 </>
               ) : (
                 <>
-                  <Link
-                    href="/login"
+                  <div
                     className="ml-[10px] flex items-center justify-center"
+                    onClick={handleLoginClick}
                   >
                     <button className="text-white bg-button hover:opacity-90 text-[1.6em] rounded-sm px-[26px] py-[10px]">
                       Login
                     </button>
-                  </Link>
+                  </div>
                 </>
               )}
             </div>
