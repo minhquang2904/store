@@ -20,7 +20,7 @@ export default function ProductDetail({
 }: {
   params: { productId: string };
 }) {
-  console.log(params.productId);
+  console.log(params?.productId);
   const [description, setDescription] = useState("");
   const [dataDetail, setDataDetail] = useState(data);
   const [picture, setPicture] = useState(0);
