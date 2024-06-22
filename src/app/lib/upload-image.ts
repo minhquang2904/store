@@ -1,6 +1,6 @@
 import cloudinary from "./cloudinary";
 
-export const UploadImage = async (file: File, folder: string) => {
+export const UploadImage = async (file: File, folder: string, tags: string) => {
   const arrayBuffer = await file.arrayBuffer();
   const buffer: any = Buffer.from(arrayBuffer);
 
@@ -8,7 +8,7 @@ export const UploadImage = async (file: File, folder: string) => {
     cloudinary.uploader
       .upload_stream(
         {
-          tags: "products",
+          tags: tags,
           folder: folder,
           upload_preset: "MyStore",
           resource_type: "image",

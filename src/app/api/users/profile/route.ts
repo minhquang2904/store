@@ -34,7 +34,7 @@ export async function PUT(req: NextRequest) {
       }
       if (typeof file === "object" && file !== "undefined") {
         try {
-          const uploadImage: any = await UploadImage(file, "avatar-user");
+          const uploadImage: any = await UploadImage(file, "user", "avatar");
           uploadImageObj.push({
             url: uploadImage.secure_url,
             public_id: uploadImage.public_id,

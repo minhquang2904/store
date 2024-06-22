@@ -145,7 +145,6 @@ const NavBar = () => {
   };
 
   const handleLoginClick = () => {
-    console.log("Login");
     push("/login");
   };
   return (

@@ -181,7 +181,7 @@ const ListUser = () => {
       </div>
       {modalImage && (
         <ModalImage
-          data={dataModalImage}
+          url={dataModalImage}
           onClose={handleCloseModalImage}
           isOpen={modalImage}
         />
@@ -219,7 +219,7 @@ const ModalSee = (props: any) => {
     role,
     status,
     email,
-    address_list,
+    address,
     phone,
   } = data;
 
@@ -243,11 +243,11 @@ const ModalSee = (props: any) => {
             {image && (
               <div
                 className="relative inline-block group overflow-hidden rounded-[16px] !h-[100px] !w-[100px] cursor-pointer"
-                onClick={() => handleShowModalImage(image.url)}
+                onClick={() => handleShowModalImage(image[0]?.url)}
               >
                 <div className="!relative group duration-200">
                   <Image
-                    src={image.url || "/images/avatar-profile.png"}
+                    src={image[0]?.url || "/images/avatar-profile.png"}
                     alt={`Image ${image.url}`}
                     className="rounded-[50%] object-cover object-top !h-[100px] !w-[100px] !relative"
                     fill
@@ -313,7 +313,9 @@ const ModalSee = (props: any) => {
           </div>
           <div className="inline-block">
             <LabelInput name="Address" styleCustom="!mb-[4px]" />
-            <TitleSee title={address_list.length > 0 ? address_list : "N/A"} />
+            <TitleSee
+              title={address.length > 0 ? address[0].addressFull : "N/A"}
+            />
           </div>
         </ModalBody>
         <ModalFooter className="flex xsm:flex-col sm:flex-col l:flex-row gap-x-[10px] gap-y-[10px]">
@@ -367,7 +369,7 @@ const ModalImage = (props: any) => {
           <Image
             src={url || "/images/avatar-profile.png"}
             alt={`Uploaded ${url}`}
-            className="!max-h-[300px] !max-w-[300px] !relative object-cover object-center select-none"
+            className="!max-h-[300px] !max-w-[300px] !relative object-cover object-center select-none rounded-[50%]"
             fill
             sizes="(max-width: 100px) 100vw"
             loading="lazy"

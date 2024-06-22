@@ -233,34 +233,66 @@ const ModalCropImage = (props: any) => {
         margin={"auto 15px auto 15px"}
         className="xsm:!max-w-[400px] xsm:!max-h-[600px] max-h-[800px]"
       >
-        <h1
-          className="text-text text-[2em] font-medium cursor-pointer"
+        <div
+          className="xsm:px-[16px] px-[24px] pt-[10px] flex justify-end cursor-pointer"
           onClick={onClose}
         >
-          close
-        </h1>
-        <div className="xsm:px-[16px] px-[24px] py-[10px] flex justify-between">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#131118"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </div>
+        <div className="xsm:px-[16px] px-[24px] py-[10px]">
           <h1 className="text-text text-[2em] font-medium">Crop Image</h1>
         </div>
         <div className="px-[24px]">
-          <input type="file" accept="image/*" onChange={onImageChange} />
+          <label
+            htmlFor="upload-image"
+            className="inline-block bg-button text-white px-[16px] py-[8px] rounded-[16px] text-[1.6em] cursor-pointer hover:opacity-80 mb-[10px] min-w-[130px]"
+          >
+            Choose Image
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            id="upload-image"
+            onChange={onImageChange}
+            className="hidden"
+          />
         </div>
         {isCropperVisible && (
-          <div>
+          <div className="px-[24px]">
             <Cropper
               src={image}
-              style={{ height: 400, width: "100%" }}
+              style={{
+                height: "100%",
+                width: "100%",
+                maxHeight: "400px",
+                maxWidth: "400px",
+              }}
               initialAspectRatio={1}
               aspectRatio={1}
               guides={false}
               ref={cropperRef}
             />
-            <button
-              onClick={handleConfirmCrop}
-              className="text-white text-[1.6em] bg-text"
-            >
-              Save
-            </button>
+            <div className="flex justify-end">
+              <button
+                onClick={handleConfirmCrop}
+                className="text-white text-[1.6em] bg-text mt-[16px] px-[20px] py-[8px] rounded-[16px] border-button border-[1px] hover:opacity-80 min-w-[130px]"
+              >
+                Save
+              </button>
+            </div>
           </div>
         )}
       </ModalContent>
@@ -281,7 +313,7 @@ const ModalAdd = (props: any) => {
     croppedImage,
     setCroppedImage,
   } = props;
-  console.log("croppedImage", croppedImage);
+
   const [city, setCity] = useState([]) as any;
   const [district, setDistrict] = useState([]) as any;
   const formData = new FormData();
@@ -408,6 +440,12 @@ const ModalAdd = (props: any) => {
       console.log("Error", error);
     }
   };
+
+  const handleCloseModalAdd = () => {
+    onClose();
+    setFileImage(null);
+    setCroppedImage(null);
+  };
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
       <ModalOverlay />
@@ -444,7 +482,7 @@ const ModalAdd = (props: any) => {
                       alt={`Uploaded image of ${user?.firstName} ${user?.lastName}`}
                       className="object-cover object-top !h-[100px] !w-[100px] !relative rounded-[50%]"
                       fill
-                      sizes="100vw"
+                      sizes="(max-width: 100px), 100vw"
                     />
                     <div className="absolute top-[4px] right-[4px] z-100 bg-white p-[5px] rounded-[50%] flex justify-center items-center">
                       <label
@@ -659,7 +697,7 @@ const ModalAdd = (props: any) => {
               </div>
               <div className="flex gap-x-[10px] justify-end mt-[16px] px-[12px]">
                 <ButtonModal
-                  onClick={onClose}
+                  onClick={handleCloseModalAdd}
                   title="Cancel"
                   styleCustom="border-button bg-white max-w-[140px] w-full"
                 />

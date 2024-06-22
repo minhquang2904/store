@@ -29,6 +29,7 @@ export default function Login() {
 
   const handleSubmit = (values: any, setSubmitting: any) => {
     setLoading(true);
+    setSubmitting(true);
     try {
       fetch("/api/users/login", {
         method: "POST",
@@ -39,7 +40,6 @@ export default function Login() {
       })
         .then((res) => res.json())
         .then((data) => {
-          setLoading(false);
           if (data.status == 200) {
             push("/");
           }
@@ -51,8 +51,9 @@ export default function Login() {
             setDataError(data.message);
             setError(true);
           }
+          setLoading(false);
+          setSubmitting(false);
         });
-      setSubmitting(false);
     } catch (error: any) {
       console.log("Login failed", error.message);
     }

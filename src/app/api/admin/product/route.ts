@@ -88,7 +88,11 @@ export async function PUT(req: NextRequest) {
 
       if (newArrFilesObject.length > 0) {
         for (const file of newArrFilesObject) {
-          const uploadImage: any = await UploadImage(file, "products");
+          const uploadImage: any = await UploadImage(
+            file,
+            "products",
+            "products"
+          );
           newArrFileSave.push({
             url: uploadImage.secure_url,
             public_id: uploadImage.public_id,
@@ -158,7 +162,11 @@ export async function POST(req: any) {
     const urlImage = [];
     for (const file of files) {
       try {
-        const uploadImage: any = await UploadImage(file, "products");
+        const uploadImage: any = await UploadImage(
+          file,
+          "products",
+          "products"
+        );
         urlImage.push({
           url: uploadImage.secure_url,
           public_id: uploadImage.public_id,

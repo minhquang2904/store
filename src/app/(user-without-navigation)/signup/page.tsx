@@ -45,6 +45,7 @@ export default function Login() {
     resetForm: any
   ) => {
     try {
+      setSubmitting(true);
       setLoading(true);
       fetch("/api/users/signup", {
         method: "POST",
@@ -64,8 +65,8 @@ export default function Login() {
             setError(true);
           }
           setLoading(false);
+          setSubmitting(false);
         });
-      setSubmitting(false);
     } catch (error: any) {
       console.log("SignUp failed", error.message);
     }
