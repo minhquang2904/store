@@ -1,6 +1,9 @@
 import connectDB from "@/app/config/connectDB";
 import Product from "@/app/models/product";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+
+export const revalidate = 0;
+
 export async function GET() {
   await connectDB();
   try {
