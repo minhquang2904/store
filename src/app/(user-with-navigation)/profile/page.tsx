@@ -277,8 +277,8 @@ const ModalCropImage = (props: any) => {
                   style={{
                     height: "100%",
                     width: "100%",
-                    maxHeight: "400px",
-                    maxWidth: "400px",
+                    maxHeight: "360px",
+                    maxWidth: "400x",
                   }}
                   initialAspectRatio={1}
                   aspectRatio={1}
