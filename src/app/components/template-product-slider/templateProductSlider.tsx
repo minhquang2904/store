@@ -208,9 +208,14 @@ const TemplateProductSlider = () => {
                         </p>
                         <div className="flex font-medium">
                           {item?.discount > 0 ? (
-                            <h3 className="text-[1.6em] ml-[10px] text-secondary">
-                              {item?.discountedPrice}
-                            </h3>
+                            <>
+                              <h3 className="text-[1.6em] text-button line-through">
+                                {item?.price}
+                              </h3>
+                              <h3 className="text-[1.6em] ml-[10px] text-secondary">
+                                {item?.discountedPrice}
+                              </h3>
+                            </>
                           ) : (
                             <h3 className="text-[1.6em] text-secondary">
                               {item?.price}

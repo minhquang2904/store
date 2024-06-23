@@ -295,8 +295,8 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
       .matches(/^[a-zA-Z -.]+$/, "Contains special characters or Numbers"),
     description: Yup.string()
       .required("Description is required")
-      .max(1000, "The description can only be a maximum of 1000 characters")
-      .matches(/^[a-zA-Z0-9 -.]+$/, "Contains special characters or Numbers"),
+      .max(1000, "The description can only be a maximum of 1000 characters"),
+    // .matches(/^[a-zA-Z0-9 -.]+$/, "Contains special characters or Numbers"),
     subName: Yup.string()
       .max(100, "The sub-product name can only be a maximum of 100 characters")
       .matches(/^[a-zA-Z -.]+$/, "Contains special characters or Numbers"),
@@ -537,7 +537,7 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
                   </div>
                   <SubLabel title="Choose minimum 1, maximum 6 picture - File not exceeds 2MB - Supported type(.png, .jpeg, .jpg)" />
                   <div className="flex flex-col">
-                    <div className="flex flex-wrap l:gap-x-[20px] xsm:gap-x-[20px] sm:gap-x-[14px]   xsm:gap-y-[16px] sm:gap-y-[16px] xsm:justify-center border-[1px] bg-white border-solid border-[#ABAEB1] p-[10px] rounded-[16px]">
+                    <div className="flex flex-wrap xsm:gap-x-[20px] sm:gap-x-[14px]   xsm:gap-y-[16px] sm:gap-y-[16px] xsm:justify-center border-[1px] bg-white border-solid border-[#ABAEB1] p-[10px] rounded-[16px]">
                       {images?.map((data: any, index: any) => {
                         return (
                           <div

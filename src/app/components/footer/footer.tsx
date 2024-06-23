@@ -143,28 +143,36 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="bg-[#1e2832] l:flex justify-center items-center xsm:hidden px-pLayout">
-        <div className="w-full max-w-layout py-[10px] px-0 flex justify-between">
-          <h1 className="text-[1.6em] capitalize text-white">
-            {" "}
-            © 2022 Coral , Inc.
-          </h1>
-          <div
-            className="flex items-center cursor-pointer !relative hover:opacity-80"
-            onClick={() => window.scroll(0, 0)}
-          >
-            <h3 className="text-[1.6em] text-white capitalize tracking-[2px] mr-[10px]">
-              Scroll to top
-            </h3>
-            <Image
-              src="/icons/arrowUp.svg"
-              className="!relative !w-[20px] !h-[20px]"
-              alt="LOGO"
-              fill
-              sizes="100vw"
-              priority={true}
-            />
+      <div className="bg-[#1e2832] pb-[16px]">
+        <div className="l:flex justify-center items-center xsm:hidden px-pLayout">
+          <div className="w-full max-w-layout py-[10px] px-0 flex justify-between">
+            <h1 className="text-[1.6em] capitalize text-white">
+              © 2022 Coral , Inc.
+            </h1>
+            <div
+              className="flex items-center cursor-pointer !relative hover:opacity-80"
+              onClick={() => window.scroll(0, 0)}
+            >
+              <h3 className="text-[1.6em] text-white capitalize tracking-[2px] mr-[10px] select-none">
+                Scroll to top
+              </h3>
+              <Image
+                src="/icons/arrowUp.svg"
+                className="!relative !w-[20px] !h-[20px]"
+                alt="LOGO"
+                fill
+                sizes="100vw"
+                priority={true}
+              />
+            </div>
           </div>
+        </div>
+        <div className="l:flex justify-center items-center xsm:hidden px-pLayout">
+          <h1 className="w-full max-w-layout px-0 flex justify-between text-white text-[1.6em]">
+            This website was created as part of a graduation thesis and is not
+            an actual e-commerce site. All products and information are for
+            illustrative purposes only.
+          </h1>
         </div>
       </div>
       <div className="iconScrollTop [&.active]:xsm:flex [&.active]:sm:flex [&.active]:l:hidden bg-[#1e2832] w-[40px] h-[40px] rounded-[50%] l:hidden justify-center items-center xsm:hidden sm:hidden fixed bottom-[80px] right-[16px]">

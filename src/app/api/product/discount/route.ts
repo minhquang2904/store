@@ -14,6 +14,7 @@ export async function GET() {
         discountedPrice: 1,
         discount: 1,
         files: 1,
+        price: 1,
       }
     );
     if (products) {
