@@ -109,6 +109,7 @@ const TemplateProductSlider = () => {
         const result = await response.json();
         const status = result.status;
         const data = result.data;
+        console.log(data);
         if (status === 200) {
           setProduct(data);
         }
