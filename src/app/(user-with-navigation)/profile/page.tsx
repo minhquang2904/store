@@ -233,10 +233,7 @@ const ModalCropImage = (props: any) => {
         margin={"auto 15px auto 15px"}
         className="xsm:!max-w-[400px] xsm:!max-h-[600px] max-h-[800px]"
       >
-        <div
-          className="xsm:px-[16px] px-[24px] pt-[10px] flex justify-end cursor-pointer"
-          onClick={onClose}
-        >
+        <div className="xsm:px-[16px] px-[24px] pt-[10px] inline-flex justify-end cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="28"
@@ -247,6 +244,7 @@ const ModalCropImage = (props: any) => {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            onClick={onClose}
           >
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -258,7 +256,7 @@ const ModalCropImage = (props: any) => {
         <div className="px-[24px]">
           <label
             htmlFor="upload-image"
-            className="inline-block bg-button text-white px-[16px] py-[8px] rounded-[16px] text-[1.6em] cursor-pointer hover:opacity-80 mb-[10px] min-w-[130px]"
+            className="inline-block bg-button text-white px-[16px] py-[8px] rounded-[16px] text-[1.6em] cursor-pointer l:hover:opacity-80 mb-[10px] min-w-[130px]"
           >
             Choose Image
           </label>
@@ -271,21 +269,25 @@ const ModalCropImage = (props: any) => {
           />
         </div>
         {isCropperVisible && (
-          <div className="px-[24px]">
-            <Cropper
-              src={image}
-              style={{
-                height: "100%",
-                width: "100%",
-                maxHeight: "400px",
-                maxWidth: "400px",
-              }}
-              initialAspectRatio={1}
-              aspectRatio={1}
-              guides={false}
-              ref={cropperRef}
-            />
-            <div className="flex justify-end">
+          <>
+            <div className={`px-[24px] overflow-y-scroll ${style.tableScroll}`}>
+              <div>
+                <Cropper
+                  src={image}
+                  style={{
+                    height: "100%",
+                    width: "100%",
+                    maxHeight: "400px",
+                    maxWidth: "400px",
+                  }}
+                  initialAspectRatio={1}
+                  aspectRatio={1}
+                  guides={false}
+                  ref={cropperRef}
+                />
+              </div>
+            </div>
+            <div className="flex justify-end pb-[20px]">
               <button
                 onClick={handleConfirmCrop}
                 className="text-white text-[1.6em] bg-text mt-[16px] px-[20px] py-[8px] rounded-[16px] border-button border-[1px] hover:opacity-80 min-w-[130px]"
@@ -293,7 +295,7 @@ const ModalCropImage = (props: any) => {
                 Save
               </button>
             </div>
-          </div>
+          </>
         )}
       </ModalContent>
     </Modal>
