@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./slider.scss";
 import TitleComponent from "../titleComponent/titleComponent";
+import { useRouter } from "next/navigation";
 
 const SampleNextArrow = (props: any) => {
   const { className, onClick } = props;
@@ -71,6 +72,7 @@ const settings = {
 };
 
 const TemplateProductSlider = () => {
+  const { push } = useRouter();
   const [dataList, setData] = useState(data);
   const [product, setProduct] = useState(null) as any;
 
@@ -126,6 +128,10 @@ const TemplateProductSlider = () => {
     }
   }, [product]);
 
+  const handleGetProductDetailUrl = (productId: any) => {
+    console.log(productId);
+    push(`/productDetail/${productId}`);
+  };
   return (
     <div className="flex justify-center items-center px-pLayout">
       <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
@@ -174,9 +180,9 @@ const TemplateProductSlider = () => {
             {product?.map((item: any) => {
               return (
                 <div key={item?._id} className="block px-pCard">
-                  <Link
+                  <div
                     className="block shadow-sm pb-[20px]"
-                    href={`/productDetail/${item?._id}/`}
+                    onClick={() => handleGetProductDetailUrl(item?._id)}
                   >
                     <div className="!relative">
                       <Image
@@ -225,7 +231,7 @@ const TemplateProductSlider = () => {
                         </div>
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 </div>
               );
             })}
