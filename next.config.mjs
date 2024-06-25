@@ -22,6 +22,7 @@ const nextConfig = {
     NEXT_PUBLIC_PUSHER_KEY: process.env.NEXT_PUBLIC_PUSHER_KEY,
     NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
     LOGIN_INFO_USER: process.env.LOGIN_INFO_USER,
+    LOGIN_INFO_ADMIN: process.env.LOGIN_INFO_ADMIN,
   },
 };
 

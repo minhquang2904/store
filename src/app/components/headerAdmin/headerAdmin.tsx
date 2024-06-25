@@ -1,17 +1,30 @@
-import Cookies from "js-cookie";
+import { useAuthContext } from "@/app/context/AuthContext";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
+
 const HeaderAdmin = (props: any) => {
-  const { childToParent, dataDecode } = props;
+  const { childToParent } = props;
+  const { admin, setLoadingAuth, setAdmin } = useAuthContext();
 
   const pathname = usePathname();
-  const router = useRouter();
+  const { push } = useRouter();
   const [pageData, setPageData] = useState(null) as any;
 
-  const handleLogOut = () => {
-    Cookies.remove("LOGIN-INFO-ADMIN");
-    router.push("/admin/login");
+  const handleLogOut = async () => {
+    setLoadingAuth(true);
+    try {
+      const response = await fetch("/api/admin/logout", { method: "POST" });
+      const result = await response.json();
+      const status = result.status;
+      if (status === 200) {
+        setAdmin(null);
+        push("/admin/login");
+      }
+      setLoadingAuth(false);
+    } catch (error) {
+      console.error("Sign out failed!", error);
+    }
   };
 
   useLayoutEffect(() => {
@@ -79,7 +92,7 @@ const HeaderAdmin = (props: any) => {
         </div>
         <div className="flex items-center">
           <div className="text-text text-[1.6em] uppercase mr-[16px] font-medium">
-            {dataDecode?.username}
+            {admin?.username}
           </div>
           <div
             className="p-[10px] cursor-pointer rounded-[4px] group"

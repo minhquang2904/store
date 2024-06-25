@@ -4,7 +4,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { verifyToken } from "@/app/lib/jwt";
 import { cookies } from "next/headers";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   await connectDB();
   const cookieStore = cookies();
   try {

@@ -9,17 +9,34 @@ interface AuthContextType {
   setUser: any;
   setLoadingAuth: any;
   triggerFetch: () => void;
+  admin: any;
+  setAdmin: any;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { user, loadingAuth, setUser, setLoadingAuth, triggerFetch } =
-    useAuth();
+  const {
+    user,
+    loadingAuth,
+    setUser,
+    setLoadingAuth,
+    triggerFetch,
+    admin,
+    setAdmin,
+  } = useAuth();
 
   return (
     <AuthContext.Provider
-      value={{ user, loadingAuth, setUser, setLoadingAuth, triggerFetch }}
+      value={{
+        user,
+        loadingAuth,
+        setUser,
+        setLoadingAuth,
+        triggerFetch,
+        admin,
+        setAdmin,
+      }}
     >
       {children}
     </AuthContext.Provider>

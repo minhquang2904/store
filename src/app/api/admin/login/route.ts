@@ -7,6 +7,7 @@ import Inventories from "@/app/models/inventories";
 import Product from "@/app/models/product";
 import TotalUser from "@/app/models/numberUser";
 import User from "@/app/models/user";
+import { createCookie } from "@/app/lib/cookie";
 
 export async function POST(req: NextRequest) {
   await connectDB();
@@ -48,6 +49,11 @@ export async function POST(req: NextRequest) {
           role,
         });
 
+        const seralized = await createCookie(
+          process.env.LOGIN_INFO_ADMIN!,
+          token
+        );
+
         if (!inventory) {
           const count = await Product.countDocuments({});
           await new Inventories({
@@ -64,10 +70,16 @@ export async function POST(req: NextRequest) {
           }).save();
         }
 
-        return NextResponse.json({
-          message: "Login Success!",
+        const response = {
+          message: "Authenticated!",
           status: 200,
-          token: token,
+        };
+
+        return new Response(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            "Set-Cookie": seralized,
+          },
         });
       }
       return NextResponse.json({ message: "Login Failed", status: 400 });

@@ -9,13 +9,10 @@ import ErrorInput from "@/app/components/errorInput/errorInput";
 import FieldInput from "@/app/components/fieldInput/fieldInput";
 import LabelInput from "@/app/components/labelInput/labelInput";
 import ErrorMessage from "@/app/components/errorMessage/errorMessage";
-import Cookies from "js-cookie";
-import LoadingModal from "@/app/components/loadingModal/loadingModal";
 
 const LoginAmin = () => {
   const usernameRef: any = useRef(null);
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { push } = useRouter();
   const [error, setError] = useState(false);
 
   const LoginSchema = Yup.object().shape({
@@ -26,7 +23,6 @@ const LoginAmin = () => {
   });
 
   const handleSubmit = (values: any, setSubmitting: any) => {
-    setLoading(true);
     try {
       fetch("/api/admin/login", {
         method: "POST",
@@ -37,21 +33,14 @@ const LoginAmin = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setLoading(false);
           if (data.status == 200) {
-            Cookies.set("LOGIN-INFO-ADMIN", data.token, {
-              sameSite: "strict",
-              secure: true,
-              path: "/",
-              expires: 7,
-            });
-            router.push("/admin");
+            push("/admin");
           }
           if (data.status == 400) {
             setError(true);
           }
+          setSubmitting(false);
         });
-      setSubmitting(false);
     } catch (error: any) {
       console.log("Login failed", error.message);
     }
@@ -108,7 +97,6 @@ const LoginAmin = () => {
           </Formik>
         </div>
       </div>
-      <LoadingModal title="Login" loading={loading} />
     </>
   );
 };
