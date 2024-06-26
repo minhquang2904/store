@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { dataDescription, data } from "@/app/data";
 import TitlePageNavigation from "@/app/components/titlePageNavigation/titlePageNavigation";
 import RelatedProduct from "@/app/components/relatedProduct/relatedProduct";
+import { getProduct } from "@/app/lib/getProduct";
 
 const SubTitleProductDetail = (props: any) => {
   const { title } = props;
@@ -16,13 +17,13 @@ const SubTitleProductDetail = (props: any) => {
 };
 
 export default function ProductDetail({ searchParams }: any) {
-  console.log("params?.productId", searchParams._id);
   const [description, setDescription] = useState("");
   const [dataDetail, setDataDetail] = useState(data);
   const [picture, setPicture] = useState(0);
   const navDescription = dataDescription[0].description;
   const navAddInformation = dataDescription[1].addInformation;
-
+  const [product, setProduct] = useState(null) as any;
+  console.log("product", product);
   const handleChangeDescription = (e: any) => {
     const id = e.target.id;
     id == "description" && setDescription(navDescription || "");
@@ -40,6 +41,15 @@ export default function ProductDetail({ searchParams }: any) {
 
   useEffect(() => {
     setDescription(navDescription || "");
+  }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getProduct(searchParams._id);
+      setProduct(data.data);
+      console.log("data", data);
+    };
+    getData();
   }, []);
 
   const handleChooseSize = (e: any) => {
@@ -66,28 +76,27 @@ export default function ProductDetail({ searchParams }: any) {
             <div className="flex flex-col items-center shrink grow-0 l:basis-2/4 sm:basis-[40%] xsm:basis-[100%]">
               <div className="!relative max-w-[400px] flex w-full">
                 <Image
-                  src={dataDetail[picture].url || ""}
+                  src={product?.files[0]?.url || "/images/avatar-profile.png"}
                   className="!relative w-full"
-                  alt="Product 1"
+                  alt={`${product?.files[0]?.url}`}
                   fill
                   sizes="(max-width: 400px) 100vw"
                 />
               </div>
               <div className="flex mt-[10px]">
-                {dataDetail.slice(0, 6).map((item: any) => {
-                  return dataDetail.length > 1 ? (
+                {product?.files.map((item: any) => {
+                  return product?.files?.length > 1 ? (
                     <div
-                      key={item.id}
+                      key={item.url}
                       className="!relative max-w-[110px] w-full cursor-pointer hover:opacity-80"
                       onClick={() => handleActivePicture(item.id - 1)}
                     >
                       <Image
                         src={item.url}
                         className="w-full !relative"
-                        alt="Product 1"
+                        alt={`Product ${item.id}`}
                         fill
                         sizes="(max-width: 200px) 100vw"
-                        priority={true}
                       />
                     </div>
                   ) : (
@@ -98,8 +107,8 @@ export default function ProductDetail({ searchParams }: any) {
             </div>
             <div className="shrink grow-0 l:basis-2/4 ml-[30px] xsm:ml-[0] xsm:mt-[40px] sm:basis-[60%] xsm:basis-[100%]">
               <div className="flex justify-between">
-                <h1 className="text-text font-semibold text-[2.6em]">
-                  YK Disney
+                <h1 className="text-text font-medium text-[2.6em] capitalize">
+                  {product?.name || "N/A"}
                 </h1>
                 <div className="flex">
                   <div className="flex items-center mr-[16px]">
@@ -112,48 +121,44 @@ export default function ProductDetail({ searchParams }: any) {
                   </div>
                   <div className="bg-[#e2f8e2] flex items-center py-[8px] px-[16px] rounded-[10px]">
                     <h5 className="text-[#3cd139] text-[1.4em] font-medium">
-                      In Stock : 8
+                      In Stock : {product?.quantity || 0}
                     </h5>
                   </div>
                 </div>
               </div>
               <div className="mt-[8px]">
-                <h4 className="text-text font-normal text-[1.6em]">
-                  Girl Pink Dress
+                <h4 className="text-text font-normal text-[1.6em] capitalize">
+                  {product?.categories || "N/A"}
                 </h4>
               </div>
-              <div className="mt-[8px]">
+              <div className="flex mt-[8px] gap-x-[6px] items-end">
+                {product?.discount > 0 && (
+                  <h4 className="text-button font-semibold text-[1.6em] line-through">
+                    {product?.price}
+                  </h4>
+                )}
                 <h4 className="text-secondary font-semibold text-[2.2em]">
-                  385.714
+                  {product?.discountedPrice || "N/A"}
                 </h4>
               </div>
               <div className="mt-[16px]">
                 <p className="text-text font-normal text-[1.4em] line-clamp-4">
-                  Lustrous yet understated. The new evening wear collection
-                  exclusively offered at the reopened Giorgio Armani boutique in
-                  Los Angeles. Lustrous yet understated. The new evening wear
-                  collection exclusively offered at the reopened Giorgio Armani
-                  boutique in Los Angeles. Lustrous yet understated. The new
-                  evening wear collection exclusively offered at the reopened
-                  Giorgio Armani boutique in Los Angeles. xclusively offered at
-                  the reopened Giorgio Armani boutique in Los Angeles. yet
-                  understated. The new evening wear collection exclusively
-                  offered at the reopened Giorgio Armani boutique in Los
-                  Angeles. xclusively offered at the reopened Giorgio Armani
-                  boutique in Los Angeles.
+                  {product?.description || "N/A"}
                 </p>
               </div>
               <div className="mt-[16px]">
                 <SubTitleProductDetail title="Color" />
                 <div className="mt-[8px] flex flex-wrap gap-y-[8px]">
-                  {dataDetail[0].color.map((item: any, index: any) => {
+                  {product?.colors?.map((item: any) => {
                     return (
                       <div
-                        key={index}
+                        key={item?.value}
                         onClick={handleChooseColor}
-                        className={`mr-[8px] [&.activeColor]:border-solid [&.activeColor]:border-[3px] [&.activeColor]:border-[#afb3b8] w-[70px] h-[40px] cursor-pointer rounded-[20px]`}
+                        className={`mr-[8px] [&.activeColor]:border-solid [&.activeColor]:border-[3px] [&.activeColor]:border-[#afb3b8] w-[70px] h-[40px] cursor-pointer rounded-[20px] flex justify-center items-center capitalize border-solid border-[1px] border-button text-[1.5em]`}
                         style={{ background: `${item}` }}
-                      ></div>
+                      >
+                        <h1>{item?.value}</h1>
+                      </div>
                     );
                   })}
                 </div>

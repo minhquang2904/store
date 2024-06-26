@@ -399,7 +399,6 @@ const ModalSee = (props: any) => {
     colors,
     sizes,
   } = data;
-  const jsonColors = JSON.parse(colors);
 
   let result: any = {};
   for (let obj of sizes) {
@@ -438,7 +437,7 @@ const ModalSee = (props: any) => {
             <LabelInput name="images" styleCustom="!mb-[4px]" />
             <div className="flex xsm:gap-x-[12px] xsm:gap-y-[12px] l:gap-x-[20px] sm:gap-x-[12px] xsm:flex-wrap">
               {files &&
-                files.map((file: any, index: any) => {
+                files?.map((file: any, index: any) => {
                   return (
                     <div
                       key={file.public_id}
@@ -495,7 +494,7 @@ const ModalSee = (props: any) => {
           <div>
             <LabelInput name="Colors" styleCustom="!mb-[4px]" />
             <div className="flex gap-x-[12px] flex-wrap gap-y-[8px]">
-              {jsonColors.map((color: any, index: any) => {
+              {colors?.map((color: any, index: any) => {
                 return (
                   <TitleSee
                     key={`${color}-${index}`}

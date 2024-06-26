@@ -89,10 +89,9 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
       method: "GET",
     });
     const data = await res.json();
-    const colorParse = JSON.parse(data.products.colors);
     const mergedValues = mergeApiDataWithInitialValues(
       data.products.sizes,
-      colorParse
+      data.products.colors
     );
     const filteredValues = filterMergedValues(mergedValues);
 
@@ -101,7 +100,7 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
       setImages(data.products.files);
       setAreaCount(data.products.description);
       setSelectedCategory(data.products.categories);
-      setSelectedColors(colorParse);
+      setSelectedColors(data.products.colors);
       setProductName(data.products.name);
       setProductSubName(data.products.subName);
       setProductDescription(data.products.description);

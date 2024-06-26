@@ -369,7 +369,7 @@ const AddProduct = () => {
   });
 
   const clearString = (value: any) => {
-    return value.replace(/\s\s+/g, " ").toLowerCase().trim();
+    return value.replace(/\s\s+/g, " ").trim();
   };
 
   const handleSubmit = (values: any, setSubmitting: any, resetForm: any) => {

@@ -23,10 +23,11 @@ export async function PUT(req: NextRequest) {
       const price = data.get("price");
       const discount = data.get("discount");
       const discountedPrice = data.get("discountedPrice");
-      const colors = data.get("colors");
+      const colors: any = data.get("colors");
       const quantity = data.get("quantity");
       const size: any = data.get("size");
 
+      const colorsParse = JSON.parse(colors);
       const sizeParse = JSON.parse(size);
       const existingSizes = [...product.sizes];
 
@@ -120,7 +121,7 @@ export async function PUT(req: NextRequest) {
         price: price,
         discount: discount,
         discountedPrice: discountedPrice,
-        colors: colors,
+        colors: [...colorsParse],
         quantity: quantity,
         sizes: [...newArrSizeExist, ...newArrSize],
       });
@@ -157,6 +158,7 @@ export async function POST(req: any) {
     const quantity = data.get("quantity");
     const size = data.get("size");
     const files = data.getAll("files");
+    const colorsParse = JSON.parse(colors);
     const sizeParse = JSON.parse(size);
 
     const urlImage = [];
@@ -192,9 +194,9 @@ export async function POST(req: any) {
       price,
       discount,
       discountedPrice,
-      colors,
+      colors: colorsParse,
       quantity,
-      sizes: [...sizeParse],
+      sizes: sizeParse,
     })
       .save()
       .then(async () => {

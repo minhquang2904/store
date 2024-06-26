@@ -13,6 +13,8 @@ interface IProduct extends Document {
   discountedPrice: number;
   colors: string[];
   soldCount: number;
+  quantity: number;
+  sizes: string[];
 }
 
 const productSchema: Schema = new Schema({
@@ -66,10 +68,12 @@ const productSchema: Schema = new Schema({
     required: true,
     default: 0,
   },
-  colors: {
-    type: String,
-    required: true,
-  },
+  colors: [
+    {
+      value: { type: String, required: true },
+      label: { type: String, required: true },
+    },
+  ],
   quantity: {
     type: Number,
     required: true,
