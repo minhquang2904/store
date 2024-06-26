@@ -128,9 +128,6 @@ const TemplateProductSlider = () => {
     }
   }, [product]);
 
-  const handleGetProductDetailUrl = (productId: any) => {
-    push(`/productDetail/${productId}`);
-  };
   return (
     <>
       {/* {product?.length > 0 && ( */}
@@ -180,11 +177,15 @@ const TemplateProductSlider = () => {
             <Slider {...settings}>
               {product?.map((item: any) => {
                 return (
-                  <div key={item?._id} className="block px-pCard">
-                    <div
-                      className="block shadow-sm pb-[20px] cursor-pointer"
-                      onClick={() => handleGetProductDetailUrl(item?._id)}
-                    >
+                  <Link
+                    href={{
+                      pathname: "/productDetail",
+                      query: { _id: item?._id },
+                    }}
+                    key={item?._id}
+                    className="block px-pCard"
+                  >
+                    <div className="block shadow-sm pb-[20px] cursor-pointer">
                       <div className="!relative">
                         <Image
                           src={item?.files[0]?.url}
@@ -233,7 +234,7 @@ const TemplateProductSlider = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
             </Slider>

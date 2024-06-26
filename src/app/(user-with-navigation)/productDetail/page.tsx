@@ -1,6 +1,6 @@
 "use client";
 
-import style from "../productDetail.module.scss";
+import style from "./productDetail.module.scss";
 import Image from "next/image";
 import IconHeartSvg from "@/app/components/iconHeartSvg/iconHeartSvg";
 import { useEffect, useState } from "react";
@@ -15,13 +15,8 @@ const SubTitleProductDetail = (props: any) => {
   );
 };
 
-export default function ProductDetail({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const { slug } = params;
-  console.log("params?.productId", slug);
+export default function ProductDetail({ searchParams }: any) {
+  console.log("params?.productId", searchParams);
   const [description, setDescription] = useState("");
   const [dataDetail, setDataDetail] = useState(data);
   const [picture, setPicture] = useState(0);
