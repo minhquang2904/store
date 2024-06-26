@@ -16,7 +16,7 @@ const SubTitleProductDetail = (props: any) => {
 };
 
 export default function ProductDetail({ searchParams }: any) {
-  console.log("params?.productId", searchParams);
+  console.log("params?.productId", searchParams._id);
   const [description, setDescription] = useState("");
   const [dataDetail, setDataDetail] = useState(data);
   const [picture, setPicture] = useState(0);
