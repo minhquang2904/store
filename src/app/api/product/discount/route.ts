@@ -8,7 +8,7 @@ export async function GET() {
   await connectDB();
   try {
     const products = await Product.find(
-      {},
+      { discount: { $gt: 0 } },
       {
         _id: 1,
         name: 1,
@@ -20,12 +20,12 @@ export async function GET() {
         price: 1,
       }
     );
+
     if (products) {
-      const filterProduct = products.filter((item) => item.discount > 0);
       return NextResponse.json({
         message: "Get discount success!",
         status: 200,
-        data: filterProduct,
+        data: products,
       });
     }
     return NextResponse.json({ message: "No product found!", status: 404 });

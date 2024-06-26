@@ -11,9 +11,16 @@ import BannerGroup from "../components/bannerGroup/bannerGroup";
 //     ssr: false,
 //   }
 // );
-import TemplateProductSlider from "../components/template-product-slider/templateProductSlider";
+const TemplateProductSlider = dynamic(
+  () => import("../components/template-product-slider/templateProductSlider"),
+  {
+    loading: () => <LoadingComponent />,
+    ssr: false,
+  }
+);
 import RelatedProduct from "../components/relatedProduct/relatedProduct";
 import TemplateProductView from "../components/template-product-view/templateProductView";
+import LoadingComponent from "../components/loadingComponent/loadingComponent";
 
 const Home = () => {
   return (

@@ -12,6 +12,7 @@ interface IProduct extends Document {
   discount: number;
   discountedPrice: number;
   colors: string[];
+  soldCount: number;
 }
 
 const productSchema: Schema = new Schema({
@@ -91,6 +92,10 @@ const productSchema: Schema = new Schema({
       },
     },
   ],
+  soldCount: {
+    type: Number,
+    default: 0,
+  },
   created_at: {
     type: Date,
     default: Date.now,

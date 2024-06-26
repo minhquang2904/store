@@ -129,116 +129,119 @@ const TemplateProductSlider = () => {
   }, [product]);
 
   const handleGetProductDetailUrl = (productId: any) => {
-    console.log(productId);
     push(`/productDetail/${productId}`);
   };
   return (
-    <div className="flex justify-center items-center px-pLayout">
-      <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
-        <TitleComponent title="Discount" />
-        <div className="my-[35px] mx-[0] flex justify-between">
-          <div className="flex gap-[12px] items-center">
-            <div
-              className="activeTabSlider [&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
-              onClick={handleChangeType}
-            >
-              all products
+    <>
+      {/* {product?.length > 0 && ( */}
+      <div className="flex justify-center items-center px-pLayout">
+        <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
+          <TitleComponent title="Discount" />
+          <div className="my-[35px] mx-[0] flex justify-between">
+            <div className="flex gap-[12px] items-center">
+              <div
+                className="activeTabSlider [&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
+                onClick={handleChangeType}
+              >
+                all products
+              </div>
+              <div
+                className="[&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
+                onClick={handleChangeType}
+                id="shirt"
+              >
+                shirt
+              </div>
+              <div
+                className="[&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
+                onClick={handleChangeType}
+                id="bag"
+              >
+                Bag
+              </div>
+              <div
+                className="[&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
+                onClick={handleChangeType}
+                id="shoes"
+              >
+                Shoes
+              </div>
             </div>
-            <div
-              className="[&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
-              onClick={handleChangeType}
-              id="shirt"
-            >
-              shirt
-            </div>
-            <div
-              className="[&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
-              onClick={handleChangeType}
-              id="bag"
-            >
-              Bag
-            </div>
-            <div
-              className="[&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
-              onClick={handleChangeType}
-              id="shoes"
-            >
-              Shoes
+            <div>
+              <Link
+                href="#"
+                className="bg-button text-white text-[1.6em] font-normal capitalize py-[8px] px-[14px] hover:opacity-90"
+              >
+                show all
+              </Link>
             </div>
           </div>
-          <div>
-            <Link
-              href="#"
-              className="bg-button text-white text-[1.6em] font-normal capitalize py-[8px] px-[14px] hover:opacity-90"
-            >
-              show all
-            </Link>
-          </div>
-        </div>
-        <div className="slider-container">
-          <Slider {...settings}>
-            {product?.map((item: any) => {
-              return (
-                <div key={item?._id} className="block px-pCard">
-                  <div
-                    className="block shadow-sm pb-[20px]"
-                    onClick={() => handleGetProductDetailUrl(item?._id)}
-                  >
-                    <div className="!relative">
-                      <Image
-                        src={item?.files[0]?.url}
-                        className="!relative w-full max-h-400px"
-                        alt="Product 1"
-                        fill
-                        sizes="(max-width: 312px) 100vw"
-                      />
-                      <div className="absolute top-[20px] left-[0]">
-                        <p className="text-white bg-secondary text-center text-[1.2em] font-semibold uppercase px-[12px] py-[6px]">
-                          Sale
-                        </p>
+          <div className="slider-container">
+            <Slider {...settings}>
+              {product?.map((item: any) => {
+                return (
+                  <div key={item?._id} className="block px-pCard">
+                    <div
+                      className="block shadow-sm pb-[20px] cursor-pointer"
+                      onClick={() => handleGetProductDetailUrl(item?._id)}
+                    >
+                      <div className="!relative">
+                        <Image
+                          src={item?.files[0]?.url}
+                          className="!relative w-full max-h-400px"
+                          alt="Product 1"
+                          fill
+                          sizes="(max-width: 312px) 100vw"
+                        />
+                        <div className="absolute top-[20px] left-[0]">
+                          <p className="text-white bg-secondary text-center text-[1.2em] font-semibold uppercase px-[12px] py-[6px]">
+                            Sale
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="mt-[18px] mx-[10px] mb-[0]">
-                      <div>
-                        <h1 className="text-text text-[1.6em] font-semibold capitalize min-h-[48px] line-clamp-2">
-                          {item?.name}
-                        </h1>
-                      </div>
-                      <div className="my-[6px] mx-[0]">
-                        <h1 className="text-text text-[1.6em] font-medium capitalize min-h-[24px] line-clamp-1">
-                          {item?.subName}
-                        </h1>
-                      </div>
-                      <div className="flex justify-between">
-                        <p className="text-[#00000080] text-[1.6em] font-medium capitalize">
-                          {item?.categories}
-                        </p>
-                        <div className="flex font-medium">
-                          {item?.discount > 0 ? (
-                            <>
-                              <h3 className="text-[1.6em] text-button line-through">
+                      <div className="mt-[18px] mx-[10px] mb-[0]">
+                        <div>
+                          <h1 className="text-text text-[1.6em] font-semibold capitalize min-h-[48px] line-clamp-2">
+                            {item?.name}
+                          </h1>
+                        </div>
+                        <div className="my-[6px] mx-[0]">
+                          <h1 className="text-text text-[1.6em] font-medium capitalize min-h-[24px] line-clamp-1">
+                            {item?.subName}
+                          </h1>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="text-[#00000080] text-[1.6em] font-medium capitalize">
+                            {item?.categories}
+                          </p>
+                          <div className="flex font-medium">
+                            {item?.discount > 0 ? (
+                              <>
+                                <h3 className="text-[1.6em] text-button line-through">
+                                  {item?.price}
+                                </h3>
+                                <h3 className="text-[1.6em] ml-[10px] text-secondary">
+                                  {item?.discountedPrice}
+                                </h3>
+                              </>
+                            ) : (
+                              <h3 className="text-[1.6em] text-secondary">
                                 {item?.price}
                               </h3>
-                              <h3 className="text-[1.6em] ml-[10px] text-secondary">
-                                {item?.discountedPrice}
-                              </h3>
-                            </>
-                          ) : (
-                            <h3 className="text-[1.6em] text-secondary">
-                              {item?.price}
-                            </h3>
-                          )}
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </Slider>
+                );
+              })}
+            </Slider>
+          </div>
         </div>
       </div>
-    </div>
+      {/* )} */}
+    </>
   );
 };
 
