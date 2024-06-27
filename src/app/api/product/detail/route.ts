@@ -2,15 +2,12 @@ import connectDB from "@/app/config/connectDB";
 import Product from "@/app/models/product";
 import { NextResponse, NextRequest } from "next/server";
 
-export const revalidate = 0;
-
 export async function GET(req: NextRequest) {
   await connectDB();
   try {
-    const url = new URL(req.url);
-    const id = url.searchParams.get("id");
-
-    console.log(id);
+    const url = await req.nextUrl.clone();
+    const searchParams = new URLSearchParams(url.searchParams);
+    const id = searchParams.get("id");
     const product = await Product.findById(id);
 
     if (product) {
