@@ -1,6 +1,5 @@
 import connectDB from "@/app/config/connectDB";
 import Product from "@/app/models/product";
-import mongoose from "mongoose";
 import { NextResponse, NextRequest } from "next/server";
 
 export const revalidate = 0;
@@ -10,10 +9,9 @@ export async function GET(req: NextRequest) {
   try {
     const url = await req.nextUrl.clone();
     const searchParams = new URLSearchParams(url.searchParams);
-    const id: any = searchParams.get("_id");
-    const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(id),
-    });
+    const id: any = searchParams.get("id");
+    console.log(id);
+    const product = await Product.findById(id);
 
     if (product) {
       return NextResponse.json({

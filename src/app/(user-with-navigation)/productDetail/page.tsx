@@ -45,7 +45,7 @@ export default function ProductDetail({ searchParams }: any) {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await getProduct(searchParams._id);
+      const data = await getProduct(searchParams.id);
       setProduct(data.data);
       // console.log("data", data);
     };

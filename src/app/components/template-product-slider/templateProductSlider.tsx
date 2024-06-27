@@ -180,7 +180,7 @@ const TemplateProductSlider = () => {
                   <Link
                     href={{
                       pathname: "/productDetail",
-                      query: { _id: item?._id },
+                      query: { id: item?._id },
                     }}
                     key={item?._id}
                     className="block px-pCard"
