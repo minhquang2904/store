@@ -7,8 +7,7 @@ export const revalidate = 0;
 export async function GET(req: NextRequest) {
   await connectDB();
   try {
-    const url = await req.nextUrl.clone();
-    const searchParams = new URLSearchParams(url.searchParams);
+    const searchParams = req.nextUrl.searchParams;
     const id: any = searchParams.get("id");
     console.log(id);
     const product = await Product.findById(id);
