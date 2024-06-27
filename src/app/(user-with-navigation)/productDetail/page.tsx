@@ -49,8 +49,10 @@ export default function ProductDetail({ searchParams }: any) {
       setProduct(data.data);
       // console.log("data", data);
     };
-    getData();
-  }, []);
+    if (!product) {
+      getData();
+    }
+  }, [product]);
 
   const handleChooseSize = (e: any) => {
     document.querySelector(".activeSize")?.classList.remove("activeSize");
