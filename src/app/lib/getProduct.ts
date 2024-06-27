@@ -1,6 +1,6 @@
 export async function getProduct(productId: string) {
   try {
-    const res = await fetch(`/api/product/detail?id=${productId}`);
+    const res = await fetch(`/api/product/detail?_id=${productId}`);
     const result = await res.json();
     console.log(result);
     return result;
