@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     const url = await req.nextUrl.clone();
     const searchParams = new URLSearchParams(url.searchParams);
     const id = searchParams.get("id");
-    const product = await Product.findById(id);
+    const product = await Product.findOne({ _id: id });
 
     if (product) {
       return NextResponse.json({

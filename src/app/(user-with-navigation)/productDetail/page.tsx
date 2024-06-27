@@ -47,7 +47,7 @@ export default function ProductDetail({ searchParams }: any) {
     const getData = async () => {
       const data = await getProduct(searchParams._id);
       setProduct(data.data);
-      console.log("data", data);
+      // console.log("data", data);
     };
     getData();
   }, []);
