@@ -5,8 +5,8 @@ import { NextResponse, NextRequest } from "next/server";
 export async function GET(req: NextRequest) {
   await connectDB();
   try {
-    const searchParams = req.nextUrl.searchParams;
-    const id = searchParams.get("id");
+    const url = new URL(req.nextUrl);
+    const id = url.searchParams.get("id");
     const product = await Product.findById(id);
 
     if (product) {
