@@ -17,6 +17,7 @@ const SubTitleProductDetail = (props: any) => {
 };
 
 export default function ProductDetail({ searchParams }: any) {
+  const id = searchParams.id;
   const [description, setDescription] = useState("");
   const [dataDetail, setDataDetail] = useState(data);
   const [picture, setPicture] = useState(0);
@@ -42,10 +43,10 @@ export default function ProductDetail({ searchParams }: any) {
   useEffect(() => {
     setDescription(navDescription || "");
   }, []);
-  console.log("searchParams", searchParams);
+
   useEffect(() => {
     const getData = async () => {
-      const data = await getProduct(searchParams.id);
+      const data = await getProduct(id);
       setProduct(data.data);
       // console.log("data", data);
     };
