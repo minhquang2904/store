@@ -12,7 +12,6 @@ import FieldInput from "@/app/components/fieldInput/fieldInput";
 import ErrorInput from "@/app/components/errorInput/errorInput";
 import LabelInput from "@/app/components/labelInput/labelInput";
 import ErrorMessage from "@/app/components/errorMessage/errorMessage";
-import Cookies from "js-cookie";
 import LoadingModal from "@/app/components/loadingModal/loadingModal";
 
 export default function Login() {
