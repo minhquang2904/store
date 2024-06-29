@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import useAuth from "./useAuth";
+import { usePathname } from "next/navigation";
+import { useAuthContext } from "../context/AuthContext";
 
 const useGetCart = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [cart, setCart] = useState(null) as any;
   const [loadingCart, setLoadingCart] = useState(false);
   const [fetchAgainCart, setFetchAgainCart] = useState(false);
+  const path = usePathname();
 
   const triggerFetchCart = () => setFetchAgainCart(true);
 
@@ -38,16 +39,16 @@ const useGetCart = () => {
   };
 
   useEffect(() => {
+    console.log("useEffect useGetCart");
     if (user && !cart) {
       fetchDataCart();
     }
     if (user && cart && fetchAgainCart) {
-      console.log("fetchAgainCart");
       fetchDataCart();
     }
-  }, [user, fetchAgainCart]);
+  }, [user, fetchAgainCart, path, cart]);
 
-  return { cart, triggerFetchCart, loadingCart };
+  return { cart, triggerFetchCart, loadingCart, setCart };
 };
 
 export default useGetCart;

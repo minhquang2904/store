@@ -7,12 +7,13 @@ interface CartContextType {
   cart: any;
   triggerFetchCart: () => void;
   loadingCart: any;
+  setCart: any;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const { cart, triggerFetchCart, loadingCart } = useGetCart();
+  const { cart, triggerFetchCart, loadingCart, setCart } = useGetCart();
 
   return (
     <CartContext.Provider
@@ -20,6 +21,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         cart,
         triggerFetchCart,
         loadingCart,
+        setCart,
       }}
     >
       {children}

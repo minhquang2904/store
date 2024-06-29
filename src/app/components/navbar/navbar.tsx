@@ -13,11 +13,10 @@ import { useCartContext } from "@/app/context/CartContext";
 
 const NavBar = () => {
   const { user, setUser, setLoadingAuth } = useAuthContext();
-  const { cart } = useCartContext();
+  const { cart, setCart } = useCartContext();
 
   const pathname = usePathname();
   const searchInput: any = useRef(null);
-  const [dataList, setDataList] = useState(data);
   const [navBottom, setNavBottom] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [cartModal, setCartModal] = useState(false);
@@ -138,6 +137,7 @@ const NavBar = () => {
       const status = result.status;
       if (status === 200) {
         setUser(null);
+        setCart(null);
         push("/");
       }
       setLoadingAuth(false);
