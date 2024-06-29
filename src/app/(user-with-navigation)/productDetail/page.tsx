@@ -68,12 +68,11 @@ export default function ProductDetail({ searchParams }: any) {
     setLoadingProducts(true);
     const data = await getProduct(id, setLoadingProducts);
     setProduct(data.data);
-    console.log("data", data);
   };
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [id]);
 
   const handleChooseSize = (value: any, setFieldValue: any) => {
     const filterAmount = filterSize?.filter((item: any) => {

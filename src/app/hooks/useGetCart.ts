@@ -39,7 +39,6 @@ const useGetCart = () => {
   };
 
   useEffect(() => {
-    console.log("useEffect useGetCart");
     if (user && !cart) {
       fetchDataCart();
     }

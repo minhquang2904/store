@@ -18,8 +18,7 @@ const TitleTable = (props: any) => {
 const Cart = () => {
   const { cart, triggerFetchCart } = useCartContext();
 
-  const handleDeleteCartItem = async (id: any) => {
-    console.log("Deleted", id);
+  const handleDeleteCartItem = (id: any) => {
     try {
       fetch(`/api/product/cart?id=${id}&userId=${cart?.userId}`, {
         method: "DELETE",
@@ -63,8 +62,7 @@ const Cart = () => {
                         <TitleTable title="subtotal" />
                         <TitleTable title="action" />
                       </tr>
-                      {cart?.items?.map((item: any, index: any) => {
-                        console.log(item);
+                      {cart?.items?.map((item: any) => {
                         return (
                           <tr key={`${item._id} - ${item.productId._id}`}>
                             <td className="w-full min-w-[320px] p-[10px] flex">

@@ -6,7 +6,7 @@ const NoItemCart = (props: any) => {
     <div className="!relative flex justify-center items-center">
       <Image
         src="/images/no-item-cart.png"
-        className="!relative max-w-[253px] w-full h-full"
+        className="!relative max-w-[200px] w-full h-full"
         alt="no-item-cart"
         fill
         sizes="(max-width: 253px) 100vw"
