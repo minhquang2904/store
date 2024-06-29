@@ -19,6 +19,7 @@ const useGetCart = () => {
       const result = await res.json();
       const status = result.status;
       const data = result.data;
+      console.log("data", data);
       if (status === 200) {
         setCart(data);
       }

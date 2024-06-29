@@ -93,7 +93,7 @@ export async function GET(req: NextRequest) {
 
     const cart = await Cart.findOne({ userId: id }).populate(
       "items.productId",
-      "files name"
+      "files name discountedPrice"
     );
 
     if (cart && cart?.items?.length === 0) {
@@ -105,10 +105,37 @@ export async function GET(req: NextRequest) {
       });
     }
 
+    let updatedItems = cart.items.map((item: any) => {
+      const currentPrice = item.productId.discountedPrice;
+      return {
+        productId: item.productId._id,
+        size: item.size,
+        color: item.color,
+        quantity: item.quantity,
+        price: currentPrice,
+        totalPriceItem: currentPrice * item.quantity,
+      };
+    });
+
+    cart.totalPrice = updatedItems.reduce(
+      (acc: any, item: any) => acc + item.totalPriceItem,
+      0
+    );
+
+    let cartToSave = {
+      userId: cart.userId,
+      items: updatedItems,
+      totalPrice: cart.totalPrice,
+    };
+
+    const cartUpdate = await Cart.findByIdAndUpdate(cart._id, cartToSave, {
+      new: true,
+    }).populate("items.productId", "files name discountedPrice");
+
     return NextResponse.json({
       message: "Get cart successfully!",
       status: 200,
-      data: cart,
+      data: cartUpdate,
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message, status: 500 });
