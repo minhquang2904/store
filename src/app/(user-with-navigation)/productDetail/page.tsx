@@ -14,6 +14,7 @@ import * as Yup from "yup";
 import ErrorInput from "@/app/components/errorInput/errorInput";
 import { useAuthContext } from "@/app/context/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
+import { toastConfig } from "@/app/config/toaster";
 
 const order = ["s", "m", "l", "xl", "xxl"];
 
@@ -124,17 +125,45 @@ export default function ProductDetail({ searchParams }: any) {
       setSubmitting(false);
       return;
     }
-    resetForm();
-    setSelectedColor(null);
-    setSelectedSize(null);
     setErrorAmount(null);
-    toast.success("Product added to cart");
-    console.log(values, product._id, user.id);
-    setSubmitting(false);
+    setSubmitting(true);
+    try {
+      fetch("/api/product/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          productId: product._id,
+          size: values.size,
+          quantity: values.amount,
+          color: values.color,
+          price: product.discountedPrice,
+        }),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result);
+          const status = result.status;
+          if (status === 200) {
+            toast.success("Product added to cart");
+            resetForm();
+            setSelectedColor(null);
+            setSelectedSize(null);
+          }
+          if (status === 400) {
+            toast.error(result.message);
+          }
+          setSubmitting(false);
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <>
-      <Toaster />
+      <Toaster toastOptions={toastConfig} />
       {loadingProducts && <LoadingComponent />}
       {product && (
         <div className="flex justify-center items-center px-pLayout">
@@ -242,7 +271,7 @@ export default function ProductDetail({ searchParams }: any) {
                                     values?.color == item?.value
                                       ? "bg-button text-white"
                                       : "bg-[transparent] text-text"
-                                  } w-[70px] h-[40px] cursor-pointer rounded-[20px] flex justify-center items-center capitalize border-solid border-[1px] border-[#727074] text-[1.5em] select-none`}
+                                  } min-w-[70px] h-[40px] px-[14px] cursor-pointer rounded-[20px] flex justify-center items-center capitalize border-solid border-[1px] border-[#727074] text-[1.5em] select-none`}
                                 >
                                   {item?.value}
                                 </label>

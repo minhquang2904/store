@@ -273,6 +273,9 @@ const NavBar = () => {
                       className="hover:bg-hover1 p-[10px] rounded-half !relative cursor-pointer cartIcon"
                       onClick={() => setCartModal(!cartModal)}
                     >
+                      <div className="absolute top-[4px] right-[4px] z-50 bg-secondary text-white w-[16px] h-[16px] text-[1em] rounded-[50%] flex justify-center items-center">
+                        <h1>3</h1>
+                      </div>
                       <Image
                         src="/icons/bag.svg"
                         alt="Bag"
