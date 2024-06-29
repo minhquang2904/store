@@ -9,9 +9,11 @@ import IconListsProduct from "../iconListsProduct/iconListProduct";
 import { useRouter } from "next/navigation";
 import { data } from "@/app/data";
 import { useAuthContext } from "@/app/context/AuthContext";
+import { useCartContext } from "@/app/context/CartContext";
 
 const NavBar = () => {
-  const { user, setUser, setLoadingAuth, triggerFetch } = useAuthContext();
+  const { user, setUser, setLoadingAuth } = useAuthContext();
+  const { cart } = useCartContext();
 
   const pathname = usePathname();
   const searchInput: any = useRef(null);
@@ -273,9 +275,11 @@ const NavBar = () => {
                       className="hover:bg-hover1 p-[10px] rounded-half !relative cursor-pointer cartIcon"
                       onClick={() => setCartModal(!cartModal)}
                     >
-                      <div className="absolute top-[4px] right-[4px] z-50 bg-secondary text-white w-[16px] h-[16px] text-[1em] rounded-[50%] flex justify-center items-center">
-                        <h1>3</h1>
-                      </div>
+                      {cart && (
+                        <div className="absolute top-[4px] right-[4px] z-50 bg-secondary text-white w-[16px] h-[16px] text-[1em] rounded-[50%] flex justify-center items-center">
+                          <h1>{cart.items.length}</h1>
+                        </div>
+                      )}
                       <Image
                         src="/icons/bag.svg"
                         alt="Bag"
@@ -291,38 +295,50 @@ const NavBar = () => {
                         className={`${style.cartContainer} absolute top-[calc(100%+16.5px)] origin-top-right right-[0] w-[360px] rounded-sm bg-[white] cursor-default shadow-sm`}
                       >
                         <h1 className="w-full text-text text-base pl-[12px] mt-[16px] font-medium">
-                          You have 3 items in your cart
+                          You have {cart?.items?.length || 0} items in your cart
                         </h1>
                         <ul className="max-h-[312px] my-[16px] overflow-y-auto overscroll-y-contain">
-                          {dataList.length <= 0 ? (
+                          {!cart ? (
                             <NoItemCart className="max-w-[180px]" />
                           ) : (
                             <>
-                              {dataList.map((item: any) => {
+                              {cart?.items?.map((item: any) => {
+                                console.log(item);
                                 return (
                                   <Link
-                                    key={item.id}
-                                    href="/productDetail"
+                                    key={`${item._id} - ${item.productId._id}`}
+                                    href={{
+                                      pathname: "/productDetail",
+                                      query: { id: item?.productId._id },
+                                    }}
                                     className="p-[12px] !relative flex hover:bg-hover1"
                                   >
                                     <Image
-                                      src="/images/product2.png"
+                                      src={item.productId.files[0].url}
                                       className="!relative max-w-[80px] max-h-[80px]"
                                       alt="Bag"
                                       fill
                                       sizes="(max-width: 80px) 100vw"
                                     />
                                     <div className="flex flex-col justify-center ml-[16px] basis-full shrink grow-0">
-                                      <h2 className="text-text text-[1.4em] font-medium">
-                                        Girls Pink Moana Printed Dress
+                                      <h2 className="text-text text-[1.4em] font-medium capitalize">
+                                        {item.productId.name}
                                       </h2>
-                                      <h3 className="text-text text-[1.4em] my-[4px] font-bold">
-                                        1 x $80
+                                      <h3 className="text-text text-[1.4em] my-[4px] font-bold flex gap-x-[4px]">
+                                        <p>
+                                          {item.quantity} x {item.price}
+                                        </p>
+                                        <p className="text-secondary">
+                                          ({item.totalPriceItem})
+                                        </p>
                                       </h3>
-                                      <div className="flex justify-between">
-                                        <h2 className="text-text text-[1.4em] font-normal">
-                                          Size S
-                                        </h2>
+                                      <div className="flex justify-between items-center">
+                                        <div className="text-text text-[1.4em] font-normal flex gap-x-[6px] items-center">
+                                          <p className="h-full block">Size:</p>
+                                          <p className="uppercase font-semibold h-full block">
+                                            {item.size} - {item.color}
+                                          </p>
+                                        </div>
                                         <div className="!relative rounded-half">
                                           <Image
                                             src="/icons/trash-can.svg"
@@ -344,14 +360,12 @@ const NavBar = () => {
                         <div className="px-[12px]">
                           <div className="text-text flex justify-between font-semibold capitalize text-[1.4em] mb-[16px]">
                             <h1>subtotal</h1>
-                            <p>$200</p>
+                            <p>{cart?.totalPrice}</p>
                           </div>
-                          <Link href="/cart">
-                            <button className="text-text hover:bg-hover1 border-solid border-border border-[1px] bg-transparent inline-block text-[1.6em] px-[28px] py-[12px] rounded-sm w-full font-medium">
-                              View Cart
-                            </button>
-                          </Link>
-                          <Link href="/" className="mt-[8px] mb-[16px] block">
+                          <Link
+                            href="/cart"
+                            className="mt-[8px] mb-[16px] block"
+                          >
                             <button className="hover:opacity-90 border-solid border-[1px] border-border inline-block text-[1.6em] bg-button px-[28px] py-[12px] rounded-sm  w-full font-medium text-white">
                               Checkout
                             </button>

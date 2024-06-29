@@ -3,6 +3,8 @@ import Cart from "@/app/models/cart";
 import Product from "@/app/models/product";
 import { NextRequest, NextResponse } from "next/server";
 
+export const revalidate = 0;
+
 export async function POST(req: NextRequest) {
   await connectDB();
   try {
@@ -78,6 +80,53 @@ export async function POST(req: NextRequest) {
     await cart.save();
 
     return NextResponse.json({ message: "Add product found!", status: 200 });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message, status: 500 });
+  }
+}
+
+export async function GET(req: NextRequest) {
+  await connectDB();
+  try {
+    const url = new URL(req.nextUrl);
+    const id = url.searchParams.get("id");
+
+    const cart = await Cart.findOne({ userId: id }).populate(
+      "items.productId",
+      "files name"
+    );
+
+    if (cart && cart?.items?.length === 0) {
+      await Cart.findOneAndDelete({ userId: id });
+      return NextResponse.json({
+        message: "Cart is empty!",
+        status: 404,
+        data: null,
+      });
+    }
+
+    return NextResponse.json({
+      message: "Get cart successfully!",
+      status: 200,
+      data: cart,
+    });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message, status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  await connectDB();
+
+  try {
+    const url = new URL(req.nextUrl);
+    const id = url.searchParams.get("id");
+    const userId = url.searchParams.get("userId");
+    await Cart.updateOne({ userId }, { $pull: { items: { _id: id } } });
+    return NextResponse.json({
+      message: "Item removed successfully!",
+      status: 200,
+    });
   } catch (error: any) {
     return NextResponse.json({ error: error.message, status: 500 });
   }

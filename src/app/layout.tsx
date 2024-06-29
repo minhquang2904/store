@@ -3,6 +3,7 @@ import "./globals.css";
 import { Jost } from "next/font/google";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AuthProvider } from "./context/AuthContext";
+import { CartProvider } from "./context/CartContext";
 
 const jost = Jost({
   subsets: ["latin"],
@@ -25,7 +26,9 @@ function RootLayout({
       </head>
       <body className={`${jost.className} bg-[#F3F4F4]`}>
         <AuthProvider>
-          <ChakraProvider>{children}</ChakraProvider>
+          <CartProvider>
+            <ChakraProvider>{children}</ChakraProvider>
+          </CartProvider>
         </AuthProvider>
       </body>
     </html>

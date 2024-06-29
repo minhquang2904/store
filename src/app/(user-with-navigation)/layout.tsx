@@ -9,7 +9,6 @@ import Loading from "../components/loading/loading";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const { loadingAuth } = useAuthContext();
-
   return (
     <>
       {loadingAuth && <Loading />}

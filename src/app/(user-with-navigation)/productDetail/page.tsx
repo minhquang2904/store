@@ -15,6 +15,8 @@ import ErrorInput from "@/app/components/errorInput/errorInput";
 import { useAuthContext } from "@/app/context/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
 import { toastConfig } from "@/app/config/toaster";
+import Link from "next/link";
+import { useCartContext } from "@/app/context/CartContext";
 
 const order = ["s", "m", "l", "xl", "xxl"];
 
@@ -26,8 +28,10 @@ const SubTitleProductDetail = (props: any) => {
 };
 
 export default function ProductDetail({ searchParams }: any) {
-  const id = searchParams.id;
+  const { triggerFetchCart } = useCartContext();
   const { user } = useAuthContext();
+  const id = searchParams.id;
+
   const [description, setDescription] = useState("");
   const [picture, setPicture] = useState(0);
   const navDescription = dataDescription[0].description;
@@ -151,6 +155,7 @@ export default function ProductDetail({ searchParams }: any) {
             resetForm();
             setSelectedColor(null);
             setSelectedSize(null);
+            triggerFetchCart();
           }
           if (status === 400) {
             toast.error(result.message);
@@ -401,13 +406,22 @@ export default function ProductDetail({ searchParams }: any) {
                           </div>
                         </div>
                         <div className="ml-[16px] flex items-center bg-button rounded-[26px] max-w-[300px] w-full hover:opacity-90 cursor-pointer duration-200">
-                          <button
-                            className="text-center w-full text-[1.4em] text-white h-full"
-                            type="submit"
-                            disabled={isSubmitting}
-                          >
-                            Add to Card
-                          </button>
+                          {user ? (
+                            <button
+                              className="text-center w-full text-[1.4em] text-white h-full"
+                              type="submit"
+                              disabled={isSubmitting}
+                            >
+                              Add to Card
+                            </button>
+                          ) : (
+                            <Link
+                              href="/login"
+                              className="text-center w-full text-[1.4em] text-white h-full flex items-center justify-center"
+                            >
+                              <h1>Add to Card</h1>
+                            </Link>
+                          )}
                         </div>
                       </div>
                       <div>
