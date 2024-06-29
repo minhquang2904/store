@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useCartContext } from "@/app/context/CartContext";
 import toast, { Toaster } from "react-hot-toast";
 import { toastConfig } from "@/app/config/toaster";
+import Link from "next/link";
 
 const TitleTable = (props: any) => {
   const { title } = props;
@@ -16,7 +17,7 @@ const TitleTable = (props: any) => {
   );
 };
 const Cart = () => {
-  const { cart, triggerFetchCart } = useCartContext();
+  const { cart, triggerFetchCart, loadingCart } = useCartContext();
 
   const handleDeleteCartItem = (id: any) => {
     try {
@@ -64,7 +65,10 @@ const Cart = () => {
                       </tr>
                       {cart?.items?.map((item: any) => {
                         return (
-                          <tr key={`${item._id} - ${item.productId._id}`}>
+                          <tr
+                            key={`${item._id} - ${item.productId._id}`}
+                            className={`${loadingCart ? "animate-pulse" : ""}`}
+                          >
                             <td className="w-full min-w-[320px] p-[10px] flex">
                               <div className="!relative">
                                 <Image
@@ -76,9 +80,15 @@ const Cart = () => {
                                 />
                               </div>
                               <div className="ml-[20px] flex flex-col justify-center">
-                                <h3 className="text-text text-[1.6em] font-bold capitalize overflow-hidden max-w-[400px] line-clamp-1">
+                                <Link
+                                  href={{
+                                    pathname: "/productDetail",
+                                    query: { id: item?.productId._id },
+                                  }}
+                                  className="text-text text-[1.6em] font-bold capitalize overflow-hidden max-w-[400px] line-clamp-1"
+                                >
                                   {item.productId.name}
-                                </h3>
+                                </Link>
                                 <div className="flex gap-x-[6px]">
                                   <p className="text-[1.5em] text-text font-normal">
                                     Size:

@@ -33,7 +33,7 @@ export default function ProductDetail({ searchParams }: any) {
   const id = searchParams.id;
 
   const [description, setDescription] = useState("");
-  const [picture, setPicture] = useState(0);
+  const [picture, setPicture] = useState(null) as any;
   const navDescription = dataDescription[0].description;
   const navAddInformation = dataDescription[1].addInformation;
   const [product, setProduct] = useState(null) as any;
@@ -56,8 +56,8 @@ export default function ProductDetail({ searchParams }: any) {
     e.target.classList.add("activeTabDetail");
   };
 
-  const handleActivePicture = (index: any) => {
-    setPicture(index);
+  const handleActivePicture = (url: any) => {
+    setPicture(url);
   };
 
   useEffect(() => {
@@ -177,7 +177,11 @@ export default function ProductDetail({ searchParams }: any) {
               <div className="flex flex-col items-center shrink grow-0 l:basis-2/4 sm:basis-[40%] xsm:basis-[100%]">
                 <div className="!relative max-w-[400px] flex w-full">
                   <Image
-                    src={product?.files[0]?.url || "/images/avatar-profile.png"}
+                    src={
+                      picture ||
+                      product?.files[0]?.url ||
+                      "/images/avatar-profile.png"
+                    }
                     className="!relative w-full"
                     alt={`${product?.files[0]?.url}`}
                     fill
@@ -186,12 +190,12 @@ export default function ProductDetail({ searchParams }: any) {
                   />
                 </div>
                 <div className="flex mt-[10px]">
-                  {product?.files.map((item: any) => {
+                  {product?.files?.map((item: any) => {
                     return product?.files?.length > 1 ? (
                       <div
                         key={item.url}
                         className="!relative max-w-[110px] w-full cursor-pointer hover:opacity-80"
-                        onClick={() => handleActivePicture(item.id - 1)}
+                        onClick={() => handleActivePicture(item.url)}
                       >
                         <Image
                           src={item.url}
@@ -233,7 +237,7 @@ export default function ProductDetail({ searchParams }: any) {
                     {product?.categories || "N/A"}
                   </h4>
                 </div>
-                <div className="flex mt-[8px] gap-x-[6px] items-end">
+                <div className="flex mt-[8px] gap-x-[6px] items-center">
                   {product?.discount > 0 && (
                     <h4 className="text-button font-semibold text-[1.6em] line-through">
                       {product?.price}

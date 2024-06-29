@@ -194,11 +194,13 @@ const TemplateProductSlider = () => {
                           fill
                           sizes="(max-width: 312px) 100vw"
                         />
-                        <div className="absolute top-[20px] left-[0]">
-                          <p className="text-white bg-secondary text-center text-[1.2em] font-semibold uppercase px-[12px] py-[6px]">
-                            Sale
-                          </p>
-                        </div>
+                        {item.discount > 0 && (
+                          <div className="absolute top-[20px] left-[0]">
+                            <p className="text-white bg-secondary text-center text-[1.2em] font-semibold uppercase px-[12px] py-[6px]">
+                              Sale
+                            </p>
+                          </div>
+                        )}
                       </div>
                       <div className="mt-[18px] mx-[10px] mb-[0]">
                         <div>
