@@ -8,8 +8,6 @@ export default function TemplateProductView() {
   const [dataList, setData] = useState(data);
   const [products, setProducts] = useState(null) as any;
 
-  const styleCustom = { width: "25%" };
-
   const handleChangeType = (e: any) => {
     const id = e.target.id;
 
@@ -90,14 +88,7 @@ export default function TemplateProductView() {
         </div>
         <div className="flex flex-wrap mx-mCard">
           {products?.map((item: any) => {
-            return (
-              <CardProduct
-                key={item._id}
-                data={item}
-                // styleCustom={styleCustom}
-                // login={login}
-              />
-            );
+            return <CardProduct key={item._id} data={item} />;
           })}
         </div>
       </div>

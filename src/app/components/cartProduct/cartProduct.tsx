@@ -34,15 +34,15 @@ const CardProduct = (props: any) => {
             </div>
             <div className="mt-[18px] mx-[10px] mb-[0]">
               <div>
-                <h1 className="text-text text-[1.6em] font-semibold capitalize min-h-[48px] line-clamp-2">
+                <h1 className="text-text text-[1.6em] font-semibold capitalize line-clamp-1 mb-[16px]">
                   {data?.name}
                 </h1>
               </div>
-              <div className="my-[6px] mx-[0]">
+              {/* <div className="my-[6px] mx-[0]">
                 <h1 className="text-text text-[1.6em] font-bold capitalize min-h-[24px] line-clamp-1">
                   {data?.subName}
                 </h1>
-              </div>
+              </div> */}
               <div className="flex justify-between">
                 <p className="text-[#00000080] text-[1.6em] font-medium capitalize">
                   {data?.categories}
