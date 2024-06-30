@@ -911,7 +911,7 @@ const AddProduct = () => {
                           {dataSize
                             .sort(
                               (a: any, b: any) =>
-                                order.indexOf(a.size) - order.indexOf(b.size)
+                                order.indexOf(a.sizes) - order.indexOf(b.sizes)
                             )
                             .map((size: any) => {
                               return (
@@ -1134,7 +1134,6 @@ const ModalAdd = (props: any) => {
       fetch(`/api/admin/${type}?id=${id}`, { method: "DELETE" })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (data.status == 200) {
             setError(false);
             getLists();

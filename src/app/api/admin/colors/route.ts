@@ -1,5 +1,6 @@
 import connectDB from "@/app/config/connectDB";
 import Colors from "@/app/models/colors";
+import Product from "@/app/models/product";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -76,9 +77,24 @@ export async function DELETE(req: NextRequest) {
   try {
     const searchParams = req.nextUrl.searchParams;
     const id = searchParams.get("id");
+    const products = await Product.aggregate([
+      { $unwind: "$colors" },
+      { $project: { colors: "$colors.value" } },
+    ]);
+    const colors = await Colors.findById(id, { colors: 1, _id: 0 });
+
+    for (const value of products) {
+      if (value.colors === colors.colors) {
+        return NextResponse.json({
+          message: `Delete Categories Failed, ${colors.colors} is used`,
+          status: 400,
+        });
+      }
+    }
+
     const data: any = await Colors.findByIdAndDelete(id);
 
-    if (data) {
+    if (true) {
       return NextResponse.json({
         message: "Delete Color Successfully",
         status: 200,

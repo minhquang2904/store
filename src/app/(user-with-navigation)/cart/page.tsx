@@ -63,80 +63,85 @@ const Cart = () => {
                         <TitleTable title="subtotal" />
                         <TitleTable title="action" />
                       </tr>
-                      {cart?.items?.map((item: any) => {
-                        return (
-                          <tr
-                            key={`${item._id} - ${item.productId._id}`}
-                            className={`${loadingCart ? "animate-pulse" : ""}`}
-                          >
-                            <td className="w-full min-w-[320px] p-[10px] flex">
-                              <div className="!relative">
-                                <Image
-                                  src={item.productId.files[0].url}
-                                  className="!relative max-w-[100px] max-h-[100px]"
-                                  alt="Item"
-                                  fill
-                                  sizes="(max-width: 100px) 100vw"
-                                />
-                              </div>
-                              <div className="ml-[20px] flex flex-col justify-center">
-                                <Link
-                                  href={{
-                                    pathname: "/productDetail",
-                                    query: { id: item?.productId._id },
-                                  }}
-                                  className="text-text text-[1.6em] font-bold capitalize overflow-hidden max-w-[400px] line-clamp-1"
-                                >
-                                  {item.productId.name}
-                                </Link>
-                                <div className="flex gap-x-[6px]">
-                                  <p className="text-[1.5em] text-text font-normal">
-                                    Size:
-                                  </p>
-                                  <p className="text-[1.5em] text-text font-medium uppercase">
-                                    {item.size} - {item.color}
-                                  </p>
+                      {cart?.items
+                        ?.slice()
+                        ?.reverse()
+                        ?.map((item: any) => {
+                          return (
+                            <tr
+                              key={`${item._id} - ${item.productId._id}`}
+                              className={`${
+                                loadingCart ? "animate-pulse" : ""
+                              }`}
+                            >
+                              <td className="w-full min-w-[320px] p-[10px] flex">
+                                <div className="!relative">
+                                  <Image
+                                    src={item.productId.files[0].url}
+                                    className="!relative max-w-[100px] max-h-[100px] object-cover"
+                                    alt="Item"
+                                    fill
+                                    sizes="(max-width: 100px) 100vw"
+                                  />
                                 </div>
-                              </div>
-                            </td>
-                            <td className="w-full p-[10px] text-text text-[1.6em] text-start">
-                              {item?.price}
-                            </td>
-                            <td className="w-full p-[10px] text-text text-[1.6em] !text-center">
-                              {item?.quantity}
-                            </td>
-                            <td className="w-full p-[10px] text-text text-[1.6em] text-start">
-                              {item.totalPriceItem}
-                            </td>
-                            <td className="w-full p-[10px]">
-                              <div
-                                className="flex justify-center"
-                                onClick={() => handleDeleteCartItem(item._id)}
-                              >
-                                <svg
-                                  fill="none"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  width="24"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="cursor-pointer"
-                                >
-                                  <g
-                                    stroke="#ff6f61"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
+                                <div className="ml-[20px] flex flex-col justify-center">
+                                  <Link
+                                    href={{
+                                      pathname: "/productDetail",
+                                      query: { id: item?.productId._id },
+                                    }}
+                                    className="text-text text-[1.6em] font-bold capitalize overflow-hidden max-w-[400px] line-clamp-1"
                                   >
-                                    <path d="m3 6h18m-16 0v14c0 1.1046.89543 2 2 2h10c1.1046 0 2-.8954 2-2v-14m-11 0v-2c0-1.10457.89543-2 2-2h4c1.1046 0 2 .89543 2 2v2" />
-                                    <path d="m14 11v6" />
-                                    <path d="m10 11v6" />
-                                  </g>
-                                </svg>
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })}
+                                    {item.productId.name}
+                                  </Link>
+                                  <div className="flex gap-x-[6px]">
+                                    <p className="text-[1.5em] text-text font-normal">
+                                      Size:
+                                    </p>
+                                    <p className="text-[1.5em] text-text font-medium uppercase">
+                                      {item.size} - {item.color}
+                                    </p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="w-full p-[10px] text-text text-[1.6em] text-start">
+                                {item?.price}
+                              </td>
+                              <td className="w-full p-[10px] text-text text-[1.6em] !text-center">
+                                {item?.quantity}
+                              </td>
+                              <td className="w-full p-[10px] text-text text-[1.6em] text-start">
+                                {item.totalPriceItem}
+                              </td>
+                              <td className="w-full p-[10px]">
+                                <div
+                                  className="flex justify-center"
+                                  onClick={() => handleDeleteCartItem(item._id)}
+                                >
+                                  <svg
+                                    fill="none"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    width="24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="cursor-pointer"
+                                  >
+                                    <g
+                                      stroke="#ff6f61"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="2"
+                                    >
+                                      <path d="m3 6h18m-16 0v14c0 1.1046.89543 2 2 2h10c1.1046 0 2-.8954 2-2v-14m-11 0v-2c0-1.10457.89543-2 2-2h4c1.1046 0 2 .89543 2 2v2" />
+                                      <path d="m14 11v6" />
+                                      <path d="m10 11v6" />
+                                    </g>
+                                  </svg>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
                     </tbody>
                   </table>
                 </div>

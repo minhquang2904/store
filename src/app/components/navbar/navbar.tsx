@@ -327,67 +327,73 @@ const NavBar = () => {
                               <NoItemCart className="max-w-[160px]" />
                             ) : (
                               <>
-                                {cart?.items?.map((item: any) => {
-                                  return (
-                                    <Link
-                                      key={`${item._id} - ${item.productId._id}`}
-                                      href={{
-                                        pathname: "/productDetail",
-                                        query: { id: item?.productId._id },
-                                      }}
-                                      className="p-[12px] !relative flex hover:bg-hover1"
-                                    >
-                                      <Image
-                                        src={
-                                          item.productId.files[0].url ||
-                                          "/images/no-image.png"
-                                        }
-                                        className="!relative max-w-[80px] max-h-[80px] object-cover"
-                                        alt="Bag"
-                                        fill
-                                        sizes="(max-width: 80px) 100vw"
-                                      />
-                                      <div className="flex flex-col justify-center ml-[16px] basis-full shrink grow-0">
-                                        <h2 className="text-text text-[1.4em] font-medium capitalize">
-                                          {item.productId.name}
-                                        </h2>
-                                        <h3 className="text-text text-[1.4em] my-[4px] font-bold flex gap-x-[4px]">
-                                          <p>
-                                            {item.quantity} x {item.price}
-                                          </p>
-                                          <p className="text-secondary">
-                                            ({item.totalPriceItem})
-                                          </p>
-                                        </h3>
-                                        <div className="flex justify-between items-center">
-                                          <div className="text-text text-[1.4em] font-normal flex gap-x-[6px] items-center">
-                                            <p className="h-full block">
-                                              Size:
+                                {cart?.items
+                                  ?.slice()
+                                  ?.reverse()
+                                  ?.map((item: any) => {
+                                    return (
+                                      <Link
+                                        key={`${item._id} - ${item.productId._id}`}
+                                        href={{
+                                          pathname: "/productDetail",
+                                          query: { id: item?.productId._id },
+                                        }}
+                                        className="p-[12px] !relative flex hover:bg-hover1"
+                                      >
+                                        <Image
+                                          src={
+                                            item.productId.files[0].url ||
+                                            "/images/no-image.png"
+                                          }
+                                          className="!relative max-w-[80px] max-h-[80px] object-cover"
+                                          alt="Bag"
+                                          fill
+                                          sizes="(max-width: 80px) 100vw"
+                                        />
+                                        <div className="flex flex-col justify-center ml-[16px] basis-full shrink grow-0">
+                                          <h2 className="text-text text-[1.4em] font-medium capitalize">
+                                            {item.productId.name}
+                                          </h2>
+                                          <h3 className="text-text text-[1.4em] my-[4px] font-bold flex gap-x-[4px]">
+                                            <p>
+                                              {item.quantity} x {item.price}
                                             </p>
-                                            <p className="uppercase font-semibold h-full block">
-                                              {item.size} - {item.color}
+                                            <p className="text-secondary">
+                                              ({item.totalPriceItem})
                                             </p>
-                                          </div>
-                                          <div
-                                            className="!relative rounded-half"
-                                            onClick={(e: any) =>
-                                              handleDeleteCartItem(e, item._id)
-                                            }
-                                          >
-                                            <Image
-                                              src="/icons/trash-can.svg"
-                                              className="!relative max-w-[24px] max-h-[24px]"
-                                              alt="Bag"
-                                              fill
-                                              sizes="(max-width: 22px) 100vw"
-                                              priority={true}
-                                            />
+                                          </h3>
+                                          <div className="flex justify-between items-center">
+                                            <div className="text-text text-[1.4em] font-normal flex gap-x-[6px] items-center">
+                                              <p className="h-full block">
+                                                Size:
+                                              </p>
+                                              <p className="uppercase font-semibold h-full block">
+                                                {item.size} - {item.color}
+                                              </p>
+                                            </div>
+                                            <div
+                                              className="!relative rounded-half"
+                                              onClick={(e: any) =>
+                                                handleDeleteCartItem(
+                                                  e,
+                                                  item._id
+                                                )
+                                              }
+                                            >
+                                              <Image
+                                                src="/icons/trash-can.svg"
+                                                className="!relative max-w-[24px] max-h-[24px]"
+                                                alt="Bag"
+                                                fill
+                                                sizes="(max-width: 22px) 100vw"
+                                                priority={true}
+                                              />
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                    </Link>
-                                  );
-                                })}
+                                      </Link>
+                                    );
+                                  })}
                               </>
                             )}
                           </ul>

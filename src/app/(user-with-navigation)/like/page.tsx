@@ -45,15 +45,18 @@ const Like = () => {
         {productLike ? (
           <div className="mt-[16px]">
             <div className="flex flex-wrap mx-mCard">
-              {productLike?.map((item: any) => {
-                return (
-                  <CardProductLike
-                    key={item?.productId?._id}
-                    data={item}
-                    styleCustom={styleCustom}
-                  />
-                );
-              })}
+              {productLike
+                ?.slice()
+                ?.reverse()
+                ?.map((item: any) => {
+                  return (
+                    <CardProductLike
+                      key={item?.productId?._id}
+                      data={item}
+                      styleCustom={styleCustom}
+                    />
+                  );
+                })}
             </div>
           </div>
         ) : (

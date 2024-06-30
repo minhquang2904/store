@@ -1,4 +1,5 @@
 import connectDB from "@/app/config/connectDB";
+import Product from "@/app/models/product";
 import Size from "@/app/models/sizes";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -76,6 +77,21 @@ export async function DELETE(req: NextRequest) {
   try {
     const searchParams = req.nextUrl.searchParams;
     const id = searchParams.get("id");
+    const products = await Product.aggregate([
+      { $unwind: "$sizes" },
+      { $project: { sizes: "$sizes.size" } },
+    ]);
+    const sizes = await Size.findById(id, { sizes: 1, _id: 0 });
+
+    for (const value of products) {
+      if (value.sizes === sizes.sizes) {
+        return NextResponse.json({
+          message: `Delete Categories Failed, ${sizes.sizes} is used`,
+          status: 400,
+        });
+      }
+    }
+
     const data: any = await Size.findByIdAndDelete(id);
 
     if (data) {
