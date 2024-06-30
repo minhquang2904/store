@@ -1,35 +1,65 @@
 "use client";
 
-import { useState } from "react";
-import { data, login } from "@/app/data";
-import CardProduct from "@/app/components/cardProduct/cardProduct";
+import { useEffect, useState } from "react";
 import Pagination from "@/app/components/pagination/pagination";
 import ShowingPage from "@/app/components/showingPage/showingPage";
+import { useAuthContext } from "@/app/context/AuthContext";
+import CardProductLike from "@/app/components/cardProductLike/cardProductLike";
+import LoadingComponent from "@/app/components/loadingComponent/loadingComponent";
+import NoItemCart from "@/app/components/noItemCart/noItemCart";
 
 const Like = () => {
+  const { user } = useAuthContext();
   const styleCustom = { width: "25%" };
-  const [dataList, setDataList] = useState(data);
+  const [productLike, setProductLike] = useState(null) as any;
+  const [loading, setLoading] = useState(false) as any;
+
+  const getDataLike = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/product/like?id=${user?.id}`);
+      const data = await res.json();
+
+      if (data.status === 200) {
+        setProductLike(data.data.likes);
+      }
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    if (!productLike) {
+      getDataLike();
+    }
+  }, [productLike, user?.id]);
   return (
     <div className="flex justify-center items-center px-pLayout">
       <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
         <ShowingPage
           title="Wish Lists"
-          subTitle="Showing 1 - 16 of 72 results"
+          subTitle={`Showing 1 - 16 of ${productLike?.length} results`}
         />
-        <div className="mt-[16px]">
-          <div className="flex flex-wrap mx-mCard">
-            {dataList.map((item: any) => {
-              return (
-                <CardProduct
-                  key={item.id}
-                  data={item}
-                  login={login}
-                  styleCustom={styleCustom}
-                />
-              );
-            })}
+        {loading && <LoadingComponent />}
+        {productLike ? (
+          <div className="mt-[16px]">
+            <div className="flex flex-wrap mx-mCard">
+              {productLike?.map((item: any) => {
+                return (
+                  <CardProductLike
+                    key={item?.productId?._id}
+                    data={item}
+                    styleCustom={styleCustom}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
+        ) : (
+          <NoItemCart className="!max-w-[200px]" />
+        )}
+
         <Pagination />
       </div>
     </div>

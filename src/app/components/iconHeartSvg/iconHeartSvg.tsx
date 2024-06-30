@@ -1,7 +1,6 @@
-export default function IconHeartSvg(props: { onClick: any; className: any }) {
+export default function IconHeartSvg(props: { className: any }) {
   return (
     <svg
-      onClick={props.onClick}
       className={`${props.className} `}
       width="24"
       height="24"

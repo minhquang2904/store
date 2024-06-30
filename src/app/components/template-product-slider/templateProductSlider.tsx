@@ -72,7 +72,6 @@ const settings = {
 };
 
 const TemplateProductSlider = () => {
-  const { push } = useRouter();
   const [dataList, setData] = useState(data);
   const [product, setProduct] = useState(null) as any;
 

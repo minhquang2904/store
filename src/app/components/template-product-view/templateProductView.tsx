@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { data, login } from "@/app/data";
 import { useState } from "react";
-import CardProduct from "../cardProduct/cardProduct";
+import CardProduct from "../cardProductLike/cardProductLike";
 import TitleComponent from "../titleComponent/titleComponent";
 
 export default function TemplateProductView() {

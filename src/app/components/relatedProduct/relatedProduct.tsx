@@ -1,5 +1,5 @@
 import { data, login } from "@/app/data";
-import CardProduct from "../cardProduct/cardProduct";
+import CardProduct from "../cardProductLike/cardProductLike";
 import TitleComponent from "../titleComponent/titleComponent";
 import { useState } from "react";
 

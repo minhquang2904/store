@@ -28,11 +28,11 @@ const Home = () => {
       {/* <Banner /> */}
       <Brand />
       <BannerGroup />
-      <TemplateProductView />
+      {/* <TemplateProductView /> */}
       <TemplateProductSlider />
-      <RelatedProduct
+      {/* <RelatedProduct
         styleCustom={{ textAlign: "center", marginBottom: "35px" }}
-      />
+      /> */}
     </>
   );
 };

@@ -44,6 +44,10 @@ export default function ProductDetail({ searchParams }: any) {
   const [amount, setAmount] = useState(null) as any;
   const [showAmount, setShowAmount] = useState(null) as any;
   const [errorAmount, setErrorAmount] = useState(null) as any;
+  const [like, setLike] = useState(false) as any;
+  const [fetchLikeAgain, setFetchLikeAgain] = useState(false) as any;
+
+  const triggerFetchLike = () => setFetchLikeAgain(true);
 
   const handleChangeDescription = (e: any) => {
     const id = e.target.id;
@@ -97,9 +101,55 @@ export default function ProductDetail({ searchParams }: any) {
     setFieldValue("color", value);
   };
 
-  const handleSubmitHeart = (e: any) => {
-    e.target.closest(".iconHeartSvg").classList.toggle("active");
-    e.preventDefault();
+  const getLike = async () => {
+    try {
+      const res = await fetch(`/api/product/like?id=${user?.id}`);
+      const result = await res.json();
+      const { data, status } = result;
+      if (status === 200) {
+        const likeCheck = data?.likes?.find((item: any) => {
+          return item?.productId?._id === product?._id;
+        });
+        likeCheck ? setLike(true) : setLike(false);
+      }
+      if (status === 404) {
+        setLike(false);
+      }
+      setFetchLikeAgain(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getLike();
+  }, [fetchLikeAgain, product]);
+
+  const handleSubmitHeart = (id: any) => {
+    try {
+      fetch("/api/product/like", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          productId: id,
+        }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((result: any) => {
+          const { status, message } = result;
+          if (status === 200) {
+            toast.success(message);
+            triggerFetchLike();
+          }
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleUpdateAmount = (value: any, setFieldValue: any) => {
@@ -165,6 +215,7 @@ export default function ProductDetail({ searchParams }: any) {
       console.log(err);
     }
   };
+
   return (
     <>
       <Toaster toastOptions={toastConfig} />
@@ -212,19 +263,11 @@ export default function ProductDetail({ searchParams }: any) {
                 </div>
               </div>
               <div className="shrink grow-0 l:basis-2/4 ml-[30px] xsm:ml-[0] xsm:mt-[40px] sm:basis-[60%] xsm:basis-[100%]">
-                <div className="flex justify-between">
+                <div className="flex justify-between xsm:flex-col">
                   <h1 className="text-text font-medium text-[2.2em] capitalize">
                     {product?.name || "N/A"}
                   </h1>
                   <div className="flex">
-                    <div className="flex items-center mr-[16px]">
-                      <div>
-                        <IconHeartSvg
-                          onClick={handleSubmitHeart}
-                          className="iconHeartSvg [&.active]:fill-secondary cursor-pointer"
-                        />
-                      </div>
-                    </div>
                     <div className="bg-[#e2f8e2] flex items-center py-[8px] px-[16px] rounded-[10px]">
                       <h5 className="text-[#3cd139] text-[1.4em] font-medium">
                         In Stock : {product?.quantity || 0}
@@ -363,8 +406,8 @@ export default function ProductDetail({ searchParams }: any) {
                           )}
                         </div>
                       </div>
-                      <div className="mt-[28px] flex">
-                        <div>
+                      <div className="mt-[28px] inline-flex">
+                        <div className="mr-[16px]">
                           <div className="inline-flex !relative items-center border-[1px] border-solid border-button py-[4px] px-[8px] rounded-[26px] min-w-[106px]">
                             <Image
                               src="/icons/subtract.svg"
@@ -408,23 +451,39 @@ export default function ProductDetail({ searchParams }: any) {
                             />
                           </div>
                         </div>
-                        <div className="ml-[16px] flex items-center bg-button rounded-[26px] max-w-[300px] w-full hover:opacity-90 cursor-pointer duration-200">
-                          {user ? (
-                            <button
-                              className="text-center w-full text-[1.4em] text-white h-full"
-                              type="submit"
-                              disabled={isSubmitting}
+                        <div className="flex w-full gap-x-[16px]">
+                          <div className="w-[80%] flex items-center bg-button rounded-[26px] hover:opacity-90 cursor-pointer duration-200">
+                            {user ? (
+                              <>
+                                <button
+                                  className="text-center w-full text-[1.4em] text-white h-full"
+                                  type="submit"
+                                  disabled={isSubmitting}
+                                >
+                                  Add to Card
+                                </button>
+                              </>
+                            ) : (
+                              <Link
+                                href="/login"
+                                className="text-center w-full text-[1.4em] text-white h-full flex items-center justify-center"
+                              >
+                                <h1>Add to Card</h1>
+                              </Link>
+                            )}
+                          </div>
+                          <div className="w-[20%]">
+                            <div
+                              className="flex justify-center items-center w-[46px] h-[46px] border-[1px] border-solid border-button rounded-[50%] cursor-pointer"
+                              onClick={() => handleSubmitHeart(product._id)}
                             >
-                              Add to Card
-                            </button>
-                          ) : (
-                            <Link
-                              href="/login"
-                              className="text-center w-full text-[1.4em] text-white h-full flex items-center justify-center"
-                            >
-                              <h1>Add to Card</h1>
-                            </Link>
-                          )}
+                              <IconHeartSvg
+                                className={`iconHeartSvg ${
+                                  like ? "fill-secondary" : "fill-none"
+                                } cursor-pointer`}
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div>
@@ -467,9 +526,9 @@ export default function ProductDetail({ searchParams }: any) {
           </div>
         </div>
       )}
-      <RelatedProduct
+      {/* <RelatedProduct
         styleCustom={{ textAlign: "left", marginBottom: "35px" }}
-      />
+      /> */}
     </>
   );
 }

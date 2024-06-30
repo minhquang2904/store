@@ -4,7 +4,7 @@ import { useLayoutEffect, useState } from "react";
 import { data } from "@/app/data";
 import TitlePageNavigation from "@/app/components/titlePageNavigation/titlePageNavigation";
 import Pagination from "@/app/components/pagination/pagination";
-import CardProduct from "@/app/components/cardProduct/cardProduct";
+import CardProduct from "@/app/components/cardProductLike/cardProduct";
 import Filter from "@/app/components/filter/filter";
 
 const Shirt = () => {
