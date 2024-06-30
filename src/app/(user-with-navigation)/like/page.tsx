@@ -10,7 +10,6 @@ import NoItemCart from "@/app/components/noItemCart/noItemCart";
 
 const Like = () => {
   const { user } = useAuthContext();
-  const styleCustom = { width: "25%" };
   const [productLike, setProductLike] = useState(null) as any;
   const [loading, setLoading] = useState(false) as any;
 
@@ -50,17 +49,13 @@ const Like = () => {
                 ?.reverse()
                 ?.map((item: any) => {
                   return (
-                    <CardProductLike
-                      key={item?.productId?._id}
-                      data={item}
-                      styleCustom={styleCustom}
-                    />
+                    <CardProductLike key={item?.productId?._id} data={item} />
                   );
                 })}
             </div>
           </div>
         ) : (
-          <NoItemCart className="!max-w-[200px]" />
+          <NoItemCart className="!max-w-[200px]" title="No product" />
         )}
 
         <Pagination />

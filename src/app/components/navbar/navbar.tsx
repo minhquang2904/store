@@ -324,7 +324,10 @@ const NavBar = () => {
                           </h1>
                           <ul className="max-h-[312px] my-[16px] overflow-y-auto overscroll-y-contain">
                             {!cart ? (
-                              <NoItemCart className="max-w-[160px]" />
+                              <NoItemCart
+                                className="max-w-[160px]"
+                                title="No product"
+                              />
                             ) : (
                               <>
                                 {cart?.items

@@ -17,6 +17,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { toastConfig } from "@/app/config/toaster";
 import Link from "next/link";
 import { useCartContext } from "@/app/context/CartContext";
+import NoItemCart from "@/app/components/noItemCart/noItemCart";
 
 const order = ["s", "m", "l", "xl", "xxl"];
 
@@ -227,6 +228,12 @@ export default function ProductDetail({ searchParams }: any) {
     <>
       <Toaster toastOptions={toastConfig} />
       {loadingProducts && <LoadingComponent />}
+      {product === undefined && (
+        <NoItemCart
+          className="max-w-[160px]"
+          title="This product does not exist"
+        />
+      )}
       {product && (
         <div className="flex justify-center items-center px-pLayout">
           <div className="l:mt-80 sm:mt-60 xsm:mt-40 w-full max-w-layout">
