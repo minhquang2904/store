@@ -215,6 +215,10 @@ export default function ProductDetail({ searchParams }: any) {
     }
   };
 
+  useEffect(() => {
+    setPicture(product?.files[0]?.url);
+  }, [product]);
+
   return (
     <>
       <Toaster toastOptions={toastConfig} />
@@ -238,6 +242,21 @@ export default function ProductDetail({ searchParams }: any) {
                     sizes="(max-width: 400px) 100vw"
                     loading="lazy"
                   />
+                  <div className="absolute bottom-[28px] left-[50%] translate-x-[-50%] flex gap-x-[10px]">
+                    {product?.files?.map((item: any) => {
+                      return (
+                        <div
+                          key={item.url}
+                          className={`w-[8px] h-[8px] rounded-[50%] cursor-pointer select-none bg-[#9b9797] ${
+                            item.url == picture
+                              ? "bg-[#7b8a84]"
+                              : "bg-[#aca7a7]"
+                          }`}
+                          onClick={() => handleActivePicture(item.url)}
+                        ></div>
+                      );
+                    })}
+                  </div>
                 </div>
                 <div className="flex mt-[10px]">
                   {product?.files?.map((item: any) => {
