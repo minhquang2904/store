@@ -4,7 +4,7 @@ import { useLayoutEffect, useState } from "react";
 import { data } from "@/app/data";
 import TitlePageNavigation from "@/app/components/titlePageNavigation/titlePageNavigation";
 import Pagination from "@/app/components/pagination/pagination";
-import CardProduct from "@/app/components/cardProductLike/cardProduct";
+// import CardProduct from "@/app/components/cardProductLike/cardProduct";
 import Filter from "@/app/components/filter/filter";
 
 const Shirt = () => {
@@ -58,9 +58,9 @@ const Shirt = () => {
             childParentSize={childParentSize}
           />
           <div className="l:w-[70%] flex flex-wrap mx-mCard xsm:mt-[20px] sm:mt-[20px] l:mt-[ 0px]">
-            {dataLists.map((item: any) => {
+            {/* {dataLists.map((item: any) => {
               return <CardProduct key={item.id} data={item} />;
-            })}
+            })} */}
           </div>
         </div>
         <Pagination />
