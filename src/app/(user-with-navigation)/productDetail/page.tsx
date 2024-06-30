@@ -3,7 +3,7 @@
 import style from "./productDetail.module.scss";
 import Image from "next/image";
 import IconHeartSvg from "@/app/components/iconHeartSvg/iconHeartSvg";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { dataDescription } from "@/app/data";
 import TitlePageNavigation from "@/app/components/titlePageNavigation/titlePageNavigation";
 import RelatedProduct from "@/app/components/relatedProduct/relatedProduct";
@@ -41,11 +41,11 @@ export default function ProductDetail({ searchParams }: any) {
   const [selectedColor, setSelectedColor] = useState(null) as any;
   const [filterSize, setFilterSize] = useState(null) as any;
   const [selectedSize, setSelectedSize] = useState(null) as any;
-  const [amount, setAmount] = useState(null) as any;
   const [showAmount, setShowAmount] = useState(null) as any;
   const [errorAmount, setErrorAmount] = useState(null) as any;
   const [like, setLike] = useState(false) as any;
   const [fetchLikeAgain, setFetchLikeAgain] = useState(false) as any;
+  const formikRef = useRef(null) as any;
 
   const triggerFetchLike = () => setFetchLikeAgain(true);
 
@@ -154,7 +154,6 @@ export default function ProductDetail({ searchParams }: any) {
 
   const handleUpdateAmount = (value: any, setFieldValue: any) => {
     setErrorAmount(null);
-    setAmount(Number(value));
     setFieldValue("amount", Number(value));
   };
 
@@ -217,6 +216,11 @@ export default function ProductDetail({ searchParams }: any) {
 
   useEffect(() => {
     setPicture(product?.files[0]?.url);
+    setSelectedColor(null);
+    setSelectedSize(null);
+    if (formikRef.current) {
+      formikRef.current.resetForm({ values: initialValues });
+    }
   }, [product]);
 
   return (
@@ -314,6 +318,7 @@ export default function ProductDetail({ searchParams }: any) {
                   </p>
                 </div>
                 <Formik
+                  innerRef={formikRef}
                   initialValues={initialValues}
                   validationSchema={CartSchema}
                   onSubmit={(values, { setSubmitting, resetForm }) =>
@@ -438,7 +443,6 @@ export default function ProductDetail({ searchParams }: any) {
                                 setErrorAmount(null);
                                 if (values.amount > 0) {
                                   setFieldValue("amount", values.amount - 1);
-                                  setAmount(values.amount - 1);
                                 }
                               }}
                             />
@@ -463,7 +467,6 @@ export default function ProductDetail({ searchParams }: any) {
                               priority={true}
                               onClick={() => {
                                 setErrorAmount(null);
-                                setAmount(values.amount + 1);
                                 setFieldValue("amount", values.amount + 1);
                               }}
                             />
