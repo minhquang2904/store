@@ -316,7 +316,7 @@ const NavBar = () => {
                       {cartModal && (
                         <div
                           onClick={(e) => e.stopPropagation()}
-                          className={`${style.cartContainer} absolute top-[calc(100%+16.5px)] origin-top-right right-[0] w-[360px] rounded-sm bg-[white] cursor-default shadow-sm`}
+                          className={`${style.cartContainer} absolute top-[calc(100%+16.5px)] origin-top-right right-[0] w-[360px] rounded-sm bg-[#F3F4F4] cursor-default shadow-sm`}
                         >
                           <h1 className="w-full text-text text-base pl-[12px] mt-[16px] font-medium">
                             You have {cart?.items?.length || 0} items in your
@@ -338,8 +338,11 @@ const NavBar = () => {
                                       className="p-[12px] !relative flex hover:bg-hover1"
                                     >
                                       <Image
-                                        src={item.productId.files[0].url}
-                                        className="!relative max-w-[80px] max-h-[80px]"
+                                        src={
+                                          item.productId.files[0].url ||
+                                          "/images/no-image.png"
+                                        }
+                                        className="!relative max-w-[80px] max-h-[80px] object-cover"
                                         alt="Bag"
                                         fill
                                         sizes="(max-width: 80px) 100vw"

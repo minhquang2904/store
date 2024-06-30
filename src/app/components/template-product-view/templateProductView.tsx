@@ -35,10 +35,12 @@ export default function TemplateProductView() {
         .then((res) => res.json())
         .then((result) => {
           const { data, status } = result;
-          if (status !== 200) {
-            return;
+          if (status === 200) {
+            setProducts(data);
           }
-          setProducts(data);
+          if (status === 404) {
+            console.log("No product found!");
+          }
         });
     } catch (error) {
       console.log(error);

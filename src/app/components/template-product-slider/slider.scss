@@ -4,7 +4,7 @@
 
 .slick-slider:hover {
   .slick-arrow {
-    background-color: rgba(227, 231, 243, 0.8);
+    background-color: #131118;
     border-radius: 50%;
   }
 }
@@ -14,9 +14,9 @@
   width: 36px !important;
   height: 36px !important;
   z-index: 10;
+  background-color: #131118;
+  border-radius: 50%;
   &:hover {
-    background-color: rgba(227, 231, 243, 0.8);
-    border-radius: 50%;
   }
   &::before {
     display: none;

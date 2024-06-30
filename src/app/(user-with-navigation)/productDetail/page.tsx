@@ -197,7 +197,6 @@ export default function ProductDetail({ searchParams }: any) {
       })
         .then((res) => res.json())
         .then((result) => {
-          console.log(result);
           const status = result.status;
           if (status === 200) {
             toast.success("Product added to cart");

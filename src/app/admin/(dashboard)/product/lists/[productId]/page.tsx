@@ -13,6 +13,8 @@ import { useRouter } from "next/navigation";
 import Select from "react-select";
 import LoadingModal from "@/app/components/loadingModal/loadingModal";
 
+const order = ["s", "m", "l", "xl", "xxl"];
+
 const ProductDetail = ({ params }: { params: { productId: string } }) => {
   const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState([]) as any;
@@ -919,8 +921,9 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
                         />
                         <div className="flex justify-between flex-wrap gap-y-[8px]">
                           {dataSize
-                            ?.sort((a: any, b: any) =>
-                              a.sizes.localeCompare(b.sizes)
+                            ?.sort(
+                              (a: any, b: any) =>
+                                order.indexOf(a.size) - order.indexOf(b.size)
                             )
                             .map((size: any) => {
                               return (

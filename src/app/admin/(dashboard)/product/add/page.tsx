@@ -24,6 +24,8 @@ import Image from "next/image";
 import Loading from "@/app/components/loading/loading";
 import Select from "react-select";
 
+const order = ["s", "m", "l", "xl", "xxl"];
+
 const AddProduct = () => {
   const [modalAdd, setModalAdd] = useState(false);
   const [dataModal, setDataModal] = useState(null);
@@ -907,8 +909,9 @@ const AddProduct = () => {
                         />
                         <div className="flex justify-between flex-wrap gap-y-[8px]">
                           {dataSize
-                            .sort((a: any, b: any) =>
-                              a.sizes.localeCompare(b.sizes)
+                            .sort(
+                              (a: any, b: any) =>
+                                order.indexOf(a.size) - order.indexOf(b.size)
                             )
                             .map((size: any) => {
                               return (
