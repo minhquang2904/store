@@ -132,7 +132,7 @@ const TemplateProductSlider = () => {
   useEffect(() => {
     const fetchDataProduct = async () => {
       try {
-        const response = await fetch("/api/product/discount");
+        const response = await fetch(`/api/product/discount?limit=12`);
         const result = await response.json();
         const status = result.status;
         const data = result.data;

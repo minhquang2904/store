@@ -1,12 +1,15 @@
 import connectDB from "@/app/config/connectDB";
 import Product from "@/app/models/product";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 export const revalidate = 0;
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   await connectDB();
   try {
+    const url = new URL(req.nextUrl);
+    const limit = parseInt(url.searchParams.get("limit") || "12");
+
     const products = await Product.find(
       { discount: { $gt: 0 } },
       {
@@ -19,7 +22,7 @@ export async function GET() {
         files: 1,
         price: 1,
       }
-    );
+    ).limit(limit);
 
     if (products) {
       return NextResponse.json({
