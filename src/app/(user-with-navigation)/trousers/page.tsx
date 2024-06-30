@@ -1,6 +1,6 @@
 "use client";
 
-import CardProduct from "@/app/components/cardProductLike/cardProduct";
+// import CardProduct from "@/app/components/cardProductLike/cardProduct";
 import Filter from "@/app/components/filter/filter";
 import Pagination from "@/app/components/pagination/pagination";
 import TitlePageNavigation from "@/app/components/titlePageNavigation/titlePageNavigation";
