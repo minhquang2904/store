@@ -4,13 +4,13 @@ import dynamic from "next/dynamic";
 import Banner from "../components/banner/banner";
 import Brand from "../components/brand/brand";
 import BannerGroup from "../components/bannerGroup/bannerGroup";
-// const TemplateProductView = dynamic(
-//   () => import("../components/template-product-view/templateProductView"),
-//   {
-//     loading: () => <LoadingPage />,
-//     ssr: false,
-//   }
-// );
+const TemplateProductView = dynamic(
+  () => import("../components/template-product-view/templateProductView"),
+  {
+    loading: () => <LoadingComponent />,
+    ssr: false,
+  }
+);
 const TemplateProductSlider = dynamic(
   () => import("../components/template-product-slider/templateProductSlider"),
   {
@@ -19,7 +19,6 @@ const TemplateProductSlider = dynamic(
   }
 );
 import RelatedProduct from "../components/relatedProduct/relatedProduct";
-import TemplateProductView from "../components/template-product-view/templateProductView";
 import LoadingComponent from "../components/loadingComponent/loadingComponent";
 
 const Home = () => {
@@ -28,7 +27,7 @@ const Home = () => {
       {/* <Banner /> */}
       <Brand />
       <BannerGroup />
-      {/* <TemplateProductView /> */}
+      <TemplateProductView />
       <TemplateProductSlider />
       {/* <RelatedProduct
         styleCustom={{ textAlign: "center", marginBottom: "35px" }}

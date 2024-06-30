@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { data, login } from "@/app/data";
-import { useState } from "react";
-import CardProduct from "../cardProductLike/cardProductLike";
+import { useEffect, useState } from "react";
+import CardProduct from "../cartProduct/cartProduct";
 import TitleComponent from "../titleComponent/titleComponent";
 
 export default function TemplateProductView() {
   const [dataList, setData] = useState(data);
+  const [products, setProducts] = useState(null) as any;
+
   const styleCustom = { width: "25%" };
 
   const handleChangeType = (e: any) => {
@@ -27,10 +29,32 @@ export default function TemplateProductView() {
     return setData(dataType);
   };
 
+  const getNewProduct = () => {
+    try {
+      fetch("/api/product/new-product")
+        .then((res) => res.json())
+        .then((result) => {
+          const { data, status } = result;
+          if (status !== 200) {
+            return;
+          }
+          setProducts(data);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!products) {
+      getNewProduct();
+    }
+  }, [products]);
+
   return (
     <div className="flex justify-center items-center px-pLayout">
       <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
-        <TitleComponent title="Best sellers" />
+        <TitleComponent title="new product " />
         <div className="my-[35px] mx-[0] flex justify-between">
           <div className="flex gap-[12px] items-center">
             <div
@@ -61,23 +85,15 @@ export default function TemplateProductView() {
               Shoes
             </div>
           </div>
-          <div>
-            <Link
-              href="#"
-              className="bg-button text-white text-[1.6em] font-normal capitalize py-[8px] px-[14px] hover:opacity-90"
-            >
-              show all
-            </Link>
-          </div>
         </div>
         <div className="flex flex-wrap mx-mCard">
-          {dataList.slice(0, 8).map((item: any) => {
+          {products?.map((item: any) => {
             return (
               <CardProduct
-                key={item.id}
+                key={item._id}
                 data={item}
-                styleCustom={styleCustom}
-                login={login}
+                // styleCustom={styleCustom}
+                // login={login}
               />
             );
           })}
