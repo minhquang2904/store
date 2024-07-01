@@ -50,6 +50,7 @@ export async function GET() {
             phone: user.phone,
             image: user.image,
             address: user.address,
+            delivery_list: user.delivery_list,
           },
         });
       }

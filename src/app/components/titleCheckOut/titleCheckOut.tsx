@@ -1,9 +1,7 @@
 const TitleCheckOut = (props: any) => {
   const { title } = props;
   return (
-    <h1 className="sm:text-[3.2em] xsm:text-[2.8em] font-medium capitalize text-text mb-[30px]">
-      {title}
-    </h1>
+    <h1 className="text-[1.6em] font-medium capitalize text-text">{title}</h1>
   );
 };
 

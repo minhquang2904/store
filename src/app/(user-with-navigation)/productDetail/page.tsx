@@ -260,7 +260,7 @@ export default function ProductDetail({ searchParams }: any) {
                           key={item.url}
                           className={`w-[8px] h-[8px] rounded-[50%] cursor-pointer select-none bg-[#9b9797] ${
                             item.url == picture
-                              ? "bg-[#7b8a84]"
+                              ? "bg-[#464e4b]"
                               : "bg-[#aca7a7]"
                           }`}
                           onClick={() => handleActivePicture(item.url)}

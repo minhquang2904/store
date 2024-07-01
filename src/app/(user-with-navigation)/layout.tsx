@@ -12,7 +12,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       {loadingAuth && <Loading />}
-      <div className="bg-[#F3F4F4] min-h-[100vh] mainLayout">
+      <div className="bg-primary min-h-[100vh] mainLayout">
         <NavBar />
         <main>{children}</main>
         <Support />
