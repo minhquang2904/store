@@ -57,10 +57,10 @@ const ListsOrder = () => {
     <>
       {listOrder && (
         <>
-          {listOrder?.map((item: any) => {
-            return (
-              <div className="flex flex-col gap-y-[40px]" key={item._id}>
-                <div>
+          <div className="flex flex-col gap-y-[40px]">
+            {listOrder?.map((item: any) => {
+              return (
+                <div key={item._id}>
                   <div className="flex justify-between">
                     <div className="w-[50%] xsm:w-[80%]  flex">
                       {/* <div className="!relative">
@@ -72,7 +72,7 @@ const ListsOrder = () => {
                     sizes="(max-width: 80px) 100vw"
                   />
                 </div> */}
-                      <div className="flex flex-col justify-center px-[8px] xsm:px-[0]">
+                      <div className="flex flex-col justify-center pr-[8px] xsm:px-[0]">
                         <h1 className="text-text text-[1.6em] font-semibold">
                           {item?.firstName} {item?.lastName}
                         </h1>
@@ -138,9 +138,9 @@ const ListsOrder = () => {
                     </p>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </>
       )}
       {noItemCart && <NoItemCart className="max-w-[160px]" title="No orders" />}
