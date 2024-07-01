@@ -88,3 +88,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: errorCustom, status: 500 });
   }
 }
+
+export async function GET(req: NextRequest) {
+  await connectDB();
+  try {
+    const url = new URL(req.nextUrl);
+    const userId = url.searchParams.get("id");
+    const order = await Order.find({ userId });
+
+    if (!order) {
+      return NextResponse.json({ message: "Order not found", status: 404 });
+    }
+
+    return NextResponse.json({
+      message: "Get List order",
+      status: 200,
+      data: order,
+    });
+  } catch (error: any) {
+    return NextResponse.json({ message: error.message, status: 500 });
+  }
+}

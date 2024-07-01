@@ -8,10 +8,14 @@ import {
   ModalFooter,
   ModalBody,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { address } from "@/app/data";
+import { useAuthContext } from "@/app/context/AuthContext";
 
 const ListsOrder = () => {
+  const [listOrder, setListOrder] = useState(null) as any;
+  const { user } = useAuthContext();
+
   const [modalDeleteShow, setModalDeleteShow] = useState(false);
   const [dataModalDelete, setDataModalDelete] = useState([]);
 
@@ -21,134 +25,101 @@ const ListsOrder = () => {
     setModalDeleteShow(true);
   };
 
+  const fetchListOrder = async () => {
+    try {
+      const res = await fetch(`/api/product/order?id=${user?.id}`);
+      const result = await res.json();
+      const { message, status } = result;
+      if (status === 200) {
+        setListOrder(result.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!listOrder) {
+      fetchListOrder();
+    }
+  }, [listOrder, user?.id]);
+  console.log(listOrder);
   return (
     <>
-      <div className="flex flex-col gap-y-[40px]">
-        <div>
-          <div className="flex justify-between">
-            <div className="w-[50%] xsm:w-[80%]  flex">
-              {/* <div className="!relative">
-                <Image
-                  src="/images/product2.png"
-                  className="!relative max-w-[80px] w-full max-h-[auto]"
-                  alt="Product 1"
-                  fill
-                  sizes="(max-width: 80px) 100vw"
-                />
-              </div> */}
-              <div className="flex flex-col justify-center px-[8px] xsm:px-[0]">
-                <h1 className="text-text text-[1.6em] font-semibold">
-                  Robert fox
-                </h1>
-                <h3 className="text-text text-[1.6em] font-normal line-clamp-1">
-                  392 Dola Mine Road, Morrisville, North Carolina 392 Dola Mine
-                  R, Morrisville, North Carolina
-                </h3>
-                <h3 className="text-text text-[1.6em] font-normal">
-                  Debit Card
-                </h3>
+      {listOrder && (
+        <>
+          {listOrder.map((item: any) => {
+            return (
+              <div className="flex flex-col gap-y-[40px]" key={item._id}>
+                <div>
+                  <div className="flex justify-between">
+                    <div className="w-[50%] xsm:w-[80%]  flex">
+                      {/* <div className="!relative">
+                  <Image
+                    src="/images/product2.png"
+                    className="!relative max-w-[80px] w-full max-h-[auto]"
+                    alt="Product 1"
+                    fill
+                    sizes="(max-width: 80px) 100vw"
+                  />
+                </div> */}
+                      <div className="flex flex-col justify-center px-[8px] xsm:px-[0]">
+                        <h1 className="text-text text-[1.6em] font-semibold">
+                          Robert fox
+                        </h1>
+                        <h3 className="text-text text-[1.6em] font-normal line-clamp-1">
+                          392 Dola Mine Road, Morrisville, North Carolina 392
+                          Dola Mine R, Morrisville, North Carolina
+                        </h3>
+                        <h3 className="text-text text-[1.6em] font-normal">
+                          Debit Card
+                        </h3>
+                      </div>
+                    </div>
+                    <div className="w-[20%] xsm:w-[20%] flex items-center justify-center px-[8px] xsm:px-[0]">
+                      <h1 className="text-text text-[1.6em] font-semibold">
+                        {item?.totalPrice}
+                      </h1>
+                    </div>
+                    <div className="w-[30%] flex justify-end pl-[8px] xsm:hidden">
+                      <div className="flex flex-col gap-y-[10px]">
+                        <ButtonOrder
+                          title="View Order"
+                          styleCustom="border-button text-text bg-[transparent]"
+                        />
+                        <ButtonOrder
+                          title="Review"
+                          styleCustom="bg-button text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-[100%] xsm:flex justify-end sm:hidden mt-[32px]">
+                    <div className="flex sm:flex-col xsm:flex-row gap-y-[10px] gap-x-[10px] xsm:w-full">
+                      <ButtonOrder
+                        title="View Order"
+                        styleCustom="border-button text-text bg-[transparent] xsm:w-[50%]"
+                      />
+                      <ButtonOrder
+                        title="Review"
+                        styleCustom="bg-button text-white xsm:w-[50%]"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex mt-[8px]">
+                    <h1 className="text-[1.6em] text-[#3CD139] mr-[16px]">
+                      Delivery
+                    </h1>
+                    <p className="text-[1.6em] text-text mr-[16px]">
+                      Your product has been delivery
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="w-[20%] xsm:w-[20%] flex items-center justify-center px-[8px] xsm:px-[0]">
-              <h1 className="text-text text-[1.6em] font-semibold">80.00</h1>
-            </div>
-            <div className="w-[30%] flex justify-end pl-[8px] xsm:hidden">
-              <div className="flex flex-col gap-y-[10px]">
-                <ButtonOrder
-                  title="View Order"
-                  styleCustom="border-button text-text bg-[transparent]"
-                />
-                <ButtonOrder
-                  title="Review"
-                  styleCustom="bg-button text-white"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="w-[100%] xsm:flex justify-end sm:hidden mt-[32px]">
-            <div className="flex sm:flex-col xsm:flex-row gap-y-[10px] gap-x-[10px] xsm:w-full">
-              <ButtonOrder
-                title="View Order"
-                styleCustom="border-button text-text bg-[transparent] xsm:w-[50%]"
-              />
-              <ButtonOrder
-                title="Review"
-                styleCustom="bg-button text-white xsm:w-[50%]"
-              />
-            </div>
-          </div>
-          <div className="flex mt-[8px]">
-            <h1 className="text-[1.6em] text-[#3CD139] mr-[16px]">Delivery</h1>
-            <p className="text-[1.6em] text-text mr-[16px]">
-              Your product has been delivery
-            </p>
-          </div>
-        </div>
-        <div>
-          <div className="flex justify-between">
-            <div className="w-[50%] xsm:w-[80%] flex">
-              {/* <div className="!relative">
-                <Image
-                  src="/images/product2.png"
-                  className="!relative max-w-[80px] w-full max-h-[auto]"
-                  alt="Product 1"
-                  fill
-                  sizes="(max-width: 80px) 100vw"
-                />
-              </div> */}
-              <div className="flex flex-col justify-center px-[8px] xsm:px-[0]">
-                <h1 className="text-text text-[1.6em] font-semibold">
-                  Robert fox
-                </h1>
-                <h3 className="text-text text-[1.6em] font-normal line-clamp-1">
-                  392 Dola Mine Road, Morrisville, North Carolina 392 Dola Mine
-                  R, Morrisville, North Carolina
-                </h3>
-                <h3 className="text-text text-[1.6em] font-normal">
-                  Debit Card
-                </h3>
-              </div>
-            </div>
-            <div className="w-[20%] xsm:w-[20%] flex items-center justify-center px-[8px] xsm:px-[0]">
-              <h1 className="text-text text-[1.6em] font-semibold">80.00</h1>
-            </div>
-            <div className="w-[30%] flex justify-end pl-[8px] xsm:hidden">
-              <div className="flex flex-col gap-y-[10px]">
-                <ButtonOrder
-                  title="View Order"
-                  styleCustom="border-button text-text bg-[transparent]"
-                />
-                <ButtonOrder
-                  title="Cancel"
-                  styleCustom="bg-secondary text-white"
-                  onClick={() => handleShowDelete(address)}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="w-[100%] xsm:flex justify-end sm:hidden mt-[32px]">
-            <div className="flex sm:flex-col xsm:flex-row gap-y-[10px] gap-x-[10px] xsm:w-full">
-              <ButtonOrder
-                title="View Order"
-                styleCustom="border-button text-text bg-[transparent] xsm:w-[50%]"
-              />
-              <ButtonOrder
-                styleCustom="bg-secondary text-white xsm:w-[50%]"
-                title="Cancel"
-                onClick={() => handleShowDelete(address)}
-              />
-            </div>
-          </div>
-          <div className="flex mt-[8px]">
-            <h1 className="text-[1.6em] text-[#E3B231] mr-[16px]">
-              In Process
-            </h1>
-            <p className="text-[1.6em] text-text mr-[16px]">
-              Your product has been Inprocess
-            </p>
-          </div>
-        </div>
-      </div>
+            );
+          })}
+        </>
+      )}
       <ModalDelete
         isOpen={modalDeleteShow}
         onClose={handleCloseDelete}
@@ -248,3 +219,70 @@ const ButtonModal = (props: any) => {
 };
 
 export default ListsOrder;
+
+{
+  /* <div>
+            <div className="flex justify-between">
+              <div className="w-[50%] xsm:w-[80%] flex">
+                <div className="!relative">
+                  <Image
+                    src="/images/product2.png"
+                    className="!relative max-w-[80px] w-full max-h-[auto]"
+                    alt="Product 1"
+                    fill
+                    sizes="(max-width: 80px) 100vw"
+                  />
+                </div>
+                <div className="flex flex-col justify-center px-[8px] xsm:px-[0]">
+                  <h1 className="text-text text-[1.6em] font-semibold">
+                    Robert fox
+                  </h1>
+                  <h3 className="text-text text-[1.6em] font-normal line-clamp-1">
+                    392 Dola Mine Road, Morrisville, North Carolina 392 Dola Mine
+                    R, Morrisville, North Carolina
+                  </h3>
+                  <h3 className="text-text text-[1.6em] font-normal">
+                    Debit Card
+                  </h3>
+                </div>
+              </div>
+              <div className="w-[20%] xsm:w-[20%] flex items-center justify-center px-[8px] xsm:px-[0]">
+                <h1 className="text-text text-[1.6em] font-semibold">80.00</h1>
+              </div>
+              <div className="w-[30%] flex justify-end pl-[8px] xsm:hidden">
+                <div className="flex flex-col gap-y-[10px]">
+                  <ButtonOrder
+                    title="View Order"
+                    styleCustom="border-button text-text bg-[transparent]"
+                  />
+                  <ButtonOrder
+                    title="Cancel"
+                    styleCustom="bg-secondary text-white"
+                    onClick={() => handleShowDelete(address)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="w-[100%] xsm:flex justify-end sm:hidden mt-[32px]">
+              <div className="flex sm:flex-col xsm:flex-row gap-y-[10px] gap-x-[10px] xsm:w-full">
+                <ButtonOrder
+                  title="View Order"
+                  styleCustom="border-button text-text bg-[transparent] xsm:w-[50%]"
+                />
+                <ButtonOrder
+                  styleCustom="bg-secondary text-white xsm:w-[50%]"
+                  title="Cancel"
+                  onClick={() => handleShowDelete(address)}
+                />
+              </div>
+            </div>
+            <div className="flex mt-[8px]">
+              <h1 className="text-[1.6em] text-[#E3B231] mr-[16px]">
+                In Process
+              </h1>
+              <p className="text-[1.6em] text-text mr-[16px]">
+                Your product has been Inprocess
+              </p>
+            </div>
+          </div> */
+}
