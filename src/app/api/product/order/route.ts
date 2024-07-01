@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
   await connectDB();
   const session = await startSession();
   let errorCustom = {
+    errorId: "",
     errorName: "",
     errorSize: "",
     errorColor: "",
@@ -40,14 +41,15 @@ export async function POST(req: NextRequest) {
         product.sizes[sizeIndex].amount -= quantity;
         await product.save({ session });
       } else {
-        const findQuantity: any = product.sizes.find(
+        const findProduct: any = product.sizes.find(
           (s: any) => s.size === size && s.color === color
         );
         errorCustom = {
+          errorId: productId,
           errorName: product.name,
           errorSize: size,
           errorColor: color,
-          errorQuantity: findQuantity.amount,
+          errorQuantity: findProduct.amount,
         };
         throw new Error(
           `Product ${product.name} does not have enough inventory for size ${size} and color ${color}`
@@ -94,7 +96,7 @@ export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.nextUrl);
     const userId = url.searchParams.get("id");
-    const order = await Order.find({ userId });
+    const order = await Order.find({ userId }).sort({ createdAt: -1 });
 
     if (!order) {
       return NextResponse.json({ message: "Order not found", status: 404 });

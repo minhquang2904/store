@@ -11,6 +11,8 @@ import {
 import { useEffect, useState } from "react";
 import { address } from "@/app/data";
 import { useAuthContext } from "@/app/context/AuthContext";
+import NoItemCart from "@/app/components/noItemCart/noItemCart";
+import LoadingComponent from "@/app/components/loadingComponent/loadingComponent";
 
 const ListsOrder = () => {
   const [listOrder, setListOrder] = useState(null) as any;
@@ -18,6 +20,8 @@ const ListsOrder = () => {
 
   const [modalDeleteShow, setModalDeleteShow] = useState(false);
   const [dataModalDelete, setDataModalDelete] = useState([]);
+  const [noItemCart, setNoItemCart] = useState(false) as any;
+  const [loading, setLoading] = useState(false) as any;
 
   const handleCloseDelete = () => setModalDeleteShow(false);
   const handleShowDelete = (data: any) => {
@@ -26,13 +30,18 @@ const ListsOrder = () => {
   };
 
   const fetchListOrder = async () => {
+    setLoading(true);
     try {
       const res = await fetch(`/api/product/order?id=${user?.id}`);
       const result = await res.json();
       const { message, status } = result;
       if (status === 200) {
         setListOrder(result.data);
+        if (result.data.length === 0) {
+          setNoItemCart(true);
+        }
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -43,12 +52,12 @@ const ListsOrder = () => {
       fetchListOrder();
     }
   }, [listOrder, user?.id]);
-  console.log(listOrder);
+
   return (
     <>
       {listOrder && (
         <>
-          {listOrder.map((item: any) => {
+          {listOrder?.map((item: any) => {
             return (
               <div className="flex flex-col gap-y-[40px]" key={item._id}>
                 <div>
@@ -65,14 +74,13 @@ const ListsOrder = () => {
                 </div> */}
                       <div className="flex flex-col justify-center px-[8px] xsm:px-[0]">
                         <h1 className="text-text text-[1.6em] font-semibold">
-                          Robert fox
+                          {item?.firstName} {item?.lastName}
                         </h1>
                         <h3 className="text-text text-[1.6em] font-normal line-clamp-1">
-                          392 Dola Mine Road, Morrisville, North Carolina 392
-                          Dola Mine R, Morrisville, North Carolina
+                          {item?.address}
                         </h3>
-                        <h3 className="text-text text-[1.6em] font-normal">
-                          Debit Card
+                        <h3 className="text-text text-[1.6em] font-normal capitalize">
+                          {item?.payment}
                         </h3>
                       </div>
                     </div>
@@ -88,9 +96,14 @@ const ListsOrder = () => {
                           styleCustom="border-button text-text bg-[transparent]"
                         />
                         <ButtonOrder
+                          title="Cancel"
+                          styleCustom="bg-secondary text-white"
+                          onClick={() => handleShowDelete(address)}
+                        />
+                        {/* <ButtonOrder
                           title="Review"
                           styleCustom="bg-button text-white"
-                        />
+                        /> */}
                       </div>
                     </div>
                   </div>
@@ -101,17 +114,27 @@ const ListsOrder = () => {
                         styleCustom="border-button text-text bg-[transparent] xsm:w-[50%]"
                       />
                       <ButtonOrder
+                        styleCustom="bg-secondary text-white xsm:w-[50%]"
+                        title="Cancel"
+                        onClick={() => handleShowDelete(address)}
+                      />
+                      {/* <ButtonOrder
                         title="Review"
                         styleCustom="bg-button text-white xsm:w-[50%]"
-                      />
+                      /> */}
                     </div>
                   </div>
                   <div className="flex mt-[8px]">
-                    <h1 className="text-[1.6em] text-[#3CD139] mr-[16px]">
-                      Delivery
+                    <h1
+                      className={`text-[1.6em] ${
+                        (item?.status === "delivery" && "text-[#3CD139]") ||
+                        (item?.status === "pending" && "text-[#E3B231]")
+                      } mr-[16px] capitalize`}
+                    >
+                      {item?.status}
                     </h1>
                     <p className="text-[1.6em] text-text mr-[16px]">
-                      Your product has been delivery
+                      {item?.status === "pending" && "Your product is pending"}
                     </p>
                   </div>
                 </div>
@@ -120,6 +143,8 @@ const ListsOrder = () => {
           })}
         </>
       )}
+      {noItemCart && <NoItemCart className="max-w-[160px]" title="No orders" />}
+      {loading && <LoadingComponent />}
       <ModalDelete
         isOpen={modalDeleteShow}
         onClose={handleCloseDelete}
@@ -143,7 +168,6 @@ const ButtonOrder = (props: any) => {
 
 const ModalDelete = (props: any) => {
   const { isOpen, onClose, data } = props;
-  console.log(data);
   const color = "#ff6f61";
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

@@ -17,6 +17,7 @@ import { useState, useEffect } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import Loading from "../loading";
 import toast, { Toaster } from "react-hot-toast";
+import LoadingComponent from "@/app/components/loadingComponent/loadingComponent";
 
 const TitleTable = (props: any) => {
   const { title } = props;
@@ -51,11 +52,11 @@ const Cart = () => {
         .then((result) => {
           const { message, status } = result;
           if (status === 200) {
-            // toast.success(message);
+            toast.success(message);
             triggerFetchCart();
           }
           if (status === 500) {
-            // toast.error(message);
+            toast.error(message);
           }
         });
     } catch (error) {
@@ -90,7 +91,11 @@ const Cart = () => {
             style={!cart ? { justifyContent: "center" } : {}}
           >
             {!cart ? (
-              <NoItemCart className="max-w-[160px]" title="No product" />
+              <>
+                {!loadingCart && (
+                  <NoItemCart className="max-w-[160px]" title="No product" />
+                )}
+              </>
             ) : (
               <div className="flex xsm:flex-col sm:flex-col l:flex-row xsm:w-full sm:w-full">
                 <div className="shrink grow-0 l:basis-[70%] h-full xsm:overflow-x-scroll xsm:overflow-y-hidden">
@@ -337,6 +342,7 @@ const Cart = () => {
           </div>
         </div>
       </div>
+
       {modalAddAddress && (
         <ModalAdd
           isOpen={modalAddAddress}
@@ -353,6 +359,7 @@ const Cart = () => {
           data={dataModalConfirm}
         />
       )}
+      {loadingCart && <LoadingComponent />}
       {loading && <Loading />}
     </>
   );
@@ -364,12 +371,13 @@ const ModalConfirmOrder = (props: any) => {
   const { value, resetForm } = data;
   const { address, payment } = value;
   const jsonParse = JSON.parse(address);
+  const [btnSubmit, setBtnSubmit] = useState(false) as any;
 
   const { user } = useAuthContext();
   const { cart, triggerFetchCart } = useCartContext();
 
   const handleConfirmOrder = () => {
-    console.log("Confirm Order");
+    setBtnSubmit(true);
     try {
       fetch("/api/product/order", {
         method: "POST",
@@ -405,22 +413,34 @@ const ModalConfirmOrder = (props: any) => {
             toast.error(
               <div>
                 Product{" "}
-                <span className="text-secondary">{message.errorName}</span> does
-                not have enough inventory for size{" "}
+                <Link
+                  href={{
+                    pathname: "/productDetail",
+                    query: { id: message.errorId },
+                  }}
+                  className="text-secondary underline capitalize"
+                >
+                  {message.errorName}
+                </Link>{" "}
+                does not have enough inventory for size{" "}
                 <span className="text-secondary uppercase">
                   {message.errorSize}
                 </span>{" "}
                 and color{" "}
                 <span className="text-secondary uppercase">
                   {message.errorColor}
-                </span>
+                </span>{" "}
                 - Quantity{" "}
                 <span className="text-secondary uppercase">
                   {message.errorQuantity}
                 </span>
-              </div>
+              </div>,
+              {
+                duration: 3000,
+              }
             );
           }
+          setBtnSubmit(false);
         });
     } catch (error) {
       console.log("Error", error);
@@ -561,7 +581,8 @@ const ModalConfirmOrder = (props: any) => {
             <BtnAccount
               styleCustom="!mt-[0] !px-[20px] !py-[8px] !border-button !rounded-[12px] !w-[50%]"
               onClick={handleConfirmOrder}
-              title="Place order"
+              title={btnSubmit ? "Place order..." : "Place order"}
+              disabled={btnSubmit}
             />
           </div>
         </div>
