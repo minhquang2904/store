@@ -241,6 +241,8 @@ const Cart = () => {
                                         district: option.district,
                                         ward: option.ward,
                                         street: option.street,
+                                        lastName: option.lastName,
+                                        firstName: option.firstName,
                                       })}
                                       className="capitalized"
                                     >
@@ -312,15 +314,15 @@ const Cart = () => {
                             <ErrorInput name="payment" />
                           </div>
                         </div>
-                        <div className="flex justify-between text-[1.6em] mb-[16px]">
-                          <h1 className="text-text capitalize font-bold">
-                            Grand Total
-                          </h1>
-                          <h3 className="font-bold text-text">
-                            {cart?.totalPrice}
-                          </h3>
-                        </div>
                         <div>
+                          <div className="flex justify-between text-[1.6em]">
+                            <h1 className="text-text capitalize font-bold">
+                              Grand Total
+                            </h1>
+                            <h3 className="font-bold text-text">
+                              {cart?.totalPrice}
+                            </h3>
+                          </div>
                           <button
                             type="submit"
                             className="mt-[10px] text-[1.4em] text-white bg-button w-full p-[14px] rounded-[10px] hover:opacity-90"
@@ -363,12 +365,67 @@ const ModalConfirmOrder = (props: any) => {
   const [seeMore, setSeeMore] = useState(false);
   const { value, resetForm } = data;
   const { user } = useAuthContext();
-  const { cart } = useCartContext();
+  const { cart, triggerFetchCart } = useCartContext();
   const { address, payment } = value;
   const jsonParse = JSON.parse(address);
 
   const handleConfirmOrder = () => {
     console.log("Confirm Order");
+    try {
+      fetch("/api/product/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          address: jsonParse,
+          payment: payment,
+        }),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          const { message, status } = result;
+          if (status === 200) {
+            toast.success(
+              <div>
+                <span>{message} - </span>
+                <Link href={"/profile/listsOrder"} className="underline">
+                  See Order
+                </Link>
+              </div>,
+              {
+                duration: 4000,
+              }
+            );
+            triggerFetchCart();
+            resetForm();
+            onClose();
+          }
+          if (status === 500) {
+            toast.error(
+              <div>
+                Product{" "}
+                <span className="text-secondary">{message.errorName}</span> does
+                not have enough inventory for size{" "}
+                <span className="text-secondary uppercase">
+                  {message.errorSize}
+                </span>{" "}
+                and color{" "}
+                <span className="text-secondary uppercase">
+                  {message.errorColor}
+                </span>
+                - Quantity{" "}
+                <span className="text-secondary uppercase">
+                  {message.errorQuantity}
+                </span>
+              </div>
+            );
+          }
+        });
+    } catch (error) {
+      console.log("Error", error);
+    }
   };
 
   return (
