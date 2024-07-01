@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     errorQuantity: 0,
   };
   try {
-    const { userId, address, payment } = await req.json();
+    const { userId, address, payment, email } = await req.json();
     const cart = await Cart.findOne({ userId });
 
     if (!cart) {
@@ -63,14 +63,6 @@ export async function POST(req: NextRequest) {
       userId,
       items: cart.items.map(
         ({ productId, size, color, quantity, price, totalPriceItem }: any) => {
-          console.log({
-            productId,
-            size,
-            color,
-            quantity,
-            price,
-            totalPriceItem,
-          });
           return {
             productId,
             size,
@@ -81,6 +73,7 @@ export async function POST(req: NextRequest) {
           };
         }
       ),
+      email,
       payment,
       address: address.addressFull,
       phone: address.phone,

@@ -8,7 +8,7 @@ import { useAuthContext } from "../context/AuthContext";
 import Loading from "../components/loading/loading";
 
 const Layout = ({ children }: { children: ReactNode }) => {
-  const { loadingAuth } = useAuthContext();
+  const { loadingAuth, user } = useAuthContext();
   return (
     <>
       {loadingAuth && <Loading />}

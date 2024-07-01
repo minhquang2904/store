@@ -386,6 +386,7 @@ const ModalConfirmOrder = (props: any) => {
         },
         body: JSON.stringify({
           userId: user.id,
+          email: user.email,
           address: jsonParse,
           payment: payment,
         }),

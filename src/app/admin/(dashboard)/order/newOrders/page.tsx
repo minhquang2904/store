@@ -12,6 +12,8 @@ import {
 } from "@chakra-ui/react";
 import style from "./newOrders.module.scss";
 import LabelInput from "@/app/components/labelInput/labelInput";
+import Image from "next/image";
+import toast from "react-hot-toast";
 
 const ListOrder = () => {
   const [listOrder, setListOrder] = useState(null) as any;
@@ -126,6 +128,7 @@ const ListOrder = () => {
           isOpen={modalSee}
           onClose={handleCloseModalDetail}
           data={dataModalSee}
+          fetchListOrder={fetchListOrder}
         />
       )}
     </>
@@ -133,8 +136,32 @@ const ListOrder = () => {
 };
 
 const ModalSee = (props: any) => {
-  const { isOpen, onClose, data } = props;
-  console.log(data);
+  const { isOpen, onClose, data, fetchListOrder } = props;
+  const handleConfirmOrder = (id: any) => {
+    try {
+      fetch("/api/admin/order/", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          const { message, status } = result;
+          if (status === 200) {
+            fetchListOrder();
+            toast.success(result.message);
+            onClose();
+          }
+          if (status === 500) {
+            toast.error(result.message);
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -144,12 +171,96 @@ const ModalSee = (props: any) => {
         margin={"auto 15px auto 15px"}
         className="l:min-w-[800px] xsm:!max-w-[400px] sm:min-w-[700px]"
       >
+        <h1 className="text-[2em] text-button capitalize px-[24px] mb-[8px]">
+          orders from {data.firstName + " " + data.lastName} -{" "}
+          <span className="text-secondary font-medium">{data.totalPrice}</span>
+        </h1>
         <ModalBody
           className={`${style.tableScroll} flex flex-col gap-y-[20px] xsm:gap-y-[16px] overflow-y-auto max-h-[600px]`}
         >
           <div className="flex xsm:flex-col xsm:gap-y-[16px]">
-            <LabelAndInput label="First Name" title={"N/A"} />
-            <LabelAndInput label="last name" title={"N/A"} />
+            <LabelAndInput
+              label="Total Price"
+              title={data.totalPrice || "N/A"}
+            />
+            <LabelAndInput label="last name" title={data.status || "N/A"} />
+          </div>
+          <div className="flex xsm:flex-col xsm:gap-y-[16px]">
+            <LabelAndInput label="First Name" title={data.firstName || "N/A"} />
+            <LabelAndInput label="last name" title={data.lastName || "N/A"} />
+          </div>
+          <div className="flex xsm:flex-col xsm:gap-y-[16px]">
+            <LabelAndInput label="Payment" title={data.payment || "N/A"} />
+            <LabelAndInput label="Phone" title={data.phone || "N/A"} />
+          </div>
+          <div className="flex xsm:flex-col xsm:gap-y-[16px]">
+            <LabelAndInput
+              label="Order date"
+              title={new Date(data.createdAt).toLocaleString("en-GB") || "N/A"}
+            />
+            <LabelAndInput
+              label="Confirmation date"
+              title={
+                data.updatedAt
+                  ? new Date(data.updatedAt).toLocaleString("en-GB")
+                  : "N/A"
+              }
+            />
+          </div>
+          <div className="flex xsm:flex-col xsm:gap-y-[16px]">
+            <LabelAndInput
+              label="Quantity"
+              title={data.email || "N/A"}
+              styleCustomSee="!lowercase"
+            />
+            <LabelAndInput
+              label="Address delivery"
+              title={data.address || "N/A"}
+            />
+          </div>
+          <div className="flex xsm:flex-col xsm:gap-y-[16px] flex-col">
+            <LabelAndInput label="List Product" />
+            <div className="flex flex-wrap">
+              {data.items.map((item: any) => {
+                return (
+                  <div
+                    key={`${item._id}`}
+                    className="py-[12px] !relative flex xsm:w-[100%] w-[50%] items-center"
+                  >
+                    <Image
+                      src={
+                        item.productId.files[0].url || "/images/no-image.png"
+                      }
+                      className="!relative max-w-[80px] max-h-[80px] object-cover"
+                      alt="Bag"
+                      fill
+                      sizes="(max-width: 80px) 100vw"
+                    />
+                    <div className="flex flex-col justify-center ml-[16px] basis-full shrink grow-0">
+                      <h2 className="text-text text-[1.4em] font-medium capitalize">
+                        {item.productId.name}
+                      </h2>
+                      <h3 className="text-text text-[1.4em] my-[4px] font-bold flex gap-x-[4px]">
+                        <p>
+                          {item.quantity} x {item.price}
+                        </p>
+                        <p className="text-secondary">
+                          ({item.totalPriceItem})
+                        </p>
+                      </h3>
+                      <div className="flex justify-between items-center">
+                        <div className="text-text text-[1.4em] font-normal flex gap-x-[6px] items-center">
+                          <p className="h-full block">Size:</p>
+                          <p className="uppercase font-semibold h-full block">
+                            {item.size} - {item.color}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </ModalBody>
         <ModalFooter className="flex xsm:flex-col sm:flex-col l:flex-row gap-x-[10px] gap-y-[10px]">
@@ -157,6 +268,11 @@ const ModalSee = (props: any) => {
             onClick={onClose}
             title="Cancel"
             styleCustom="border-button bg-white xsm:w-full sm:w-full"
+          />
+          <ButtonModal
+            title="Confirm Order"
+            styleCustom="border-button bg-button xsm:w-full sm:w-full text-white"
+            onClick={() => handleConfirmOrder(data._id)}
           />
         </ModalFooter>
       </ModalContent>

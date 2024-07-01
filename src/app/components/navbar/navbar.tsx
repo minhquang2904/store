@@ -339,7 +339,7 @@ const NavBar = () => {
                                           pathname: "/productDetail",
                                           query: { id: item?.productId._id },
                                         }}
-                                        className="p-[12px] !relative flex hover:bg-hover1"
+                                        className="p-[12px] !relative flex hover:bg-hover1 items-center"
                                       >
                                         <Image
                                           src={

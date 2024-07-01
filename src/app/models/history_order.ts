@@ -30,7 +30,7 @@ const cartItemSchema = new Schema({
   },
 });
 
-const orderSchema = new Schema({
+const historyOrderSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -69,7 +69,7 @@ const orderSchema = new Schema({
   status: {
     type: String,
     required: true,
-    default: "pending",
+    default: "confirm",
   },
   createdAt: {
     type: Date,
@@ -81,5 +81,6 @@ const orderSchema = new Schema({
   },
 });
 
-const Order = models.Order || model("Order", orderSchema);
-export default Order;
+const HistoryOrder =
+  models.HistoryOrder || model("HistoryOrder", historyOrderSchema);
+export default HistoryOrder;
