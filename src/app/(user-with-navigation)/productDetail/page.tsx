@@ -13,8 +13,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import ErrorInput from "@/app/components/errorInput/errorInput";
 import { useAuthContext } from "@/app/context/AuthContext";
-import toast, { Toaster } from "react-hot-toast";
-import { toastConfig } from "@/app/config/toaster";
+import toast from "react-hot-toast";
 import Link from "next/link";
 import { useCartContext } from "@/app/context/CartContext";
 import NoItemCart from "@/app/components/noItemCart/noItemCart";
@@ -226,7 +225,6 @@ export default function ProductDetail({ searchParams }: any) {
 
   return (
     <>
-      <Toaster toastOptions={toastConfig} />
       {loadingProducts && <LoadingComponent />}
       {product === undefined && (
         <NoItemCart

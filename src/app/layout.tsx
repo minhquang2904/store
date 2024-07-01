@@ -4,6 +4,8 @@ import { Jost } from "next/font/google";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
+import toast, { Toaster } from "react-hot-toast";
+import { toastConfig } from "@/app/config/toaster";
 
 const jost = Jost({
   subsets: ["latin"],
@@ -28,6 +30,7 @@ function RootLayout({
         <AuthProvider>
           <CartProvider>
             <ChakraProvider>{children}</ChakraProvider>
+            <Toaster toastOptions={toastConfig} />
           </CartProvider>
         </AuthProvider>
       </body>

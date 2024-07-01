@@ -9,8 +9,7 @@ import IconListsProduct from "../iconListsProduct/iconListProduct";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { useCartContext } from "@/app/context/CartContext";
-import { toastConfig } from "@/app/config/toaster";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const NavBar = () => {
   const { user, setUser, setLoadingAuth } = useAuthContext();
@@ -173,7 +172,6 @@ const NavBar = () => {
   };
   return (
     <>
-      <Toaster toastOptions={toastConfig} />
       <div className="headerContainer min-h-80 flex justify-center items-center sticky top-[0] left-[0] right-[0] bg-primary z-20 l:px-pLayout xsm:px-pLayout sm:px-[15px]">
         <div className="flex w-full max-w-layout">
           <div className="h-20 mx-auto flex justify-between items-center w-full">

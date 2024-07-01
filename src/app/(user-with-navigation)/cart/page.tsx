@@ -4,8 +4,6 @@ import NoItemCart from "@/app/components/noItemCart/noItemCart";
 import TitleCheckOut from "@/app/components/titleCheckOut/titleCheckOut";
 import Image from "next/image";
 import { useCartContext } from "@/app/context/CartContext";
-import toast, { Toaster } from "react-hot-toast";
-import { toastConfig } from "@/app/config/toaster";
 import Link from "next/link";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -18,6 +16,7 @@ import style from "./cart.module.scss";
 import { useState, useEffect } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import Loading from "../loading";
+import toast, { Toaster } from "react-hot-toast";
 
 const TitleTable = (props: any) => {
   const { title } = props;
@@ -29,13 +28,13 @@ const TitleTable = (props: any) => {
 };
 const Cart = () => {
   const { cart, triggerFetchCart, loadingCart } = useCartContext();
+  const { user } = useAuthContext();
+
   const [modalAddAddress, setModalAddAddress] = useState(false);
   const [modalConfirmOrder, setModalConfirmOrder] = useState(false);
   const [area, setArea] = useState(null) as any;
   const [loading, setLoading] = useState(false);
   const [dataModalConfirm, setDataModalConfirm] = useState(null) as any;
-
-  const { user } = useAuthContext();
 
   const handleCloseModalAddAddress = () => setModalAddAddress(false);
   const handleShowModalAddAddress = () => setModalAddAddress(true);
@@ -52,11 +51,11 @@ const Cart = () => {
         .then((result) => {
           const { message, status } = result;
           if (status === 200) {
-            toast.success(message);
+            // toast.success(message);
             triggerFetchCart();
           }
           if (status === 500) {
-            toast.error(message);
+            // toast.error(message);
           }
         });
     } catch (error) {
@@ -81,7 +80,6 @@ const Cart = () => {
   };
   return (
     <>
-      <Toaster toastOptions={toastConfig} />
       <div className="flex justify-center items-center px-pLayout">
         <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
           <h1 className="sm:text-[3.2em] xsm:text-[2.8em] font-medium capitalize text-text mb-[30px]">
@@ -364,10 +362,11 @@ const ModalConfirmOrder = (props: any) => {
   const { isOpen, onClose, data } = props;
   const [seeMore, setSeeMore] = useState(false);
   const { value, resetForm } = data;
-  const { user } = useAuthContext();
-  const { cart, triggerFetchCart } = useCartContext();
   const { address, payment } = value;
   const jsonParse = JSON.parse(address);
+
+  const { user } = useAuthContext();
+  const { cart, triggerFetchCart } = useCartContext();
 
   const handleConfirmOrder = () => {
     console.log("Confirm Order");
