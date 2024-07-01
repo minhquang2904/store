@@ -156,7 +156,7 @@ const MenuProfile = () => {
         </Link>
         <Link
           href="/profile/listHistoryOrder"
-          className={`px-[16px] py-[14px] cursor-pointer block rounded-[16px] ${checkActiveMenu(
+          className={`px-[16px] py-[14px] cursor-pointer flex items-center rounded-[16px] ${checkActiveMenu(
             "/profile/listHistoryOrder",
             "bg-button",
             ""

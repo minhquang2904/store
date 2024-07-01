@@ -144,7 +144,7 @@ const ListsOrder = () => {
         </>
       )}
       {noItemCart && <NoItemCart className="max-w-[160px]" title="No orders" />}
-      {loading && <LoadingComponent />}
+      {loading && <LoadingComponent styleCustom="!min-h-[300px]" />}
       <ModalDelete
         isOpen={modalDeleteShow}
         onClose={handleCloseDelete}

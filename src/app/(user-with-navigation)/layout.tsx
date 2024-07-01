@@ -8,11 +8,10 @@ import { useAuthContext } from "../context/AuthContext";
 import Loading from "../components/loading/loading";
 
 const Layout = ({ children }: { children: ReactNode }) => {
-  const { loadingAuth, user } = useAuthContext();
+  const { loadingAuth } = useAuthContext();
   return (
     <>
       {loadingAuth && <Loading />}
-
       <div className="bg-primary min-h-[100vh] mainLayout">
         <NavBar />
         <main>{children}</main>

@@ -359,7 +359,7 @@ const Cart = () => {
           data={dataModalConfirm}
         />
       )}
-      {loadingCart && <LoadingComponent />}
+      {loading && <LoadingComponent styleCustom="!min-h-[300px]" />}
       {loading && <Loading />}
     </>
   );

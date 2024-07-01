@@ -13,13 +13,18 @@ const ListsHistoryOrder = () => {
   const [noItemCart, setNoItemCart] = useState(false);
 
   const fetchHistoryOrder = async () => {
+    setLoading(true);
     try {
       const res = await fetch(`/api/product/history_order?id=${user?.id}`);
       const result = await res.json();
       const { message, status } = result;
       if (status === 200) {
         setListOrder(result.data);
+        if (result.data.length === 0) {
+          setNoItemCart(true);
+        }
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -94,8 +99,10 @@ const ListsHistoryOrder = () => {
           </div>
         </>
       )}
-      {noItemCart && <NoItemCart className="max-w-[160px]" title="No orders" />}
-      {loading && <LoadingComponent />}
+      {noItemCart && (
+        <NoItemCart className="max-w-[160px]" title="No order history" />
+      )}
+      {loading && <LoadingComponent styleCustom="!min-h-[300px]" />}
     </>
   );
 };
