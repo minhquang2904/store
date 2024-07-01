@@ -39,6 +39,8 @@ export async function POST(req: NextRequest) {
 
       if (sizeIndex !== -1) {
         product.sizes[sizeIndex].amount -= quantity;
+        product.soldCount += quantity;
+        product.quantity -= quantity;
         await product.save({ session });
       } else {
         const findProduct: any = product.sizes.find(

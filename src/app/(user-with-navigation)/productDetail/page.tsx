@@ -143,7 +143,15 @@ export default function ProductDetail({ searchParams }: any) {
         .then((result: any) => {
           const { status, message } = result;
           if (status === 200) {
-            toast.success(message);
+            toast.success(
+              <div>
+                <span>{message}</span> - {""}
+                <Link href={"/like"} className="underline">
+                  Wish Lists
+                </Link>
+              </div>,
+              { duration: 3000 }
+            );
             triggerFetchLike();
           }
         });
@@ -198,7 +206,15 @@ export default function ProductDetail({ searchParams }: any) {
         .then((result) => {
           const status = result.status;
           if (status === 200) {
-            toast.success("Product added to cart");
+            toast.success(
+              <div>
+                <span>Product added to cart</span> - {""}
+                <Link href={"/cart"} className="underline">
+                  CheckOut
+                </Link>
+              </div>,
+              { duration: 3000 }
+            );
             resetForm();
             setSelectedColor(null);
             setSelectedSize(null);
@@ -294,18 +310,17 @@ export default function ProductDetail({ searchParams }: any) {
                   <h1 className="text-text font-medium text-[2.2em] capitalize">
                     {product?.name || "N/A"}
                   </h1>
-                  <div className="flex">
-                    <div className="bg-[#e2f8e2] flex items-center py-[8px] px-[16px] rounded-[10px]">
-                      <h5 className="text-[#3cd139] text-[1.4em] font-medium">
-                        In Stock : {product?.quantity || 0}
-                      </h5>
-                    </div>
-                  </div>
                 </div>
-                <div className="mt-[8px]">
-                  <h4 className="text-text font-normal text-[1.6em] capitalize">
+                <div className="mt-[8px] flex">
+                  <h4 className="text-text font-normal text-[1.6em] capitalize pr-[15px] border-r-2">
                     {product?.categories || "N/A"}
                   </h4>
+                  <div className="text-[1.6em] px-[15px] border-r-2">
+                    Stock : {product?.quantity || 0}
+                  </div>
+                  <div className="text-[1.6em] px-[15px]">
+                    Sold : {product?.soldCount || 0}
+                  </div>
                 </div>
                 <div className="flex mt-[8px] gap-x-[6px] items-center">
                   {product?.discount > 0 && (
