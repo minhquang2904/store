@@ -1,0 +1,11 @@
+.tableScroll::-webkit-scrollbar {
+  width: 6px;
+}
+.tableScroll::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #b2b5b9;
+}
+.tableScroll::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #f3f4f4;
+}

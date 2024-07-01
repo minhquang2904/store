@@ -61,12 +61,26 @@ export async function POST(req: NextRequest) {
 
     const newOrder = new Order({
       userId,
-      items: cart.items.map(({ productId, size, color, quantity }: any) => ({
-        productId,
-        size,
-        color,
-        quantity,
-      })),
+      items: cart.items.map(
+        ({ productId, size, color, quantity, price, totalPriceItem }: any) => {
+          console.log({
+            productId,
+            size,
+            color,
+            quantity,
+            price,
+            totalPriceItem,
+          });
+          return {
+            productId,
+            size,
+            color,
+            quantity,
+            price,
+            totalPriceItem,
+          };
+        }
+      ),
       payment,
       address: address.addressFull,
       phone: address.phone,

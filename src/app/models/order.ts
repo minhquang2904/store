@@ -19,6 +19,15 @@ const cartItemSchema = new Schema({
     required: true,
     min: 1,
   },
+  price: {
+    type: Number,
+    required: true,
+  },
+  totalPriceItem: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
 });
 
 const orderSchema = new Schema({
