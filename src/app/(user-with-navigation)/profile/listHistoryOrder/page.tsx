@@ -111,7 +111,7 @@ const ButtonOrder = (props: any) => {
   const { styleCustom, title, onClick } = props;
   return (
     <button
-      className={`px-[30px] py-[12px] w-full text-[1.6em] border-[1px] border-solid rounded-[16px] ${styleCustom}`}
+      className={`px-[16px] py-[4px] w-full text-[1.6em] border-[1px] border-solid rounded-[12px] ${styleCustom}`}
       onClick={onClick}
     >
       {title}

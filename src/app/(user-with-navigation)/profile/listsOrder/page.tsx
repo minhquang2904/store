@@ -7,12 +7,13 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
+  Link,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { address } from "@/app/data";
 import { useAuthContext } from "@/app/context/AuthContext";
 import NoItemCart from "@/app/components/noItemCart/noItemCart";
 import LoadingComponent from "@/app/components/loadingComponent/loadingComponent";
+import toast from "react-hot-toast";
 
 const ListsOrder = () => {
   const [listOrder, setListOrder] = useState(null) as any;
@@ -24,10 +25,6 @@ const ListsOrder = () => {
   const [loading, setLoading] = useState(false) as any;
 
   const handleCloseDelete = () => setModalDeleteShow(false);
-  const handleShowDelete = (data: any) => {
-    setDataModalDelete(data[0]);
-    setModalDeleteShow(true);
-  };
 
   const fetchListOrder = async () => {
     setLoading(true);
@@ -53,6 +50,11 @@ const ListsOrder = () => {
     }
   }, [listOrder, user?.id]);
 
+  const handleShowDelete = (id: any) => {
+    setDataModalDelete(id);
+    setModalDeleteShow(true);
+  };
+
   return (
     <>
       {listOrder && (
@@ -62,16 +64,7 @@ const ListsOrder = () => {
               return (
                 <div key={item._id}>
                   <div className="flex justify-between">
-                    <div className="w-[50%] xsm:w-[80%]  flex">
-                      {/* <div className="!relative">
-                  <Image
-                    src="/images/product2.png"
-                    className="!relative max-w-[80px] w-full max-h-[auto]"
-                    alt="Product 1"
-                    fill
-                    sizes="(max-width: 80px) 100vw"
-                  />
-                </div> */}
+                    <div className="w-[50%] xsm:w-[80%] flex">
                       <div className="flex flex-col justify-center pr-[8px] xsm:px-[0]">
                         <h1 className="text-text text-[1.6em] font-semibold">
                           {item?.firstName} {item?.lastName}
@@ -97,13 +90,9 @@ const ListsOrder = () => {
                         />
                         <ButtonOrder
                           title="Cancel"
-                          styleCustom="bg-secondary text-white"
-                          onClick={() => handleShowDelete(address)}
+                          styleCustom="bg-secondary text-white border-secondary border-[1px] border-solid"
+                          onClick={() => handleShowDelete(item._id)}
                         />
-                        {/* <ButtonOrder
-                          title="Review"
-                          styleCustom="bg-button text-white"
-                        /> */}
                       </div>
                     </div>
                   </div>
@@ -114,21 +103,16 @@ const ListsOrder = () => {
                         styleCustom="border-button text-text bg-[transparent] xsm:w-[50%]"
                       />
                       <ButtonOrder
-                        styleCustom="bg-secondary text-white xsm:w-[50%]"
+                        styleCustom="bg-secondary text-white xsm:w-[50%] border-secondary border-[1px] border-solid"
                         title="Cancel"
-                        onClick={() => handleShowDelete(address)}
+                        onClick={() => handleShowDelete(item._id)}
                       />
-                      {/* <ButtonOrder
-                        title="Review"
-                        styleCustom="bg-button text-white xsm:w-[50%]"
-                      /> */}
                     </div>
                   </div>
                   <div className="flex mt-[8px]">
                     <h1
                       className={`text-[1.6em] ${
-                        (item?.status === "delivery" && "text-[#3CD139]") ||
-                        (item?.status === "pending" && "text-[#E3B231]")
+                        item?.status === "pending" && "text-[#E3B231]"
                       } mr-[16px] capitalize`}
                     >
                       {item?.status}
@@ -149,6 +133,7 @@ const ListsOrder = () => {
         isOpen={modalDeleteShow}
         onClose={handleCloseDelete}
         data={dataModalDelete}
+        fetchListOrder={fetchListOrder}
       />
     </>
   );
@@ -158,7 +143,7 @@ const ButtonOrder = (props: any) => {
   const { styleCustom, title, onClick } = props;
   return (
     <button
-      className={`px-[30px] py-[12px] w-full text-[1.6em] border-[1px] border-solid rounded-[16px] ${styleCustom}`}
+      className={`px-[16px] py-[4px] w-full text-[1.6em] border-[1px] border-solid rounded-[12px] ${styleCustom}`}
       onClick={onClick}
     >
       {title}
@@ -167,8 +152,41 @@ const ButtonOrder = (props: any) => {
 };
 
 const ModalDelete = (props: any) => {
-  const { isOpen, onClose, data } = props;
+  const { isOpen, onClose, data, fetchListOrder } = props;
   const color = "#ff6f61";
+
+  const handleDelete = (id: any) => {
+    toast.promise(
+      fetch(`/api/product/order?orderId=${id}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result);
+          const { message, status } = result;
+          if (status === 200) {
+            fetchListOrder();
+            onClose();
+            return message;
+          } else {
+            throw new Error(message);
+          }
+        }),
+      {
+        loading: <div className="text-text text-[1.6em]">Deleting...</div>,
+        success: (data) => (
+          <div>
+            <span>{data}</span> -{" "}
+            <Link href="/profile/listHistoryOrder" className="underline">
+              History Order
+            </Link>
+          </div>
+        ),
+        error: (data) => <div>{data.message}</div>,
+      },
+      { duration: 4000 }
+    );
+  };
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -210,8 +228,8 @@ const ModalDelete = (props: any) => {
           </div>
         </ModalHeader>
         <ModalBody className="flex flex-col items-center">
-          <h1 className="text-[2.2em] text-secondary">Delete Address</h1>
-          <p className="text-text text-[1.6em] text-center">{data.address}</p>
+          <h1 className="text-[2.2em] text-secondary">Delete Order</h1>
+          {/* <p className="text-text text-[1.6em] text-center">{data.address}</p> */}
         </ModalBody>
         <ModalFooter className="flex gap-x-[10px] gap-y-[10px] xsm:flex-col sm:flex-col l:flex-row">
           <ButtonModal
@@ -220,7 +238,7 @@ const ModalDelete = (props: any) => {
             styleCustom="border-button bg-white xsm:w-full sm:w-full"
           />
           <ButtonModal
-            onClick={onClose}
+            onClick={() => handleDelete(data)}
             title="Delete"
             styleCustom="bg-secondary text-white xsm:w-full sm:w-full"
           />

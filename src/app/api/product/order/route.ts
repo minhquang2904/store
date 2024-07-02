@@ -2,6 +2,7 @@ import connectDB from "@/app/config/connectDB";
 import Cart from "@/app/models/cart";
 import Order from "@/app/models/order";
 import Product from "@/app/models/product";
+import HistoryOrder from "@/app/models/history_order";
 import { NextRequest, NextResponse } from "next/server";
 import { startSession } from "mongoose";
 
@@ -118,5 +119,76 @@ export async function GET(req: NextRequest) {
     });
   } catch (error: any) {
     return NextResponse.json({ message: error.message, status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  await connectDB();
+  const session = await startSession();
+  let errorCustom = {
+    error: "",
+  };
+  try {
+    const url = new URL(req.nextUrl);
+    const orderId = url.searchParams.get("orderId");
+    const order = await Order.findOne({ _id: orderId });
+
+    if (!order) {
+      return NextResponse.json({ message: "Order not found", status: 404 });
+    }
+
+    session.startTransaction();
+
+    for (let i = 0; i < order.items.length; i++) {
+      const { size, color, quantity, productId } = order.items[i];
+      const product = await Product.findOne({ _id: productId }).session(
+        session
+      );
+
+      const sizeIndex = product.sizes.findIndex(
+        (s: any) => s.size === size && s.color === color
+      );
+
+      if (sizeIndex > -1) {
+        product.sizes[sizeIndex].amount += quantity;
+        product.soldCount -= quantity;
+        product.quantity += quantity;
+        await product.save({ session });
+      } else {
+        errorCustom.error = "Product not found";
+        throw new Error("Product not found");
+      }
+    }
+
+    const historyOrder = new HistoryOrder({
+      userId: order.userId,
+      items: order.items,
+      email: order.email,
+      totalPrice: order.totalPrice,
+      payment: order.payment,
+      address: order.address,
+      phone: order.phone,
+      lastName: order.lastName,
+      firstName: order.firstName,
+      status: "cancel",
+      createdAt: order.orderDate,
+      updatedAt: new Date(),
+    });
+
+    await historyOrder.save({ session });
+
+    await Order.deleteOne({ _id: orderId }).session(session);
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return NextResponse.json({
+      message: "Delete order successfully",
+      status: 200,
+    });
+  } catch (error: any) {
+    await session.abortTransaction();
+    session.endSession();
+    return NextResponse.json({ message: errorCustom, status: 500 });
   }
 }

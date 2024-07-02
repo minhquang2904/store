@@ -403,6 +403,11 @@ export default function ProductDetail({ searchParams }: any) {
                         <div className="flex mt-[8px] flex-wrap gap-y-[8px]">
                           {selectedColor ? (
                             <>
+                              {product?.quantity === 0 && (
+                                <div className="text-text text-[1.6em] font-normal">
+                                  Out of stock
+                                </div>
+                              )}
                               {filterSize
                                 ?.sort(
                                   (a: any, b: any) =>
