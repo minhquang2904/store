@@ -409,6 +409,7 @@ export default function ProductDetail({ searchParams }: any) {
                                     order.indexOf(a.size) -
                                     order.indexOf(b.size)
                                 )
+                                ?.filter((item: any) => item.amount > 0)
                                 ?.map((item: any, index: any) => {
                                   return (
                                     <div

@@ -13,6 +13,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
+  Link,
 } from "@chakra-ui/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import LoadingModal from "@/app/components/loadingModal/loadingModal";
@@ -23,6 +24,7 @@ import SubLabel from "@/app/components/subLabel/subLabel";
 import Image from "next/image";
 import Loading from "@/app/components/loading/loading";
 import Select from "react-select";
+import toast from "react-hot-toast";
 
 const order = ["s", "m", "l", "xl", "xxl"];
 
@@ -258,25 +260,41 @@ const AddProduct = () => {
     }),
   };
 
-  const createInitialValues = async (colors: string[], sizes: string[]) => {
-    const initialValues: { [key: string]: number } = {};
+  const colorSizeInitialValues: any = {};
+  const [formValues, setFormValues] = useState(colorSizeInitialValues);
+  function createInitialValues(
+    colors: string[],
+    sizes: string[],
+    currentFormValues: any
+  ) {
+    const initialValues = { ...currentFormValues };
 
-    if (!dataColor || !dataSize) {
+    if (!colors || !sizes) {
       return initialValues;
     }
 
-    await Promise.all(
-      colors.map(async (color: any) => {
-        sizes.map((size: any) => {
-          initialValues[`${color.value}_${size.sizes}_quantity`] = 0;
-        });
-      })
-    );
-    return initialValues;
-  };
+    colors.forEach((color: any) => {
+      sizes.forEach((size: any) => {
+        const key = `${color.value}_${size.sizes}_quantity`;
+        if (!(key in initialValues)) {
+          initialValues[key] = 0;
+        }
+      });
+    });
 
-  const colorSizeInitialValues = createInitialValues(selectedColors, dataSize);
-  const [formValues, setFormValues] = useState(colorSizeInitialValues) as any;
+    return initialValues;
+  }
+
+  useEffect(() => {
+    setFormValues((prevFormValues: any) => {
+      const initialValues = createInitialValues(
+        selectedColors,
+        dataSize,
+        prevFormValues
+      );
+      return { ...prevFormValues, ...initialValues };
+    });
+  }, [selectedColors, dataSize]);
 
   const initialValues = {
     files: [],
@@ -345,7 +363,6 @@ const AddProduct = () => {
     description: Yup.string()
       .required("Description is required")
       .max(1000, "The description can only be a maximum of 1000 characters"),
-    // .matches(/^[a-zA-Z0-9 -.]+$/, "Contains special characters or Numbers"),
     subName: Yup.string()
       .max(100, "The sub-product name can only be a maximum of 100 characters")
       .matches(/^[a-zA-Z -.]+$/, "Contains special characters or Numbers"),
@@ -405,7 +422,9 @@ const AddProduct = () => {
       )
     );
 
-    const filterAmount = filterColor.filter((amount: any) => amount.amount > 0);
+    const filterAmount = filterColor.filter(
+      (amount: any) => amount.amount >= 0
+    );
 
     const totalQuantity = filterAmount.reduce((acc: any, cur: any) => {
       return acc + cur.amount;
@@ -427,42 +446,42 @@ const AddProduct = () => {
       formData.append("files", data.files);
     });
 
-    try {
-      setOverlay(true);
-      setDataLoading(`ADD -  ${values.name.slice(0, 10)}...`);
-      setLoading(true);
-      fetch(`/api/admin/product`, {
-        method: "POST",
-        body: formData,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.status === 200) {
-            setDataLoading("Successfully");
-            setImages([]);
-            setFormValues(colorSizeInitialValues);
-            setSelectedColors([]);
-            resetForm();
-          }
-          if (data.status === 400) {
-            setDataLoading("Failed");
-          }
-          if (data.status === 500) {
-            alert(data.message);
-          }
-          setResultModal(true);
-          setTimeout(() => {
-            setLoading(false);
-          }, 800);
-          setTimeout(() => {
-            setResultModal(false);
-          }, 1000);
-          setOverlay(false);
-          setSubmitting(false);
-        });
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+    setSubmitting(true);
+    toast
+      .promise(
+        fetch(`/api/admin/product`, {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setSubmitting(false);
+            if (data.status === 200) {
+              setDataLoading("Successfully");
+              setImages([]);
+              setFormValues(colorSizeInitialValues);
+              setSelectedColors([]);
+              resetForm();
+              return data.message;
+            }
+            if (data.status === 400 || data.status === 500) {
+              throw new Error(data.message);
+            }
+          }),
+        {
+          loading: <div className="text-text text-[1.6em]">Add...</div>,
+          success: (data) => (
+            <div>
+              <span className="text-text">{data}</span> -{" "}
+              <Link href="/admin/product/lists" className="underline">
+                Lists Product
+              </Link>
+            </div>
+          ),
+          error: (data) => <div className="text-text">{data.message}</div>,
+        }
+      )
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -1003,11 +1022,7 @@ const ModalAdd = (props: any) => {
   const {
     isOpen,
     onClose,
-    setModalAdd,
     data,
-    setLoading,
-    setDataLoading,
-    setResultModal,
     setCheckDataCategories,
     checkDataCategories,
     setCheckDataType,
@@ -1062,11 +1077,9 @@ const ModalAdd = (props: any) => {
       obj.id = jsonParse._id;
       obj.categories = jsonParse.categories;
     }
-    const cate = values[type];
-    setDataLoading(`Add ${type} : ${cate}`);
-    setLoading(true);
-    setSubmitting(true);
+
     try {
+      setSubmitting(true);
       fetch(`/api/admin/${type}`, {
         method: "POST",
         headers: {
@@ -1076,26 +1089,14 @@ const ModalAdd = (props: any) => {
       })
         .then((res) => res.json())
         .then((data) => {
+          setSubmitting(false);
           if (data.status == 200) {
-            setDataLoading("Successfully");
-            setError(false);
-            setModalAdd(false);
+            toast.success("Successfully!", { duration: 3000 });
+            onClose();
           }
           if (data.status == 400) {
-            setDataLoading("Failed");
-            setErrorData(data.message);
-            setError(true);
+            toast.error("Exist!", { duration: 3000 });
           }
-          setResultModal(true);
-          setTimeout(() => {
-            setLoading(false);
-          }, 800);
-          setTimeout(() => {
-            setResultModal(false);
-          }, 1000);
-          setTimeout(() => {
-            setSubmitting(false);
-          }, 1200);
         });
     } catch (error: any) {
       console.log("Add Failed", error.message);
@@ -1130,23 +1131,25 @@ const ModalAdd = (props: any) => {
 
   const handleDelete = (id: any) => {
     setLoadingLists(true);
-    try {
+    toast.promise(
       fetch(`/api/admin/${type}?id=${id}`, { method: "DELETE" })
         .then((res) => res.json())
         .then((data) => {
-          if (data.status == 200) {
-            setError(false);
-            getLists();
-          }
-          if (data.status == 400) {
-            setErrorData(data.message);
-            setError(true);
-          }
           setLoadingLists(false);
-        });
-    } catch (error: any) {
-      console.log("Delete Failed", error.message);
-    }
+          if (data.status == 200) {
+            getLists();
+            return data.message;
+          }
+          if (data.status == 400 || data.status == 500) {
+            throw new Error(data.message);
+          }
+        }),
+      {
+        loading: <div className="text-text text-[1.6em]">Deleting...</div>,
+        success: (data) => <div className="text-text">{data}</div>,
+        error: (data) => <div className="text-text">{data.message}</div>,
+      }
+    );
   };
 
   const handleDeleteSubCategories = (item: any, id: any) => {
@@ -1168,10 +1171,12 @@ const ModalAdd = (props: any) => {
         .then((res) => res.json())
         .then((data) => {
           if (data.status == 200) {
+            toast.success("Successfully!", { duration: 3000 });
             getLists();
             setError(false);
           }
           if (data.status == 400) {
+            toast.error("Failed!", { duration: 3000 });
             setErrorData(data.message);
             setError(true);
           }

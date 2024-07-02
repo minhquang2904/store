@@ -18,6 +18,7 @@ import LabelInput from "@/app/components/labelInput/labelInput";
 import style from "./lists.module.scss";
 import Pagination from "@/app/components/pagination/pagination";
 import LoadingTable from "@/app/components/loadingTable/loadingTable";
+import toast from "react-hot-toast";
 
 const ListsProduct = () => {
   const [products, setProducts] = useState([]) as any;
@@ -575,10 +576,8 @@ const ModalDelete = (props: any) => {
   const [btnDisabled, setBtnDisabled] = useState(false) as any;
 
   const handleDeleteProduct = () => {
-    setLoadingModal(true);
-    setDataLoading(`DELETE : ${data.name}`);
     setBtnDisabled(true);
-    try {
+    toast.promise(
       fetch(`/api/admin/product?id=${data.id}`, {
         method: "DELETE",
       })
@@ -588,24 +587,20 @@ const ModalDelete = (props: any) => {
             setProducts((prev: any) =>
               prev.filter((item: any) => item._id !== data.id)
             );
-            setDataLoading("Successfully");
-            setResultModal(true);
-            setTimeout(() => {
-              setLoadingModal(false);
-            }, 800);
-            setTimeout(() => {
-              setResultModal(false);
-            }, 1000);
             onClose();
             setBtnDisabled(false);
             fetchData();
+            return data.message;
           } else {
-            console.error(data.message);
+            throw new Error(data.message);
           }
-        });
-    } catch (error) {
-      console.error("Error in handleDeleteProduct: ", error);
-    }
+        }),
+      {
+        loading: <div className="text-text text-[1.6em]">Deleting...</div>,
+        success: (data) => <div className="text-text">{data}</div>,
+        error: (data) => <div className="text-text">{data.message}</div>,
+      }
+    );
   };
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

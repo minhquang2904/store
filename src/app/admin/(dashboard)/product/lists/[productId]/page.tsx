@@ -12,6 +12,8 @@ import BtnAccount from "@/app/components/btnAccount/btnAccount";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
 import LoadingModal from "@/app/components/loadingModal/loadingModal";
+import toast from "react-hot-toast";
+import Link from "next/link";
 
 const order = ["s", "m", "l", "xl", "xxl"];
 
@@ -45,22 +47,26 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
   const formData = new FormData();
   const router = useRouter();
 
-  const createInitialValues = async (colors: string[], sizes: string[]) => {
+  const [formValues, setFormValues] = useState(() =>
+    createInitialValues(selectedColors, dataSize)
+  );
+
+  function createInitialValues(colors: string[], sizes: string[]) {
     const initialValues: { [key: string]: number } = {};
 
-    if (!dataColor || !dataSize) {
+    if (!colors || !sizes) {
       return initialValues;
     }
 
-    await Promise.all(
-      colors.map(async (color: any) => {
-        sizes.map((size: any) => {
-          initialValues[`${color.value}_${size.sizes}_quantity`] = 0;
-        });
-      })
-    );
+    colors.forEach((color: any) => {
+      sizes.forEach((size: any) => {
+        const key = `${color.value}_${size.sizes}_quantity`;
+        initialValues[key] = formValues[key] || 0;
+      });
+    });
+
     return initialValues;
-  };
+  }
 
   const mergeApiDataWithInitialValues = (
     apiData: any[],
@@ -83,8 +89,12 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
     return result;
   };
 
-  const colorSizeInitialValues = createInitialValues(selectedColors, dataSize);
-  const [formValues, setFormValues] = useState(colorSizeInitialValues) as any;
+  useEffect(() => {
+    setFormValues((prevFormValues) => {
+      const initialValues = createInitialValues(selectedColors, dataSize);
+      return { ...prevFormValues, ...initialValues };
+    });
+  }, [selectedColors, dataSize]);
 
   const getProductsId = async () => {
     const res = await fetch(`/api/admin/product/?id=${params.productId}`, {
@@ -447,7 +457,10 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
         (selectedColor: any) => selectedColor.value === color.color
       )
     );
-    const filterAmount = filterColor.filter((amount: any) => amount.amount > 0);
+    const filterAmount = filterColor.filter(
+      (amount: any) => amount.amount >= 0
+    );
+
     const totalQuantity = filterAmount.reduce((acc: any, cur: any) => {
       return acc + cur.amount;
     }, 0);
@@ -469,39 +482,36 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
       formData.append("files", data.files || data.public_id);
     });
 
-    try {
-      setOverlay(true);
-      setLoadingStatus(true);
-      setDataLoading(`Update - ${values.name.slice(0, 10)}...`);
+    setSubmitting(true);
+    toast.promise(
       fetch(`/api/admin/product`, {
         method: "PUT",
         body: formData,
       })
         .then((res) => res.json())
         .then((data) => {
+          setSubmitting(false);
           if (data.status == 200) {
             getProductsId();
-            setDataLoading("Successfully");
+            return data.message;
           }
-          if (data.status == 400) {
-            setDataLoading("Failed");
+          if (data.status == 400 || data.status == 500) {
+            throw new Error(data.message);
           }
-          if (data.status == 500) {
-            alert(data.message);
-          }
-          setOverlay(false);
-          setResultModal(true);
-          setTimeout(() => {
-            setLoadingStatus(false);
-          }, 800);
-          setTimeout(() => {
-            setResultModal(false);
-          }, 1000);
-          setSubmitting(false);
-        });
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+        }),
+      {
+        loading: <div className="text-text text-[1.6em]">Update...</div>,
+        success: (data) => (
+          <div>
+            <span className="text-text">{data}</span> -{" "}
+            <Link href="/admin/product/lists" className="underline">
+              Lists Product
+            </Link>
+          </div>
+        ),
+        error: (data) => <div className="text-text">{data.message}</div>,
+      }
+    );
   };
 
   return (
@@ -923,7 +933,7 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
                           {dataSize
                             ?.sort(
                               (a: any, b: any) =>
-                                order.indexOf(a.size) - order.indexOf(b.size)
+                                order.indexOf(a.sizes) - order.indexOf(b.sizes)
                             )
                             .map((size: any) => {
                               return (
