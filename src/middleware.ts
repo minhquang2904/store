@@ -2,14 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyToken } from "./app/lib/jwt";
 
-const protectedRoutes = [
-  "/cart",
-  "/payment",
-  "/address",
-  "/like",
-  "/profile",
-  "/reviewOrder",
-];
+const protectedRoutes = ["/cart", "/like", "/profile"];
 const loginRoutes = ["/login", "/signup"];
 
 export default async function middleware(req: any) {

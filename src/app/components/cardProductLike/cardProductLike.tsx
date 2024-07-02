@@ -14,6 +14,7 @@ const CardProductLike = (props: any) => {
     subName,
     _id,
   } = data.productId;
+
   return (
     <>
       {data && (
