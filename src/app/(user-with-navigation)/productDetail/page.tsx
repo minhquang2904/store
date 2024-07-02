@@ -451,66 +451,81 @@ export default function ProductDetail({ searchParams }: any) {
                         </div>
                       </div>
                       <div className="mt-[28px] inline-flex">
-                        <div className="mr-[16px]">
-                          <div className="inline-flex !relative items-center border-[1px] border-solid border-button py-[4px] px-[8px] rounded-[26px] min-w-[106px]">
-                            <Image
-                              src="/icons/subtract.svg"
-                              className="!relative !w-[24px] !h-[24px] cursor-pointer"
-                              alt="Icon"
-                              fill
-                              sizes="100vw"
-                              priority={true}
-                              onClick={() => {
-                                setErrorAmount(null);
-                                if (values.amount > 0) {
-                                  setFieldValue("amount", values.amount - 1);
+                        {product?.quantity !== 0 && (
+                          <div className="mr-[16px]">
+                            <div className="inline-flex !relative items-center border-[1px] border-solid border-button py-[4px] px-[8px] rounded-[26px] min-w-[106px]">
+                              <Image
+                                src="/icons/subtract.svg"
+                                className="!relative !w-[24px] !h-[24px] cursor-pointer"
+                                alt="Icon"
+                                fill
+                                sizes="100vw"
+                                priority={true}
+                                onClick={() => {
+                                  setErrorAmount(null);
+                                  if (values.amount > 0) {
+                                    setFieldValue("amount", values.amount - 1);
+                                  }
+                                }}
+                              />
+                              <Field
+                                type="number"
+                                name="amount"
+                                value={values.amount}
+                                onChange={(e: any) =>
+                                  handleUpdateAmount(
+                                    e.target.value,
+                                    setFieldValue
+                                  )
                                 }
-                              }}
-                            />
-                            <Field
-                              type="number"
-                              name="amount"
-                              value={values.amount}
-                              onChange={(e: any) =>
-                                handleUpdateAmount(
-                                  e.target.value,
-                                  setFieldValue
-                                )
-                              }
-                              className={`text-text outline-none p-[6px] text-[1.6em] max-w-[40px] font-medium text-center ${style.inputOuterAndInner} bg-[transparent]`}
-                            />
-                            <Image
-                              src="/icons/plus.svg"
-                              className="!relative !w-[24px] !h-[24px] cursor-pointer"
-                              alt="Icon"
-                              fill
-                              sizes="100vw"
-                              priority={true}
-                              onClick={() => {
-                                setErrorAmount(null);
-                                setFieldValue("amount", values.amount + 1);
-                              }}
-                            />
+                                className={`text-text outline-none p-[6px] text-[1.6em] max-w-[40px] font-medium text-center ${style.inputOuterAndInner} bg-[transparent]`}
+                              />
+                              <Image
+                                src="/icons/plus.svg"
+                                className="!relative !w-[24px] !h-[24px] cursor-pointer"
+                                alt="Icon"
+                                fill
+                                sizes="100vw"
+                                priority={true}
+                                onClick={() => {
+                                  setErrorAmount(null);
+                                  setFieldValue("amount", values.amount + 1);
+                                }}
+                              />
+                            </div>
                           </div>
-                        </div>
+                        )}
                         <div className="flex w-full gap-x-[16px]">
                           <div className="w-[80%] flex items-center bg-button rounded-[26px] hover:opacity-90 cursor-pointer duration-200">
                             {user ? (
                               <>
-                                <button
-                                  className="text-center w-full text-[1.4em] text-white h-full"
-                                  type="submit"
-                                  disabled={isSubmitting}
-                                >
-                                  Add to Card
-                                </button>
+                                {product?.quantity === 0 ? (
+                                  <button
+                                    className="text-center w-full text-[1.4em] text-text h-full !bg-[#ccc] rounded-[26px]"
+                                    disabled={true}
+                                  >
+                                    Sold Out
+                                  </button>
+                                ) : (
+                                  <button
+                                    className="text-center w-full text-[1.4em] text-white h-full"
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                  >
+                                    Add to Card
+                                  </button>
+                                )}
                               </>
                             ) : (
                               <Link
                                 href="/login"
                                 className="text-center w-full text-[1.4em] text-white h-full flex items-center justify-center"
                               >
-                                <h1>Add to Card</h1>
+                                <h1>
+                                  {product?.quantity === 0
+                                    ? "Sold Out"
+                                    : "Add to Card"}
+                                </h1>
                               </Link>
                             )}
                           </div>

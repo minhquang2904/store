@@ -378,7 +378,8 @@ const ModalConfirmOrder = (props: any) => {
 
   const handleConfirmOrder = () => {
     setBtnSubmit(true);
-    try {
+
+    toast.promise(
       fetch("/api/product/order", {
         method: "POST",
         headers: {
@@ -393,59 +394,60 @@ const ModalConfirmOrder = (props: any) => {
       })
         .then((res) => res.json())
         .then((result) => {
+          setBtnSubmit(false);
           const { message, status } = result;
           if (status === 200) {
-            toast.success(
-              <div>
-                <span>{message} - </span>
-                <Link href={"/profile/listsOrder"} className="underline">
-                  See Order
-                </Link>
-              </div>,
-              {
-                duration: 4000,
-              }
-            );
             triggerFetchCart();
             resetForm();
             onClose();
+            return message;
           }
           if (status === 500) {
-            toast.error(
-              <div>
-                Product{" "}
-                <Link
-                  href={{
-                    pathname: "/productDetail",
-                    query: { id: message.errorId },
-                  }}
-                  className="text-secondary underline capitalize"
-                >
-                  {message.errorName}
-                </Link>{" "}
-                does not have enough inventory for size{" "}
-                <span className="text-secondary uppercase">
-                  {message.errorSize}
-                </span>{" "}
-                and color{" "}
-                <span className="text-secondary uppercase">
-                  {message.errorColor}
-                </span>{" "}
-                - Quantity{" "}
-                <span className="text-secondary uppercase">
-                  {message.errorQuantity}
-                </span>
-              </div>,
-              {
-                duration: 3000,
-              }
-            );
+            throw new Error(JSON.stringify(message));
           }
-          setBtnSubmit(false);
-        });
-    } catch (error) {
-      console.log("Error", error);
-    }
+        }),
+      {
+        loading: <div className="text-text text-[1.6em]">Add...</div>,
+        success: (message) => (
+          <div>
+            <span>{message} - </span>
+            <Link href={"/profile/listsOrder"} className="underline">
+              See Order
+            </Link>
+          </div>
+        ),
+        error: (data) => {
+          const message = JSON.parse(data.message);
+          return (
+            <div>
+              Product{" "}
+              <Link
+                href={{
+                  pathname: "/productDetail",
+                  query: { id: message.errorId },
+                }}
+                className="text-secondary underline capitalize"
+              >
+                {message.errorName}
+              </Link>{" "}
+              does not have enough inventory for size{" "}
+              <span className="text-secondary uppercase">
+                {message.errorSize}
+              </span>{" "}
+              and color{" "}
+              <span className="text-secondary uppercase">
+                {message.errorColor}
+              </span>{" "}
+              - Quantity{" "}
+              <span className="text-secondary uppercase">
+                {message.errorQuantity}
+              </span>
+            </div>
+          );
+        },
+      },
+      { duration: 4000 }
+    );
   };
 
   return (
