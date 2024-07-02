@@ -13,7 +13,7 @@ const OrderAdmin = () => {
       <TitlePageAmin title="Order" />
       <div>
         <Link
-          href="/admin/user/lists"
+          href="/admin/order/newOrders"
           className={`${style.hoverCard} ${
             loadingData && "animate-pulse"
           } inline-flex pl-[16px] pr-[12px] py-[12px] max-w-[200px] w-full bg-[#f1f1f5] shadow-sm rounded-[16px] cursor-pointer`}

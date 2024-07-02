@@ -407,7 +407,7 @@ const ModalConfirmOrder = (props: any) => {
           }
         }),
       {
-        loading: <div className="text-text text-[1.6em]">Add...</div>,
+        loading: <div className="text-text text-[1.6em]">Order...</div>,
         success: (message) => (
           <div>
             <span>{message} - </span>
