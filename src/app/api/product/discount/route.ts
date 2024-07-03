@@ -21,6 +21,7 @@ export async function GET(req: NextRequest) {
         discount: 1,
         files: 1,
         price: 1,
+        quantity: 1,
       }
     ).limit(limit);
 

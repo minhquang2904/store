@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import {
   Modal,
   ModalOverlay,
@@ -14,13 +13,14 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import NoItemCart from "@/app/components/noItemCart/noItemCart";
 import LoadingComponent from "@/app/components/loadingComponent/loadingComponent";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const ListsOrder = () => {
   const [listOrder, setListOrder] = useState(null) as any;
   const { user } = useAuthContext();
 
   const [modalDeleteShow, setModalDeleteShow] = useState(false);
-  const [dataModalDelete, setDataModalDelete] = useState([]);
+  const [dataModalDelete, setDataModalDelete] = useState(null);
   const [noItemCart, setNoItemCart] = useState(false) as any;
   const [loading, setLoading] = useState(false) as any;
 
@@ -31,7 +31,7 @@ const ListsOrder = () => {
     try {
       const res = await fetch(`/api/product/order?id=${user?.id}`);
       const result = await res.json();
-      const { message, status } = result;
+      const { status } = result;
       if (status === 200) {
         setListOrder(result.data);
         if (result.data.length === 0) {
@@ -59,7 +59,7 @@ const ListsOrder = () => {
     <>
       {listOrder && (
         <>
-          <div className="flex flex-col gap-y-[40px]">
+          <div className="flex flex-col gap-y-[45px]">
             {listOrder?.map((item: any) => {
               return (
                 <div key={item._id}>
@@ -100,7 +100,7 @@ const ListsOrder = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="w-[100%] xsm:flex justify-end sm:hidden mt-[32px]">
+                  <div className="w-[100%] xsm:flex justify-end sm:hidden mt-[20px]">
                     <div className="flex sm:flex-col xsm:flex-row gap-y-[10px] gap-x-[10px] xsm:w-full">
                       <ButtonOrder
                         title="View Order"
@@ -158,6 +158,7 @@ const ButtonOrder = (props: any) => {
 const ModalDelete = (props: any) => {
   const { isOpen, onClose, data, fetchListOrder } = props;
   const color = "#ff6f61";
+  const { push } = useRouter();
 
   const handleDelete = (id: any) => {
     toast.promise(
@@ -166,7 +167,6 @@ const ModalDelete = (props: any) => {
       })
         .then((res) => res.json())
         .then((result) => {
-          console.log(result);
           const { message, status } = result;
           if (status === 200) {
             fetchListOrder();
@@ -181,9 +181,12 @@ const ModalDelete = (props: any) => {
         success: (data) => (
           <div>
             <span>{data}</span> -{" "}
-            <Link href="/profile/listHistoryOrder" className="underline">
+            <span
+              className="underline cursor-pointer"
+              onClick={() => push("/profile/listHistoryOrder")}
+            >
               History Order
-            </Link>
+            </span>
           </div>
         ),
         error: (data) => {
@@ -191,9 +194,12 @@ const ModalDelete = (props: any) => {
           return (
             <div>
               <span>{message.error}</span> -{" "}
-              <Link href="/profile/listHistoryOrder" className="underline">
+              <span
+                onClick={() => push("/profile/listHistoryOrder")}
+                className="underline cursor-pointer"
+              >
                 History Order
-              </Link>
+              </span>
             </div>
           );
         },

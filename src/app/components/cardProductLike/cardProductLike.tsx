@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import style from "./cardProductLike.module.scss";
+import SoldOut from "../soldOut/soldOut";
 
 const CardProductLike = (props: any) => {
   const { data } = props;
@@ -11,7 +12,7 @@ const CardProductLike = (props: any) => {
     discountedPrice,
     price,
     name,
-    subName,
+    quantity,
     _id,
   } = data.productId;
 
@@ -42,6 +43,7 @@ const CardProductLike = (props: any) => {
                   </p>
                 </div>
               )}
+              {quantity === 0 && <SoldOut />}
             </div>
             <div className="mt-[18px] mx-[10px] mb-[0]">
               <div>
@@ -49,11 +51,6 @@ const CardProductLike = (props: any) => {
                   {name}
                 </h1>
               </div>
-              {/* <div className="my-[6px] mx-[0]">
-                <h1 className="text-text text-[1.6em] font-bold capitalize min-h-[24px] line-clamp-1">
-                  {subName}
-                </h1>
-              </div> */}
               <div className="flex justify-between">
                 <p className="text-[#00000080] text-[1.6em] font-medium capitalize">
                   {categories}

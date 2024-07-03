@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
     const userId = url.searchParams.get("id");
     const like = await Like.findOne({ userId }).populate(
       "likes.productId",
-      "files name discountedPrice discount price categories subName"
+      "files name discountedPrice discount price categories subName quantity"
     );
 
     if (!like) {

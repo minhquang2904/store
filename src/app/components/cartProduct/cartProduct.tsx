@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import style from "./cardProduct.module.scss";
+import SoldOut from "../soldOut/soldOut";
 
 const CardProduct = (props: any) => {
   const { data } = props;
@@ -31,6 +32,7 @@ const CardProduct = (props: any) => {
                   </p>
                 </div>
               )}
+              {data?.quantity === 0 && <SoldOut />}
             </div>
             <div className="mt-[18px] mx-[10px] mb-[0]">
               <div>

@@ -16,8 +16,9 @@ import style from "./cart.module.scss";
 import { useState, useEffect } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import Loading from "../loading";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import LoadingComponent from "@/app/components/loadingComponent/loadingComponent";
+import { useRouter } from "next/navigation";
 
 const TitleTable = (props: any) => {
   const { title } = props;
@@ -156,7 +157,7 @@ const Cart = () => {
                                 {item?.quantity}
                               </td>
                               <td className="w-full p-[10px] text-text text-[1.6em] text-start">
-                                {item.totalPriceItem}
+                                {item?.totalPriceItem}
                               </td>
                               <td className="w-full p-[10px]">
                                 <div
@@ -357,6 +358,7 @@ const Cart = () => {
           isOpen={modalConfirmOrder}
           onClose={handleCloseModalConfirmOrder}
           data={dataModalConfirm}
+          handleDeleteCartItem={handleDeleteCartItem}
         />
       )}
       {loading && <LoadingComponent styleCustom="!min-h-[300px]" />}
@@ -366,15 +368,21 @@ const Cart = () => {
 };
 
 const ModalConfirmOrder = (props: any) => {
-  const { isOpen, onClose, data } = props;
+  const { isOpen, onClose, data, handleDeleteCartItem } = props;
   const [seeMore, setSeeMore] = useState(false);
   const { value, resetForm } = data;
   const { address, payment } = value;
   const jsonParse = JSON.parse(address);
   const [btnSubmit, setBtnSubmit] = useState(false) as any;
-
+  const { push } = useRouter();
   const { user } = useAuthContext();
   const { cart, triggerFetchCart } = useCartContext();
+
+  useEffect(() => {
+    if (!cart) {
+      onClose();
+    }
+  }, [cart]);
 
   const handleConfirmOrder = () => {
     setBtnSubmit(true);
@@ -411,9 +419,12 @@ const ModalConfirmOrder = (props: any) => {
         success: (message) => (
           <div>
             <span>{message} - </span>
-            <Link href={"/profile/listsOrder"} className="underline">
+            <span
+              onClick={() => push("/profile/listsOrder")}
+              className="underline cursor-pointer"
+            >
               See Order
-            </Link>
+            </span>
           </div>
         ),
         error: (data) => {
@@ -421,15 +432,12 @@ const ModalConfirmOrder = (props: any) => {
           return (
             <div>
               Product{" "}
-              <Link
-                href={{
-                  pathname: "/productDetail",
-                  query: { id: message.errorId },
-                }}
-                className="text-secondary underline capitalize"
+              <span
+                onClick={() => push(`/productDetail/${message.errorId}`)}
+                className="text-secondary underline capitalize cursor-pointer"
               >
                 {message.errorName}
-              </Link>{" "}
+              </span>{" "}
               does not have enough inventory for size{" "}
               <span className="text-secondary uppercase">
                 {message.errorSize}
@@ -463,7 +471,7 @@ const ModalConfirmOrder = (props: any) => {
         <div className="xsm:px-[16px] px-[12px] py-[10px]">
           <h1 className="text-text text-[2em] font-medium">Review Order</h1>
           <div
-            className={`mt-[20px] overflow-y-auto xsm:max-h-[400px] max-h-[600px] ${style.tableScroll}`}
+            className={`mt-[20px] overflow-y-auto xsm:max-h-[400px] max-h-[600px] pr-[12px] ${style.tableScroll}`}
           >
             <div>
               <div>
@@ -472,7 +480,7 @@ const ModalConfirmOrder = (props: any) => {
                 />
                 <ul
                   className={`${
-                    seeMore ? "max-h-[100%]" : "max-h-[312px]"
+                    seeMore ? "max-h-[100%]" : "max-h-[357px]"
                   } overflow-hidden`}
                 >
                   {cart && (
@@ -515,6 +523,32 @@ const ModalConfirmOrder = (props: any) => {
                                       {item.size} - {item.color}
                                     </p>
                                   </div>
+                                  <div
+                                    className="flex justify-center"
+                                    onClick={() =>
+                                      handleDeleteCartItem(item._id)
+                                    }
+                                  >
+                                    <svg
+                                      fill="none"
+                                      height="24"
+                                      viewBox="0 0 24 24"
+                                      width="24"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="cursor-pointer"
+                                    >
+                                      <g
+                                        stroke="#ff6f61"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                      >
+                                        <path d="m3 6h18m-16 0v14c0 1.1046.89543 2 2 2h10c1.1046 0 2-.8954 2-2v-14m-11 0v-2c0-1.10457.89543-2 2-2h4c1.1046 0 2 .89543 2 2v2" />
+                                        <path d="m14 11v6" />
+                                        <path d="m10 11v6" />
+                                      </g>
+                                    </svg>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -523,7 +557,7 @@ const ModalConfirmOrder = (props: any) => {
                     </>
                   )}
                 </ul>
-                {cart.items.length > 3 && (
+                {cart?.items?.length > 3 && (
                   <div className="text-center">
                     <div
                       className="group select-none hover:bg-button text-center mt-[16px] cursor-pointer text-text text-[1.3em] font-medium inline-flex items-center seeMoreBtn border-[1px] border-solid border-button px-[16px] py-[4px] rounded-[16px]"
@@ -572,7 +606,7 @@ const ModalConfirmOrder = (props: any) => {
               Grand Total
             </h1>
             <h1 className="text-secondary capitalize font-bold text-[1.6em]">
-              {cart.totalPrice}
+              {cart?.totalPrice}
             </h1>
           </div>
           <div className="flex justify-between gap-x-[10px] mb-[10px]">

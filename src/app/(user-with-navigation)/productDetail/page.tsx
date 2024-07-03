@@ -501,19 +501,19 @@ export default function ProductDetail({ searchParams }: any) {
                           </div>
                         )}
                         <div className="flex w-full gap-x-[16px]">
-                          <div className="w-[80%] flex items-center bg-button rounded-[26px] hover:opacity-90 cursor-pointer duration-200">
+                          <div className="w-[80%] flex items-center rounded-[26px] hover:opacity-90 cursor-pointer duration-200 h-[46px] overflow-hidden">
                             {user ? (
                               <>
                                 {product?.quantity === 0 ? (
                                   <button
-                                    className="text-center w-full text-[1.4em] text-text h-full !bg-[#ccc] rounded-[26px]"
+                                    className="text-center w-full text-[1.4em] text-text h-full !bg-[#ccc]"
                                     disabled={true}
                                   >
                                     Sold Out
                                   </button>
                                 ) : (
                                   <button
-                                    className="text-center w-full text-[1.4em] text-white h-full"
+                                    className="text-center w-full text-[1.4em] text-white h-full bg-button "
                                     type="submit"
                                     disabled={isSubmitting}
                                   >
@@ -535,16 +535,33 @@ export default function ProductDetail({ searchParams }: any) {
                             )}
                           </div>
                           <div className="w-[20%]">
-                            <div
-                              className="flex justify-center items-center w-[46px] h-[46px] border-[1px] border-solid border-button rounded-[50%] cursor-pointer"
-                              onClick={() => handleSubmitHeart(product._id)}
-                            >
-                              <IconHeartSvg
-                                className={`iconHeartSvg ${
-                                  like ? "fill-secondary" : "fill-none"
-                                } cursor-pointer`}
-                              />
-                            </div>
+                            {!user ? (
+                              <>
+                                <Link
+                                  href="/login"
+                                  className="flex justify-center items-center w-[46px] h-[46px] border-[1px] border-solid border-button rounded-[50%] cursor-pointer"
+                                >
+                                  <IconHeartSvg
+                                    className={`iconHeartSvg ${
+                                      like ? "fill-secondary" : "fill-none"
+                                    } cursor-pointer`}
+                                  />
+                                </Link>
+                              </>
+                            ) : (
+                              <>
+                                <div
+                                  className="flex justify-center items-center w-[46px] h-[46px] border-[1px] border-solid border-button rounded-[50%] cursor-pointer"
+                                  onClick={() => handleSubmitHeart(product._id)}
+                                >
+                                  <IconHeartSvg
+                                    className={`iconHeartSvg ${
+                                      like ? "fill-secondary" : "fill-none"
+                                    } cursor-pointer`}
+                                  />
+                                </div>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>

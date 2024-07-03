@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./slider.scss";
 import TitleComponent from "../titleComponent/titleComponent";
+import SoldOut from "../soldOut/soldOut";
 
 const SampleNextArrow = (props: any) => {
   const { className, onClick } = props;
@@ -224,6 +225,7 @@ const TemplateProductSlider = () => {
                               </p>
                             </div>
                           )}
+                          {item.quantity === 0 && <SoldOut />}
                         </div>
                         <div className="mt-[18px] mx-[10px] mb-[0]">
                           <div>

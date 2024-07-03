@@ -8,6 +8,92 @@ import { startSession } from "mongoose";
 
 export const revalidate = 0;
 
+export async function PUT(req: NextRequest) {
+  await connectDB();
+  const session = await startSession();
+  let errorCustom = {
+    error: "",
+    errorId: "",
+    errorName: "",
+    errorSize: "",
+    errorColor: "",
+    errorQuantity: 0,
+  };
+  try {
+    const { orderId } = await req.json();
+    const historyOrder = await HistoryOrder.findOne({ _id: orderId });
+
+    if (!historyOrder) {
+      errorCustom.error = "Order not found";
+      throw new Error("Order not found");
+    }
+
+    session.startTransaction();
+
+    for (let i = 0, j = historyOrder.items.length; i < j; i++) {
+      const { size, color, quantity, productId } = historyOrder.items[i];
+      const product = await Product.findOne({ _id: productId }).session(
+        session
+      );
+
+      if (!product) {
+        errorCustom.error = "Product not found";
+        throw new Error("Product not found");
+      }
+
+      const sizeIndex = product.sizes.findIndex(
+        (s: any) => s.size === size && s.color === color && s.amount >= quantity
+      );
+
+      if (sizeIndex > -1) {
+        product.sizes[sizeIndex].amount -= quantity;
+        product.soldCount += quantity;
+        product.quantity -= quantity;
+        await product.save({ session });
+      } else {
+        errorCustom = {
+          error: "Product does not have enough inventory for size and color",
+          errorId: productId,
+          errorName: "",
+          errorSize: "",
+          errorColor: "",
+          errorQuantity: 0,
+        };
+
+        throw new Error(
+          "Product does not have enough inventory for size and color"
+        );
+      }
+    }
+
+    const newOrder = new Order({
+      userId: historyOrder.userId,
+      items: historyOrder.items,
+      email: historyOrder.email,
+      payment: historyOrder.payment,
+      address: historyOrder.address,
+      phone: historyOrder.phone,
+      lastName: historyOrder.lastName,
+      firstName: historyOrder.firstName,
+      totalPrice: historyOrder.totalPrice,
+    });
+
+    await newOrder.save({ session });
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return NextResponse.json({
+      message: "Re-order successfully!",
+      status: 200,
+    });
+  } catch (error: any) {
+    await session.abortTransaction();
+    session.endSession();
+    return NextResponse.json({ message: errorCustom, status: 500 });
+  }
+}
+
 export async function POST(req: NextRequest) {
   await connectDB();
   const session = await startSession();
