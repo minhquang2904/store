@@ -14,6 +14,10 @@ import NoItemCart from "@/app/components/noItemCart/noItemCart";
 import LoadingComponent from "@/app/components/loadingComponent/loadingComponent";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import BtnAccount from "@/app/components/btnAccount/btnAccount";
+import TitleCheckOut from "@/app/components/titleCheckOut/titleCheckOut";
+import Image from "next/image";
+import style from "./listOrder.module.scss";
 
 const ListsOrder = () => {
   const [listOrder, setListOrder] = useState(null) as any;
@@ -22,9 +26,17 @@ const ListsOrder = () => {
   const [modalDeleteShow, setModalDeleteShow] = useState(false);
   const [dataModalDelete, setDataModalDelete] = useState(null);
   const [noItemCart, setNoItemCart] = useState(false) as any;
+  const [modalViewOrder, setModalViewOrder] = useState(false);
+  const [dataModalViewOrder, setDataModalViewOrder] = useState(null) as any;
   const [loading, setLoading] = useState(false) as any;
 
   const handleCloseDelete = () => setModalDeleteShow(false);
+
+  const handleCloseModalViewOrder = () => setModalViewOrder(false);
+  const handleShowModalViewOrder = (data: any) => {
+    setDataModalViewOrder(data);
+    setModalViewOrder(true);
+  };
 
   const fetchListOrder = async () => {
     setLoading(true);
@@ -91,6 +103,7 @@ const ListsOrder = () => {
                         <ButtonOrder
                           title="View Order"
                           styleCustom="border-button text-text bg-[transparent]"
+                          onClick={() => handleShowModalViewOrder({ item })}
                         />
                         <ButtonOrder
                           title="Cancel"
@@ -105,6 +118,7 @@ const ListsOrder = () => {
                       <ButtonOrder
                         title="View Order"
                         styleCustom="border-button text-text bg-[transparent] xsm:w-[50%]"
+                        onClick={() => handleShowModalViewOrder({ item })}
                       />
                       <ButtonOrder
                         styleCustom="bg-secondary text-white xsm:w-[50%] border-secondary border-[1px] border-solid"
@@ -139,7 +153,156 @@ const ListsOrder = () => {
         data={dataModalDelete}
         fetchListOrder={fetchListOrder}
       />
+      {modalViewOrder && (
+        <ModalConfirmOrder
+          isOpen={modalViewOrder}
+          onClose={handleCloseModalViewOrder}
+          data={dataModalViewOrder}
+        />
+      )}
     </>
+  );
+};
+
+const ModalConfirmOrder = (props: any) => {
+  const { isOpen, onClose, data } = props;
+  const [seeMore, setSeeMore] = useState(false);
+  const { item } = data;
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent
+        rounded={"20px"}
+        padding={"10px 2px 10px 2px"}
+        margin={"auto 15px auto 15px"}
+        background={"#F3F4F4"}
+        className="xsm:!max-w-[400px] xsm:!max-h-[600px] max-h-[800px]"
+      >
+        <div className="xsm:px-[16px] px-[12px] py-[10px]">
+          <h1 className="text-text text-[2em] font-medium">Review Order</h1>
+          <div
+            className={`mt-[20px] overflow-y-auto xsm:max-h-[400px] max-h-[600px] pr-[12px] ${style.tableScroll}`}
+          >
+            <div>
+              <div>
+                <TitleCheckOut
+                  title={`There are ${item?.items?.length} products in total`}
+                />
+                <ul
+                  className={`${
+                    seeMore ? "max-h-[100%]" : "max-h-[357px]"
+                  } overflow-hidden`}
+                >
+                  {item && (
+                    <>
+                      {item?.items
+                        ?.slice()
+                        ?.reverse()
+                        ?.map((item: any) => {
+                          return (
+                            <div
+                              key={`${item._id} - ${item.productId._id}`}
+                              className="py-[12px] !relative flex"
+                            >
+                              <Image
+                                src={
+                                  item.productId.files[0].url ||
+                                  "/images/no-image.png"
+                                }
+                                className="!relative max-w-[80px] max-h-[80px] object-cover"
+                                alt="Bag"
+                                fill
+                                sizes="(max-width: 80px) 100vw"
+                              />
+                              <div className="flex flex-col justify-center ml-[16px] basis-full shrink grow-0">
+                                <h2 className="text-text text-[1.4em] font-medium capitalize">
+                                  {item.productId.name}
+                                </h2>
+                                <h3 className="text-text text-[1.4em] my-[4px] font-bold flex gap-x-[4px]">
+                                  <p>
+                                    {item.quantity} x {item.price}
+                                  </p>
+                                  <p className="text-secondary">
+                                    ({item.totalPriceItem})
+                                  </p>
+                                </h3>
+                                <div className="flex justify-between items-center">
+                                  <div className="text-text text-[1.4em] font-normal flex gap-x-[6px] items-center">
+                                    <p className="h-full block">Size:</p>
+                                    <p className="uppercase font-semibold h-full block">
+                                      {item.size} - {item.color}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </>
+                  )}
+                </ul>
+                {item?.items?.length > 3 && (
+                  <div className="text-center">
+                    <div
+                      className="group select-none hover:bg-button text-center mt-[16px] cursor-pointer text-text text-[1.3em] font-medium inline-flex items-center seeMoreBtn border-[1px] border-solid border-button px-[16px] py-[4px] rounded-[16px]"
+                      onClick={() => setSeeMore(!seeMore)}
+                    >
+                      <h1 className="mr-[8px] uppercase group-hover:text-white">
+                        See more
+                      </h1>
+                      <svg
+                        fill="none"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className={`${seeMore && "rotate-180"}`}
+                      >
+                        <path
+                          d="m4 8 8 8 8-8"
+                          className="stroke-[#131118] group-hover:stroke-white"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="my-[30px]">
+                <TitleCheckOut title="Shipping Address" />
+                <div className="text-text text-[1.5em] font-normal mt-[4px]">
+                  {item?.address}
+                </div>
+              </div>
+              <div>
+                <TitleCheckOut title="Payment Method" />
+                <div className="text-text text-[1.5em] font-normal mt-[4px] capitalize">
+                  {item?.payment}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="xsm:pt-[30px] pt-[40px] mb-[16px] flex justify-between">
+            <h1 className="text-secondary capitalize font-bold text-[1.6em]">
+              Grand Total
+            </h1>
+            <h1 className="text-secondary capitalize font-bold text-[1.6em]">
+              {item?.totalPrice}
+            </h1>
+          </div>
+          <div className="flex justify-end gap-x-[10px] mb-[10px]">
+            <ButtonModal
+              onClick={onClose}
+              title="Close"
+              styleCustom="border-button bg-white !w-[100%]"
+            />
+          </div>
+        </div>
+      </ModalContent>
+    </Modal>
   );
 };
 

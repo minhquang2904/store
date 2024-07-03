@@ -31,7 +31,7 @@ export async function PUT(req: NextRequest) {
     session.startTransaction();
 
     for (let i = 0, j = historyOrder.items.length; i < j; i++) {
-      const { size, color, quantity, productId } = historyOrder.items[i];
+      const { size, color, quantity, productId, price } = historyOrder.items[i];
       const product = await Product.findOne({ _id: productId }).session(
         session
       );
@@ -39,6 +39,14 @@ export async function PUT(req: NextRequest) {
       if (!product) {
         errorCustom.error = "Product not found";
         throw new Error("Product not found");
+      }
+
+      const priceIndex = product.discountedPrice > price;
+
+      if (priceIndex) {
+        errorCustom.error = "Price of product has been changed";
+        errorCustom.errorId = productId;
+        throw new Error("Price of product has been changed");
       }
 
       const sizeIndex = product.sizes.findIndex(
@@ -192,7 +200,9 @@ export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.nextUrl);
     const userId = url.searchParams.get("id");
-    const order = await Order.find({ userId }).sort({ createdAt: -1 });
+    const order = await Order.find({ userId })
+      .sort({ createdAt: -1 })
+      .populate("items.productId", "name files");
 
     if (!order) {
       return NextResponse.json({ message: "Order not found", status: 404 });

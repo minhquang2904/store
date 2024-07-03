@@ -10,9 +10,11 @@ export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.nextUrl);
     const userId = url.searchParams.get("id");
-    const historyOrder = await HistoryOrder.find({ userId }).sort({
-      updatedAt: -1,
-    });
+    const historyOrder = await HistoryOrder.find({ userId })
+      .sort({
+        updatedAt: -1,
+      })
+      .populate("items.productId", "name files");
 
     return NextResponse.json({
       message: "Get history orders success!",
