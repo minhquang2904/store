@@ -17,7 +17,7 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import { useCartContext } from "@/app/context/CartContext";
 import NoItemCart from "@/app/components/noItemCart/noItemCart";
-
+import { useRouter } from "next/navigation";
 const order = ["s", "m", "l", "xl", "xxl"];
 
 const SubTitleProductDetail = (props: any) => {
@@ -31,6 +31,7 @@ export default function ProductDetail({ searchParams }: any) {
   const { triggerFetchCart } = useCartContext();
   const { user } = useAuthContext();
   const id = searchParams.id;
+  const { push } = useRouter();
 
   const [description, setDescription] = useState("");
   const [picture, setPicture] = useState(null) as any;
@@ -146,9 +147,12 @@ export default function ProductDetail({ searchParams }: any) {
             toast.success(
               <div>
                 <span>{message}</span> - {""}
-                <Link href={"/like"} className="underline">
+                <span
+                  onClick={() => push("/like")}
+                  className="underline cursor-pointer"
+                >
                   Wish Lists
-                </Link>
+                </span>
               </div>,
               { duration: 3000 }
             );
@@ -239,6 +243,10 @@ export default function ProductDetail({ searchParams }: any) {
     }
   }, [product]);
 
+  const reduceAmount = filterSize?.reduce(
+    (acc: any, item: any) => acc + item.amount,
+    0
+  );
   return (
     <>
       {loadingProducts && <LoadingComponent />}
@@ -403,8 +411,9 @@ export default function ProductDetail({ searchParams }: any) {
                         <div className="flex mt-[8px] flex-wrap gap-y-[8px]">
                           {selectedColor ? (
                             <>
-                              {product?.quantity === 0 && (
-                                <div className="text-text text-[1.6em] font-normal">
+                              {(product?.quantity === 0 ||
+                                reduceAmount === 0) && (
+                                <div className="text-text text-[1.6em] font-normal py-[8px]">
                                   Out of stock
                                 </div>
                               )}
@@ -448,7 +457,7 @@ export default function ProductDetail({ searchParams }: any) {
                                 })}
                             </>
                           ) : (
-                            <div className="text-text text-[1.6em] font-normal">
+                            <div className="text-text text-[1.6em] font-normal py-[8px]">
                               Please select a color to display the available
                               sizes.
                             </div>
