@@ -75,6 +75,10 @@ const ListsOrder = () => {
                         <h3 className="text-text text-[1.6em] font-normal capitalize">
                           {item?.payment}
                         </h3>
+                        <h3 className="text-text text-[1.6em] font-normal capitalize">
+                          Order date -{" "}
+                          {new Date(item?.createdAt).toLocaleString("en-GB")}
+                        </h3>
                       </div>
                     </div>
                     <div className="w-[20%] xsm:w-[20%] flex items-center justify-center px-[8px] xsm:px-[0]">
@@ -169,7 +173,7 @@ const ModalDelete = (props: any) => {
             onClose();
             return message;
           } else {
-            throw new Error(message);
+            throw new Error(JSON.stringify(message));
           }
         }),
       {
@@ -182,7 +186,17 @@ const ModalDelete = (props: any) => {
             </Link>
           </div>
         ),
-        error: (data) => <div>{data.message}</div>,
+        error: (data) => {
+          const message = JSON.parse(data.message);
+          return (
+            <div>
+              <span>{message.error}</span> -{" "}
+              <Link href="/profile/listHistoryOrder" className="underline">
+                History Order
+              </Link>
+            </div>
+          );
+        },
       },
       { duration: 4000 }
     );
@@ -261,70 +275,3 @@ const ButtonModal = (props: any) => {
 };
 
 export default ListsOrder;
-
-{
-  /* <div>
-            <div className="flex justify-between">
-              <div className="w-[50%] xsm:w-[80%] flex">
-                <div className="!relative">
-                  <Image
-                    src="/images/product2.png"
-                    className="!relative max-w-[80px] w-full max-h-[auto]"
-                    alt="Product 1"
-                    fill
-                    sizes="(max-width: 80px) 100vw"
-                  />
-                </div>
-                <div className="flex flex-col justify-center px-[8px] xsm:px-[0]">
-                  <h1 className="text-text text-[1.6em] font-semibold">
-                    Robert fox
-                  </h1>
-                  <h3 className="text-text text-[1.6em] font-normal line-clamp-1">
-                    392 Dola Mine Road, Morrisville, North Carolina 392 Dola Mine
-                    R, Morrisville, North Carolina
-                  </h3>
-                  <h3 className="text-text text-[1.6em] font-normal">
-                    Debit Card
-                  </h3>
-                </div>
-              </div>
-              <div className="w-[20%] xsm:w-[20%] flex items-center justify-center px-[8px] xsm:px-[0]">
-                <h1 className="text-text text-[1.6em] font-semibold">80.00</h1>
-              </div>
-              <div className="w-[30%] flex justify-end pl-[8px] xsm:hidden">
-                <div className="flex flex-col gap-y-[10px]">
-                  <ButtonOrder
-                    title="View Order"
-                    styleCustom="border-button text-text bg-[transparent]"
-                  />
-                  <ButtonOrder
-                    title="Cancel"
-                    styleCustom="bg-secondary text-white"
-                    onClick={() => handleShowDelete(address)}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="w-[100%] xsm:flex justify-end sm:hidden mt-[32px]">
-              <div className="flex sm:flex-col xsm:flex-row gap-y-[10px] gap-x-[10px] xsm:w-full">
-                <ButtonOrder
-                  title="View Order"
-                  styleCustom="border-button text-text bg-[transparent] xsm:w-[50%]"
-                />
-                <ButtonOrder
-                  styleCustom="bg-secondary text-white xsm:w-[50%]"
-                  title="Cancel"
-                  onClick={() => handleShowDelete(address)}
-                />
-              </div>
-            </div>
-            <div className="flex mt-[8px]">
-              <h1 className="text-[1.6em] text-[#E3B231] mr-[16px]">
-                In Process
-              </h1>
-              <p className="text-[1.6em] text-text mr-[16px]">
-                Your product has been Inprocess
-              </p>
-            </div>
-          </div> */
-}

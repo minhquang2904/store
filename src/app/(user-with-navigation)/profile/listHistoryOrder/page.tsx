@@ -56,6 +56,18 @@ const ListsHistoryOrder = () => {
                         <h3 className="text-text text-[1.6em] font-normal capitalize">
                           {item?.payment}
                         </h3>
+                        <h3 className="text-text text-[1.6em] font-normal capitalize">
+                          Order date -{" "}
+                          {new Date(item?.createdAt).toLocaleString("en-GB")}
+                        </h3>
+                        <h3 className="text-text text-[1.6em] font-normal capitalize">
+                          {item?.status === "cancel" &&
+                            "Cancel date - " +
+                              new Date(item?.updatedAt).toLocaleString("en-GB")}
+                          {item?.status === "confirm" &&
+                            "Confirm date - " +
+                              new Date(item?.updatedAt).toLocaleString("en-GB")}
+                        </h3>
                       </div>
                     </div>
                     <div className="w-[20%] xsm:w-[20%] flex items-center justify-center px-[8px] xsm:px-[0]">
@@ -83,14 +95,15 @@ const ListsHistoryOrder = () => {
                   <div className="flex mt-[8px]">
                     <h1
                       className={`text-[1.6em] ${
-                        item?.status === "confirm" && "text-[#3CD139]"
+                        (item?.status === "confirm" && "text-[#3CD139]") ||
+                        (item?.status === "cancel" && "text-secondary")
                       } mr-[16px] capitalize`}
                     >
                       {item?.status}
                     </h1>
                     <p className="text-[1.6em] text-text mr-[16px]">
-                      {item?.status === "confirm" &&
-                        "Your product is confirmed"}
+                      {item?.status === "confirm" && "Your order is confirmed"}
+                      {item?.status === "cancel" && "Your order is canceled"}
                     </p>
                   </div>
                 </div>

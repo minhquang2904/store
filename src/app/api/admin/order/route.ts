@@ -16,6 +16,7 @@ export async function PUT(req: NextRequest) {
     if (!order) {
       throw new Error(`Order with id ${id} not found`);
     }
+
     session.startTransaction();
 
     const historyOrder = new HistoryOrder({
@@ -29,7 +30,7 @@ export async function PUT(req: NextRequest) {
       lastName: order.lastName,
       firstName: order.firstName,
       status: "confirm",
-      createdAt: order.orderDate,
+      createdAt: order.createdAt,
       updatedAt: new Date(),
     });
 

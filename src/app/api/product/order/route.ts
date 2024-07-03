@@ -134,7 +134,8 @@ export async function DELETE(req: NextRequest) {
     const order = await Order.findOne({ _id: orderId });
 
     if (!order) {
-      return NextResponse.json({ message: "Order not found", status: 404 });
+      errorCustom.error = "Your order has been confirmed";
+      return NextResponse.json({ message: errorCustom, status: 404 });
     }
 
     session.startTransaction();
@@ -148,15 +149,18 @@ export async function DELETE(req: NextRequest) {
       const sizeIndex = product.sizes.findIndex(
         (s: any) => s.size === size && s.color === color
       );
-
+      console.log(sizeIndex);
       if (sizeIndex > -1) {
         product.sizes[sizeIndex].amount += quantity;
         product.soldCount -= quantity;
         product.quantity += quantity;
         await product.save({ session });
       } else {
-        errorCustom.error = "Product not found";
-        throw new Error("Product not found");
+        product.sizes.push({ size, color, amount: quantity });
+        product.colors.push({ value: color, label: color });
+        product.soldCount -= quantity;
+        product.quantity += quantity;
+        await product.save({ session });
       }
     }
 
@@ -171,7 +175,7 @@ export async function DELETE(req: NextRequest) {
       lastName: order.lastName,
       firstName: order.firstName,
       status: "cancel",
-      createdAt: order.orderDate,
+      createdAt: order.createdAt,
       updatedAt: new Date(),
     });
 
