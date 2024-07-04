@@ -247,6 +247,7 @@ export default function ProductDetail({ searchParams }: any) {
     (acc: any, item: any) => acc + item.amount,
     0
   );
+
   return (
     <>
       {loadingProducts && <LoadingComponent />}
@@ -533,7 +534,11 @@ export default function ProductDetail({ searchParams }: any) {
                             ) : (
                               <Link
                                 href="/login"
-                                className="text-center w-full text-[1.4em] text-white h-full flex items-center justify-center"
+                                className={`text-center w-full text-[1.4em] h-full flex items-center justify-center ${
+                                  product?.quantity === 0
+                                    ? "!bg-[#ccc] text-text"
+                                    : "text-white bg-button"
+                                }`}
                               >
                                 <h1>
                                   {product?.quantity === 0
