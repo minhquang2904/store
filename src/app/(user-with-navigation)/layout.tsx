@@ -18,7 +18,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         console.log("Fetching data for user:", user.id);
         try {
           const res = await fetch(
-            `http://localhost:8000/get_data_history_order/?userId=${user.id}`
+            `https://recommend-product.vercel.app/get_data_history_order/?userId=${user.id}`
           );
           const result = await res.json();
 
