@@ -12,12 +12,11 @@ const useGetRecommend = () => {
   const triggerFetchRecommend = () => setFetchAgainRecommend(true);
 
   const fetchDataRecommend = async () => {
-    console.log("Fetching data for user 123 131 3ddd:", user.id);
-
+    console.log("Fetching data for user 123 131 32 33:", user.id);
     // `http://localhost:8000/get_data_history_order/?userId=${user.id}`
     try {
       const res = await fetch(
-        `https://my-store-ten-sand.vercel.app/get_data_history_order/?userId=${user.id}`
+        `https://recommend-product-akle.onrender.com/get_data_history_order/?userId=${user.id}`
       );
       const result = await res.json();
       const jsonParse = JSON.parse(result);
