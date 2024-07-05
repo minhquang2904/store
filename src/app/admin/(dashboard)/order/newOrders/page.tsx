@@ -25,6 +25,7 @@ const ListOrder = () => {
       const res = await fetch("/api/admin/order");
       const result = await res.json();
       const { message, status } = result;
+      console.log("result", result);
       if (status === 200) {
         setListOrder(result.data);
       }

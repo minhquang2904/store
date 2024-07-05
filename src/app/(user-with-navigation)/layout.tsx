@@ -16,13 +16,20 @@ const Layout = ({ children }: { children: ReactNode }) => {
     if (user && cart) {
       const fetchData = async () => {
         console.log("Fetching data for user:", user.id);
+        // `http://localhost:8000/get_data_history_order/?userId=${user.id}`
         try {
           const res = await fetch(
-            `https://recommend-product.vercel.app/get_data_history_order/?userId=${user.id}`
+            `http://localhost:8000/get_data_history_order/?userId=${user.id}`
           );
           const result = await res.json();
-
-          console.log("Data fetched:", JSON.parse(result));
+          const jsonParse = JSON.parse(result);
+          console.log("Data fetched:", jsonParse);
+          const { data, message, status } = jsonParse;
+          if (status === 200) {
+            console.log("Data fetched:", data);
+          } else {
+            console.log("Data fetched:", message);
+          }
         } catch (error) {
           console.error("Error fetching data:", error);
         }
