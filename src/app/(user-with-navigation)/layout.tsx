@@ -6,39 +6,9 @@ import Support from "@/app/components/support/support";
 import NavBar from "../components/navbar/navbar";
 import { useAuthContext } from "../context/AuthContext";
 import Loading from "../components/loading/loading";
-import { useCartContext } from "../context/CartContext";
 
 const Layout = ({ children }: { children: ReactNode }) => {
-  const { loadingAuth, user } = useAuthContext();
-  const { cart } = useCartContext();
-
-  useEffect(() => {
-    if (user && cart) {
-      const fetchData = async () => {
-        console.log("Fetching data for user:", user.id);
-        // `http://localhost:8000/get_data_history_order/?userId=${user.id}`
-        try {
-          const res = await fetch(
-            `http://localhost:8000/get_data_history_order/?userId=${user.id}`
-          );
-          const result = await res.json();
-          const jsonParse = JSON.parse(result);
-          console.log("Data fetched:", jsonParse);
-          const { data, message, status } = jsonParse;
-          if (status === 200) {
-            console.log("Data fetched:", data);
-          } else {
-            console.log("Data fetched:", message);
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-
-      fetchData();
-    }
-  }, [user, cart]);
-
+  const { loadingAuth } = useAuthContext();
   return (
     <>
       {loadingAuth && <Loading />}

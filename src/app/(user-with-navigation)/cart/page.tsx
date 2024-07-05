@@ -19,6 +19,7 @@ import Loading from "../loading";
 import toast from "react-hot-toast";
 import LoadingComponent from "@/app/components/loadingComponent/loadingComponent";
 import { useRouter } from "next/navigation";
+import { useRecommendContext } from "@/app/context/RecommedContext";
 
 const TitleTable = (props: any) => {
   const { title } = props;
@@ -31,6 +32,8 @@ const TitleTable = (props: any) => {
 const Cart = () => {
   const { cart, triggerFetchCart, loadingCart } = useCartContext();
   const { user } = useAuthContext();
+  const { recommend } = useRecommendContext();
+  console.log("Recommend--:", recommend);
 
   const [modalAddAddress, setModalAddAddress] = useState(false);
   const [modalConfirmOrder, setModalConfirmOrder] = useState(false);
@@ -190,6 +193,19 @@ const Cart = () => {
                         })}
                     </tbody>
                   </table>
+                  <>
+                    {recommend &&
+                      recommend.map((value: any) => {
+                        return (
+                          <div
+                            key={value._id.$oid}
+                            className="text-text text-[1.6em] font-medium"
+                          >
+                            {value.name} - {value._id.$oid}
+                          </div>
+                        );
+                      })}
+                  </>
                 </div>
                 <Formik
                   initialValues={initialValues}
