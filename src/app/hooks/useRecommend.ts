@@ -16,7 +16,7 @@ const useGetRecommend = () => {
     // `http://localhost:8000/get_data_history_order/?userId=${user.id}`
     try {
       const res = await fetch(
-        `https://recommend-product.vercel.app/get_data_history_order/?userId=${user.id}`
+        `https://recommend-product-akle.onrender.com/get_data_history_order/?userId=${user.id}`
       );
       const result = await res.json();
       const jsonParse = JSON.parse(result);
