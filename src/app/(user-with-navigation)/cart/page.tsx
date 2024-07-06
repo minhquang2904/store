@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import ErrorInput from "@/app/components/errorInput/errorInput";
-import { Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent, filter } from "@chakra-ui/react";
 import BtnAccount from "@/app/components/btnAccount/btnAccount";
 import FieldInput from "@/app/components/fieldInput/fieldInput";
 import LabelInput from "@/app/components/labelInput/labelInput";
@@ -34,7 +34,7 @@ const TitleTable = (props: any) => {
 const Cart = () => {
   const { cart, triggerFetchCart, loadingCart } = useCartContext();
   const { user } = useAuthContext();
-  const { recommend, fetchDataRecommend } = useRecommendContext();
+  const { recommend, fetchDataRecommend, setRecommend } = useRecommendContext();
 
   const [modalAddAddress, setModalAddAddress] = useState(false);
   const [modalConfirmOrder, setModalConfirmOrder] = useState(false);
@@ -165,7 +165,6 @@ const Cart = () => {
       setSubmitting(false);
       return;
     }
-    console.log("values", values, itemIndex);
     try {
       fetch("/api/product/cart", {
         method: "POST",
@@ -185,6 +184,16 @@ const Cart = () => {
         .then((result) => {
           const status = result.status;
           if (status === 200) {
+            setRecommend(
+              recommend.filter((value: any) => {
+                return value._id.$oid !== item._id.$oid;
+              })
+            );
+            selectedColors[itemIndex] = "";
+            selectedSizes[itemIndex] = "";
+            fetchDataRecommend();
+            resetForm();
+            triggerFetchCart();
             toast.success(
               <div>
                 <span>Product added to cart</span> - {""}
@@ -194,11 +203,6 @@ const Cart = () => {
               </div>,
               { duration: 3000 }
             );
-            selectedColors[itemIndex] = "";
-            selectedSizes[itemIndex] = "";
-            fetchDataRecommend();
-            resetForm();
-            triggerFetchCart();
           }
           if (status === 400) {
             setSubmitting(false);

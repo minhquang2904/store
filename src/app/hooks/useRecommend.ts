@@ -37,7 +37,7 @@ const useGetRecommend = () => {
       fetchDataRecommend();
     }
   }, [user, recommend]);
-  return { recommend, triggerFetchRecommend, fetchDataRecommend };
+  return { recommend, triggerFetchRecommend, fetchDataRecommend, setRecommend };
 };
 
 export default useGetRecommend;
