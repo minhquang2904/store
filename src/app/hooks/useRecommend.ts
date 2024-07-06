@@ -9,7 +9,12 @@ const useGetRecommend = () => {
   const triggerFetchRecommend = () => setFetchAgainRecommend(true);
 
   const fetchDataRecommend = async () => {
-    const url = `${process.env.NEXT_PUBLIC_HOST_API_DJANGO}/get_data_history_order/?userId=${user.id}`;
+    const baseUrl = process.env.NEXT_PUBLIC_HOST_API_DJANGO?.replace(
+      /\/+$/,
+      ""
+    );
+    const userId = user.id;
+    const url = `${baseUrl}/get_data_history_order/?userId=${userId}`;
     console.log("Fetching data from ", url);
 
     try {
