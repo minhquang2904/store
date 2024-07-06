@@ -35,7 +35,6 @@ const Cart = () => {
   const { cart, triggerFetchCart, loadingCart } = useCartContext();
   const { user } = useAuthContext();
   const { recommend, fetchDataRecommend } = useRecommendContext();
-  console.log("Recommend--:", recommend);
 
   const [modalAddAddress, setModalAddAddress] = useState(false);
   const [modalConfirmOrder, setModalConfirmOrder] = useState(false);
@@ -115,6 +114,8 @@ const Cart = () => {
       return newSelectedSizes;
     });
 
+    amountCheck[itemIndex] = "";
+    setFieldValue("size", "");
     setFieldValue("color", color);
   };
 
@@ -193,6 +194,8 @@ const Cart = () => {
               </div>,
               { duration: 3000 }
             );
+            selectedColors[itemIndex] = "";
+            selectedSizes[itemIndex] = "";
             fetchDataRecommend();
             resetForm();
             triggerFetchCart();
@@ -226,97 +229,101 @@ const Cart = () => {
               </>
             ) : (
               <div className="flex xsm:flex-col sm:flex-col l:flex-row xsm:w-full sm:w-full">
-                <div className="shrink grow-0 l:basis-[70%] h-full xsm:overflow-x-scroll xsm:overflow-y-hidden">
-                  <table>
-                    <tbody>
-                      <tr>
-                        <TitleTable title="product" />
-                        <TitleTable title="price" />
-                        <TitleTable title="quantity" />
-                        <TitleTable title="subtotal" />
-                        <TitleTable title="action" />
-                      </tr>
-                      {cart?.items
-                        ?.slice()
-                        ?.reverse()
-                        ?.map((item: any) => {
-                          return (
-                            <tr
-                              key={`${item._id} - ${item.productId._id}`}
-                              className={`${
-                                loadingCart ? "animate-pulse" : ""
-                              }`}
-                            >
-                              <td className="w-full min-w-[320px] p-[10px] flex">
-                                <div className="!relative">
-                                  <Image
-                                    src={item.productId.files[0].url}
-                                    className="!relative max-w-[100px] max-h-[100px] object-cover"
-                                    alt="Item"
-                                    fill
-                                    sizes="(max-width: 100px) 100vw"
-                                  />
-                                </div>
-                                <div className="ml-[20px] flex flex-col justify-center">
-                                  <Link
-                                    href={{
-                                      pathname: "/productDetail",
-                                      query: { id: item?.productId._id },
-                                    }}
-                                    className="text-text text-[1.6em] font-bold capitalize overflow-hidden max-w-[400px] line-clamp-1"
-                                  >
-                                    {item.productId.name}
-                                  </Link>
-                                  <div className="flex gap-x-[6px]">
-                                    <p className="text-[1.5em] text-text font-normal">
-                                      Size:
-                                    </p>
-                                    <p className="text-[1.5em] text-text font-medium uppercase">
-                                      {item.size} - {item.color}
-                                    </p>
+                <div className="shrink grow-0 l:basis-[70%] h-full">
+                  <div className="xsm:overflow-x-scroll xsm:overflow-y-hidden">
+                    <table>
+                      <tbody>
+                        <tr>
+                          <TitleTable title="product" />
+                          <TitleTable title="price" />
+                          <TitleTable title="quantity" />
+                          <TitleTable title="subtotal" />
+                          <TitleTable title="action" />
+                        </tr>
+                        {cart?.items
+                          ?.slice()
+                          ?.reverse()
+                          ?.map((item: any) => {
+                            return (
+                              <tr
+                                key={`${item._id} - ${item.productId._id}`}
+                                className={`${
+                                  loadingCart ? "animate-pulse" : ""
+                                }`}
+                              >
+                                <td className="w-full min-w-[320px] p-[10px] flex">
+                                  <div className="!relative">
+                                    <Image
+                                      src={item.productId.files[0].url}
+                                      className="!relative max-w-[100px] max-h-[100px] object-cover"
+                                      alt="Item"
+                                      fill
+                                      sizes="(max-width: 100px) 100vw"
+                                    />
                                   </div>
-                                </div>
-                              </td>
-                              <td className="w-full p-[10px] text-text text-[1.6em] text-start">
-                                {item?.price}
-                              </td>
-                              <td className="w-full p-[10px] text-text text-[1.6em] !text-center">
-                                {item?.quantity}
-                              </td>
-                              <td className="w-full p-[10px] text-text text-[1.6em] text-start">
-                                {item?.totalPriceItem}
-                              </td>
-                              <td className="w-full p-[10px]">
-                                <div
-                                  className="flex justify-center"
-                                  onClick={() => handleDeleteCartItem(item._id)}
-                                >
-                                  <svg
-                                    fill="none"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    width="24"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="cursor-pointer"
-                                  >
-                                    <g
-                                      stroke="#ff6f61"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth="2"
+                                  <div className="ml-[20px] flex flex-col justify-center">
+                                    <Link
+                                      href={{
+                                        pathname: "/productDetail",
+                                        query: { id: item?.productId._id },
+                                      }}
+                                      className="text-text text-[1.6em] font-bold capitalize overflow-hidden max-w-[400px] line-clamp-1"
                                     >
-                                      <path d="m3 6h18m-16 0v14c0 1.1046.89543 2 2 2h10c1.1046 0 2-.8954 2-2v-14m-11 0v-2c0-1.10457.89543-2 2-2h4c1.1046 0 2 .89543 2 2v2" />
-                                      <path d="m14 11v6" />
-                                      <path d="m10 11v6" />
-                                    </g>
-                                  </svg>
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                    </tbody>
-                  </table>
+                                      {item.productId.name}
+                                    </Link>
+                                    <div className="flex gap-x-[6px]">
+                                      <p className="text-[1.5em] text-text font-normal">
+                                        Size:
+                                      </p>
+                                      <p className="text-[1.5em] text-text font-medium uppercase">
+                                        {item.size} - {item.color}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="w-full p-[10px] text-text text-[1.6em] text-start">
+                                  {item?.price}
+                                </td>
+                                <td className="w-full p-[10px] text-text text-[1.6em] !text-center">
+                                  {item?.quantity}
+                                </td>
+                                <td className="w-full p-[10px] text-text text-[1.6em] text-start">
+                                  {item?.totalPriceItem}
+                                </td>
+                                <td className="w-full p-[10px]">
+                                  <div
+                                    className="flex justify-center"
+                                    onClick={() =>
+                                      handleDeleteCartItem(item._id)
+                                    }
+                                  >
+                                    <svg
+                                      fill="none"
+                                      height="24"
+                                      viewBox="0 0 24 24"
+                                      width="24"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="cursor-pointer"
+                                    >
+                                      <g
+                                        stroke="#ff6f61"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                      >
+                                        <path d="m3 6h18m-16 0v14c0 1.1046.89543 2 2 2h10c1.1046 0 2-.8954 2-2v-14m-11 0v-2c0-1.10457.89543-2 2-2h4c1.1046 0 2 .89543 2 2v2" />
+                                        <path d="m14 11v6" />
+                                        <path d="m10 11v6" />
+                                      </g>
+                                    </svg>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </table>
+                  </div>
                   <>
                     {recommend && (
                       <div className="mt-[30px] mb-[16px] text-text text-[1.6em] font-medium uppercase">
@@ -324,7 +331,7 @@ const Cart = () => {
                       </div>
                     )}
                     {recommend && (
-                      <div className="flex flex-col gap-y-[26px]">
+                      <div className="flex flex-col sm:gap-y-[46px] xsm:gap-y-[20px]">
                         {recommend.map((item: any, itemIndex: any) => {
                           return (
                             <div key={item._id.$oid}>
@@ -332,13 +339,14 @@ const Cart = () => {
                                 initialValues={{
                                   color: "",
                                   size: "",
-                                  amount: 0,
+                                  amount: 1,
                                 }}
                                 validationSchema={Yup.object().shape({
-                                  color:
-                                    Yup.string().required("Color is required"),
+                                  color: Yup.string().required(
+                                    "- Color is required"
+                                  ),
                                   size: Yup.string().required(
-                                    "Size is required"
+                                    "- Size is required"
                                   ),
                                   amount: Yup.number()
                                     .required("Amount is required")
@@ -361,34 +369,23 @@ const Cart = () => {
                                 }
                               >
                                 {({ isSubmitting, setFieldValue, values }) => (
-                                  <Form className="flex">
-                                    <div className="w-[40%] flex items-center">
+                                  <Form className="flex xsm:flex-col">
+                                    <div className="w-[40%] xsm:w-[100%] flex items-center xsm:flex-col xsm:mb-[16px]">
                                       <div className="!relative">
                                         <Image
                                           src={item.files[0].url}
-                                          className="!relative max-w-[400px] max-h-[400px] object-cover"
+                                          className="!relative max-w-[300px] max-h-[300px] object-cover"
                                           alt="Item"
                                           fill
                                           sizes="(max-width: 200px) 200px"
                                         />
                                       </div>
                                     </div>
-                                    <div className="w-[60%] ml-[16px]">
+                                    <div className="w-[60%] xsm:w-[100%] sm:ml-[16px]">
                                       <div className="flex justify-between xsm:flex-col">
-                                        <h1 className="text-text font-medium text-[2.2em] capitalize">
+                                        <h1 className="text-text font-medium text-[1.8em] capitalize">
                                           {item.name}
                                         </h1>
-                                      </div>
-                                      <div className="mt-[8px] flex">
-                                        <h4 className="text-text font-normal text-[1.6em] capitalize pr-[15px] border-r-2">
-                                          {item?.categories || "N/A"}
-                                        </h4>
-                                        <div className="text-[1.6em] px-[15px] border-r-2">
-                                          Stock : {item?.quantity || 0}
-                                        </div>
-                                        <div className="text-[1.6em] px-[15px]">
-                                          Sold : {item?.soldCount || 0}
-                                        </div>
                                       </div>
                                       <div className="flex mt-[8px] gap-x-[6px] items-center">
                                         {item?.discount > 0 && (
@@ -396,11 +393,11 @@ const Cart = () => {
                                             {item?.price}
                                           </h4>
                                         )}
-                                        <h4 className="text-secondary font-semibold text-[2.2em]">
+                                        <h4 className="text-secondary font-semibold text-[1.8em]">
                                           {item?.discountedPrice || "N/A"}
                                         </h4>
                                       </div>
-                                      <div className="mt-[16px]">
+                                      <div className="mt-[8px]">
                                         <div className="flex">
                                           <SubTitleProductDetail title="Color" />
                                           <ErrorInput
@@ -422,13 +419,13 @@ const Cart = () => {
                                                 >
                                                   <label
                                                     htmlFor={`item_${itemIndex}_${colorItem?.value}`}
-                                                    className={`mr-[8px] ${
+                                                    className={`mr-[20px] ${
                                                       selectedColors[
                                                         itemIndex
                                                       ] === colorItem?.value
-                                                        ? "bg-button text-white"
-                                                        : "bg-[transparent] text-text"
-                                                    } min-w-[70px] h-[40px] px-[14px] cursor-pointer rounded-[20px] flex justify-center items-center capitalize border-solid border-[1px] border-[#727074] text-[1.5em] select-none`}
+                                                        ? "text-[#000]"
+                                                        : "text-[#858388]"
+                                                    } cursor-pointer rounded-[20px] flex justify-center items-center capitalize text-[1.6em] select-none font-semibold`}
                                                   >
                                                     {colorItem?.value}
                                                   </label>
@@ -452,17 +449,18 @@ const Cart = () => {
                                           )}
                                         </div>
                                       </div>
-                                      <div className="mt-[16px]">
+                                      <div className="mt-[8px]">
                                         <div className="flex">
                                           <SubTitleProductDetail title="Size" />
-                                          <ErrorInput
-                                            name="size"
-                                            styleCustom="!mt-[0] text-[1.6em] ml-[8px]"
-                                          />
-                                          {amountCheck[itemIndex] && (
+                                          {amountCheck[itemIndex] ? (
                                             <div className="text-[1.6em] ml-[4px]">
                                               - {amountCheck[itemIndex]}
                                             </div>
+                                          ) : (
+                                            <ErrorInput
+                                              name="size"
+                                              styleCustom="!mt-[0] text-[1.6em] ml-[8px]"
+                                            />
                                           )}
                                         </div>
                                         <div className="flex mt-[8px] flex-wrap gap-y-[8px]">
@@ -473,62 +471,57 @@ const Cart = () => {
                                                   (value: any) =>
                                                     value.amount > 0
                                                 )
-                                                .map(
-                                                  (
-                                                    sizeItem: any,
-                                                    index: any
-                                                  ) => {
-                                                    return (
-                                                      <div
-                                                        key={sizeItem._id.$oid}
-                                                        className="mb-[8px]"
+                                                .map((sizeItem: any) => {
+                                                  return (
+                                                    <div
+                                                      key={sizeItem._id.$oid}
+                                                      className="mb-[8px]"
+                                                    >
+                                                      <label
+                                                        htmlFor={`item_${itemIndex}_${sizeItem.size}`}
+                                                        className={`mr-[20px] ${
+                                                          selectedSizes[
+                                                            itemIndex
+                                                          ] == sizeItem?.size
+                                                            ? "text-[#000]"
+                                                            : "text-[#727074]"
+                                                        } cursor-pointer rounded-[20px] flex justify-center items-center font-semibold uppercase text-[1.6em] select-none`}
                                                       >
-                                                        <label
-                                                          htmlFor={`item_${itemIndex}_${sizeItem.size}`}
-                                                          className={`mr-[8px] ${
-                                                            selectedSizes[
-                                                              itemIndex
-                                                            ] == sizeItem?.size
-                                                              ? "bg-button text-white"
-                                                              : "bg-[transparent] text-text"
-                                                          } w-[70px] h-[40px] cursor-pointer rounded-[20px] flex justify-center items-center uppercase border-solid border-[1px] border-[#727074] text-[1.5em] select-none`}
-                                                        >
-                                                          {sizeItem?.size}
-                                                        </label>
-                                                        <Field
-                                                          type="radio"
-                                                          name="size"
-                                                          id={`item_${itemIndex}_${sizeItem.size}`}
-                                                          className="hidden"
-                                                          value={sizeItem?.size}
-                                                          onChange={(e: any) =>
-                                                            handleChooseSizeForItem(
-                                                              e.target.value,
-                                                              itemIndex,
-                                                              setFieldValue
-                                                            )
-                                                          }
-                                                        />
-                                                      </div>
-                                                    );
-                                                  }
-                                                )}
+                                                        {sizeItem?.size}
+                                                      </label>
+                                                      <Field
+                                                        type="radio"
+                                                        name="size"
+                                                        id={`item_${itemIndex}_${sizeItem.size}`}
+                                                        className="hidden"
+                                                        value={sizeItem?.size}
+                                                        onChange={(e: any) =>
+                                                          handleChooseSizeForItem(
+                                                            e.target.value,
+                                                            itemIndex,
+                                                            setFieldValue
+                                                          )
+                                                        }
+                                                      />
+                                                    </div>
+                                                  );
+                                                })}
                                             </>
                                           ) : (
-                                            <div className="text-text text-[1.6em] font-normal py-[8px]">
+                                            <div className="text-text text-[1.6em] font-normal py-[4px]">
                                               Please select a color to display
                                               the available sizes.
                                             </div>
                                           )}
                                         </div>
                                       </div>
-                                      <div className="mt-[28px] flex">
+                                      <div className="mt-[16px] flex mb-[8px]">
                                         {item?.quantity !== 0 && (
-                                          <div className="mr-[16px]">
-                                            <div className="inline-flex !relative items-center border-[1px] border-solid border-button py-[4px] px-[8px] rounded-[26px] min-w-[106px]">
+                                          <div className="mr-[16px] h-full">
+                                            <div className="inline-flex justify-around !relative items-center border-[1px] border-solid border-button py-[4px] px-[8px] rounded-[26px] min-w-[106px]">
                                               <Image
                                                 src="/icons/subtract.svg"
-                                                className="!relative !w-[24px] !h-[24px] cursor-pointer"
+                                                className="!relative !w-[20px] !h-[20px] cursor-pointer"
                                                 alt="Icon"
                                                 fill
                                                 sizes="100vw"
@@ -552,11 +545,11 @@ const Cart = () => {
                                                     setFieldValue
                                                   )
                                                 }
-                                                className={`text-text outline-none p-[6px] text-[1.6em] max-w-[40px] font-medium text-center bg-[transparent]`}
+                                                className={`text-text outline-none px-[6px] py-[2px] text-[1.6em] max-w-[40px] font-medium text-center bg-[transparent]`}
                                               />
                                               <Image
                                                 src="/icons/plus.svg"
-                                                className="!relative !w-[24px] !h-[24px] cursor-pointer"
+                                                className="!relative !w-[20px] !h-[20px] cursor-pointer"
                                                 alt="Icon"
                                                 fill
                                                 sizes="100vw"
@@ -571,10 +564,10 @@ const Cart = () => {
                                             </div>
                                           </div>
                                         )}
-                                        <div className="flex w-full gap-x-[16px]">
-                                          <div className="w-[40%] flex items-center rounded-[26px] hover:opacity-90 cursor-pointer duration-200 h-[46px] overflow-hidden">
+                                        <div className="flex xsm:w-[100%] w-[40%] gap-x-[16px]">
+                                          <div className="flex items-center w-full rounded-[26px] hover:opacity-90 cursor-pointer duration-200  h-full overflow-hidden">
                                             <button
-                                              className="text-center w-full text-[1.4em] text-white h-full bg-button cursor-pointer"
+                                              className="text-center w-full text-[1.4em] h-full text-white bg-button cursor-pointer"
                                               type="submit"
                                               disabled={isSubmitting}
                                             >
@@ -583,6 +576,10 @@ const Cart = () => {
                                           </div>
                                         </div>
                                       </div>
+                                      <ErrorInput
+                                        name="amount"
+                                        styleCustom="!mt-[0] text-[1.6em] ml-[8px]"
+                                      />
                                     </div>
                                   </Form>
                                 )}
