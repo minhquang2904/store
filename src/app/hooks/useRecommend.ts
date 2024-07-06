@@ -12,9 +12,8 @@ const useGetRecommend = () => {
   const triggerFetchRecommend = () => setFetchAgainRecommend(true);
 
   const fetchDataRecommend = async () => {
-    const url = `http://127.0.0.1:8000/get_data_history_order/?userId=${user.id}`;
+    const url = `https://recommend-product-akle.onrender.com/get_data_history_order/?userId=${user.id}`;
     console.log("Fetching data from ", url);
-    // `http://localhost:8000/get_data_history_order/?userId=${user.id}`
 
     try {
       const res = await fetch(url);
