@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import { useAuthContext } from "../context/AuthContext";
-import { useCartContext } from "../context/CartContext";
 
 const useGetRecommend = () => {
   const { user } = useAuthContext();
@@ -11,7 +9,7 @@ const useGetRecommend = () => {
   const triggerFetchRecommend = () => setFetchAgainRecommend(true);
 
   const fetchDataRecommend = async () => {
-    const url = `http://127.0.0.1:8000/get_data_history_order/?userId=${user.id}`;
+    const url = `https://recommend-product-akle.onrender.com/get_data_history_order/?userId=${user.id}`;
     console.log("Fetching data from ", url);
 
     try {
