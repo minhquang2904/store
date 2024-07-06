@@ -9,7 +9,7 @@ const useGetRecommend = () => {
   const triggerFetchRecommend = () => setFetchAgainRecommend(true);
 
   const fetchDataRecommend = async () => {
-    const url = `https://recommend-product-akle.onrender.com/get_data_history_order/?userId=${user.id}`;
+    const url = `${process.env.NEXT_PUBLIC_HOST_API_DJANGO}get_data_history_order/?userId=${user.id}`;
     console.log("Fetching data from ", url);
 
     try {
