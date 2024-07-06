@@ -7,14 +7,15 @@ const useGetRecommend = () => {
   const { user } = useAuthContext();
   const { cart } = useCartContext();
   const [recommend, setRecommend] = useState(null) as any;
-  const [fetchAgainRecommend, setFetchAgainRecommend] = useState(false);
+  const [fetchAgainRecommend, setFetchAgainRecommend] = useState(true);
 
   const triggerFetchRecommend = () => setFetchAgainRecommend(true);
 
   const fetchDataRecommend = async () => {
-    const url = `https://recommend-product-akle.onrender.com/get_data_history_order/?userId=${user.id}`;
+    const url = `http://127.0.0.1:8000/get_data_history_order/?userId=${user.id}`;
     console.log("Fetching data from ", url);
     // `http://localhost:8000/get_data_history_order/?userId=${user.id}`
+
     try {
       const res = await fetch(url);
       const result = await res.json();
@@ -29,17 +30,18 @@ const useGetRecommend = () => {
         console.log("Data fetched:", message);
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.log("Data fetched:", error);
+      setRecommend(null);
     }
   };
 
   useEffect(() => {
-    if (user && cart) {
+    if (user && !recommend) {
+      console.log("Fetching data from useGetRecommend 2");
       fetchDataRecommend();
     }
-  }, [user, fetchAgainRecommend, cart]);
-
-  return { recommend, triggerFetchRecommend };
+  }, [user, recommend]);
+  return { recommend, triggerFetchRecommend, fetchDataRecommend };
 };
 
 export default useGetRecommend;

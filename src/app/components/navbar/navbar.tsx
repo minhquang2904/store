@@ -10,10 +10,12 @@ import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { useCartContext } from "@/app/context/CartContext";
 import toast from "react-hot-toast";
+import { useRecommendContext } from "@/app/context/RecommedContext";
 
 const NavBar = () => {
   const { user, setUser, setLoadingAuth } = useAuthContext();
   const { cart, setCart, triggerFetchCart } = useCartContext();
+  const { fetchDataRecommend } = useRecommendContext();
 
   const pathname = usePathname();
   const searchInput: any = useRef(null);
@@ -161,6 +163,7 @@ const NavBar = () => {
           if (status === 200) {
             toast.success(message);
             triggerFetchCart();
+            fetchDataRecommend();
           }
           if (status === 500) {
             toast.error(message);

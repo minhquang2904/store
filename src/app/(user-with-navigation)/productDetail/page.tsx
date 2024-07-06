@@ -18,6 +18,7 @@ import Link from "next/link";
 import { useCartContext } from "@/app/context/CartContext";
 import NoItemCart from "@/app/components/noItemCart/noItemCart";
 import { useRouter } from "next/navigation";
+import { useRecommendContext } from "@/app/context/RecommedContext";
 const order = ["s", "m", "l", "xl", "xxl"];
 
 const SubTitleProductDetail = (props: any) => {
@@ -32,6 +33,7 @@ export default function ProductDetail({ searchParams }: any) {
   const { user } = useAuthContext();
   const id = searchParams.id;
   const { push } = useRouter();
+  const { fetchDataRecommend } = useRecommendContext();
 
   const [description, setDescription] = useState("");
   const [picture, setPicture] = useState(null) as any;
@@ -219,6 +221,7 @@ export default function ProductDetail({ searchParams }: any) {
               </div>,
               { duration: 3000 }
             );
+            fetchDataRecommend();
             resetForm();
             setSelectedColor(null);
             setSelectedSize(null);

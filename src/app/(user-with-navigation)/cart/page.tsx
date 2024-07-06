@@ -32,7 +32,7 @@ const TitleTable = (props: any) => {
 const Cart = () => {
   const { cart, triggerFetchCart, loadingCart } = useCartContext();
   const { user } = useAuthContext();
-  const { recommend } = useRecommendContext();
+  const { recommend, fetchDataRecommend } = useRecommendContext();
   console.log("Recommend--:", recommend);
 
   const [modalAddAddress, setModalAddAddress] = useState(false);
@@ -58,6 +58,7 @@ const Cart = () => {
           if (status === 200) {
             toast.success(message);
             triggerFetchCart();
+            fetchDataRecommend();
           }
           if (status === 500) {
             toast.error(message);
@@ -393,6 +394,7 @@ const ModalConfirmOrder = (props: any) => {
   const { push } = useRouter();
   const { user } = useAuthContext();
   const { cart, triggerFetchCart } = useCartContext();
+  const { fetchDataRecommend } = useRecommendContext();
 
   useEffect(() => {
     if (!cart) {
@@ -422,6 +424,7 @@ const ModalConfirmOrder = (props: any) => {
           const { message, status } = result;
           if (status === 200) {
             triggerFetchCart();
+            fetchDataRecommend();
             resetForm();
             onClose();
             return message;

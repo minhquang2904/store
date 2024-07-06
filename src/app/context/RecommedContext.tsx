@@ -6,6 +6,7 @@ import useGetRecommend from "../hooks/useRecommend";
 interface RecommendContextType {
   recommend: any;
   triggerFetchRecommend: () => void;
+  fetchDataRecommend: () => void;
 }
 
 const RecommendContext = createContext<RecommendContextType | undefined>(
@@ -13,13 +14,15 @@ const RecommendContext = createContext<RecommendContextType | undefined>(
 );
 
 export const RecommendProvider = ({ children }: { children: ReactNode }) => {
-  const { recommend, triggerFetchRecommend } = useGetRecommend();
+  const { recommend, triggerFetchRecommend, fetchDataRecommend } =
+    useGetRecommend();
 
   return (
     <RecommendContext.Provider
       value={{
         recommend,
         triggerFetchRecommend,
+        fetchDataRecommend,
       }}
     >
       {children}
