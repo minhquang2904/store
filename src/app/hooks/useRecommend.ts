@@ -15,23 +15,19 @@ const useGetRecommend = () => {
     );
     const userId = user.id;
     const url = `${baseUrl}/get_data_history_order/?userId=${userId}`;
-    console.log("Fetching data from ", url);
+    console.log("Fetching data from get_data_history_order");
 
     try {
       const res = await fetch(url);
       const result = await res.json();
       const jsonParse = JSON.parse(result);
-      console.log("Data fetched:", jsonParse);
       const { data, message, status } = jsonParse;
       if (status === 200) {
         setRecommend(data);
-        console.log("Data fetched:", data);
       } else {
         setRecommend(null);
-        console.log("Data fetched:", message);
       }
     } catch (error) {
-      console.log("Data fetched:", error);
       setRecommend(null);
     }
   };
