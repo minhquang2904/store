@@ -21,6 +21,8 @@ import LoadingComponent from "@/app/components/loadingComponent/loadingComponent
 import { useRouter } from "next/navigation";
 import { useRecommendContext } from "@/app/context/RecommedContext";
 
+const order = ["s", "m", "l", "xl", "xxl"];
+
 const TitleTable = (props: any) => {
   const { title } = props;
   return (
@@ -84,6 +86,127 @@ const Cart = () => {
     setModalConfirmOrder(true);
     setSubmitting(false);
   };
+
+  const [selectedColors, setSelectedColors] = useState(
+    Array(recommend?.length).fill("")
+  );
+  const [selectedSizes, setSelectedSizes] = useState(() =>
+    Array(recommend?.length).fill("")
+  );
+
+  const [amountCheck, setAmountCheck] = useState(() =>
+    Array(recommend?.length).fill("")
+  );
+
+  const handleChooseColorForItem = (
+    color: any,
+    itemIndex: any,
+    setFieldValue: any
+  ) => {
+    setSelectedColors((prevColors) => {
+      const newSelectedColors = [...prevColors];
+      newSelectedColors[itemIndex] = color;
+      return newSelectedColors;
+    });
+
+    setSelectedSizes((prevSizes) => {
+      const newSelectedSizes = [...prevSizes];
+      newSelectedSizes[itemIndex] = "";
+      return newSelectedSizes;
+    });
+
+    setFieldValue("color", color);
+  };
+
+  const handleChooseSizeForItem = (
+    size: any,
+    itemIndex: any,
+    setFieldValue: any
+  ) => {
+    setSelectedSizes((prevSizes) => {
+      const newSelectedSizes = [...prevSizes];
+      newSelectedSizes[itemIndex] = size;
+      return newSelectedSizes;
+    });
+
+    const filterAmount = recommend[itemIndex].sizes.filter((item: any) => {
+      return item.size === size && item.color === selectedColors[itemIndex];
+    });
+
+    setAmountCheck((prevSizes) => {
+      const newAmount = [...prevSizes];
+      newAmount[itemIndex] = filterAmount[0].amount;
+      return newAmount;
+    });
+
+    setFieldValue("size", size);
+  };
+
+  const handleUpdateAmount = (value: any, setFieldValue: any) => {
+    setFieldValue("amount", Number(value));
+  };
+
+  const getFilteredSizes = (item: any, itemIndex: any) => {
+    return item.sizes
+      ?.filter((sizeItem: any) => sizeItem.color === selectedColors[itemIndex])
+      ?.sort((a: any, b: any) => order.indexOf(a.size) - order.indexOf(b.size));
+  };
+
+  const handleSubmitColorSize = (
+    values: any,
+    item: any,
+    itemIndex: any,
+    setSubmitting: any,
+    resetForm: any
+  ) => {
+    if (values.amount > amountCheck[itemIndex]) {
+      toast.error("The product is out of stock");
+      setSubmitting(false);
+      return;
+    }
+    console.log("values", values, itemIndex);
+    try {
+      fetch("/api/product/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          productId: item._id.$oid,
+          size: values.size,
+          quantity: values.amount,
+          color: values.color,
+          price: item.discountedPrice,
+        }),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          const status = result.status;
+          if (status === 200) {
+            toast.success(
+              <div>
+                <span>Product added to cart</span> - {""}
+                <Link href={"/cart"} className="underline">
+                  CheckOut
+                </Link>
+              </div>,
+              { duration: 3000 }
+            );
+            fetchDataRecommend();
+            resetForm();
+            triggerFetchCart();
+          }
+          if (status === 400) {
+            setSubmitting(false);
+            toast.error(result.message);
+          }
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <div className="flex justify-center items-center px-pLayout">
@@ -195,17 +318,280 @@ const Cart = () => {
                     </tbody>
                   </table>
                   <>
-                    {recommend &&
-                      recommend.map((value: any) => {
-                        return (
-                          <div
-                            key={value._id.$oid}
-                            className="text-text text-[1.6em] font-medium"
-                          >
-                            {value.name} - {value._id.$oid}
-                          </div>
-                        );
-                      })}
+                    {recommend && (
+                      <div className="mt-[30px] mb-[16px] text-text text-[1.6em] font-medium uppercase">
+                        Popular products
+                      </div>
+                    )}
+                    {recommend && (
+                      <div className="flex flex-col gap-y-[26px]">
+                        {recommend.map((item: any, itemIndex: any) => {
+                          return (
+                            <div key={item._id.$oid}>
+                              <Formik
+                                initialValues={{
+                                  color: "",
+                                  size: "",
+                                  amount: 0,
+                                }}
+                                validationSchema={Yup.object().shape({
+                                  color:
+                                    Yup.string().required("Color is required"),
+                                  size: Yup.string().required(
+                                    "Size is required"
+                                  ),
+                                  amount: Yup.number()
+                                    .required("Amount is required")
+                                    .min(
+                                      1,
+                                      "The minimum quantity of products is 1"
+                                    ),
+                                })}
+                                onSubmit={(
+                                  values,
+                                  { setSubmitting, resetForm }
+                                ) =>
+                                  handleSubmitColorSize(
+                                    values,
+                                    item,
+                                    itemIndex,
+                                    setSubmitting,
+                                    resetForm
+                                  )
+                                }
+                              >
+                                {({ isSubmitting, setFieldValue, values }) => (
+                                  <Form className="flex">
+                                    <div className="w-[40%] flex items-center">
+                                      <div className="!relative">
+                                        <Image
+                                          src={item.files[0].url}
+                                          className="!relative max-w-[400px] max-h-[400px] object-cover"
+                                          alt="Item"
+                                          fill
+                                          sizes="(max-width: 200px) 200px"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div className="w-[60%] ml-[16px]">
+                                      <div className="flex justify-between xsm:flex-col">
+                                        <h1 className="text-text font-medium text-[2.2em] capitalize">
+                                          {item.name}
+                                        </h1>
+                                      </div>
+                                      <div className="mt-[8px] flex">
+                                        <h4 className="text-text font-normal text-[1.6em] capitalize pr-[15px] border-r-2">
+                                          {item?.categories || "N/A"}
+                                        </h4>
+                                        <div className="text-[1.6em] px-[15px] border-r-2">
+                                          Stock : {item?.quantity || 0}
+                                        </div>
+                                        <div className="text-[1.6em] px-[15px]">
+                                          Sold : {item?.soldCount || 0}
+                                        </div>
+                                      </div>
+                                      <div className="flex mt-[8px] gap-x-[6px] items-center">
+                                        {item?.discount > 0 && (
+                                          <h4 className="text-button font-semibold text-[1.6em] line-through">
+                                            {item?.price}
+                                          </h4>
+                                        )}
+                                        <h4 className="text-secondary font-semibold text-[2.2em]">
+                                          {item?.discountedPrice || "N/A"}
+                                        </h4>
+                                      </div>
+                                      <div className="mt-[16px]">
+                                        <div className="flex">
+                                          <SubTitleProductDetail title="Color" />
+                                          <ErrorInput
+                                            name="color"
+                                            styleCustom="!mt-[0] text-[1.6em] ml-[8px]"
+                                          />
+                                        </div>
+                                        <div className="mt-[8px] flex flex-wrap gap-y-[8px]">
+                                          {item?.colors?.map(
+                                            (colorItem: any, index: any) => {
+                                              return (
+                                                <div
+                                                  key={
+                                                    colorItem?.value +
+                                                    index +
+                                                    itemIndex
+                                                  }
+                                                  className="mb-[8px]"
+                                                >
+                                                  <label
+                                                    htmlFor={`item_${itemIndex}_${colorItem?.value}`}
+                                                    className={`mr-[8px] ${
+                                                      selectedColors[
+                                                        itemIndex
+                                                      ] === colorItem?.value
+                                                        ? "bg-button text-white"
+                                                        : "bg-[transparent] text-text"
+                                                    } min-w-[70px] h-[40px] px-[14px] cursor-pointer rounded-[20px] flex justify-center items-center capitalize border-solid border-[1px] border-[#727074] text-[1.5em] select-none`}
+                                                  >
+                                                    {colorItem?.value}
+                                                  </label>
+                                                  <Field
+                                                    type="radio"
+                                                    name="color"
+                                                    id={`item_${itemIndex}_${colorItem?.value}`}
+                                                    className="hidden"
+                                                    value={colorItem?.value}
+                                                    onChange={(e: any) =>
+                                                      handleChooseColorForItem(
+                                                        e.target.value,
+                                                        itemIndex,
+                                                        setFieldValue
+                                                      )
+                                                    }
+                                                  />
+                                                </div>
+                                              );
+                                            }
+                                          )}
+                                        </div>
+                                      </div>
+                                      <div className="mt-[16px]">
+                                        <div className="flex">
+                                          <SubTitleProductDetail title="Size" />
+                                          <ErrorInput
+                                            name="size"
+                                            styleCustom="!mt-[0] text-[1.6em] ml-[8px]"
+                                          />
+                                          {amountCheck[itemIndex] && (
+                                            <div className="text-[1.6em] ml-[4px]">
+                                              - {amountCheck[itemIndex]}
+                                            </div>
+                                          )}
+                                        </div>
+                                        <div className="flex mt-[8px] flex-wrap gap-y-[8px]">
+                                          {selectedColors[itemIndex] ? (
+                                            <>
+                                              {getFilteredSizes(item, itemIndex)
+                                                .filter(
+                                                  (value: any) =>
+                                                    value.amount > 0
+                                                )
+                                                .map(
+                                                  (
+                                                    sizeItem: any,
+                                                    index: any
+                                                  ) => {
+                                                    return (
+                                                      <div
+                                                        key={sizeItem._id.$oid}
+                                                        className="mb-[8px]"
+                                                      >
+                                                        <label
+                                                          htmlFor={`item_${itemIndex}_${sizeItem.size}`}
+                                                          className={`mr-[8px] ${
+                                                            selectedSizes[
+                                                              itemIndex
+                                                            ] == sizeItem?.size
+                                                              ? "bg-button text-white"
+                                                              : "bg-[transparent] text-text"
+                                                          } w-[70px] h-[40px] cursor-pointer rounded-[20px] flex justify-center items-center uppercase border-solid border-[1px] border-[#727074] text-[1.5em] select-none`}
+                                                        >
+                                                          {sizeItem?.size}
+                                                        </label>
+                                                        <Field
+                                                          type="radio"
+                                                          name="size"
+                                                          id={`item_${itemIndex}_${sizeItem.size}`}
+                                                          className="hidden"
+                                                          value={sizeItem?.size}
+                                                          onChange={(e: any) =>
+                                                            handleChooseSizeForItem(
+                                                              e.target.value,
+                                                              itemIndex,
+                                                              setFieldValue
+                                                            )
+                                                          }
+                                                        />
+                                                      </div>
+                                                    );
+                                                  }
+                                                )}
+                                            </>
+                                          ) : (
+                                            <div className="text-text text-[1.6em] font-normal py-[8px]">
+                                              Please select a color to display
+                                              the available sizes.
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+                                      <div className="mt-[28px] flex">
+                                        {item?.quantity !== 0 && (
+                                          <div className="mr-[16px]">
+                                            <div className="inline-flex !relative items-center border-[1px] border-solid border-button py-[4px] px-[8px] rounded-[26px] min-w-[106px]">
+                                              <Image
+                                                src="/icons/subtract.svg"
+                                                className="!relative !w-[24px] !h-[24px] cursor-pointer"
+                                                alt="Icon"
+                                                fill
+                                                sizes="100vw"
+                                                priority
+                                                onClick={() => {
+                                                  if (values.amount > 0) {
+                                                    setFieldValue(
+                                                      "amount",
+                                                      values.amount - 1
+                                                    );
+                                                  }
+                                                }}
+                                              />
+                                              <Field
+                                                type="number"
+                                                name={`item_${itemIndex}_amount`}
+                                                value={values.amount}
+                                                onChange={(e: any) =>
+                                                  handleUpdateAmount(
+                                                    e.target.value,
+                                                    setFieldValue
+                                                  )
+                                                }
+                                                className={`text-text outline-none p-[6px] text-[1.6em] max-w-[40px] font-medium text-center bg-[transparent]`}
+                                              />
+                                              <Image
+                                                src="/icons/plus.svg"
+                                                className="!relative !w-[24px] !h-[24px] cursor-pointer"
+                                                alt="Icon"
+                                                fill
+                                                sizes="100vw"
+                                                priority
+                                                onClick={() => {
+                                                  setFieldValue(
+                                                    "amount",
+                                                    values.amount + 1
+                                                  );
+                                                }}
+                                              />
+                                            </div>
+                                          </div>
+                                        )}
+                                        <div className="flex w-full gap-x-[16px]">
+                                          <div className="w-[40%] flex items-center rounded-[26px] hover:opacity-90 cursor-pointer duration-200 h-[46px] overflow-hidden">
+                                            <button
+                                              className="text-center w-full text-[1.4em] text-white h-full bg-button cursor-pointer"
+                                              type="submit"
+                                              disabled={isSubmitting}
+                                            >
+                                              Add to Cart
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </Form>
+                                )}
+                              </Formik>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </>
                 </div>
                 <Formik
@@ -1019,6 +1405,13 @@ const ButtonModal = (props: any) => {
     >
       {title}
     </button>
+  );
+};
+
+const SubTitleProductDetail = (props: any) => {
+  const { title } = props;
+  return (
+    <h3 className="text-text capitalize font-semibold text-[1.6em]">{title}</h3>
   );
 };
 
