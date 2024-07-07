@@ -9,9 +9,11 @@ import Loading from "../components/loading/loading";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const { loadingAuth } = useAuthContext();
+  if (loadingAuth) {
+    return <Loading />;
+  }
   return (
     <>
-      {loadingAuth && <Loading />}
       <div className="bg-primary min-h-[100vh] mainLayout">
         <NavBar />
         <main>{children}</main>

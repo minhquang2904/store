@@ -8,14 +8,14 @@ const TemplateProductView = dynamic(
   () => import("../components/template-product-view/templateProductView"),
   {
     loading: () => <LoadingComponent />,
-    ssr: false,
+    ssr: true,
   }
 );
 const TemplateProductSlider = dynamic(
   () => import("../components/template-product-slider/templateProductSlider"),
   {
     loading: () => <LoadingComponent />,
-    ssr: false,
+    ssr: true,
   }
 );
 import RelatedProduct from "../components/relatedProduct/relatedProduct";
