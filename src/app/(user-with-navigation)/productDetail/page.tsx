@@ -33,7 +33,7 @@ export default function ProductDetail({ searchParams }: any) {
   const { user } = useAuthContext();
   const id = searchParams.id;
   const { push } = useRouter();
-  const { fetchDataRecommend } = useRecommendContext();
+  const { fetchDataRecommend, related } = useRecommendContext();
 
   const [description, setDescription] = useState("");
   const [picture, setPicture] = useState(null) as any;

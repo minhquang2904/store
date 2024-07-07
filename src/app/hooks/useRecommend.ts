@@ -41,7 +41,7 @@ const useGetRecommend = () => {
       const result = await res.json();
       const jsonParse = JSON.parse(result);
       const { data, message, status } = jsonParse;
-
+      console.log("jsonParse", data);
       if (status === 200) {
         setRelated(data);
       } else {
@@ -57,14 +57,11 @@ const useGetRecommend = () => {
       console.log("Fetching data from useGetRecommend 2");
       fetchDataRecommend();
     }
-  }, [user, recommend]);
-
-  useEffect(() => {
     if (user && !related) {
       console.log("Fetching data from useGetRecommend 1");
       fetchDataRelated();
     }
-  }, [user, related]);
+  }, [user, recommend, related]);
 
   return {
     recommend,

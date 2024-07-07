@@ -1,13 +1,13 @@
+"use client";
 import { data, login } from "@/app/data";
 import CardProduct from "../cartProduct/cartProduct";
 import TitleComponent from "../titleComponent/titleComponent";
-import { useState } from "react";
-import useGetRecommend from "@/app/hooks/useRecommend";
+import { useRecommendContext } from "@/app/context/RecommedContext";
 
 const RelatedProduct = (props: any) => {
   const { styleCustom } = props;
-  const { related } = useGetRecommend();
-  console.log("related", related);
+  const { related } = useRecommendContext();
+
   return (
     <>
       {related && (
