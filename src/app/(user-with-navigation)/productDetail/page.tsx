@@ -622,9 +622,9 @@ export default function ProductDetail({ searchParams }: any) {
           </div>
         </div>
       )}
-      {/* <RelatedProduct
+      <RelatedProduct
         styleCustom={{ textAlign: "left", marginBottom: "35px" }}
-      /> */}
+      />
     </>
   );
 }

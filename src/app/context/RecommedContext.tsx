@@ -8,6 +8,7 @@ interface RecommendContextType {
   triggerFetchRecommend: () => void;
   fetchDataRecommend: () => void;
   setRecommend: (data: any) => void;
+  related: any;
 }
 
 const RecommendContext = createContext<RecommendContextType | undefined>(
@@ -15,8 +16,13 @@ const RecommendContext = createContext<RecommendContextType | undefined>(
 );
 
 export const RecommendProvider = ({ children }: { children: ReactNode }) => {
-  const { recommend, triggerFetchRecommend, fetchDataRecommend, setRecommend } =
-    useGetRecommend();
+  const {
+    recommend,
+    triggerFetchRecommend,
+    fetchDataRecommend,
+    setRecommend,
+    related,
+  } = useGetRecommend();
 
   return (
     <RecommendContext.Provider
@@ -25,6 +31,7 @@ export const RecommendProvider = ({ children }: { children: ReactNode }) => {
         triggerFetchRecommend,
         fetchDataRecommend,
         setRecommend,
+        related,
       }}
     >
       {children}

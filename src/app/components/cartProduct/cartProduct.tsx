@@ -13,7 +13,7 @@ const CardProduct = (props: any) => {
             className={`${style.hoverCard} block shadow-sm pb-[20px]`}
             href={{
               pathname: "/productDetail",
-              query: { id: data?._id },
+              query: { id: data?._id?.$oid || data?._id },
             }}
           >
             <div className="!relative">
