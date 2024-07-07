@@ -13,9 +13,10 @@ import toast from "react-hot-toast";
 import { useRecommendContext } from "@/app/context/RecommedContext";
 
 const NavBar = () => {
-  const { user, setUser, setLoadingAuth } = useAuthContext();
+  const { user, setUser } = useAuthContext();
   const { cart, setCart, triggerFetchCart } = useCartContext();
-  const { fetchDataRecommend } = useRecommendContext();
+  const { fetchDataRecommend, setRecommend, setRelated } =
+    useRecommendContext();
 
   const pathname = usePathname();
   const searchInput: any = useRef(null);
@@ -132,7 +133,6 @@ const NavBar = () => {
   }, [pathname]);
 
   const handleSignOut = async () => {
-    setLoadingAuth(true);
     try {
       const response = await fetch("/api/users/logout", { method: "POST" });
       const result = await response.json();
@@ -140,9 +140,10 @@ const NavBar = () => {
       if (status === 200) {
         setUser(null);
         setCart(null);
+        setRecommend(null);
+        setRelated(null);
         push("/");
       }
-      setLoadingAuth(false);
     } catch (error) {
       console.error("Sign out failed!", error);
     }
@@ -301,7 +302,7 @@ const NavBar = () => {
                         onClick={() => setCartModal(!cartModal)}
                       >
                         {cart && (
-                          <div className="absolute top-[4px] right-[4px] z-50 bg-secondary text-white w-[16px] h-[16px] text-[1em] rounded-[50%] flex justify-center items-center">
+                          <div className="absolute top-[4px] right-[4px] z-10 bg-secondary text-white w-[16px] h-[16px] text-[1em] rounded-[50%] flex justify-center items-center">
                             <h1>{cart.items.length}</h1>
                           </div>
                         )}

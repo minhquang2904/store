@@ -41,7 +41,7 @@ const useGetRecommend = () => {
       const result = await res.json();
       const jsonParse = JSON.parse(result);
       const { data, message, status } = jsonParse;
-      console.log("jsonParse", data);
+
       if (status === 200) {
         setRelated(data);
       } else {
@@ -69,6 +69,7 @@ const useGetRecommend = () => {
     fetchDataRecommend,
     setRecommend,
     related,
+    setRelated,
   };
 };
 

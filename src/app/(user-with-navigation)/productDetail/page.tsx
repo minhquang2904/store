@@ -622,9 +622,11 @@ export default function ProductDetail({ searchParams }: any) {
           </div>
         </div>
       )}
-      <RelatedProduct
-        styleCustom={{ textAlign: "left", marginBottom: "35px" }}
-      />
+      {user && (
+        <RelatedProduct
+          styleCustom={{ textAlign: "left", marginBottom: "35px" }}
+        />
+      )}
     </>
   );
 }
