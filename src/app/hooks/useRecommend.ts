@@ -11,6 +11,7 @@ const useGetRecommend = () => {
 
   const baseUrl = process.env.NEXT_PUBLIC_HOST_API_DJANGO?.replace(/\/+$/, "");
   const urlLocal = "http://127.0.0.1:8000";
+
   const fetchDataRecommend = async () => {
     const userId = user?.id;
     const url = `${baseUrl}/get_data_history_order/?userId=${userId}`;

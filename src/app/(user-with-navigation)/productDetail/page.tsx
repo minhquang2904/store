@@ -47,6 +47,7 @@ export default function ProductDetail({ searchParams }: any) {
   const [showAmount, setShowAmount] = useState(null) as any;
   const [errorAmount, setErrorAmount] = useState(null) as any;
   const [like, setLike] = useState(false) as any;
+  const [relatedProduct, setRelatedProduct] = useState(null) as any;
   const [fetchLikeAgain, setFetchLikeAgain] = useState(false) as any;
   const formikRef = useRef(null) as any;
 
@@ -74,6 +75,7 @@ export default function ProductDetail({ searchParams }: any) {
   const getData = async () => {
     setLoadingProducts(true);
     const data = await getProduct(id, setLoadingProducts);
+    setRelatedProduct(data.related);
     setProduct(data.data);
   };
 
@@ -109,6 +111,7 @@ export default function ProductDetail({ searchParams }: any) {
       const res = await fetch(`/api/product/like?id=${user?.id}`);
       const result = await res.json();
       const { data, status } = result;
+
       if (status === 200) {
         const likeCheck = data?.likes?.find((item: any) => {
           return item?.productId?._id === product?._id;
@@ -622,9 +625,10 @@ export default function ProductDetail({ searchParams }: any) {
           </div>
         </div>
       )}
-      {user && (
+      {(relatedProduct || relatedProduct?.length > 0) && (
         <RelatedProduct
           styleCustom={{ textAlign: "left", marginBottom: "35px" }}
+          data={relatedProduct}
         />
       )}
     </>

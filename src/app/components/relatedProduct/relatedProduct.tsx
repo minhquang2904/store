@@ -5,8 +5,7 @@ import TitleComponent from "../titleComponent/titleComponent";
 import { useRecommendContext } from "@/app/context/RecommedContext";
 
 const RelatedProduct = (props: any) => {
-  const { styleCustom } = props;
-  const { related } = useRecommendContext();
+  const { styleCustom, data: related } = props;
 
   return (
     <>
@@ -19,9 +18,7 @@ const RelatedProduct = (props: any) => {
             />
             <div className="flex flex-wrap mx-mCard">
               {related?.map((item: any) => {
-                return (
-                  <CardProduct key={item._id.$oid} data={item} login={login} />
-                );
+                return <CardProduct key={item._id} data={item} login={login} />;
               })}
             </div>
           </div>
