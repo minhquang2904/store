@@ -10,17 +10,18 @@ const useGetRecommend = () => {
   const triggerFetchRecommend = () => setFetchAgainRecommend(true);
 
   const baseUrl = process.env.NEXT_PUBLIC_HOST_API_DJANGO?.replace(/\/+$/, "");
-
+  const urlLocal = "http://127.0.0.1:8000";
   const fetchDataRecommend = async () => {
     const userId = user?.id;
     const url = `${baseUrl}/get_data_history_order/?userId=${userId}`;
-    console.log("Fetching data from get_data_history_order");
+    console.log("Fetching data from get_data_history_order", url);
 
     try {
       const res = await fetch(url);
       const result = await res.json();
       const jsonParse = JSON.parse(result);
       const { data, message, status } = jsonParse;
+      console.log("data---", data);
       if (status === 200) {
         setRecommend(data);
       } else {
