@@ -21,7 +21,9 @@ const SearchPage = ({ searchParams }: any) => {
       setLoadingProducts(true);
       try {
         const response = await fetch(
-          `/api/users/search/page?keyword=${searchKeyword}&page=${currentPage}`
+          `/api/users/search/page?keyword=${searchKeyword
+            .replace(/\s+/g, "")
+            .trim()}&page=${currentPage}`
         );
         const data = await response.json();
         setProducts(data.data);
@@ -54,14 +56,18 @@ const SearchPage = ({ searchParams }: any) => {
       )}
       <div className="flex justify-center items-center px-pLayout">
         <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
-          <h1 className="text-[2em] font-medium text-text">
-            Search Result: {searchKeyword}
-          </h1>
-          <p className="mb-[16px] font-medium text-text text-[1.6em]">
-            Page {currentPage} of {totalPages || 1} - ({products?.length}{" "}
-            products on this page)
-          </p>
           {loadingProducts && <LoadingComponent />}
+          {products?.length !== 0 && (
+            <>
+              <h1 className="text-[2em] font-medium text-text">
+                Search Result: {searchKeyword}
+              </h1>
+              <p className="mb-[16px] font-medium text-text text-[1.6em]">
+                Page {currentPage} of {totalPages || 1} - ({products?.length}{" "}
+                products on this page)
+              </p>
+            </>
+          )}
           <div className="flex flex-wrap mx-mCard">
             {products?.map((item: any) => {
               return <CardProduct key={item._id} data={item} />;

@@ -74,7 +74,9 @@ const NavBar = () => {
 
       try {
         const response = await fetch(
-          `/api/users/search/instant?query=${debouncedQuery}`
+          `/api/users/search/instant?query=${debouncedQuery
+            .replace(/\s+/g, "")
+            .trim()}`
         );
         const data = await response.json();
         setSearchResults(data.data);
