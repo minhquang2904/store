@@ -22,6 +22,12 @@ const NavBar = () => {
 
   const debouncedQuery = useDebouncedValue(query, 500);
 
+  const searchRef: any = useRef(null);
+  const cartRef: any = useRef(null);
+  const profileRef: any = useRef(null);
+  const iconCartRef: any = useRef(null);
+  const iconProfileRef: any = useRef(null);
+
   const pathname = usePathname();
   const searchInput: any = useRef(null);
   const [navBottom, setNavBottom] = useState(false);
@@ -30,6 +36,33 @@ const NavBar = () => {
   const [profileModal, setProfileModal] = useState(false);
   const [searchResults, setSearchResults] = useState(null) as any;
   const { push } = useRouter();
+
+  const handleClickOutside = (event: any) => {
+    if (searchRef.current && !searchRef.current.contains(event.target)) {
+      setShowSearch(false);
+    }
+    if (
+      cartRef.current &&
+      !cartRef.current.contains(event.target) &&
+      !iconCartRef.current.contains(event.target)
+    ) {
+      setCartModal(false);
+    }
+    if (
+      profileRef.current &&
+      !profileRef.current.contains(event.target) &&
+      !iconProfileRef.current.contains(event.target)
+    ) {
+      setProfileModal(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
   useEffect(() => {
@@ -57,7 +90,9 @@ const NavBar = () => {
     const value = event.target.value;
 
     if (event.key === "Enter") {
-      console.log("Enter key pressed", value);
+      setQuery("");
+      setShowSearch(false);
+      push(`/search?keyword=${value}&page=1`);
     }
   };
 
@@ -87,34 +122,6 @@ const NavBar = () => {
     handleScrollTop();
     return () => window.removeEventListener("scroll", handleScrollTop);
   }, []);
-
-  useEffect(() => {
-    const $ = document.querySelector.bind(document);
-    const mainLayout: any = $(".mainLayout");
-    const cartContainer: any = $(`.${style.cartContainer}`);
-    const userModal: any = $(`.${style.navigationNameUserModal}`);
-    const cartIcon: any = $(".cartIcon");
-    const profileName: any = $(".profileName");
-    const profileIcon: any = $(".profileIcon");
-
-    const checkActiveIcon = (e: any) => {
-      const target = e.target;
-      cartModal &&
-        !cartContainer.contains(target) &&
-        !cartIcon.contains(target) &&
-        setCartModal(false);
-
-      profileModal &&
-        !userModal.contains(target) &&
-        !profileName.contains(target) &&
-        !profileIcon.contains(target) &&
-        setProfileModal(false);
-    };
-
-    mainLayout.addEventListener("click", checkActiveIcon);
-
-    return () => mainLayout.removeEventListener("click", checkActiveIcon);
-  }, [cartModal, profileModal]);
 
   const lineActive = (target: any, navActive: any, width: any) => {
     const sizeWidth = width;
@@ -331,6 +338,7 @@ const NavBar = () => {
                   <>
                     <div className="pointer relative xsm:hidden sm:hidden l:flex">
                       <div
+                        ref={iconCartRef}
                         className="hover:bg-hover1 p-[10px] rounded-half !relative cursor-pointer cartIcon"
                         onClick={() => setCartModal(!cartModal)}
                       >
@@ -350,6 +358,7 @@ const NavBar = () => {
                       </div>
                       {cartModal && (
                         <div
+                          ref={cartRef}
                           onClick={(e) => e.stopPropagation()}
                           className={`${style.cartContainer} absolute top-[calc(100%+16.5px)] origin-top-right right-[0] w-[360px] rounded-sm bg-[#F3F4F4] cursor-default shadow-sm`}
                         >
@@ -459,7 +468,7 @@ const NavBar = () => {
                       href="/cart"
                     >
                       {cart && (
-                        <div className="absolute top-[4px] right-[4px] z-50 bg-secondary text-white w-[16px] h-[16px] text-[1em] rounded-[50%] flex justify-center items-center">
+                        <div className="absolute top-[4px] right-[4px] z-10 bg-secondary text-white w-[16px] h-[16px] text-[1em] rounded-[50%] flex justify-center items-center">
                           <h1>{cart.items.length}</h1>
                         </div>
                       )}
@@ -478,27 +487,29 @@ const NavBar = () => {
                 {user ? (
                   <>
                     <div className="flex items-center relative">
-                      <div className="h-full w-full ml-[10px] xsm:hidden sm:hidden l:flex">
-                        <h3
-                          className="cursor-pointer h-full w-full text-text text-[20px] flex shrink grow items-center profileName"
-                          onClick={() => setProfileModal(!profileModal)}
-                        >
+                      <div
+                        className="h-full w-full l:ml-[10px]"
+                        onClick={() => setProfileModal(!profileModal)}
+                        ref={iconProfileRef}
+                      >
+                        <h3 className="cursor-pointer h-full w-full text-text text-[20px] xsm:hidden sm:hidden l:flex shrink grow items-center profileName">
                           {user?.email}
                         </h3>
-                      </div>
-                      <div className="xsm:block l:hidden !relative">
-                        <Image
-                          src="/icons/user.svg"
-                          alt="Bag"
-                          className="!relative max-w-[44px] p-[10px] pr-[0px] profileIcon"
-                          fill
-                          sizes="100vw"
-                          priority={true}
-                          onClick={() => setProfileModal(!profileModal)}
-                        />
+                        <div className="xsm:block l:hidden !relative">
+                          <Image
+                            src="/icons/user.svg"
+                            alt="Bag"
+                            className="!relative max-w-[44px] p-[10px] pr-[0px] profileIcon"
+                            fill
+                            sizes="100vw"
+                            priority={true}
+                            onClick={() => setProfileModal(!profileModal)}
+                          />
+                        </div>
                       </div>
                       {profileModal && (
                         <div
+                          ref={profileRef}
                           className={`${style.navigationNameUserModal} origin-top-right absolute right-[0] top-[calc(100%+16.5px)] bg-white shadow-sm rounded-[12px] max-w-[400px] min-w-[200px] w-full`}
                         >
                           <div>
@@ -643,6 +654,7 @@ const NavBar = () => {
           className={`l:px-[15px] xsm:px-[15px] sm:px-[15px] [&.activeSearch]:opacity-100 [&.activeSearch]:duration-300 [&.activeSearch]:visible invisible h-full flex opacity-0 top-[0] absolute right-[0] left-[0] origin-top-right z-10 bg-primary justify-center items-center ${
             showSearch ? "activeSearch" : ""
           }`}
+          ref={searchRef}
         >
           <div className="!relative max-w-[1320px] w-full h-full flex items-center">
             <input
@@ -676,7 +688,7 @@ const NavBar = () => {
             </svg>
             {searchResults && (
               <div
-                className={`${style.tableScroll} !absolute left-[0] right-[0] top-[100%] shadow-[0px_2px_10px_rgba(0,0,0,0.08)] bg-primary max-h-[600px] overflow-y-auto overscroll-y-contain`}
+                className={`${style.tableScroll} !absolute left-[0] right-[0] top-[100%] shadow-[0px_2px_10px_rgba(0,0,0,0.08)] bg-primary xsm:max-h-[400px] max-h-[600px] overflow-y-auto overscroll-y-contain`}
               >
                 <h1 className="w-full text-text text-base pl-[12px] my-[16px] font-medium">
                   The search results contain {searchResults.length || 0}{" "}

@@ -258,10 +258,12 @@ export default function ProductDetail({ searchParams }: any) {
     <>
       {loadingProducts && <LoadingComponent />}
       {product === undefined && (
-        <NoItemCart
-          className="max-w-[160px]"
-          title="This product does not exist"
-        />
+        <div className="mt-[100px]">
+          <NoItemCart
+            className="max-w-[160px]"
+            title="This product does not exist"
+          />
+        </div>
       )}
       {product && (
         <div className="flex justify-center items-center px-pLayout">
