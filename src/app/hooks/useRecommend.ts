@@ -59,11 +59,14 @@ const useGetRecommend = () => {
       console.log("Fetching data from useGetRecommend 2");
       fetchDataRecommend();
     }
+  }, [user, recommend]);
+
+  useEffect(() => {
     if (user && !related) {
       console.log("Fetching data from useGetRecommend 1");
       fetchDataRelated();
     }
-  }, [user, recommend, related]);
+  }, [user, related]);
 
   return {
     recommend,

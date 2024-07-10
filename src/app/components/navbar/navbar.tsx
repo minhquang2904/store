@@ -11,12 +11,16 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import { useCartContext } from "@/app/context/CartContext";
 import toast from "react-hot-toast";
 import { useRecommendContext } from "@/app/context/RecommedContext";
+import useDebouncedValue from "@/app/hooks/useDebouncedValue ";
 
 const NavBar = () => {
   const { user, setUser } = useAuthContext();
   const { cart, setCart, triggerFetchCart } = useCartContext();
   const { fetchDataRecommend, setRecommend, setRelated } =
     useRecommendContext();
+  const [query, setQuery] = useState("");
+
+  const debouncedQuery = useDebouncedValue(query, 500);
 
   const pathname = usePathname();
   const searchInput: any = useRef(null);
@@ -24,9 +28,38 @@ const NavBar = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [cartModal, setCartModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
+  const [searchResults, setSearchResults] = useState(null) as any;
   const { push } = useRouter();
 
   const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!debouncedQuery) {
+        setSearchResults(null);
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `/api/users/search/instant?query=${debouncedQuery}`
+        );
+        const data = await response.json();
+        setSearchResults(data.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [debouncedQuery]);
+
+  const handleInputChange = (event: any) => {
+    const value = event.target.value;
+
+    if (event.key === "Enter") {
+      console.log("Enter key pressed", value);
+    }
+  };
 
   const checkNavActive = (url: string): string => {
     return pathname == `${url}`
@@ -616,8 +649,11 @@ const NavBar = () => {
               ref={searchInput}
               type="text"
               placeholder="Search for clothes..."
+              value={query}
               className="text-text xsm:text-[2em] sm:text-[2em] l:text-[3.4em] outline-none w-full inputSearch bg-primary	"
               contentEditable={true}
+              onChange={(e: any) => setQuery(e.target.value)}
+              onKeyDown={handleInputChange}
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -630,11 +666,58 @@ const NavBar = () => {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              onClick={() => setShowSearch(false)}
+              onClick={() => {
+                setShowSearch(false);
+                setQuery("");
+              }}
             >
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
+            {searchResults && (
+              <div
+                className={`${style.tableScroll} !absolute left-[0] right-[0] top-[calc(100%+8px)] shadow-[0px_2px_10px_rgba(0,0,0,0.08)] bg-primary max-h-[600px] overflow-y-auto overscroll-y-contain`}
+              >
+                <h1 className="w-full text-text text-base pl-[12px] my-[16px] font-medium">
+                  The search results contain {searchResults.length || 0}{" "}
+                  products
+                </h1>
+                {searchResults.map((value: any) => {
+                  return (
+                    <Link
+                      key={value._id}
+                      className="py-[12px] px-[10px] flex items-center hover:bg-hover1 !relative border-b-[1px] border-solid border-navMobile last:border-b-0"
+                      href={`/productDetail?id=${value._id}`}
+                      onClick={() => {
+                        setShowSearch(false);
+                        setQuery("");
+                      }}
+                    >
+                      <Image
+                        src={value.files[0].url}
+                        className="!relative l:!max-w-[60px] xsm:!max-w-[60px] sm:!max-w-[60px]"
+                        alt="LOGO"
+                        fill
+                        sizes="100vw"
+                      />
+                      <div className="text-text capitalize text-[1.6em] ml-[16px]">
+                        <h1 className="font-semibold">{value.name}</h1>
+                        <div className="flex gap-x-[8px]">
+                          {value?.discount > 0 && (
+                            <h4 className="text-button font-semibold line-through">
+                              {value?.price}
+                            </h4>
+                          )}
+                          <h4 className="text-secondary font-semibold">
+                            {value?.discountedPrice || 0}
+                          </h4>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
