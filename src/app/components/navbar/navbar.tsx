@@ -676,7 +676,7 @@ const NavBar = () => {
             </svg>
             {searchResults && (
               <div
-                className={`${style.tableScroll} !absolute left-[0] right-[0] top-[calc(100%+8px)] shadow-[0px_2px_10px_rgba(0,0,0,0.08)] bg-primary max-h-[600px] overflow-y-auto overscroll-y-contain`}
+                className={`${style.tableScroll} !absolute left-[0] right-[0] top-[100%] shadow-[0px_2px_10px_rgba(0,0,0,0.08)] bg-primary max-h-[600px] overflow-y-auto overscroll-y-contain`}
               >
                 <h1 className="w-full text-text text-base pl-[12px] my-[16px] font-medium">
                   The search results contain {searchResults.length || 0}{" "}
@@ -698,7 +698,7 @@ const NavBar = () => {
                         className="!relative l:!max-w-[60px] xsm:!max-w-[60px] sm:!max-w-[60px]"
                         alt="LOGO"
                         fill
-                        sizes="100vw"
+                        sizes="(max-width: 60px) 100vw"
                       />
                       <div className="text-text capitalize text-[1.6em] ml-[16px]">
                         <h1 className="font-semibold">{value.name}</h1>
