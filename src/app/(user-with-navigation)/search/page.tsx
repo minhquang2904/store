@@ -6,6 +6,7 @@ import NoItemCart from "@/app/components/noItemCart/noItemCart";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Pagination from "@/app/components/pagination/pagination";
+
 const SearchPage = ({ searchParams }: any) => {
   const searchKeyword = searchParams.keyword;
   const searchPage = searchParams.page;
@@ -23,7 +24,6 @@ const SearchPage = ({ searchParams }: any) => {
           `/api/users/search/page?keyword=${searchKeyword}&page=${currentPage}`
         );
         const data = await response.json();
-        console.log(data);
         setProducts(data.data);
         setTotalPages(data.totalPages);
         setCurrentPage(data.currentPage);
