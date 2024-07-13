@@ -1,7 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import CheckIcon from "../checkIcon/checkIcon";
 import { type, size } from "@/app/data";
+import { Checkbox, CheckboxGroup, Stack, Box } from "@chakra-ui/react";
+
+const order = ["s", "m", "l", "xl", "xxl"];
 
 const TitleFilter = (props: any) => {
   const { title } = props;
@@ -14,80 +17,37 @@ const TitleFilter = (props: any) => {
 
 const Filter = (props: any) => {
   const { checkType, childParentType, childParentSize } = props;
-  useEffect(() => {
-    const $ = document.querySelector.bind(document);
-    const $$ = document.querySelectorAll.bind(document);
-
-    const container: any = $$(".container");
-    const checkMark: any = $$(".checkmark");
-
-    if (checkType) {
-      ($(`#${checkType} > span`) as any).style.background = "rgb(19, 17, 24)";
-      ($(`#${checkType} > span`) as any).setAttribute("checked", "active");
-    }
-
-    const checkBoxActive = (index: any) => {
-      checkMark[index].style.background == "rgb(19, 17, 24)"
-        ? (checkMark[index].style.background = "transparent")
-        : (checkMark[index].style.background = "rgb(19, 17, 24)");
-    };
-
-    container.forEach((item: any, index: any) => {
-      item.addEventListener("click", () => checkBoxActive(index));
-    });
-
-    return () => {
-      container.forEach((item: any, index: any) => {
-        item.removeEventListener("click", () => checkBoxActive(index));
-      });
-    };
-  }, []);
-
-  const getTag = (parent: any, child: any, index: any) => {
-    return document
-      .querySelectorAll(`.${parent}`)
-      [index].querySelector(`.${child}`);
-  };
-
-  const setAndRemoveAttrType = (getAttr: any, element: any, type: any) => {
-    if (getAttr == null) {
-      element.setAttribute("checked", "active");
-      childParentType(type, "active");
-    }
-    if (getAttr == "active") {
-      element.removeAttribute("checked");
-      childParentType(type, "");
-    }
-  };
-
-  const setAndRemoveAttrSize = (getAttr: any, element: any, type: any) => {
-    if (getAttr == null) {
-      element.setAttribute("checked", "active");
-      childParentSize(type, "active");
-    }
-    if (getAttr == "active") {
-      element.removeAttribute("checked");
-      childParentSize(type, "");
-    }
-  };
-
-  const handleCheckBoxType = (index: any, type: any) => {
-    const element: any = getTag("containerType", "checkmarkType", index);
-    const getAttr = element.getAttribute("checked", "active");
-
-    setAndRemoveAttrType(getAttr, element, type);
-  };
-
-  const handleCheckBoxSize = (index: any, type: any) => {
-    const element: any = getTag("containerSize", "checkmarkSize", index);
-    const getAttr = element.getAttribute("checked", "active");
-
-    setAndRemoveAttrSize(getAttr, element, type);
-  };
+  const [categories, setCategories] = useState(null) as any;
+  const [size, setSize] = useState(null) as any;
+  const [selectedSizes, setSelectedSizes] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   const handleShowFilter = () => {
     document.querySelector(".filterIcon")?.classList.toggle("activeFilter");
   };
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const [resCategoriesData, resSizeData] = await Promise.all([
+          fetch("/api/admin/categories"),
+          fetch("/api/admin/sizes"),
+        ]);
+
+        const [resultCategories, resultSize] = await Promise.all([
+          resCategoriesData.json(),
+          resSizeData.json(),
+        ]);
+
+        setCategories(resultCategories.data);
+        setSize(resultSize.data);
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    };
+
+    getData();
+  }, []);
 
   return (
     <div className="w-full l:w-[30%] mr-[16px]">
@@ -115,54 +75,78 @@ const Filter = (props: any) => {
       <div className="filterIcon duration-500 ease-in-out xsm:max-h-[0] sm:max-h-[0] l:!max-h-[100%] l:h-[100%] [&.activeFilter]:xsm:max-h-[800px] [&.activeFilter]:sm:max-h-[800px] overflow-hidden flex flex-col">
         <div className="mb-[16px] xsm:mb-[8px]">
           <TitleFilter title="product categories" />
-          <div className="flex flex-col xsm:flex-row sm:flex-row flex-wrap">
-            {type.map((item: any, index: any) => {
-              return (
-                <div
-                  key={index}
-                  className="container containerType xsm:w-[33.3333333%] sm:w-[20%] l:w-full xsm:pr-[8px] sm:pr-[8px] items-center relative select-none cursor-pointer py-[10px] l:pr-[0] pl-[35px]"
-                  id={item.type}
-                  onClick={() => handleCheckBoxType(index, item.type)}
-                >
-                  <span className="checkmark checkmarkType absolute inline-block top-2/4 left-[0] translate-y-[-50%] w-[22px] h-[22px] border-solid rounded-[6px] bg-transparent	border-[1px] border-button"></span>
-                  <p className="text-text text-[1.6em] font-medium capitalize">
-                    {item.type}
-                  </p>
-                  <CheckIcon />
-                </div>
-              );
-            })}
-          </div>
+          <CheckboxGroup
+            onChange={(value: any) => setSelectedCategories(value)}
+            value={selectedCategories}
+          >
+            <div className="flex md:flex-col xsm:flex-row sm:flex-row flex-wrap capitalize gap-y-[8px] gap-x-[20px] mt-[8px] text-text font-medium">
+              {categories?.map((categoriesItem: any) => {
+                return (
+                  <CustomCheckbox
+                    key={categoriesItem._id}
+                    title={categoriesItem.categories}
+                  />
+                );
+              })}
+            </div>
+          </CheckboxGroup>
         </div>
         <div className="mb-[16px] xsm:mb-[8px]">
           <TitleFilter title="Filter by size" />
-          <div className="flex flex-col xsm:flex-row sm:flex-row flex-wrap">
-            {size.map((item: any, index: any) => {
-              return (
-                <div
-                  key={index}
-                  className="container containerSize xsm:w-[33.3333333%] sm:w-[20%] l:w-full xsm:pr-[8px] sm:pr-[8px] items-center relative select-none cursor-pointer py-[10px] l:pr-[0] pl-[35px]"
-                  id={item.size}
-                  onClick={() => handleCheckBoxSize(index, item.size)}
-                >
-                  <span className="checkmark checkmarkSize  absolute inline-block top-2/4 left-[0] translate-y-[-50%] w-[22px] h-[22px] border-solid rounded-[6px] bg-transparent	border-[1px] border-button"></span>
-                  <p
-                    className="text-text text-[1.6em] font-medium capitalize"
-                    style={{ textTransform: "uppercase" }}
-                  >
-                    {item.size}
-                  </p>
-                  <CheckIcon />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        <div>
-          <TitleFilter title="Filter by price" />
+          <CheckboxGroup
+            onChange={(value: any) => setSelectedSizes(value)}
+            value={selectedSizes}
+          >
+            <div className="flex md:flex-col xsm:flex-row sm:flex-row flex-wrap capitalize gap-y-[8px] gap-x-[20px] mt-[8px] text-text font-medium">
+              {size
+                ?.sort(
+                  (a: any, b: any) =>
+                    order.indexOf(a.sizes) - order.indexOf(b.sizes)
+                )
+                .map((sizeItem: any) => {
+                  return (
+                    <CustomCheckbox key={sizeItem._id} title={sizeItem.sizes} />
+                  );
+                })}
+            </div>
+          </CheckboxGroup>
         </div>
       </div>
     </div>
+  );
+};
+
+const CustomCheckbox = (props: any) => {
+  const { title } = props;
+  return (
+    <Checkbox
+      value={title}
+      size="lg"
+      borderColor="#E4E5F0"
+      iconColor="white"
+      spacing="10px"
+      _checked={{
+        "& .chakra-checkbox__control": {
+          background: "#131118",
+          borderColor: "#131118",
+        },
+      }}
+      sx={{
+        "& .chakra-checkbox__control": {
+          borderRadius: "5px",
+        },
+        "& .chakra-checkbox__label": {
+          fontSize: "14px",
+          color: "#131118",
+          textTransform: "uppercase",
+        },
+      }}
+      _hover={{
+        borderColor: "#131118",
+      }}
+    >
+      {title}
+    </Checkbox>
   );
 };
 

@@ -330,7 +330,7 @@ const Cart = () => {
                   </div>
                   <>
                     {recommend && (
-                      <div className="mt-[30px] mb-[16px] text-text text-[1.6em] font-medium uppercase">
+                      <div className="mt-[16px] mb-[16px] pt-[26px] text-text text-[1.6em] font-medium uppercase border-t-[1px] border-border">
                         Popular products
                       </div>
                     )}
@@ -375,7 +375,10 @@ const Cart = () => {
                                 {({ isSubmitting, setFieldValue, values }) => (
                                   <Form className="flex xsm:flex-col">
                                     <div className="w-[40%] xsm:w-[100%] flex items-center xsm:flex-col xsm:mb-[16px]">
-                                      <div className="!relative">
+                                      <Link
+                                        href={`/productDetail?id=${item._id.$oid}`}
+                                        className="!relative"
+                                      >
                                         <Image
                                           src={item.files[0].url}
                                           className="!relative max-w-[300px] max-h-[300px] object-cover"
@@ -383,7 +386,7 @@ const Cart = () => {
                                           fill
                                           sizes="(max-width: 200px) 200px"
                                         />
-                                      </div>
+                                      </Link>
                                     </div>
                                     <div className="w-[60%] xsm:w-[100%] sm:ml-[16px]">
                                       <div className="flex justify-between xsm:flex-col">

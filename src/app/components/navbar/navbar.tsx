@@ -103,18 +103,19 @@ const NavBar = () => {
       ? `${style.navigationItem} lineActive`
       : `${style.navigationItem}`;
   };
+  const positionTopNavRef: any = useRef(null);
 
   useEffect(() => {
     const $ = document.querySelector.bind(document);
-    const positionTopNav: any = $(".headerContainer");
     const iconScrollTop: any = $(".iconScrollTop");
 
     const handleScrollTop = () => {
-      positionTopNav.offsetTop > 80
-        ? (positionTopNav.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.15)")
-        : (positionTopNav.style.boxShadow = "unset");
+      positionTopNavRef.current.offsetTop > 80
+        ? (positionTopNavRef.current.style.boxShadow =
+            "0 4px 10px rgba(0, 0, 0, 0.15)")
+        : (positionTopNavRef.current.style.boxShadow = "unset");
 
-      positionTopNav.offsetTop > 500
+      positionTopNavRef.current.offsetTop > 500
         ? iconScrollTop.classList.add("active")
         : iconScrollTop.classList.remove("active");
     };
@@ -216,9 +217,16 @@ const NavBar = () => {
       console.error("There was a problem with deleting the cart item:", error);
     }
   };
+
+  const handleNavClick = (category: any) => {
+    push(`/${category}?categories=${category}`);
+  };
   return (
     <>
-      <div className="headerContainer min-h-80 flex justify-center items-center sticky top-[0] left-[0] right-[0] bg-primary z-20 l:px-pLayout xsm:px-pLayout sm:px-[15px]">
+      <div
+        ref={positionTopNavRef}
+        className="headerContainer min-h-80 flex justify-center items-center sticky top-[0] left-[0] right-[0] bg-primary z-20 l:px-pLayout xsm:px-pLayout sm:px-[15px]"
+      >
         <div className="flex w-full max-w-layout">
           <div className="h-20 mx-auto flex justify-between items-center w-full">
             <div className="flex items-center h-full">
@@ -238,15 +246,24 @@ const NavBar = () => {
                 <Link href="/" className={checkNavActive("/")}>
                   home
                 </Link>
-                <Link href="/shirt" className={checkNavActive("/shirt")}>
+                <div
+                  onClick={() => handleNavClick("shirt")}
+                  className={checkNavActive("/shirt")}
+                >
                   shirt
-                </Link>
-                <Link href="/trousers" className={checkNavActive("/trousers")}>
+                </div>
+                <div
+                  onClick={() => handleNavClick("trousers")}
+                  className={checkNavActive("/trousers")}
+                >
                   trousers
-                </Link>
-                <Link href="/bagShoes" className={checkNavActive("/bagShoes")}>
-                  Bag & Shoes
-                </Link>
+                </div>
+                <div
+                  onClick={() => handleNavClick("jacket")}
+                  className={checkNavActive("/bagShoes")}
+                >
+                  jacket
+                </div>
                 <div className={`${style.line}`}></div>
               </div>
             </div>
@@ -294,7 +311,7 @@ const NavBar = () => {
                       trousers
                     </Link>
                     <Link href="/bagShoes" className="ml-[10px] py-[6px]">
-                      Bag & Shoes
+                      jacket
                     </Link>
                   </div>
                 </div>

@@ -26,9 +26,13 @@ const SearchPage = ({ searchParams }: any) => {
             .trim()}&page=${currentPage}`
         );
         const data = await response.json();
-        setProducts(data.data);
-        setTotalPages(data.totalPages);
-        setCurrentPage(data.currentPage);
+        if (data.status === 200) {
+          setProducts(data.data);
+          setTotalPages(data.totalPages);
+          setCurrentPage(data.currentPage);
+        } else {
+          setProducts([]);
+        }
         setLoadingProducts(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -46,18 +50,10 @@ const SearchPage = ({ searchParams }: any) => {
   };
   return (
     <>
-      {products?.length === 0 && (
-        <div className="mt-[100px]">
-          <NoItemCart
-            className="max-w-[160px]"
-            title="This product does not exist"
-          />
-        </div>
-      )}
       <div className="flex justify-center items-center px-pLayout">
         <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
           {loadingProducts && <LoadingComponent />}
-          {products?.length !== 0 && (
+          {products?.length > 0 ? (
             <>
               <h1 className="text-[2em] font-medium text-text">
                 Search Result: {searchKeyword}
@@ -66,18 +62,27 @@ const SearchPage = ({ searchParams }: any) => {
                 Page {currentPage} of {totalPages || 1} - ({products?.length}{" "}
                 products on this page)
               </p>
+              <div className="flex flex-wrap mx-mCard">
+                {products?.map((item: any) => {
+                  return <CardProduct key={item._id} data={item} />;
+                })}
+              </div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </>
+          ) : (
+            <>
+              <div className="mt-[100px]">
+                <NoItemCart
+                  className="max-w-[160px]"
+                  title="This product does not exist"
+                />
+              </div>
             </>
           )}
-          <div className="flex flex-wrap mx-mCard">
-            {products?.map((item: any) => {
-              return <CardProduct key={item._id} data={item} />;
-            })}
-          </div>
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
         </div>
       </div>
     </>
