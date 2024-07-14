@@ -3,7 +3,6 @@ import { data, login } from "@/app/data";
 import { useEffect, useState } from "react";
 import CardProduct from "../cartProduct/cartProduct";
 import TitleComponent from "../titleComponent/titleComponent";
-import { MathRound } from "@/app/config/formatCurrencyVND";
 
 export default function TemplateProductView() {
   const [dataList, setData] = useState(data);
