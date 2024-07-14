@@ -26,7 +26,6 @@ export async function PUT(req: NextRequest) {
       const colors: any = data.get("colors");
       const quantity = data.get("quantity");
       const size: any = data.get("size");
-
       const colorsParse = JSON.parse(colors);
       const sizeParse = JSON.parse(size);
       const existingSizes = [...product.sizes];

@@ -12,6 +12,7 @@ import { useCartContext } from "@/app/context/CartContext";
 import toast from "react-hot-toast";
 import { useRecommendContext } from "@/app/context/RecommedContext";
 import useDebouncedValue from "@/app/hooks/useDebouncedValue ";
+import { FormatCurrencyVND } from "@/app/config/formatCurrencyVND";
 
 const NavBar = () => {
   const { user, setUser } = useAuthContext();
@@ -219,7 +220,7 @@ const NavBar = () => {
   };
 
   const handleNavClick = (category: any) => {
-    push(`/${category}?categories=${category}`);
+    push(`/category/${category}?categories=${category}`);
   };
   return (
     <>
@@ -422,10 +423,15 @@ const NavBar = () => {
                                           </h2>
                                           <h3 className="text-text text-[1.4em] my-[4px] font-bold flex gap-x-[4px]">
                                             <p>
-                                              {item.quantity} x {item.price}
+                                              {item.quantity} x{" "}
+                                              {FormatCurrencyVND(item.price)}
                                             </p>
                                             <p className="text-secondary">
-                                              ({item.totalPriceItem})
+                                              (
+                                              {FormatCurrencyVND(
+                                                item.totalPriceItem
+                                              )}
+                                              )
                                             </p>
                                           </h3>
                                           <div className="flex justify-between items-center">
@@ -467,7 +473,10 @@ const NavBar = () => {
                             <div className="px-[12px]">
                               <div className="text-text flex justify-between font-semibold capitalize text-[1.4em] mb-[16px]">
                                 <h1>subtotal</h1>
-                                <p>{cart?.totalPrice || 0}</p>
+                                <p>
+                                  {FormatCurrencyVND(cart?.totalPrice) || 0}{" "}
+                                  <span className="lowercase">đ</span>
+                                </p>
                               </div>
                               <Link
                                 href="/cart"

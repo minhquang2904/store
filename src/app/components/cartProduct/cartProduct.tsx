@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import style from "./cardProduct.module.scss";
 import SoldOut from "../soldOut/soldOut";
+import { MathCeil } from "@/app/config/formatCurrencyVND";
 
 const CardProduct = (props: any) => {
   const { data } = props;
@@ -40,11 +41,6 @@ const CardProduct = (props: any) => {
                   {data?.name}
                 </h1>
               </div>
-              {/* <div className="my-[6px] mx-[0]">
-                <h1 className="text-text text-[1.6em] font-bold capitalize min-h-[24px] line-clamp-1">
-                  {data?.subName}
-                </h1>
-              </div> */}
               <div className="flex justify-between">
                 <p className="text-[#00000080] text-[1.6em] font-medium capitalize">
                   {data?.categories}
@@ -53,15 +49,15 @@ const CardProduct = (props: any) => {
                   {data?.discount > 0 ? (
                     <>
                       <h3 className="text-[1.6em] text-button line-through">
-                        {data?.price}
+                        {MathCeil(data?.price)}
                       </h3>
                       <h3 className="text-[1.6em] ml-[10px] text-secondary">
-                        {data?.discountedPrice}
+                        {MathCeil(data?.discountedPrice)}
                       </h3>
                     </>
                   ) : (
                     <h3 className="text-[1.6em] text-secondary">
-                      {data?.price}
+                      {MathCeil(data?.price)}
                     </h3>
                   )}
                 </div>

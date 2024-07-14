@@ -14,6 +14,7 @@ import style from "./newOrders.module.scss";
 import LabelInput from "@/app/components/labelInput/labelInput";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { FormatCurrencyVND } from "@/app/config/formatCurrencyVND";
 
 const ListOrder = () => {
   const [listOrder, setListOrder] = useState(null) as any;
@@ -78,7 +79,11 @@ const ListOrder = () => {
                     />
                     <ContentTable title={order.phone ? order.phone : "N/A"} />
                     <ContentTable
-                      title={order.totalPrice ? order.totalPrice : "N/A"}
+                      title={
+                        order.totalPrice
+                          ? FormatCurrencyVND(order.totalPrice)
+                          : "N/A"
+                      }
                       styleCustom="!text-secondary !font-medium"
                     />
                     <ContentTable
@@ -174,7 +179,9 @@ const ModalSee = (props: any) => {
       >
         <h1 className="text-[2em] text-button capitalize px-[24px] mb-[8px]">
           orders from {data.firstName + " " + data.lastName} -{" "}
-          <span className="text-secondary font-medium">{data.totalPrice}</span>
+          <span className="text-secondary font-medium">
+            {FormatCurrencyVND(data.totalPrice)}
+          </span>
         </h1>
         <ModalBody
           className={`${style.tableScroll} flex flex-col gap-y-[20px] xsm:gap-y-[16px] overflow-y-auto max-h-[600px]`}
@@ -182,9 +189,9 @@ const ModalSee = (props: any) => {
           <div className="flex xsm:flex-col xsm:gap-y-[16px]">
             <LabelAndInput
               label="Total Price"
-              title={data.totalPrice || "N/A"}
+              title={FormatCurrencyVND(data.totalPrice) || "N/A"}
             />
-            <LabelAndInput label="last name" title={data.status || "N/A"} />
+            <LabelAndInput label="status" title={data.status || "N/A"} />
           </div>
           <div className="flex xsm:flex-col xsm:gap-y-[16px]">
             <LabelAndInput label="First Name" title={data.firstName || "N/A"} />
@@ -243,10 +250,10 @@ const ModalSee = (props: any) => {
                       </h2>
                       <h3 className="text-text text-[1.4em] my-[4px] font-bold flex gap-x-[4px]">
                         <p>
-                          {item.quantity} x {item.price}
+                          {item.quantity} x {FormatCurrencyVND(item.price)}
                         </p>
                         <p className="text-secondary">
-                          ({item.totalPriceItem})
+                          ({FormatCurrencyVND(item.totalPriceItem)})
                         </p>
                       </h3>
                       <div className="flex justify-between items-center">

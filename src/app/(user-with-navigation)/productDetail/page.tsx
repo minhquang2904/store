@@ -19,6 +19,7 @@ import { useCartContext } from "@/app/context/CartContext";
 import NoItemCart from "@/app/components/noItemCart/noItemCart";
 import { useRouter } from "next/navigation";
 import { useRecommendContext } from "@/app/context/RecommedContext";
+import { FormatCurrencyVND } from "@/app/config/formatCurrencyVND";
 const order = ["s", "m", "l", "xl", "xxl"];
 
 const SubTitleProductDetail = (props: any) => {
@@ -342,11 +343,12 @@ export default function ProductDetail({ searchParams }: any) {
                 <div className="flex mt-[8px] gap-x-[6px] items-center">
                   {product?.discount > 0 && (
                     <h4 className="text-button font-semibold text-[1.6em] line-through">
-                      {product?.price}
+                      {FormatCurrencyVND(product?.price)} <span>đ</span>
                     </h4>
                   )}
                   <h4 className="text-secondary font-semibold text-[2.2em]">
-                    {product?.discountedPrice || "N/A"}
+                    {FormatCurrencyVND(product?.discountedPrice)}{" "}
+                    <span className="text-text">đ</span>
                   </h4>
                 </div>
                 <div className="mt-[16px]">

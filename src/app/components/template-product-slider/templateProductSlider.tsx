@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "./slider.scss";
 import TitleComponent from "../titleComponent/titleComponent";
 import SoldOut from "../soldOut/soldOut";
+import { MathCeil } from "@/app/config/formatCurrencyVND";
 
 const SampleNextArrow = (props: any) => {
   const { className, onClick } = props;
@@ -233,11 +234,6 @@ const TemplateProductSlider = () => {
                               {item?.name}
                             </h1>
                           </div>
-                          {/* <div className="my-[6px] mx-[0]">
-                            <h1 className="text-text text-[1.6em] font-medium capitalize min-h-[24px] line-clamp-1">
-                              {item?.subName}
-                            </h1>
-                          </div> */}
                           <div className="flex justify-between">
                             <p className="text-[#00000080] text-[1.6em] font-medium capitalize">
                               {item?.categories}
@@ -246,15 +242,15 @@ const TemplateProductSlider = () => {
                               {item?.discount > 0 ? (
                                 <>
                                   <h3 className="text-[1.6em] text-button line-through">
-                                    {item?.price}
+                                    {MathCeil(item?.price)}
                                   </h3>
                                   <h3 className="text-[1.6em] ml-[10px] text-secondary">
-                                    {item?.discountedPrice}
+                                    {MathCeil(item?.discountedPrice)}
                                   </h3>
                                 </>
                               ) : (
                                 <h3 className="text-[1.6em] text-secondary">
-                                  {item?.price}
+                                  {MathCeil(item?.price)}
                                 </h3>
                               )}
                             </div>

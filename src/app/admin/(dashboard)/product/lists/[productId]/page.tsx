@@ -408,6 +408,13 @@ const ProductDetail = ({ params }: { params: { productId: string } }) => {
     setFieldValue("discountedPrice", discountedPrice);
   };
 
+  function formatCurrencyVND(amount: any) {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(amount);
+  }
+
   const handleChangeDiscount = (e: any, setFieldValue: any, values: any) => {
     const discount = e.target.value;
     setProductDiscount(Number(discount));

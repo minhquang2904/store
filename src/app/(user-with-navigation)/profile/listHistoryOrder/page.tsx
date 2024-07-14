@@ -18,6 +18,7 @@ import BtnAccount from "@/app/components/btnAccount/btnAccount";
 import Image from "next/image";
 import TitleCheckOut from "@/app/components/titleCheckOut/titleCheckOut";
 import style from "./listHistoryOrder.module.scss";
+import { FormatCurrencyVND } from "@/app/config/formatCurrencyVND";
 
 const ListsHistoryOrder = () => {
   const { push } = useRouter();
@@ -160,7 +161,7 @@ const ListsHistoryOrder = () => {
                     </div>
                     <div className="w-[20%] xsm:w-[20%] flex items-center justify-center px-[8px] xsm:px-[0]">
                       <h1 className="text-text text-[1.6em] font-semibold">
-                        {item?.totalPrice}
+                        {FormatCurrencyVND(item?.totalPrice)} <span>đ</span>
                       </h1>
                     </div>
                     <div className="w-[30%] flex justify-end pl-[8px] xsm:hidden">
@@ -358,10 +359,11 @@ const ModalConfirmOrder = (props: any) => {
                                 </h2>
                                 <h3 className="text-text text-[1.4em] my-[4px] font-bold flex gap-x-[4px]">
                                   <p>
-                                    {item.quantity} x {item.price}
+                                    {item.quantity} x{" "}
+                                    {FormatCurrencyVND(item.price)}
                                   </p>
                                   <p className="text-secondary">
-                                    ({item.totalPriceItem})
+                                    ({FormatCurrencyVND(item.totalPriceItem)})
                                   </p>
                                 </h3>
                                 <div className="flex justify-between items-center">
@@ -428,7 +430,8 @@ const ModalConfirmOrder = (props: any) => {
               Grand Total
             </h1>
             <h1 className="text-secondary capitalize font-bold text-[1.6em]">
-              {item?.totalPrice}
+              {FormatCurrencyVND(item?.totalPrice)}{" "}
+              <span className="text-text lowercase">đ</span>
             </h1>
           </div>
           <div className="flex justify-between gap-x-[10px] mb-[10px]">

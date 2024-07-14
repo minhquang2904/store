@@ -20,6 +20,7 @@ import toast from "react-hot-toast";
 import LoadingComponent from "@/app/components/loadingComponent/loadingComponent";
 import { useRouter } from "next/navigation";
 import { useRecommendContext } from "@/app/context/RecommedContext";
+import { FormatCurrencyVND } from "@/app/config/formatCurrencyVND";
 
 const order = ["s", "m", "l", "xl", "xxl"];
 
@@ -285,14 +286,16 @@ const Cart = () => {
                                     </div>
                                   </div>
                                 </td>
-                                <td className="w-full p-[10px] text-text text-[1.6em] text-start">
-                                  {item?.price}
+                                <td className="w-full p-[10px] whitespace-nowrap text-text text-[1.6em] text-start">
+                                  {FormatCurrencyVND(item?.price)}{" "}
+                                  <span>đ</span>
                                 </td>
                                 <td className="w-full p-[10px] text-text text-[1.6em] !text-center">
                                   {item?.quantity}
                                 </td>
-                                <td className="w-full p-[10px] text-text text-[1.6em] text-start">
-                                  {item?.totalPriceItem}
+                                <td className="w-full p-[10px] whitespace-nowrap text-text text-[1.6em] text-start">
+                                  {FormatCurrencyVND(item?.totalPriceItem)}{" "}
+                                  <span>đ</span>
                                 </td>
                                 <td className="w-full p-[10px]">
                                   <div
@@ -397,11 +400,15 @@ const Cart = () => {
                                       <div className="flex mt-[8px] gap-x-[6px] items-center">
                                         {item?.discount > 0 && (
                                           <h4 className="text-button font-semibold text-[1.6em] line-through">
-                                            {item?.price}
+                                            {FormatCurrencyVND(item?.price)}{" "}
+                                            <span>đ</span>
                                           </h4>
                                         )}
                                         <h4 className="text-secondary font-semibold text-[1.8em]">
-                                          {item?.discountedPrice || "N/A"}
+                                          {FormatCurrencyVND(
+                                            item?.discountedPrice
+                                          )}{" "}
+                                          <span className="text-text">đ</span>
                                         </h4>
                                       </div>
                                       <div className="mt-[8px]">
@@ -731,7 +738,8 @@ const Cart = () => {
                               Grand Total
                             </h1>
                             <h3 className="font-bold text-text">
-                              {cart?.totalPrice}
+                              {FormatCurrencyVND(cart?.totalPrice)}{" "}
+                              <span>đ</span>
                             </h3>
                           </div>
                           <button
@@ -919,10 +927,11 @@ const ModalConfirmOrder = (props: any) => {
                                 </h2>
                                 <h3 className="text-text text-[1.4em] my-[4px] font-bold flex gap-x-[4px]">
                                   <p>
-                                    {item.quantity} x {item.price}
+                                    {item.quantity} x{" "}
+                                    {FormatCurrencyVND(item.price)}{" "}
                                   </p>
                                   <p className="text-secondary">
-                                    ({item.totalPriceItem})
+                                    ({FormatCurrencyVND(item.totalPriceItem)})
                                   </p>
                                 </h3>
                                 <div className="flex justify-between items-center">
@@ -1015,7 +1024,8 @@ const ModalConfirmOrder = (props: any) => {
               Grand Total
             </h1>
             <h1 className="text-secondary capitalize font-bold text-[1.6em]">
-              {cart?.totalPrice}
+              {FormatCurrencyVND(cart?.totalPrice)}{" "}
+              <span className="text-text lowercase">đ</span>
             </h1>
           </div>
           <div className="flex justify-between gap-x-[10px] mb-[10px]">

@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import style from "./cardProductLike.module.scss";
 import SoldOut from "../soldOut/soldOut";
+import { MathCeil } from "@/app/config/formatCurrencyVND";
 
 const CardProductLike = (props: any) => {
   const { data } = props;
@@ -59,14 +60,16 @@ const CardProductLike = (props: any) => {
                   {discount > 0 ? (
                     <>
                       <h3 className="text-[1.6em] text-button line-through">
-                        {price}
+                        {MathCeil(price)}
                       </h3>
                       <h3 className="text-[1.6em] ml-[10px] text-secondary">
-                        {discountedPrice}
+                        {MathCeil(discountedPrice)}
                       </h3>
                     </>
                   ) : (
-                    <h3 className="text-[1.6em] text-secondary">{price}</h3>
+                    <h3 className="text-[1.6em] text-secondary">
+                      {MathCeil(price)}
+                    </h3>
                   )}
                 </div>
               </div>
