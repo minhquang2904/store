@@ -160,39 +160,10 @@ const TemplateProductSlider = () => {
       <div className="flex justify-center items-center px-pLayout">
         <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
           <TitleComponent title="Discount" />
-          <div className="my-[35px] mx-[0] flex justify-between">
-            <div className="flex gap-[12px] items-center">
-              <div
-                className="activeTabSlider [&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
-                onClick={handleChangeType}
-              >
-                all products
-              </div>
-              <div
-                className="[&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
-                onClick={handleChangeType}
-                id="shirt"
-              >
-                shirt
-              </div>
-              <div
-                className="[&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
-                onClick={handleChangeType}
-                id="bag"
-              >
-                Bag
-              </div>
-              <div
-                className="[&.activeTabSlider]:text-text text-sub text-[1.6em] font-semibold capitalize cursor-pointer hover:text-text"
-                onClick={handleChangeType}
-                id="shoes"
-              >
-                Shoes
-              </div>
-            </div>
+          <div className="my-[35px] mx-[0] flex justify-end">
             <div>
               <Link
-                href="#"
+                href={`/promotions?promotions=discount&page=1`}
                 className="bg-button text-white text-[1.6em] font-normal capitalize py-[8px] px-[14px] hover:opacity-90"
               >
                 show all

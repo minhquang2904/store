@@ -1,8 +1,6 @@
+import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import CheckIcon from "../checkIcon/checkIcon";
-import { type, size } from "@/app/data";
-import { Checkbox, CheckboxGroup, Stack, Box } from "@chakra-ui/react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const order = ["s", "m", "l", "xl", "xxl"];
 
@@ -16,11 +14,17 @@ const TitleFilter = (props: any) => {
 };
 
 const Filter = (props: any) => {
-  const { checkType, childParentType, childParentSize } = props;
+  const { initial } = props;
   const [categories, setCategories] = useState(null) as any;
   const [size, setSize] = useState(null) as any;
-  const [selectedSizes, setSelectedSizes] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState({}) as any;
+  const { push } = useRouter();
+  const searchParams = useSearchParams();
+  console.log("searchParams--", searchParams.get("categories"));
+  useEffect(() => {
+    setSelectedFilters({ categories: [initial] });
+  }, []);
+  console.log("selectedFilters--", selectedFilters);
 
   const handleShowFilter = () => {
     document.querySelector(".filterIcon")?.classList.toggle("activeFilter");
@@ -49,6 +53,31 @@ const Filter = (props: any) => {
     getData();
   }, []);
 
+  const handleCheckboxChange = (value: any, filterType: any) => {
+    setSelectedFilters((prevFilters: any) => {
+      const newFilters = { ...prevFilters };
+      newFilters[filterType] = value;
+      console.log(newFilters);
+      if (newFilters[filterType].length === 0) {
+        delete newFilters[filterType];
+      }
+      applyFilters(newFilters);
+      return newFilters;
+    });
+  };
+
+  const applyFilters = (filters: any) => {
+    const params = new URLSearchParams();
+    Object.keys(filters).forEach((filterType) => {
+      if (filters[filterType].length > 0) {
+        params.append(filterType, filters[filterType].join(" "));
+      }
+    });
+    console.log(params.toString());
+    const queryString = `/category?${params.toString()}`;
+    push(queryString);
+  };
+
   return (
     <div className="w-full l:w-[30%] mr-[16px]">
       <div
@@ -76,8 +105,8 @@ const Filter = (props: any) => {
         <div className="mb-[16px] xsm:mb-[8px]">
           <TitleFilter title="product categories" />
           <CheckboxGroup
-            onChange={(value: any) => setSelectedCategories(value)}
-            value={selectedCategories}
+            onChange={(value) => handleCheckboxChange(value, "categories")}
+            value={selectedFilters.categories || []}
           >
             <div className="flex md:flex-col xsm:flex-row sm:flex-row flex-wrap capitalize gap-y-[8px] gap-x-[20px] mt-[8px] text-text font-medium">
               {categories?.map((categoriesItem: any) => {
@@ -94,8 +123,8 @@ const Filter = (props: any) => {
         <div className="mb-[16px] xsm:mb-[8px]">
           <TitleFilter title="Filter by size" />
           <CheckboxGroup
-            onChange={(value: any) => setSelectedSizes(value)}
-            value={selectedSizes}
+            onChange={(value) => handleCheckboxChange(value, "sizes")}
+            value={selectedFilters.sizes || []}
           >
             <div className="flex md:flex-col xsm:flex-row sm:flex-row flex-wrap capitalize gap-y-[8px] gap-x-[20px] mt-[8px] text-text font-medium">
               {size

@@ -220,7 +220,7 @@ const NavBar = () => {
   };
 
   const handleNavClick = (category: any) => {
-    push(`/category/${category}?categories=${category}`);
+    push(`/category?categories=${category}`);
   };
   return (
     <>

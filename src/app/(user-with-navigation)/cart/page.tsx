@@ -332,12 +332,12 @@ const Cart = () => {
                     </table>
                   </div>
                   <>
-                    {recommend && (
+                    {recommend?.length > 0 && (
                       <div className="mt-[16px] mb-[16px] pt-[26px] text-text text-[1.6em] font-medium uppercase border-t-[1px] border-border">
                         Popular products
                       </div>
                     )}
-                    {recommend && (
+                    {recommend?.length > 0 && (
                       <div className="flex flex-col sm:gap-y-[46px] xsm:gap-y-[20px]">
                         {recommend.map((item: any, itemIndex: any) => {
                           return (
