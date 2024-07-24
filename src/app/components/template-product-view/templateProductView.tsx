@@ -1,31 +1,10 @@
 import Link from "next/link";
-import { data, login } from "@/app/data";
 import { useEffect, useState } from "react";
 import CardProduct from "../cartProduct/cartProduct";
 import TitleComponent from "../titleComponent/titleComponent";
 
 export default function TemplateProductView() {
-  const [dataList, setData] = useState(data);
   const [products, setProducts] = useState(null) as any;
-
-  const handleChangeType = (e: any) => {
-    const id = e.target.id;
-
-    id == "shirt" && getDataType("shirt");
-    id == "bag" && getDataType("bag");
-    id == "shoes" && getDataType("shoes");
-    !id && setData(data);
-
-    document.querySelector(".activeTabView")?.classList.remove("activeTabView");
-    e.target.classList.add("activeTabView");
-  };
-
-  const getDataType = (type: string) => {
-    const dataType = data.filter((item: any) => {
-      return item.type.includes(type);
-    });
-    return setData(dataType);
-  };
 
   const getNewProduct = () => {
     try {
@@ -58,7 +37,7 @@ export default function TemplateProductView() {
         <div className="my-[35px] mx-[0] flex justify-end">
           <div>
             <Link
-              href={`/promotions?promotions=new-product`}
+              href={`/promotions?promotions=new-product&page=1`}
               className="bg-button text-white text-[1.6em] font-normal capitalize py-[8px] px-[14px] hover:opacity-90"
             >
               show all

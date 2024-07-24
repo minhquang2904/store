@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { data } from "@/app/data";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -101,35 +100,14 @@ const settings = {
 };
 
 const TemplateProductSlider = () => {
-  const [dataList, setData] = useState(data);
   const [product, setProduct] = useState(null) as any;
-  const handleChangeType = (e: any) => {
-    const id = e.target.id;
-
-    id == "shirt" && getDataType("shirt");
-    id == "bag" && getDataType("bag");
-    id == "shoes" && getDataType("shoes");
-    !id && setData(data);
-
-    document
-      .querySelector(".activeTabSlider")
-      ?.classList.remove("activeTabSlider");
-    e.target.classList.add("activeTabSlider");
-  };
-
-  const getDataType = (type: string) => {
-    const dataType = data.filter((item: any) => {
-      return type.includes(item.type);
-    });
-    return setData(dataType);
-  };
 
   useEffect(() => {
     const slideArrow = document.querySelectorAll(".slick-arrow");
-    dataList.length <= 4
+    product?.length <= 4
       ? slideArrow.forEach((item: any) => (item.style.display = "none"))
       : slideArrow.forEach((item: any) => (item.style.display = "block"));
-  }, [dataList]);
+  }, [product]);
 
   useEffect(() => {
     const fetchDataProduct = async () => {

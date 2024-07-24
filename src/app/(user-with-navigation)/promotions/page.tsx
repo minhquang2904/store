@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import LoadingComponent from "@/app/components/loadingComponent/loadingComponent";
 import NoItemCart from "@/app/components/noItemCart/noItemCart";
 import Pagination from "@/app/components/pagination/pagination";
+import TitlePromotion from "@/app/components/titlePromotion/titlePromotion";
+
 const PromotionsPage = ({ searchParams }: any) => {
   const promotions = searchParams.promotions;
   const searchPage = searchParams.page;
@@ -40,6 +42,19 @@ const PromotionsPage = ({ searchParams }: any) => {
     getPromotions();
   }, [promotions, currentPage]);
 
+  useEffect(() => {
+    const handleRouteChange = () => {
+      const pageFromParams = parseInt(
+        new URLSearchParams(window.location.search).get("page") || "1"
+      );
+      setCurrentPage(pageFromParams);
+    };
+    window.addEventListener("popstate", handleRouteChange);
+    return () => {
+      window.removeEventListener("popstate", handleRouteChange);
+    };
+  }, []);
+
   const handlePageChange = (page: any) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
@@ -54,6 +69,15 @@ const PromotionsPage = ({ searchParams }: any) => {
           {loadingProducts && <LoadingComponent />}
           {products?.length > 0 ? (
             <>
+              <TitlePromotion
+                title={
+                  promotions === "new-product" ? "New Product" : promotions
+                }
+              />
+              <p className="mb-[16px] font-medium text-text text-[1.6em]">
+                Page {currentPage} of {totalPages || 1} - ({products?.length}{" "}
+                products on this page)
+              </p>
               <div className="flex flex-wrap mx-mCard">
                 {products?.map((item: any) => {
                   return <CardProduct key={item._id} data={item} />;

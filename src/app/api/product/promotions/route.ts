@@ -10,7 +10,8 @@ export async function GET(req: NextRequest) {
     const url = new URL(req.url);
     const promotions = url.searchParams.get("promotions");
     const page: any = Number(url.searchParams.get("page"));
-    console.log(promotions, page);
+    const pageSize = 16;
+
     const dataFilter = {
       _id: 1,
       name: 1,
@@ -23,13 +24,17 @@ export async function GET(req: NextRequest) {
       quantity: 1,
     };
 
+    if (!page) {
+      return NextResponse.json({ message: "Page not found!", status: 404 });
+    }
+
     if (promotions === "discount") {
       const products = await Product.find({ discount: { $gt: 0 } }, dataFilter)
         .sort({ created_at: -1 })
-        .limit(16)
-        .skip((page - 1) * 16)
+        .limit(pageSize)
+        .skip((page - 1) * pageSize)
         .exec();
-      const total = await Product.countDocuments({});
+      const total = await Product.countDocuments({ discount: { $gt: 0 } });
 
       return NextResponse.json({
         message: "Get discount successfully!",
@@ -44,10 +49,20 @@ export async function GET(req: NextRequest) {
       const products = await Product.find({}, dataFilter)
         .sort({ created_at: -1 })
         .limit(20);
+
+      const paginatedProducts = products.slice(
+        (page - 1) * pageSize,
+        page * pageSize
+      );
+
+      const totalPages = Math.ceil(products.length / pageSize);
+
       return NextResponse.json({
         message: "Get new product successfully!",
         status: 200,
-        data: products,
+        data: paginatedProducts,
+        currentPage: page,
+        totalPages: totalPages,
       });
     }
 
