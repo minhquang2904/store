@@ -111,7 +111,7 @@ const NavBar = () => {
     const iconScrollTop: any = $(".iconScrollTop");
 
     const handleScrollTop = () => {
-      positionTopNavRef.current.offsetTop > 80
+      positionTopNavRef?.current?.offsetTop > 80
         ? (positionTopNavRef.current.style.boxShadow =
             "0 4px 10px rgba(0, 0, 0, 0.15)")
         : (positionTopNavRef.current.style.boxShadow = "unset");

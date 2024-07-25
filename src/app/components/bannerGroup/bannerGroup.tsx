@@ -7,7 +7,7 @@ export default function BannerGroup() {
       <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
         <div className="grid sm:grid-cols-4 xsm:grid-cols-2 sm:grid-rows-[324px_324px] xsm:grid-rows-[200px_200px] gap-[15px]">
           <Link
-            href="#"
+            href={`/sub-categories?sub-categories=polo&page=1`}
             className="group sm:row-start-1 sm:col-start-1 sm:row-end-3 sm:col-end-3 !relative"
           >
             <Image
@@ -21,13 +21,13 @@ export default function BannerGroup() {
             <div className="group-hover:opacity-100 group-hover:bg-[rgba(0,0,0,0.2)] flex justify-center items-center absolute top-[0] left-[0] right-[0] bottom-[0] opacity-0">
               <div>
                 <h1 className="uppercase l:text-[4em] sm:text-[3.4em] xsm:text-[2.6em] tracking-[10px] text-white">
-                  women
+                  POLO
                 </h1>
               </div>
             </div>
           </Link>
           <Link
-            href="#"
+            href={`/sub-categories?sub-categories=jeans&page=1`}
             className="group sm:row-start-1 sm:col-start-3 sm:row-end-2 sm:col-end-5 !relative"
           >
             <Image
@@ -41,13 +41,13 @@ export default function BannerGroup() {
             <div className="group-hover:opacity-100 group-hover:bg-[rgba(0,0,0,0.2)] flex justify-center items-center absolute top-[0] left-[0] right-[0] bottom-[0] opacity-0">
               <div>
                 <h1 className="uppercase l:text-[4em] sm:text-[3.4em] xsm:text-[2.6em] tracking-[10px] text-white">
-                  man
+                  Jeans
                 </h1>
               </div>
             </div>
           </Link>
           <Link
-            href="#"
+            href={`/sub-categories?sub-categories=t-shirt&page=1`}
             className="group sm:row-start-2 sm:col-start-3 sm:row-end-3 sm:col-end-4 !relative"
           >
             <Image
@@ -61,13 +61,13 @@ export default function BannerGroup() {
             <div className="group-hover:opacity-100 group-hover:bg-[rgba(0,0,0,0.2)] flex justify-center items-center absolute top-[0] left-[0] right-[0] bottom-[0] opacity-0">
               <div>
                 <h1 className="uppercase l:text-[4em] sm:text-[3.4em] xsm:text-[2.6em] tracking-[10px] text-white">
-                  bag
+                  T-shirt
                 </h1>
               </div>
             </div>
           </Link>
           <Link
-            href="#"
+            href={`/sub-categories?sub-categories=shorts&page=1`}
             className="group sm:row-start-2 sm:col-start-4 sm:row-end-3 sm:col-end-5 !relative"
           >
             <Image
@@ -81,7 +81,7 @@ export default function BannerGroup() {
             <div className="group-hover:opacity-100 group-hover:bg-[rgba(0,0,0,0.2)] flex justify-center items-center absolute top-[0] left-[0] right-[0] bottom-[0] opacity-0">
               <div>
                 <h1 className="uppercase l:text-[4em] sm:text-[3.4em] xsm:text-[2.6em] tracking-[10px] text-white">
-                  shoes
+                  shorts
                 </h1>
               </div>
             </div>

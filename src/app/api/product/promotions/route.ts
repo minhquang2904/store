@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   await connectDB();
   try {
     const url = new URL(req.url);
-    const promotions = url.searchParams.get("promotions");
+    const promotions = url.searchParams.get("promotions")?.toLowerCase();
     const page: any = Number(url.searchParams.get("page"));
     const pageSize = 16;
 
@@ -24,8 +24,11 @@ export async function GET(req: NextRequest) {
       quantity: 1,
     };
 
-    if (!page) {
-      return NextResponse.json({ message: "Page not found!", status: 404 });
+    if (!page || !promotions) {
+      return NextResponse.json({
+        message: "No promotions found!",
+        status: 404,
+      });
     }
 
     if (promotions === "discount") {
