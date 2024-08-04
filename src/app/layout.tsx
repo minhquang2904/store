@@ -7,6 +7,7 @@ import { CartProvider } from "./context/CartContext";
 import { Toaster } from "react-hot-toast";
 import { toastConfig } from "@/app/config/toaster";
 import { RecommendProvider } from "./context/RecommedContext";
+import { NavProvider } from "./context/NavContext";
 
 const jost = Jost({
   subsets: ["latin"],
@@ -28,14 +29,16 @@ function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className={`${jost.className} bg-[#F3F4F4]`}>
-        <AuthProvider>
-          <CartProvider>
-            <RecommendProvider>
-              <ChakraProvider>{children}</ChakraProvider>
-              <Toaster toastOptions={toastConfig} />
-            </RecommendProvider>
-          </CartProvider>
-        </AuthProvider>
+        <NavProvider>
+          <AuthProvider>
+            <CartProvider>
+              <RecommendProvider>
+                <ChakraProvider>{children}</ChakraProvider>
+                <Toaster toastOptions={toastConfig} />
+              </RecommendProvider>
+            </CartProvider>
+          </AuthProvider>
+        </NavProvider>
       </body>
     </html>
   );

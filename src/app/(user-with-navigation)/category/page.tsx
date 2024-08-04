@@ -4,8 +4,10 @@ import Filter from "@/app/components/filter/filter";
 import Pagination from "@/app/components/pagination/pagination";
 import TitlePageNavigation from "@/app/components/titlePageNavigation/titlePageNavigation";
 import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useNavContext } from "@/app/context/NavContext";
+import CardProduct from "@/app/components/cartProduct/cartProduct";
 
 const order = ["s", "m", "l", "xl", "xxl"];
 
@@ -18,16 +20,66 @@ const TitleFilter = (props: any) => {
   );
 };
 
-const CategoryPage = ({ searchParams }: any) => {
-  const initial = searchParams.categories;
+function removeEmptyStrings(arr: any) {
+  return arr.filter((item: any) => item !== "");
+}
+
+const buildQueryString = (filters: any) => {
+  const query = [];
+
+  if (filters.categories && filters.categories.length > 0) {
+    query.push(`categories=${filters.categories.join("+")}`);
+  }
+
+  if (filters.sizes && filters.sizes.length > 0) {
+    query.push(`sizes=${filters.sizes.join("+")}`);
+  }
+
+  return query.join("&");
+};
+
+const CategoryPage = () => {
   const [categories, setCategories] = useState(null) as any;
   const [size, setSize] = useState(null) as any;
   const [selectedFilters, setSelectedFilters] = useState({}) as any;
   const { push } = useRouter();
+  const searchParamsRouter = useSearchParams();
+  const path = usePathname();
+  const { nav, setNav } = useNavContext();
+  const [product, setProduct] = useState(null) as any;
+  const requestCount = useRef(0);
 
   const handleShowFilter = () => {
     document.querySelector(".filterIcon")?.classList.toggle("activeFilter");
   };
+
+  const handleCheckUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+
+    const categories = removeEmptyStrings(
+      params.get("categories")?.split(" ") || []
+    );
+    const sizes = removeEmptyStrings(params.get("sizes")?.split(" ") || []);
+    setSelectedFilters({ categories, sizes });
+  };
+
+  useEffect(() => {
+    if (nav) {
+      handleCheckUrl();
+      setNav(false);
+    }
+  }, [searchParamsRouter]);
+
+  useEffect(() => {
+    handleCheckUrl();
+  }, [path]);
+
+  useEffect(() => {
+    window.addEventListener("popstate", handleCheckUrl);
+    return () => {
+      window.removeEventListener("popstate", handleCheckUrl);
+    };
+  }, []);
 
   useEffect(() => {
     const getData = async () => {
@@ -56,7 +108,6 @@ const CategoryPage = ({ searchParams }: any) => {
     setSelectedFilters((prevFilters: any) => {
       const newFilters = { ...prevFilters };
       newFilters[filterType] = value;
-      console.log(newFilters);
       if (newFilters[filterType].length === 0) {
         delete newFilters[filterType];
       }
@@ -72,10 +123,34 @@ const CategoryPage = ({ searchParams }: any) => {
         params.append(filterType, filters[filterType].join(" "));
       }
     });
-    console.log(params.toString());
     const queryString = `/category?${params.toString()}`;
     push(queryString);
   };
+
+  const getDataFilter = async () => {
+    const currentRequest = ++requestCount.current;
+
+    let url = "/api/product/filter";
+    const queryString = buildQueryString(selectedFilters);
+    if (queryString) {
+      url += `?${queryString}`;
+    }
+
+    try {
+      const res = await fetch(url);
+      const result = await res.json();
+
+      if (result.status === 200 && currentRequest === requestCount.current) {
+        setProduct(result.data);
+      }
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
+  useEffect(() => {
+    getDataFilter();
+  }, [selectedFilters]);
+
   return (
     <div className="flex justify-center items-center px-pLayout">
       <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
@@ -150,9 +225,11 @@ const CategoryPage = ({ searchParams }: any) => {
             </div>
           </div>
           <div className="l:w-[70%] flex flex-wrap mx-mCard xsm:mt-[20px] sm:mt-[20px] l:mt-[ 0px]">
-            {/* {dataLists.map((item: any) => {
-          return <CardProduct key={item.id} data={item} />;
-        })} */}
+            {product?.map((item: any) => {
+              return (
+                <CardProduct key={item._id} data={item} filterCard={true} />
+              );
+            })}
           </div>
         </div>
         <Pagination />

@@ -5,11 +5,15 @@ import SoldOut from "../soldOut/soldOut";
 import { MathCeil } from "@/app/config/formatCurrencyVND";
 
 const CardProduct = (props: any) => {
-  const { data } = props;
+  const { data, filterCard } = props;
   return (
     <>
       {data && (
-        <div className="block mb-[24px] px-pCard l:w-[25%] sm:w-[33.333333%] xsm:w-[50%]">
+        <div
+          className={`block mb-[24px] px-pCard ${
+            filterCard ? "l:w-[33.333333%]" : "l:w-[25%]"
+          } sm:w-[33.333333%] xsm:w-[50%]`}
+        >
           <Link
             className={`${style.hoverCard} block shadow-sm pb-[20px]`}
             href={{

@@ -13,6 +13,11 @@ import toast from "react-hot-toast";
 import { useRecommendContext } from "@/app/context/RecommedContext";
 import useDebouncedValue from "@/app/hooks/useDebouncedValue ";
 import { FormatCurrencyVND } from "@/app/config/formatCurrencyVND";
+import { useNavContext } from "@/app/context/NavContext";
+
+function removeEmptyStrings(arr: any) {
+  return arr.filter((item: any) => item !== "");
+}
 
 const NavBar = () => {
   const { user, setUser } = useAuthContext();
@@ -20,6 +25,7 @@ const NavBar = () => {
   const { fetchDataRecommend, setRecommend, setRelated } =
     useRecommendContext();
   const [query, setQuery] = useState("");
+  const { setNav } = useNavContext();
 
   const debouncedQuery = useDebouncedValue(query, 500);
 
@@ -65,7 +71,6 @@ const NavBar = () => {
     };
   }, []);
 
-  const urlNavLink: any = ["/", "/shirt", "/trousers", "/bagShoes"];
   useEffect(() => {
     const fetchData = async () => {
       if (!debouncedQuery) {
@@ -99,11 +104,6 @@ const NavBar = () => {
     }
   };
 
-  const checkNavActive = (url: string): string => {
-    return pathname == `${url}`
-      ? `${style.navigationItem} lineActive`
-      : `${style.navigationItem}`;
-  };
   const positionTopNavRef: any = useRef(null);
 
   useEffect(() => {
@@ -127,53 +127,10 @@ const NavBar = () => {
     return () => window.removeEventListener("scroll", handleScrollTop);
   }, []);
 
-  const lineActive = (target: any, navActive: any, width: any) => {
-    const sizeWidth = width;
-    const sizeLeft = sizeWidth / 2;
-    if (navActive) {
-      target.style.left = navActive?.offsetLeft + sizeLeft + "px";
-      target.style.width = navActive?.offsetWidth - sizeWidth + "px";
-    } else {
-      target.style.left = 0 + "px";
-      target.style.width = 0 + "px";
-    }
-  };
-
   useEffect(() => {
-    const $ = document.querySelector.bind(document);
-    const $$ = document.querySelectorAll.bind(document);
-
-    const navigationItem = $$(`.${style.navigationItem}`);
-    const line: any = $(`.${style.line}`);
-    const navActive: any = $(`.${style.navigationItem}.lineActive`);
-
-    lineActive(line, navActive, 26);
-    navActive && navActive.classList.add(`${style.active}`);
-
-    const handleClick = (event: Event) => {
-      const target = event.target as HTMLElement;
-      if (target.classList.contains(style.navigationItem)) {
-        target.classList.add(`${style.active}`);
-        lineActive(line, target, 26);
-      }
-    };
-
-    navigationItem.forEach((item: any) => {
-      item.addEventListener("click", handleClick);
-    });
-
-    if (!urlNavLink.includes(pathname)) {
-      lineActive(line, navActive, 0);
-    }
-
     profileModal && setProfileModal(false);
     cartModal && setCartModal(false);
     setNavBottom(false);
-    return () => {
-      navigationItem.forEach((item: any) => {
-        item.removeEventListener("click", handleClick);
-      });
-    };
   }, [pathname]);
 
   const handleSignOut = async () => {
@@ -221,6 +178,7 @@ const NavBar = () => {
 
   const handleNavClick = (category: any) => {
     push(`/category?categories=${category}`);
+    setNav(true);
   };
   return (
     <>
@@ -243,25 +201,30 @@ const NavBar = () => {
               </Link>
             </div>
             <div className="xsm:hidden sm:hidden l:flex">
-              <div className="flex relative">
-                <Link href="/" className={checkNavActive("/")}>
+              <div className="flex relative text-[1.6em] text-[#00000080] capitalize font-semibold gap-x-[60px]">
+                <Link
+                  href="/"
+                  className={`cursor-pointer hover:text-text ${
+                    pathname === "/" && "text-text"
+                  }`}
+                >
                   home
                 </Link>
                 <div
                   onClick={() => handleNavClick("shirt")}
-                  className={checkNavActive("/shirt")}
+                  className={`cursor-pointer hover:text-text`}
                 >
                   shirt
                 </div>
                 <div
                   onClick={() => handleNavClick("trousers")}
-                  className={checkNavActive("/trousers")}
+                  className={`cursor-pointer hover:text-text`}
                 >
                   trousers
                 </div>
                 <div
                   onClick={() => handleNavClick("jacket")}
-                  className={checkNavActive("/bagShoes")}
+                  className={`cursor-pointer hover:text-text`}
                 >
                   jacket
                 </div>

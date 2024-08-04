@@ -11,7 +11,7 @@ export default function BannerGroup() {
             className="group sm:row-start-1 sm:col-start-1 sm:row-end-3 sm:col-end-3 !relative"
           >
             <Image
-              src="/images/bannerGroup1.png"
+              src="/images/bannerGroup1.jpg"
               className="!relative object-cover"
               alt="LOGIN"
               fill
