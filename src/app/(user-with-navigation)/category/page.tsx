@@ -1,6 +1,5 @@
 "use client";
 
-import Filter from "@/app/components/filter/filter";
 import Pagination from "@/app/components/pagination/pagination";
 import TitlePageNavigation from "@/app/components/titlePageNavigation/titlePageNavigation";
 import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
@@ -8,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useNavContext } from "@/app/context/NavContext";
 import CardProduct from "@/app/components/cartProduct/cartProduct";
+import { useFilterContext } from "@/app/context/FilterContext";
 
 const order = ["s", "m", "l", "xl", "xxl"];
 
@@ -39,8 +39,7 @@ const buildQueryString = (filters: any) => {
 };
 
 const CategoryPage = () => {
-  const [categories, setCategories] = useState(null) as any;
-  const [size, setSize] = useState(null) as any;
+  const { categories, size } = useFilterContext();
   const [selectedFilters, setSelectedFilters] = useState({}) as any;
   const { push } = useRouter();
   const searchParamsRouter = useSearchParams();
@@ -79,29 +78,6 @@ const CategoryPage = () => {
     return () => {
       window.removeEventListener("popstate", handleCheckUrl);
     };
-  }, []);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const [resCategoriesData, resSizeData] = await Promise.all([
-          fetch("/api/admin/categories"),
-          fetch("/api/admin/sizes"),
-        ]);
-
-        const [resultCategories, resultSize] = await Promise.all([
-          resCategoriesData.json(),
-          resSizeData.json(),
-        ]);
-
-        setCategories(resultCategories.data);
-        setSize(resultSize.data);
-      } catch (error: any) {
-        console.log(error.message);
-      }
-    };
-
-    getData();
   }, []);
 
   const handleCheckboxChange = (value: any, filterType: any) => {
@@ -148,9 +124,7 @@ const CategoryPage = () => {
     }
   };
   useEffect(() => {
-    if (Object.keys(selectedFilters).length > 0) {
-      getDataFilter();
-    }
+    getDataFilter();
   }, [selectedFilters]);
   return (
     <div className="flex justify-center items-center px-pLayout">

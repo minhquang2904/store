@@ -8,6 +8,7 @@ import { Toaster } from "react-hot-toast";
 import { toastConfig } from "@/app/config/toaster";
 import { RecommendProvider } from "./context/RecommedContext";
 import { NavProvider } from "./context/NavContext";
+import { FilterProvider } from "./context/FilterContext";
 
 const jost = Jost({
   subsets: ["latin"],
@@ -30,14 +31,16 @@ function RootLayout({
       </head>
       <body className={`${jost.className} bg-[#F3F4F4]`}>
         <NavProvider>
-          <AuthProvider>
-            <CartProvider>
-              <RecommendProvider>
-                <ChakraProvider>{children}</ChakraProvider>
-                <Toaster toastOptions={toastConfig} />
-              </RecommendProvider>
-            </CartProvider>
-          </AuthProvider>
+          <FilterProvider>
+            <AuthProvider>
+              <CartProvider>
+                <RecommendProvider>
+                  <ChakraProvider>{children}</ChakraProvider>
+                  <Toaster toastOptions={toastConfig} />
+                </RecommendProvider>
+              </CartProvider>
+            </AuthProvider>
+          </FilterProvider>
         </NavProvider>
       </body>
     </html>
