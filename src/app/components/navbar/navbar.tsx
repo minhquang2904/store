@@ -112,9 +112,9 @@ const NavBar = () => {
 
     const handleScrollTop = () => {
       positionTopNavRef?.current?.offsetTop > 80
-        ? (positionTopNavRef.current.style.boxShadow =
-            "0 4px 10px rgba(0, 0, 0, 0.15)")
-        : (positionTopNavRef.current.style.boxShadow = "unset");
+        ? ((positionTopNavRef.current.style.boxShadow =
+            "0 4px 10px rgba(0, 0, 0, 0.15)") as any)
+        : ((positionTopNavRef.current.style.boxShadow = "unset") as any);
 
       positionTopNavRef.current.offsetTop > 500
         ? iconScrollTop.classList.add("active")

@@ -148,9 +148,10 @@ const CategoryPage = () => {
     }
   };
   useEffect(() => {
-    getDataFilter();
+    if (Object.keys(selectedFilters).length > 0) {
+      getDataFilter();
+    }
   }, [selectedFilters]);
-
   return (
     <div className="flex justify-center items-center px-pLayout">
       <div className="w-full max-w-layout l:mt-80 sm:mt-60 xsm:mt-40">
