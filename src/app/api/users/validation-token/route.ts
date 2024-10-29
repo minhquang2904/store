@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 
 export async function GET() {
   await connectDB();
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   try {
     const token = cookieStore.get(process.env.LOGIN_INFO_USER!);
     if (!token) {
