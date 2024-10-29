@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { ReactNode } from "react";
 import Footer from "@/app/components/footer/footer";
 import Support from "@/app/components/support/support";
@@ -9,11 +9,10 @@ import Loading from "../components/loading/loading";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const { loadingAuth } = useAuthContext();
-
   if (loadingAuth) {
     return <Loading />;
   }
-  
+
   return (
     <>
       <div className="bg-primary min-h-[100vh] mainLayout">
