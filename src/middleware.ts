@@ -8,7 +8,7 @@ const loginRoutes = ["/login", "/signup"];
 export default async function middleware(req: any) {
   const { pathname } = req.nextUrl;
 
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const accessTokenUser: any = cookieStore.get(process.env.LOGIN_INFO_USER!);
   const accessTokenAdmin: any = cookieStore.get("LOGIN-INFO-ADMIN");
 
