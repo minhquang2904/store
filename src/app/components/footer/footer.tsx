@@ -171,7 +171,7 @@ const Footer = () => {
           <h1 className="w-full max-w-layout px-0 flex justify-between text-white text-[1.6em]">
             This website was created as part of a graduation thesis and is not
             an actual e-commerce site. All products and information are for
-            illustrative purposes only.
+            illustrative purposes only - Lương Minh Quang
           </h1>
         </div>
       </div>
