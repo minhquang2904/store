@@ -703,16 +703,18 @@ const NavBar = () => {
                         fill
                         sizes="(max-width: 60px) 100vw"
                       />
-                      <div className="text-text capitalize text-[1.6em] ml-[16px]">
+                      <div className="text-text capitalize ml-[16px] text-[1.6em]">
                         <h1 className="font-semibold">{value.name}</h1>
-                        <div className="flex gap-x-[8px]">
+                        <div className="flex gap-x-[8px] items-center">
                           {value?.discount > 0 && (
                             <h4 className="text-button font-semibold line-through">
-                              {value?.price}
+                              {FormatCurrencyVND(value?.price)}{" "}
+                              <span className="text-text lowercase">đ</span>
                             </h4>
                           )}
                           <h4 className="text-secondary font-semibold">
-                            {value?.discountedPrice || 0}
+                            {FormatCurrencyVND(value?.discountedPrice) || 0}{" "}
+                            <span className="text-text lowercase">đ</span>
                           </h4>
                         </div>
                       </div>
