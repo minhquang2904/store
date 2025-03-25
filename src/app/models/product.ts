@@ -15,6 +15,7 @@ interface IProduct extends Document {
   soldCount: number;
   quantity: number;
   sizes: string[];
+  view: number;
 }
 
 const productSchema: Schema = new Schema({
@@ -97,6 +98,10 @@ const productSchema: Schema = new Schema({
     },
   ],
   soldCount: {
+    type: Number,
+    default: 0,
+  },
+  view: {
     type: Number,
     default: 0,
   },

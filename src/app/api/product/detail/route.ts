@@ -4,13 +4,17 @@ import { NextResponse, NextRequest } from "next/server";
 
 export const revalidate = 0;
 
+const viewedUsers = new Map();
 export async function GET(req: NextRequest) {
   await connectDB();
   try {
     const url = new URL(req.nextUrl);
     const id = url.searchParams.get("id");
+    const userIp =
+      req.headers.get("x-forwarded-for")?.split(",")[0] || req.ip || "unknown";
+    console.log(userIp);
     const product = await Product.findById(id);
-
+    
     if (product) {
       const related = await Product.find({
         sub_categories: product.sub_categories,

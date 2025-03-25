@@ -336,8 +336,11 @@ export default function ProductDetail({ searchParams }: any) {
                   <div className="text-[1.6em] px-[15px] border-r-2">
                     Stock : {product?.quantity || 0}
                   </div>
-                  <div className="text-[1.6em] px-[15px]">
+                  <div className="text-[1.6em] px-[15px] border-r-2">
                     Sold : {product?.soldCount || 0}
+                  </div>
+                  <div className="text-[1.6em] px-[15px]">
+                    View : {product?.view || 0}
                   </div>
                 </div>
                 <div className="flex mt-[8px] gap-x-[6px] items-center">
